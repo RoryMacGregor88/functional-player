@@ -1,27 +1,26 @@
 import { useState } from "react";
-import { loginHandler } from "src/utils/login-handler";
+import { registerHandler } from "src/utils/registerHandler";
 
 export default function Login() {
-  const [user, setUser] = useState(undefined);
   const [formState, setFormState] = useState({});
 
-  const { email, password } = formState;
+  const { username, email, password } = formState;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const { user, error } = await loginHandler({
+    const { message, error } = await registerHandler({
+      username,
       email,
       password,
     });
 
-    if (error) {
+    if (!!error) {
       console.log("Status is NOT OK: ", error);
       return;
     }
 
-    // need some kind of Provider for this. React context even?
-    setUser(user);
+    console.log("Message: ", message);
   };
 
   const onChange = ({ target: { name, value } }) =>

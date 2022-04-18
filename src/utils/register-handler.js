@@ -1,12 +1,10 @@
-export default async function registerHandler(formData) {
-  const { email, username, password } = formData;
+// TODO: formdata must be fully validated before reaching this point
 
-  //TODO: will validation make this unneeded?
-  if (!email || !email.includes("@") || !password || !username) {
-    return { error: "Invalid Data" };
-  }
-
-  const res = await fetch("/api/register", {
+/**
+ * @param {{ username: string, email: string, password: string }} formData
+ */
+const registerHandler = async function (formData) {
+  const res = await fetch("/api/auth/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -14,11 +12,8 @@ export default async function registerHandler(formData) {
     body: JSON.stringify(formData),
   });
 
-  const data = await res.json();
+  // TODO: is await required here?
+  return res.json();
+};
 
-  if (data.error) {
-    return { error: data.error };
-  } else if (data.ops) {
-    return data?.ops[0];
-  }
-}
+export { registerHandler };
