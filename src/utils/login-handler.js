@@ -1,5 +1,7 @@
 // TODO: formdata must be fully validated before reaching this point
 
+// TODO: This is no longer being used
+
 /**
  * @param {{ email: string, password: string }} formData
  */

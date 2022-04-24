@@ -1,4 +1,4 @@
-import { Navbar, Footer } from "components";
+import { Navbar, Footer } from "src/components";
 
 const Layout = ({ children }) => (
   <>

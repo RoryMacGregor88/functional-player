@@ -1,49 +1,43 @@
 import { useState } from "react";
-import { registerHandler } from "src/utils/registerHandler";
 
-export default function Login() {
-  const [formState, setFormState] = useState({});
+import { Box } from "@mui/material";
 
-  const { username, email, password } = formState;
+import { Stepper, RegisterForm, SubscribeForm } from "src/components";
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+const FinishView = () => {
+  return <div>You Are finished.</div>;
+};
 
-    const { message, error } = await registerHandler({
-      username,
-      email,
-      password,
-    });
+export default function Register() {
+  const [activeStep, setActiveStep] = useState(1);
+  const [insertedId, setInsertedId] = useState(null);
 
-    if (!!error) {
-      console.log("Status is NOT OK: ", error);
-      return;
-    }
+  console.log("insertedId: ", insertedId);
 
-    console.log("Message: ", message);
+  const onNextClick = () => setActiveStep((prev) => prev + 1);
+
+  const handleFinishClick = () => {
+    console.log("Finished!");
   };
 
-  const onChange = ({ target: { name, value } }) =>
-    setFormState((prev) => ({ ...prev, [name]: value }));
-
   return (
-    <>
-      <h1>Username is: {user?.username}</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Email"
-          name="email"
-          value={email}
-          onChange={onChange}
+    <Box
+      sx={{ width: "100%", height: "100%" }}
+      justifyContent="center"
+      alignItems="center"
+    >
+      <Stepper activeStep={activeStep} />
+      {activeStep === 1 ? (
+        <RegisterForm
+          insertedId={insertedId}
+          setInsertedId={setInsertedId}
+          onNextClick={onNextClick}
         />
-        <input
-          placeholder="Password"
-          name="password"
-          value={password}
-          onChange={onChange}
-        />
-        <button type="submit">Submit</button>
-      </form>
-    </>
+      ) : null}
+      {activeStep === 2 ? <SubscribeForm insertedId={insertedId} /> : null}
+      {activeStep === 3 ? (
+        <FinishView handleFinishClick={handleFinishClick} />
+      ) : null}
+    </Box>
   );
 }
