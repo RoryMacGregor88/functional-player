@@ -1,12 +1,29 @@
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { withIronSessionSsr } from "iron-session/next";
+import { sessionOptions } from "lib/session";
+
 import Head from "next/head";
-import { SessionProvider } from "next-auth/react";
 import { Layout } from "src/components";
 
 const theme = createTheme({});
 
-function App({ Component, pageProps: { session, ...pageProps } }) {
+export const getServerSideProps = withIronSessionSsr(
+  async function getServerSideProps({ req }) {
+    console.log("HIT withIronSessionSsr");
+    const user = req.session.user;
+
+    return {
+      props: {
+        user: user ?? null,
+      },
+    };
+  },
+  sessionOptions
+);
+
+function App({ Component, pageProps: { user, ...pageProps } }) {
+  console.log("user: ", user);
   return (
     <>
       <CssBaseline />
@@ -20,13 +37,12 @@ function App({ Component, pageProps: { session, ...pageProps } }) {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <SessionProvider session={session}>
-        <ThemeProvider theme={theme}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ThemeProvider>
-      </SessionProvider>
+
+      <ThemeProvider theme={theme}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ThemeProvider>
     </>
   );
 }

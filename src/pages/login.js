@@ -1,20 +1,17 @@
 import { useState } from "react";
-import { useSession, signIn } from "next-auth/react";
+
+import { loginHandler } from "../utils";
 
 export default function Login() {
   const [user, setUser] = useState(undefined);
   const [formState, setFormState] = useState({});
-
-  const { data: session, status } = useSession();
-  console.log("session: ", session);
-  console.log("status: ", status);
 
   const { email, password } = formState;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const res = await signIn("credentials", {
+    const res = await loginHandler({
       redirect: false,
       email: email,
       password: password,

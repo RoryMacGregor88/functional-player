@@ -2,7 +2,7 @@ import { hash } from "bcryptjs";
 import { connectToDatabase } from "lib/mongodb";
 import { USERS } from "src/utils/constants";
 
-//TODO: next-auth for this, or manual?
+//TODO: iron-session for this, or manual?
 export default async function register(req, res) {
   if (req.method === "POST") {
     try {

@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { registerHandler } from "src/utils/register-handler";
-
+import { registerHandler } from "src/utils";
 const RegisterForm = ({ insertedId, setInsertedId, onNextClick }) => {
   const [formState, setFormState] = useState({});
 

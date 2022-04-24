@@ -3,7 +3,7 @@
 /**
  * @param {{ username: string, email: string, password: string }} formData
  */
-const registerHandler = async function (formData) {
+export default async function registerHandler(formData) {
   const res = await fetch("/api/auth/register", {
     method: "POST",
     headers: {
@@ -14,6 +14,4 @@ const registerHandler = async function (formData) {
 
   // TODO: is await required here?
   return res.json();
-};
-
-export { registerHandler };
+}
