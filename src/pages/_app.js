@@ -1,29 +1,32 @@
+import { useState, useEffect } from "react";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { withIronSessionSsr } from "iron-session/next";
-import { sessionOptions } from "lib/session";
 
 import Head from "next/head";
 import { Layout } from "src/components";
+import { getUser } from "src/utils";
 
 const theme = createTheme({});
 
-export const getServerSideProps = withIronSessionSsr(
-  async function getServerSideProps({ req }) {
-    console.log("HIT withIronSessionSsr");
-    const user = req.session.user;
+function App({ Component, pageProps }) {
+  const [userResponse, setUserResponse] = useState({});
+  const { error, user, noSession } = userResponse;
 
-    return {
-      props: {
-        user: user ?? null,
-      },
-    };
-  },
-  sessionOptions
-);
+  // TODO: does error pop up here too?
 
-function App({ Component, pageProps: { user, ...pageProps } }) {
-  console.log("user: ", user);
+  useEffect(() => {
+    (async () => {
+      const res = await getUser();
+      setUserResponse(res);
+    })();
+  }, []);
+
+  if (!user && !noSession) return <h1>Loading...</h1>;
+
+  if (noSession) {
+    return <h1>No session.</h1>;
+  }
+
   return (
     <>
       <CssBaseline />
@@ -40,7 +43,7 @@ function App({ Component, pageProps: { user, ...pageProps } }) {
 
       <ThemeProvider theme={theme}>
         <Layout>
-          <Component {...pageProps} />
+          <Component user={user} {...pageProps} />
         </Layout>
       </ThemeProvider>
     </>
