@@ -18,7 +18,7 @@ async function login(req, res) {
       const result = await db.collection(USERS).findOne({ email });
 
       if (!result) {
-        return res.status(200).json({
+        return res.status(200).send({
           error: "No user account associated with this email address.",
         });
       }
@@ -29,7 +29,7 @@ async function login(req, res) {
       const checkPassword = await compare(password, currentPassword);
 
       if (!checkPassword) {
-        return res.status(200).json({ error: "Incorrect password." });
+        return res.status(200).send({ error: "Incorrect password." });
       }
 
       // subscription status
@@ -45,19 +45,19 @@ async function login(req, res) {
 
       const user = { ...rest, subscribed };
 
-      // TODO: must implement `Keep me signed in`
+      // TODO: must implement `Keep me signed in` checkbox in form
       req.session.user = user;
       await req.session.save();
 
-      return res.status(200).json({ user });
+      return res.status(200).send({ loggedIn: true });
     } catch (error) {
       console.log("Error: ", error);
-      return res.status(500).json({ error });
+      return res.status(500).send({ error });
     }
   } else {
     return res
       .status(500)
-      .json({ error: "Invalid method, only POST permitted." });
+      .send({ error: "Invalid method, only POST permitted." });
   }
 }
 

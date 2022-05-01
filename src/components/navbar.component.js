@@ -1,31 +1,8 @@
-import { useState } from "react";
-import {
-  AppBar,
-  Toolbar,
-  Menu,
-  MenuItem,
-  Typography,
-  Container,
-} from "@mui/material";
+import { AppBar, Toolbar, Typography } from "@mui/material";
 
-const PAGES = ["Page 1", "Page 2", "Page 3"],
-  OPTIONS = ["Settings", "Account", "Logout"];
+const PAGES = ["Page 1", "Page 2", "Page 3"];
 
-const Navbar = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleOptionClick = () => {
-    setAnchorEl(null);
-  };
-
-  const handleButtonClick = (e) => {
-    setAnchorEl(e.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
+const Navbar = ({ user }) => {
   return (
     <AppBar position="static">
       <Toolbar disableGutters>
@@ -35,21 +12,7 @@ const Navbar = () => {
             {page}
           </button>
         ))}
-        <div>
-          <button onClick={handleButtonClick}>Open Nav</button>
-          <Menu
-            id="appbar-menu"
-            anchorEl={anchorEl}
-            open={!!anchorEl}
-            onClose={handleClose}
-          >
-            {OPTIONS.map((option) => (
-              <MenuItem key={option} onClick={handleOptionClick}>
-                {option}
-              </MenuItem>
-            ))}
-          </Menu>
-        </div>
+        {!!user ? <Typography variant="h4">{user.username}</Typography> : null}
       </Toolbar>
     </AppBar>
   );

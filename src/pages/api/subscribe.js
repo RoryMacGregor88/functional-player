@@ -25,7 +25,7 @@ export default async function subscribe(req, res) {
     const { client_secret, status } =
       subscription?.latest_invoice.payment_intent;
 
-    res.json({ subscriptionId, client_secret, status });
+    return res.json({ subscriptionId, client_secret, status });
   } catch (error) {
     return res.status(500).send({ error });
   }

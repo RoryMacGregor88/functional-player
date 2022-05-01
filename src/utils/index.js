@@ -1,5 +1,7 @@
+import getUser from "./get-user";
 import registerHandler from "./register-handler";
 import loginHandler from "./login-handler";
-import getUser from "./get-user";
+import logoutHandler from "./logout-handler";
+import updateHandler from "./update-handler";
 
-export { registerHandler, loginHandler, getUser };
+export { getUser, registerHandler, loginHandler, logoutHandler, updateHandler };

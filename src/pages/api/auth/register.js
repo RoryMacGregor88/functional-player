@@ -2,7 +2,6 @@ import { hash } from "bcryptjs";
 import { connectToDatabase } from "lib/mongodb";
 import { USERS } from "src/utils/constants";
 
-//TODO: iron-session for this, or manual?
 export default async function register(req, res) {
   if (req.method === "POST") {
     try {
@@ -13,9 +12,7 @@ export default async function register(req, res) {
       const checkExistingEmail = await db.collection(USERS).findOne({ email });
 
       if (!!checkExistingEmail) {
-        return res
-          .status(200)
-          .json({ error: { message: "Email already exists." } });
+        return res.status(200).send({ error: "Email already exists." });
       }
 
       const checkExistingUsername = await db
@@ -23,9 +20,7 @@ export default async function register(req, res) {
         .findOne({ username });
 
       if (!!checkExistingUsername) {
-        return res
-          .status(200)
-          .json({ error: { message: "Username is taken." } });
+        return res.status(200).send({ error: "Username is taken." });
       }
 
       const { insertedId } = await db.collection(USERS).insertOne({
@@ -40,6 +35,6 @@ export default async function register(req, res) {
       return res.status(500).send({ error });
     }
   } else {
-    res.status(500).json({ error: { message: "Route not valid" } });
+    res.status(500).send({ error: "Invalid method, only POST permitted." });
   }
 }

@@ -12,8 +12,6 @@ function App({ Component, pageProps }) {
   const [userResponse, setUserResponse] = useState({});
   const { error, user, noSession } = userResponse;
 
-  // TODO: does error pop up here too?
-
   useEffect(() => {
     (async () => {
       const res = await getUser();
@@ -21,17 +19,17 @@ function App({ Component, pageProps }) {
     })();
   }, []);
 
-  if (!user && !noSession) return <h1>Loading...</h1>;
-
-  if (noSession) {
-    return <h1>No session.</h1>;
+  if (!!error) {
+    //handle error
   }
+
+  if (!user && !noSession) return <h1>Loading...</h1>;
 
   return (
     <>
       <CssBaseline />
       <Head>
-        {/* // TODO: pay attention to this, SEO is vital */}
+        {/* // TODO: need one on every page, SEO is vital */}
         <title>Functional Player</title>
         <meta
           name="description"
@@ -42,7 +40,7 @@ function App({ Component, pageProps }) {
       </Head>
 
       <ThemeProvider theme={theme}>
-        <Layout>
+        <Layout user={user}>
           <Component user={user} {...pageProps} />
         </Layout>
       </ThemeProvider>
