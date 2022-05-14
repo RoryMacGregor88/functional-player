@@ -1,17 +1,28 @@
 import { Stepper as MuiStepper, Step, StepLabel } from "@mui/material";
 
-const STEPS = ["Create an account", "Subscribe"];
+const STEPS = [
+  { step: 1, label: "Create account" },
+  { step: 2, label: "Subscribe" },
+  { step: 3, label: "Finish" },
+];
 
-const Stepper = (activeStep) => {
-  return (
-    <MuiStepper activeStep={activeStep}>
-      {STEPS.map((step) => (
-        <Step key={step}>
-          <StepLabel>{step}</StepLabel>
-        </Step>
-      ))}
-    </MuiStepper>
-  );
-};
+const Stepper = ({ activeStep }) => (
+  <MuiStepper
+    activeStep={activeStep}
+    sx={{
+      marginBottom: "2rem",
+    }}
+  >
+    {STEPS.map(({ step, label }) => (
+      <Step
+        key={step}
+        active={activeStep === step}
+        completed={activeStep > step}
+      >
+        <StepLabel>{label}</StepLabel>
+      </Step>
+    ))}
+  </MuiStepper>
+);
 
 export default Stepper;

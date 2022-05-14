@@ -1,14 +1,17 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
+import { Grid, Box } from "@mui/material";
 
-import { Box } from "@mui/material";
+import {
+  Stepper,
+  RegisterForm,
+  SubscribeForm,
+  RegistrationFinishView,
+  SpacedTitle,
+} from "src/components";
 
-import { Stepper, RegisterForm, SubscribeForm } from "src/components";
-
-const FinishView = () => {
-  return <div>You Are finished.</div>;
-};
-
-export default function Register() {
+export default function Register({ user }) {
+  const router = useRouter();
   const [activeStep, setActiveStep] = useState(1);
   const [insertedId, setInsertedId] = useState(null);
 
@@ -20,24 +23,50 @@ export default function Register() {
     console.log("Finished!");
   };
 
-  return (
-    <Box
-      sx={{ width: "100%", height: "100%" }}
-      justifyContent="center"
-      alignItems="center"
-    >
-      <Stepper activeStep={activeStep} />
-      {activeStep === 1 ? (
-        <RegisterForm
-          insertedId={insertedId}
-          setInsertedId={setInsertedId}
-          onNextClick={onNextClick}
-        />
-      ) : null}
-      {activeStep === 2 ? <SubscribeForm insertedId={insertedId} /> : null}
-      {activeStep === 3 ? (
-        <FinishView handleFinishClick={handleFinishClick} />
-      ) : null}
-    </Box>
+  const getView = ({
+    activeStep,
+    insertedId,
+    setInsertedId,
+    onNextClick,
+    handleFinishClick,
+  }) => {
+    switch (activeStep) {
+      case activeStep === 2:
+        return <SubscribeForm insertedId={insertedId} />;
+      case activeStep === 3:
+        return <RegistrationFinishView handleFinishClick={handleFinishClick} />;
+      default:
+        return (
+          <RegisterForm
+            insertedId={insertedId}
+            setInsertedId={setInsertedId}
+            onNextClick={onNextClick}
+          />
+        );
+    }
+  };
+
+  return !!user ? (
+    router.push("/dashboard")
+  ) : (
+    <Grid container direction="column" alignItems="center" wrap="nowrap">
+      <SpacedTitle>Register</SpacedTitle>
+      <Grid
+        item
+        component={Box}
+        sx={{ minWidth: "50%", height: "100%" }}
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Stepper activeStep={activeStep} />
+        {getView({
+          activeStep,
+          insertedId,
+          setInsertedId,
+          onNextClick,
+          handleFinishClick,
+        })}
+      </Grid>
+    </Grid>
   );
 }

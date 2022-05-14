@@ -22,18 +22,16 @@ export default function Login({ user }) {
     }
 
     if (loggedIn) {
-      router.push("/");
+      router.push("/dashboard");
     }
   };
 
   const onChange = ({ target: { name, value } }) =>
     setFormState((prev) => ({ ...prev, [name]: value }));
 
-  if (!!user) {
-    // redirect to dashboard
-  }
-
-  return (
+  return !!user ? (
+    router.push("/dashboard")
+  ) : (
     <form onSubmit={handleSubmit}>
       <input
         placeholder="Email"
