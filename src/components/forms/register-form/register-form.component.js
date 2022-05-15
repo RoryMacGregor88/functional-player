@@ -1,15 +1,13 @@
 import { useForm } from "react-hook-form";
 
 import { registerHandler } from "src/utils";
-import { PASSWORD_MIN, PASSWORD_MAX } from "src/constants";
 
 import {
   FormWrapper,
   UsernameField,
   EmailField,
   PasswordField,
-  ConfirmPasswordField,
-} from "..";
+} from "src/components";
 
 import { Button } from "../..";
 
@@ -25,12 +23,9 @@ const RegisterForm = ({ insertedId, setInsertedId, onNextClick }) => {
   const onSubmit = async (event) => {
     const { username, email, password } = event;
 
-    console.log("event: ", event);
-    return;
-
     const { error, insertedId } = await registerHandler({
       username,
-      email,
+      email: email.toLowerCase(),
       password,
     });
 
@@ -47,8 +42,19 @@ const RegisterForm = ({ insertedId, setInsertedId, onNextClick }) => {
       <FormWrapper onSubmit={handleSubmit(onSubmit)}>
         <EmailField errors={errors} register={register} />
         <UsernameField errors={errors} register={register} />
-        <PasswordField errors={errors} register={register} />
-        <ConfirmPasswordField errors={errors} register={register} />
+        <PasswordField
+          errors={errors}
+          register={register}
+          label="Password"
+          name="password"
+          validate
+        />
+        <PasswordField
+          errors={errors}
+          register={register}
+          label="Confirm password"
+          name="confirmPassword"
+        />
         <Button type="submit" disabled={shouldDisable || !!insertedId}>
           Submit
         </Button>

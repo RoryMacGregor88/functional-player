@@ -11,6 +11,7 @@ const Stepper = ({ activeStep }) => (
     activeStep={activeStep}
     sx={{
       marginBottom: "2rem",
+      minWidth: "50%",
     }}
   >
     {STEPS.map(({ step, label }) => (

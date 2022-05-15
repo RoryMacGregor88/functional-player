@@ -49,24 +49,16 @@ export default function Register({ user }) {
   return !!user ? (
     router.push("/dashboard")
   ) : (
-    <Grid container direction="column" alignItems="center" wrap="nowrap">
+    <Grid container direction="column" alignItems="center">
       <SpacedTitle>Register</SpacedTitle>
-      <Grid
-        item
-        component={Box}
-        sx={{ minWidth: "50%", height: "100%" }}
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Stepper activeStep={activeStep} />
-        {getView({
-          activeStep,
-          insertedId,
-          setInsertedId,
-          onNextClick,
-          handleFinishClick,
-        })}
-      </Grid>
+      <Stepper activeStep={activeStep} />
+      {getView({
+        activeStep,
+        insertedId,
+        setInsertedId,
+        onNextClick,
+        handleFinishClick,
+      })}
     </Grid>
   );
 }

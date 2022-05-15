@@ -10,9 +10,8 @@ const Button = ({ disabled = false, children, ...props }) => (
   <MuiButton
     sx={{
       margin: "0.5rem 0",
-      padding: "0.5rem",
+      padding: "0.5rem 0",
       width: "100%",
-      cursor: disabled ? "not-allowed" : "pointer",
     }}
     disabled={disabled}
     {...props}

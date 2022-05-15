@@ -35,6 +35,15 @@ const theme = {
       main: lightGrey,
     },
   },
+  // components: {
+  //   MuiTextField: {
+  //     styleOverrides: {
+  //       input: {
+  //         WebkitBoxShadow: "0 0 0 1000px #ff0000 inset",
+  //       },
+  //     },
+  //   },
+  // },
 };
 
 export default createTheme(theme);

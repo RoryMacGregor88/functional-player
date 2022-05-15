@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Grid, InputAdornment } from "@mui/material";
+import { InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import { TextField, IconButton } from "..";
@@ -12,22 +12,29 @@ import { PASSWORD_MIN, PASSWORD_MAX } from "src/constants";
  *  register: function
  * }} props
  */
-const EmailField = ({ errors, register }) => (
-  <Grid
-    item
-    component={TextField}
-    variant="outlined"
-    label="Email"
-    type="email"
-    aria-describedby="email"
-    error={!!errors.email}
-    helperText={errors.email?.message}
-    {...register("email", {
+const EmailField = ({ errors, register }) => {
+  const utils = {
+    ...register("email", {
       required: "Email address is required",
-    })}
-    autoFocus
-  />
-);
+    }),
+  };
+
+  console.log("utils: ", utils);
+  return (
+    <TextField
+      variant="outlined"
+      label="Email"
+      id="email"
+      name="email"
+      type="email"
+      aria-describedby="email"
+      error={!!errors.email}
+      helperText={errors.email?.message}
+      {...utils}
+      autoFocus
+    />
+  );
+};
 
 /**
  * @param {{
@@ -36,11 +43,11 @@ const EmailField = ({ errors, register }) => (
  * }} props
  */
 const UsernameField = ({ errors, register }) => (
-  <Grid
-    item
-    component={TextField}
+  <TextField
     variant="outlined"
     label="Username"
+    id="username"
+    name="username"
     // TODO: check type is right
     type="input"
     aria-describedby="username"
@@ -56,26 +63,40 @@ const UsernameField = ({ errors, register }) => (
  * @param {{
  *  errors: object
  *  register: function
+ *  label: string
+ *  name: string
+ *  validate?: boolean
  * }} props
  */
-const PasswordField = ({ errors, register }) => {
+const PasswordField = ({ errors, register, label, name, validate = false }) => {
   const [showPassword, setShowPassword] = useState(false);
-
-  // TODO: need to make this re-usable with confirm password
 
   // TODO: this is broke, negative margin -12px being implemented somewhere
   const iconStyles = { marginRight: "1rem", color: "palette.primary.main" };
 
+  const validation = validate
+    ? {
+        minLength: {
+          value: PASSWORD_MIN,
+          message: `Password is too short (minimum ${PASSWORD_MIN} characters)`,
+        },
+        maxLength: {
+          value: PASSWORD_MAX,
+          message: `Password is too long (maximum ${PASSWORD_MAX} characters)`,
+        },
+      }
+    : {};
+
   return (
-    <Grid
-      item
-      component={TextField}
+    <TextField
       variant="outlined"
-      label="Password"
+      label={label}
+      id={name}
+      name={name}
       type={showPassword ? "input" : "password"}
-      aria-describedby="password"
-      error={!!errors.password}
-      helperText={errors.password?.message}
+      aria-describedby={name}
+      error={!!errors[name]}
+      helperText={errors[name]?.message}
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
@@ -94,43 +115,12 @@ const PasswordField = ({ errors, register }) => {
           </InputAdornment>
         ),
       }}
-      {...register("password", {
-        required: "Password is required",
-        minLength: {
-          value: PASSWORD_MIN,
-          message: `Password is too short (minimum ${PASSWORD_MIN} characters)`,
-        },
-        maxLength: {
-          value: PASSWORD_MAX,
-          message: `Password is too long (maximum ${PASSWORD_MAX} characters)`,
-        },
+      {...register(name, {
+        required: `${label} is required`,
+        ...validation,
       })}
     />
   );
 };
 
-/**
- * @param {{
- *  errors: object
- *  register: function
- * }} props
- */
-const ConfirmPasswordField = ({ errors, register }) => (
-  <Grid
-    item
-    component={TextField}
-    variant="outlined"
-    label="Confirm Password"
-    type="password"
-    aria-describedby="confirmPassword"
-    error={!!errors.confirmPassword}
-    helperText={errors.confirmPassword?.message}
-    {...register("confirmPassword", {
-      required: "Password confirmation is required",
-      minLength: PASSWORD_MIN,
-      maxLength: PASSWORD_MAX,
-    })}
-  />
-);
-
-export { UsernameField, EmailField, PasswordField, ConfirmPasswordField };
+export { UsernameField, EmailField, PasswordField };

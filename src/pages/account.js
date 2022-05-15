@@ -1,66 +1,62 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { updateHandler } from "src/utils";
+import { Tabs, Tab, Box } from "@mui/material";
 
-const initialState = {
-  currentPassword: "",
-  newPassword: "",
-  confirmNewPassword: "",
-};
+import {
+  SpacedTitle,
+  UpdatePasswordForm,
+  DeleteAccountForm,
+  UpdateSubscriptionForm,
+  UpdateUserForm,
+} from "src/components";
+
+const TabPanel = ({ children, name, value, index }) => (
+  <Box
+    role="tabpanel"
+    hidden={value !== index}
+    id={`${name}-tab`}
+    aria-labelledby={`${name}-tab`}
+  >
+    {value === index ? children : null}
+  </Box>
+);
 
 export default function Account({ user }) {
   const router = useRouter();
-  const [formState, setFormState] = useState(initialState);
+  const [value, setValue] = useState(0);
 
-  const { currentPassword, newPassword, confirmNewPassword } = formState;
+  return !user ? (
+    router.push("/login")
+  ) : (
+    <div>
+      <SpacedTitle>Account Settings</SpacedTitle>
+      <Tabs
+        value={value}
+        onChange={(_, newValue) => setValue(newValue)}
+        aria-label="account and subscription tabs"
+        indicatorColor="primary"
+        centered
+        sx={{ marginBottom: "2rem" }}
+      >
+        <Tab label="Account Settings" />
+        <Tab label="My Subscription" />
+        <Tab label="Update Password" />
+        <Tab label="Delete Account" />
+      </Tabs>
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
+      <TabPanel name="update-user" value={value} index={0}>
+        <UpdateUserForm user={user} />
+      </TabPanel>
+      <TabPanel name="update-subscription" value={value} index={1}>
+        <UpdateSubscriptionForm user={user} />
+      </TabPanel>
 
-    const userData = {
-      email: user.email,
-      currentPassword,
-      newPassword,
-    };
-
-    const { error, ok } = await updateHandler({ formData: userData });
-
-    if (!!error) {
-      console.log("error: ", error);
-    }
-
-    console.log("ok: ", ok);
-  };
-
-  const onChange = ({ target: { name, value } }) =>
-    setFormState((prev) => ({ ...prev, [name]: value }));
-
-  if (!user) {
-    router.push("/login");
-  }
-
-  return (
-    <form onSubmit={onSubmit}>
-      <h1>Edit account settings</h1>
-      <input
-        name="currentPassword"
-        placeholder="Current password"
-        value={currentPassword}
-        onChange={onChange}
-      />
-      <input
-        name="newPassword"
-        placeholder="New password"
-        value={newPassword}
-        onChange={onChange}
-      />
-      <input
-        name="confirmNewPassword"
-        placeholder="Confirm new password"
-        value={confirmNewPassword}
-        onChange={onChange}
-      />
-      <button type="submit">Submit</button>
-    </form>
+      <TabPanel name="update-user" value={value} index={2}>
+        <UpdatePasswordForm user={user} />
+      </TabPanel>
+      <TabPanel name="delete-account" value={value} index={3}>
+        <DeleteAccountForm user={user} />
+      </TabPanel>
+    </div>
   );
 }

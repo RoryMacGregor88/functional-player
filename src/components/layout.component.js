@@ -20,7 +20,6 @@ const Layout = ({ user, children }) => {
         style={{
           display: "flex",
           justifyContent: "center",
-          padding: "1rem",
           minHeight: "85vh",
         }}
       >
