@@ -4,6 +4,7 @@ import { Button as MuiButton } from "@mui/material";
  * @param {{
  *  disabled?: boolean
  *  children: string
+ *  props: any
  * }} props
  */
 const Button = ({ disabled = false, children, ...props }) => (
