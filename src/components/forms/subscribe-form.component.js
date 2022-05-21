@@ -1,13 +1,39 @@
-import { Button } from "@/src/components";
+import { useForm } from "react-hook-form";
+import { Button, FormWrapper } from "@/src/components";
 
-const SubscribeForm = ({ insertedId, onNextClick }) => {
-  // call subscribe handler
-  // create subscription and save subscriptionId to created user
+/**
+ * @param {{
+ *  insertedId: string,
+ *  subscribeHandler: function,
+ *  onNextClick: function
+ * }} props
+ */
+const SubscribeForm = ({ insertedId, subscribeHandler, onNextClick }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {},
+  });
+
+  // types
+  const onSubmit = (values) => {
+    subscribeHandler({ insertedId, ...values });
+  };
+
   return (
-    <form onSubmit={onNextClick}>
-      <p>Subscribe</p>
-      <Button type="submit">Submit</Button>
-    </form>
+    <>
+      <FormWrapper onSubmit={handleSubmit(onSubmit)}>
+        <p style={{ textAlign: "center" }}>Subscribe</p>
+        <Button type="submit" disabled={!!Object.keys(errors).length}>
+          Submit
+        </Button>
+      </FormWrapper>
+      <Button onClick={onNextClick} disabled={false}>
+        Next
+      </Button>
+    </>
   );
 };
 

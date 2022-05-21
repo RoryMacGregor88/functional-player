@@ -35,6 +35,8 @@ export default async function register(req, res) {
       return res.status(500).send({ error });
     }
   } else {
-    res.status(500).send({ error: "Invalid method, only POST permitted." });
+    res
+      .status(500)
+      .send({ error: "Invalid method, only POST requests permitted." });
   }
 }

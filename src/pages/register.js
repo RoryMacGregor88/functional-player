@@ -10,26 +10,27 @@ import {
   SpacedTitle,
 } from "@/src/components";
 
-import { registerHandler } from "@/src/utils";
+import { registerHandler, subscribeHandler } from "@/src/utils";
 
 /**
  * @param {{
  *  activeStep: number,
  *  registerSubmit: function,
+ *  subscribeSubmit: function,
  *  insertedId: string,
  *  onNextClick: function,
  * }} props
  * @returns {React.ReactNode}
  */
-const getView = ({ activeStep, registerSubmit, insertedId, onNextClick }) => {
+const getView = ({
+  activeStep,
+  registerSubmit,
+  subscribeSubmit,
+  insertedId,
+  onNextClick,
+}) => {
   switch (activeStep) {
-    case 2:
-      return (
-        <SubscribeForm insertedId={insertedId} onNextClick={onNextClick} />
-      );
-    case 3:
-      return <RegistrationFinishView />;
-    default:
+    case 1:
       return (
         <RegisterForm
           insertedId={insertedId}
@@ -37,6 +38,18 @@ const getView = ({ activeStep, registerSubmit, insertedId, onNextClick }) => {
           onNextClick={onNextClick}
         />
       );
+    case 2:
+      return (
+        <SubscribeForm
+          insertedId={insertedId}
+          subscribeSubmit={subscribeSubmit}
+          onNextClick={onNextClick}
+        />
+      );
+    case 3:
+      return <RegistrationFinishView />;
+    default:
+      return null;
   }
 };
 
@@ -44,6 +57,8 @@ export default function Register({ user }) {
   const router = useRouter();
   const [activeStep, setActiveStep] = useState(1);
   const [insertedId, setInsertedId] = useState(null);
+
+  const onNextClick = () => setActiveStep((prev) => prev + 1);
 
   const registerSubmit = async (event) => {
     const { username, email, password } = event;
@@ -62,7 +77,9 @@ export default function Register({ user }) {
     setInsertedId(insertedId);
   };
 
-  const onNextClick = () => setActiveStep((prev) => prev + 1);
+  const subscribeSubmit = async (event) => {
+    subscribeHandler(event);
+  };
 
   return !!user ? (
     router.push("/dashboard")
@@ -78,6 +95,7 @@ export default function Register({ user }) {
       {getView({
         activeStep,
         registerSubmit,
+        subscribeSubmit,
         insertedId,
         setInsertedId,
         onNextClick,

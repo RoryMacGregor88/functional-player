@@ -13,7 +13,7 @@ async function user(req, res) {
   } else {
     return res
       .status(500)
-      .send({ error: "Invalid method, only GET permitted." });
+      .send({ error: "Invalid method, only GET requests permitted." });
   }
 }
 
