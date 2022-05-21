@@ -5,6 +5,8 @@ import loginHandler from "./login-handler";
 import logoutHandler from "./logout-handler";
 import updateHandler from "./update-handler";
 
+export * from "./constants";
+
 export {
   getUser,
   getStripe,

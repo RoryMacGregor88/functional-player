@@ -21,6 +21,7 @@ const Layout = ({ user, children }) => {
           display: "flex",
           justifyContent: "center",
           minHeight: "85vh",
+          padding: "0 1rem",
         }}
       >
         {children}

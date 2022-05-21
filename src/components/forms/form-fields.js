@@ -4,7 +4,7 @@ import { InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import { TextField, IconButton } from "..";
-import { PASSWORD_MIN, PASSWORD_MAX } from "src/constants";
+import { PASSWORD_MIN, PASSWORD_MAX } from "@/src/utils";
 
 /**
  * @param {{
@@ -12,29 +12,22 @@ import { PASSWORD_MIN, PASSWORD_MAX } from "src/constants";
  *  register: function
  * }} props
  */
-const EmailField = ({ errors, register }) => {
-  const utils = {
-    ...register("email", {
+const EmailField = ({ errors, register }) => (
+  <TextField
+    variant="outlined"
+    label="Email"
+    id="email"
+    name="email"
+    type="email"
+    aria-describedby="email"
+    error={!!errors.email}
+    helperText={errors.email?.message}
+    {...register("email", {
       required: "Email address is required",
-    }),
-  };
-
-  console.log("utils: ", utils);
-  return (
-    <TextField
-      variant="outlined"
-      label="Email"
-      id="email"
-      name="email"
-      type="email"
-      aria-describedby="email"
-      error={!!errors.email}
-      helperText={errors.email?.message}
-      {...utils}
-      autoFocus
-    />
-  );
-};
+    })}
+    autoFocus
+  />
+);
 
 /**
  * @param {{
@@ -92,12 +85,14 @@ const PasswordField = ({ errors, register, label, name, validate = false }) => {
       variant="outlined"
       label={label}
       id={name}
-      name={name}
+      data-testid="test-password"
       type={showPassword ? "input" : "password"}
       aria-describedby={name}
       error={!!errors[name]}
       helperText={errors[name]?.message}
       InputProps={{
+        role: "textbox",
+        "aria-label": label,
         endAdornment: (
           <InputAdornment position="end">
             <IconButton

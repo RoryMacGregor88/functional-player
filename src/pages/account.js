@@ -8,7 +8,7 @@ import {
   DeleteAccountForm,
   UpdateSubscriptionForm,
   UpdateUserForm,
-} from "src/components";
+} from "@/src/components";
 
 const TabPanel = ({ children, name, value, index }) => (
   <Box

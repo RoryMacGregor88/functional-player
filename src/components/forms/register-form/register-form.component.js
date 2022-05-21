@@ -1,45 +1,35 @@
 import { useForm } from "react-hook-form";
 
-import { registerHandler } from "src/utils";
+import { Box } from "@mui/material";
 
 import {
   FormWrapper,
   UsernameField,
   EmailField,
   PasswordField,
-} from "src/components";
+} from "@/src/components";
 
 import { Button } from "../..";
 
-const RegisterForm = ({ insertedId, setInsertedId, onNextClick }) => {
+const RegisterForm = ({ insertedId, registerSubmit, onNextClick }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty },
-  } = useForm();
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
 
-  const shouldDisable = !insertedId || !isDirty || !!Object.keys(errors).length;
-
-  const onSubmit = async (event) => {
-    const { username, email, password } = event;
-
-    const { error, insertedId } = await registerHandler({
-      username,
-      email: email.toLowerCase(),
-      password,
-    });
-
-    if (!!error) {
-      console.log("There was an error: ", error);
-      return;
-    }
-
-    setInsertedId(insertedId);
-  };
+  // TODO: is Object.keys... required with UseForm
 
   return (
-    <>
-      <FormWrapper onSubmit={handleSubmit(onSubmit)}>
+    <Box sx={{ width: "100%" }} justifyContent="center" alignItems="center">
+      <FormWrapper onSubmit={handleSubmit(registerSubmit)}>
         <EmailField errors={errors} register={register} />
         <UsernameField errors={errors} register={register} />
         <PasswordField
@@ -55,18 +45,18 @@ const RegisterForm = ({ insertedId, setInsertedId, onNextClick }) => {
           label="Confirm password"
           name="confirmPassword"
         />
-        <Button type="submit" disabled={shouldDisable || !!insertedId}>
+        <Button type="submit" disabled={!!Object.keys(errors).length}>
           Submit
         </Button>
       </FormWrapper>
       <Button
         onClick={onNextClick}
-        disabled={shouldDisable}
+        // disabled={!insertedId}
         sx={{ width: "100%" }}
       >
         Next
       </Button>
-    </>
+    </Box>
   );
 };
 

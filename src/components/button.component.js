@@ -1,5 +1,7 @@
 import { Button as MuiButton } from "@mui/material";
 
+// disabled ? <span style={{cursor: 'not-allowed'}}>{component}</span>
+
 /**
  * @param {{
  *  disabled?: boolean

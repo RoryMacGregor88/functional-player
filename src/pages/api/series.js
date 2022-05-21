@@ -1,5 +1,5 @@
-import { connectToDatabase } from 'lib/mongodb';
-import { SERIES } from 'src/constants';
+import { connectToDatabase } from "lib/mongodb";
+import { SERIES } from "src/constants";
 
 export const getAllSeries = async () => {
   const { db } = await connectToDatabase();
@@ -7,7 +7,7 @@ export const getAllSeries = async () => {
   return series;
 };
 
-export const getSeriesById = async seriesPath => {
+export const getSeriesById = async (seriesPath) => {
   const { db } = await connectToDatabase();
   const series = await db.collection(SERIES).find({ seriesPath }).toArray();
   return series?.[0];

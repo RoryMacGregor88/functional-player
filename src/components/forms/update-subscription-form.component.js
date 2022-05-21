@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { FormWrapper, Button } from "src/components";
+import { FormWrapper, Button } from "@/src/components";
 
 const Unsubscribe = ({ user }) => (
   <>

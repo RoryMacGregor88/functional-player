@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 
 import { Button } from "@mui/material";
 
-import { FormWrapper, UsernameField, EmailField } from "src/components";
+import { FormWrapper, UsernameField, EmailField } from "@/src/components";
 
 const UpdateUserForm = ({ user }) => {
   const {

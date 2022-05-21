@@ -4,7 +4,7 @@ import { withIronSessionApiRoute } from "iron-session/next";
 import { connectToDatabase } from "lib/mongodb";
 import { sessionOptions } from "lib/session";
 
-import { USERS } from "src/utils/constants";
+import { USERS } from "@/src/utils/constants";
 
 async function login(req, res) {
   if (req.method === "POST") {

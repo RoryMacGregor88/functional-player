@@ -1,6 +1,6 @@
 import { hash } from "bcryptjs";
 import { connectToDatabase } from "lib/mongodb";
-import { USERS } from "src/utils/constants";
+import { USERS } from "@/src/utils/constants";
 
 export default async function register(req, res) {
   if (req.method === "POST") {

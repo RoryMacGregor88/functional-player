@@ -7,10 +7,10 @@ import { useState, useEffect } from "react";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 
-import { Layout, LoadingSpinner } from "src/components";
-import { getUser, getStripe } from "src/utils";
+import { Layout, LoadingSpinner } from "@/src/components";
+import { getUser, getStripe } from "@/src/utils";
 
-import theme from "src/components/theme";
+import theme from "@/src/components/theme";
 
 function App({ Component, pageProps }) {
   const stripePromise = getStripe();

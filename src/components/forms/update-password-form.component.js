@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 
-import { updateHandler } from "src/utils";
+import { updateHandler } from "@/src/utils";
 
-import { FormWrapper, Button, PasswordField } from "src/components";
+import { FormWrapper, Button, PasswordField } from "@/src/components";
 
 const UpdatePasswordForm = ({ user }) => {
   const router = useRouter();

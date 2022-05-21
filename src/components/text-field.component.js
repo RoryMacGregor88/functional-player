@@ -1,10 +1,11 @@
+import { forwardRef } from "react";
 import { TextField as MuiTextField } from "@mui/material";
 
 // TODO: focused background color is blue for some reason
 
 // TODO: maybe theme this, as there are many variants/errors etc
 
-const TextField = (props) => (
+const TextField = (props, ref) => (
   <MuiTextField
     fullWidth
     inputProps={{
@@ -13,7 +14,8 @@ const TextField = (props) => (
       },
     }}
     {...props}
+    ref={ref}
   />
 );
 
-export default TextField;
+export default forwardRef(TextField);

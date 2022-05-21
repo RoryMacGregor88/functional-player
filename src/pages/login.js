@@ -4,14 +4,14 @@ import { useForm } from "react-hook-form";
 
 import { Grid } from "@mui/material";
 
-import { loginHandler } from "src/utils";
+import { loginHandler } from "@/src/utils";
 import {
   Button,
   SpacedTitle,
   FormWrapper,
   EmailField,
   PasswordField,
-} from "src/components";
+} from "@/src/components";
 
 export default function Login({ user }) {
   const router = useRouter();

@@ -1,7 +1,6 @@
 import { render as rtlRender } from "@testing-library/react";
 
 const render = (ui, { ...options } = {}) => {
-  console.log("hit render");
   const utils = rtlRender(ui, { ...options });
   return { ...utils };
 };

@@ -1,5 +1,5 @@
 import { Button, Typography } from "@mui/material";
-import { FormWrapper } from "src/components";
+import { FormWrapper } from "@/src/components";
 
 const DeleteAccountForm = () => {
   return (

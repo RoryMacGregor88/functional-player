@@ -1,10 +1,10 @@
 import { Close as CloseIcon } from "@mui/icons-material";
 import { Drawer as MuiDrawer, Grid } from "@mui/material";
 import { useRouter } from "next/router";
-import { logoutHandler } from "src/utils";
+import { logoutHandler } from "@/src/utils";
 import NextLink from "next/link";
 
-import { Button, IconButton } from "src/components";
+import { Button, IconButton } from "@/src/components";
 
 const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
   const router = useRouter();

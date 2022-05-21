@@ -1,4 +1,4 @@
-import { Grid, Box } from "@mui/material";
+import { Grid } from "@mui/material";
 
 /**
  * @param {
@@ -7,17 +7,15 @@ import { Grid, Box } from "@mui/material";
  * } props
  */
 const FormWrapper = ({ onSubmit, children }) => (
-  <Box sx={{ minWidth: "50%" }} justifyContent="center" alignItems="center">
-    <Grid
-      container
-      component="form"
-      direction="column"
-      gap="1rem"
-      onSubmit={onSubmit}
-    >
-      {children}
-    </Grid>
-  </Box>
+  <Grid
+    container
+    component="form"
+    direction="column"
+    gap="1rem"
+    onSubmit={onSubmit}
+  >
+    {children}
+  </Grid>
 );
 
 export default FormWrapper;
