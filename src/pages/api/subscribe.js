@@ -31,7 +31,7 @@ export default async function subscribe(req, res) {
       return res.status(500).send({ error });
     }
   } else {
-    res
+    return res
       .status(500)
       .send({ error: "Invalid method, only POST requests permitted." });
   }

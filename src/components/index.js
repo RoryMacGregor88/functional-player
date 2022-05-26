@@ -14,6 +14,9 @@ import Footer from "./footer.component";
 // forms
 export * from "./forms";
 
+// stripe
+export * from "./stripe-elements";
+
 export {
   Layout,
   LoadingSpinner,

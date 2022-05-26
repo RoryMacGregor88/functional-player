@@ -23,6 +23,7 @@ export default async function register(req, res) {
         return res.status(200).send({ error: "Incorrect password." });
       }
 
+      // TODO: why not use id to find?
       await db
         .collection(USERS)
         .updateOne(
@@ -37,7 +38,7 @@ export default async function register(req, res) {
       return res.status(500).send({ error });
     }
   } else {
-    res
+    return res
       .status(500)
       .send({ error: "Invalid method, only POST requests permitted." });
   }

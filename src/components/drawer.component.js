@@ -29,13 +29,8 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
       }}
     >
       <Grid container direction="column" justifyContent="space-between">
-        <IconButton>
-          <CloseIcon
-            onClick={toggleDrawer}
-            sx={{ height: "2rem", width: "2rem" }}
-          >
-            Close
-          </CloseIcon>
+        <IconButton onClick={toggleDrawer}>
+          <CloseIcon sx={{ height: "2rem", width: "2rem" }}>Close</CloseIcon>
         </IconButton>
 
         <NextLink href="/series" passHref>

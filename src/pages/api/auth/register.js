@@ -29,7 +29,7 @@ export default async function register(req, res) {
         password: await hash(password, 12),
       });
 
-      res.status(201).json({ insertedId });
+      return res.status(201).json({ insertedId });
     } catch (error) {
       // TODO: test error states (timeouts and stuff too, see MongoDB docs)
       return res.status(500).send({ error });

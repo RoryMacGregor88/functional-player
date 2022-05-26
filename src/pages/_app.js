@@ -14,24 +14,29 @@ import theme from "@/src/components/theme";
 
 function App({ Component, pageProps }) {
   const stripePromise = getStripe();
+
+  const [clientSecret, setClientSecret] = useState(null);
+
   const [userResponse, setUserResponse] = useState({});
-  const { error, user, noSession } = userResponse;
+  const [error, setError] = useState(null);
+
+  const { user, noSession } = userResponse;
 
   useEffect(() => {
     (async () => {
-      const res = await getUser();
-      setUserResponse(res);
+      const { error, user, noSession } = await getUser();
+      if (!!error) {
+        // TODO: what do if error fetching user? Old way might be better?
+        setError(error);
+      } else {
+        setUserResponse({ user, noSession });
+      }
     })();
   }, []);
 
-  if (!!error) {
-    //handle error
-    console.log("Error: ", error);
-  }
-
   if (!user && !noSession) return <LoadingSpinner />;
 
-  return (
+  return !stripePromise ? null : (
     <>
       <Head>
         {/* // TODO: need one on every page, SEO is vital */}
@@ -45,9 +50,13 @@ function App({ Component, pageProps }) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Elements stripe={stripePromise}>
+        <Elements stripe={stripePromise} options={{ clientSecret }}>
           <Layout user={user}>
-            <Component user={user} {...pageProps} />
+            <Component
+              user={user}
+              setClientSecret={setClientSecret}
+              {...pageProps}
+            />
           </Layout>
         </Elements>
       </ThemeProvider>
