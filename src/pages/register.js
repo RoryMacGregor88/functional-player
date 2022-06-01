@@ -8,6 +8,7 @@ import {
   SubscribeForm,
   RegistrationFinishView,
   SpacedTitle,
+  Well,
 } from "@/src/components";
 
 import { registerHandler, subscribeHandler } from "@/src/utils";
@@ -17,17 +18,15 @@ import { registerHandler, subscribeHandler } from "@/src/utils";
  *  activeStep: number,
  *  registerSubmit: function,
  *  subscribeHandler: function,
- *  setClientSecret: function,
  *  insertedId: string,
  *  onNextClick: function,
  * }} props
- * @returns {React.ReactNode}
  */
 const FormView = ({
+  setError,
   activeStep,
   registerSubmit,
   subscribeHandler,
-  setClientSecret,
   insertedId,
   setInsertedId,
   onNextClick,
@@ -45,9 +44,9 @@ const FormView = ({
   if (activeStep === 2)
     return (
       <SubscribeForm
+        setError={setError}
         insertedId={insertedId}
         subscribeHandler={subscribeHandler}
-        setClientSecret={setClientSecret}
         onNextClick={onNextClick}
       />
     );
@@ -55,28 +54,33 @@ const FormView = ({
   if (activeStep === 3) return <RegistrationFinishView />;
 };
 
-export default function Register({ user, setClientSecret }) {
+export default function Register({ user }) {
   const router = useRouter();
+
   const [activeStep, setActiveStep] = useState(1);
   const [insertedId, setInsertedId] = useState(null);
+  const [error, setError] = useState(null);
 
   const onNextClick = () => setActiveStep((prev) => prev + 1);
 
   const registerSubmit = async (event) => {
-    const { username, email, password } = event;
+    try {
+      const { username, email, password } = event;
 
-    const { error, insertedId } = await registerHandler({
-      username,
-      email: email.toLowerCase(),
-      password,
-    });
+      const { error, insertedId } = await registerHandler({
+        username,
+        email: email.toLowerCase(),
+        password,
+      });
 
-    if (!!error) {
-      console.log("There was an error: ", error);
-      return;
+      setInsertedId(insertedId);
+    } catch (error) {
+      setError({
+        title: "Error",
+        message: "Something went wrong...",
+        stack: error,
+      });
     }
-
-    setInsertedId(insertedId);
   };
 
   return !!user ? (
@@ -89,12 +93,13 @@ export default function Register({ user, setClientSecret }) {
       sx={{ maxWidth: "50rem" }}
     >
       <SpacedTitle>Register</SpacedTitle>
+      {!!error ? <Well {...error} /> : null}
       <Stepper activeStep={activeStep} />
       <FormView
+        setError={setError}
         activeStep={activeStep}
         registerSubmit={registerSubmit}
         subscribeHandler={subscribeHandler}
-        setClientSecret={setClientSecret}
         insertedId={insertedId}
         setInsertedId={setInsertedId}
         onNextClick={onNextClick}

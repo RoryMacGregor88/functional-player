@@ -13,12 +13,12 @@ import { Button } from "../..";
 
 /**
  * @param {{
+ *  insertedId: string,
  *  registerSubmit: function
- *  setInsertedId: function
  *  onNextClick: function
  * }} props
  */
-const RegisterForm = ({ registerSubmit, setInsertedId, onNextClick }) => {
+const RegisterForm = ({ insertedId, registerSubmit, onNextClick }) => {
   const {
     register,
     handleSubmit,

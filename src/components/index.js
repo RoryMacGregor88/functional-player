@@ -7,6 +7,7 @@ import IconButton from "./icon-button.component";
 import SpacedTitle from "./spaced-title.component";
 import Stepper from "./stepper.component";
 import RegistrationFinishView from "./registration-finish-view.component";
+import Well from "./well.component";
 import TextField from "./text-field.component";
 import Button from "./button.component";
 import Footer from "./footer.component";
@@ -26,6 +27,7 @@ export {
   SpacedTitle,
   Stepper,
   RegistrationFinishView,
+  Well,
   TextField,
   Button,
   Footer,

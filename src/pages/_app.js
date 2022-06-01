@@ -1,22 +1,16 @@
 import Head from "next/head";
 
-import { Elements } from "@stripe/react-stripe-js";
-
 import { useState, useEffect } from "react";
 
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 
 import { Layout, LoadingSpinner } from "@/src/components";
-import { getUser, getStripe } from "@/src/utils";
+import { getUser } from "@/src/utils";
 
 import theme from "@/src/components/theme";
 
 function App({ Component, pageProps }) {
-  const stripePromise = getStripe();
-
-  const [clientSecret, setClientSecret] = useState(null);
-
   const [userResponse, setUserResponse] = useState({});
   const [error, setError] = useState(null);
 
@@ -24,19 +18,23 @@ function App({ Component, pageProps }) {
 
   useEffect(() => {
     (async () => {
-      const { error, user, noSession } = await getUser();
-      if (!!error) {
-        // TODO: what do if error fetching user? Old way might be better?
-        setError(error);
-      } else {
+      try {
+        const { user, noSession } = await getUser();
         setUserResponse({ user, noSession });
+      } catch (error) {
+        // TODO: what do if error fetching user? Old way might be better?
+        setError({
+          title: "Error",
+          message: "Something went wrong...",
+          stack: error,
+        });
       }
     })();
   }, []);
 
   if (!user && !noSession) return <LoadingSpinner />;
 
-  return !stripePromise ? null : (
+  return (
     <>
       <Head>
         {/* // TODO: need one on every page, SEO is vital */}
@@ -50,15 +48,9 @@ function App({ Component, pageProps }) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <Layout user={user}>
-            <Component
-              user={user}
-              setClientSecret={setClientSecret}
-              {...pageProps}
-            />
-          </Layout>
-        </Elements>
+        <Layout user={user}>
+          <Component user={user} {...pageProps} />
+        </Layout>
       </ThemeProvider>
     </>
   );

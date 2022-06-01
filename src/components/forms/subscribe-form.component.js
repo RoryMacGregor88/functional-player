@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 import {
+  Elements,
   useStripe,
   useElements,
   PaymentElement,
@@ -10,102 +11,117 @@ import { useForm } from "react-hook-form";
 
 import { Button, FormWrapper } from "@/src/components";
 
+import { getStripe } from "@/src/utils";
+
 /**
  * @param {{
- *  insertedId: string,
- *  subscribeHandler: function,
- *  setClientSecret: function,
+ *  setError: function,
  *  onNextClick: function
+ *  clientSecret: string
+ *  subscriptionData: string
  * }} props
  */
 const SubscribeForm = ({
-  insertedId,
-  subscribeHandler,
-  setClientSecret,
+  setError,
   onNextClick,
+  clientSecret,
+  subscriptionId,
 }) => {
   const stripe = useStripe();
   const elements = useElements();
 
-  const [subscriptionData, setSubscriptionData] = useState({});
-  const [error, setError] = useState(null);
+  const [paymentIntent, setPaymentIntent] = useState(null);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const notLoaded = !stripe || !elements;
 
-  const { subscriptionId, clientSecret } = subscriptionData;
-  const isLoaded = !!stripe && !!elements && !!clientSecret;
-
-  useEffect(() => {
-    (async () => {
-      const { error, subscriptionId, clientSecret } = await subscribeHandler({
-        insertedId,
-      });
-
-      if (!!error) {
-        setError(error);
-      } else {
-        setClientSecret(clientSecret);
-        setSubscriptionData({ subscriptionId, clientSecret });
-      }
-    })();
-  }, [insertedId, setClientSecret, subscribeHandler]);
+  // TODO:  Server side props can do this?
 
   // TODO: do this properly
   /** @param {object} values */
   const onSubmit = async (values) => {
-    console.log("values: ", values);
-
     const stripeElement = elements.getElement(PaymentElement);
 
-    // Use element to tokenize payment details
-    let { error, paymentIntent } = await stripe.confirmCardPayment(
-      clientSecret,
-      {
+    try {
+      const { paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: stripeElement,
           billing_details: {},
         },
-      }
-    );
+      });
 
-    if (!!error) {
-      setError(error);
-    } else {
-      console.log("paymentIntent: ", paymentIntent);
-      onNextClick();
+      setPaymentIntent(paymentIntent);
+    } catch (error) {
+      setError({
+        title: "Error",
+        message: "Something went wrong...",
+        stack: error,
+      });
     }
   };
 
-  // isLoaded
-  return false ? null : (
+  return notLoaded ? null : (
     <>
-      <FormWrapper onSubmit={handleSubmit(onSubmit)}>
+      <FormWrapper onSubmit={onSubmit}>
         <p style={{ textAlign: "center" }}>Subscribe</p>
-        <div
-          style={{
-            height: "10rem",
-            width: "100%",
-            border: "2px solid hotpink",
-            padding: "2rem",
-          }}
-        >
-          <h3>TOP</h3>
-          <PaymentElement options={{ clientSecret }} />
-          <h3>BOTTOM</h3>
-        </div>
-        <Button type="submit" disabled={!!Object.keys(errors).length}>
+        <PaymentElement onChange={(e) => console.log("e: ", e)} />
+        <Button type="submit" disabled={true}>
           Submit
         </Button>
       </FormWrapper>
-      <Button onClick={onNextClick} disabled={!isLoaded}>
+      <Button onClick={onNextClick} disabled={notLoaded || !paymentIntent}>
         Next
       </Button>
     </>
   );
 };
 
-export default SubscribeForm;
+/**
+ * @param {{
+ *  setError: function,
+ *  insertedId: string,
+ *  subscribeHandler: function,
+ *  onNextClick: function,
+ * }} props
+ */
+const WrappedComponent = ({
+  setError,
+  insertedId,
+  subscribeHandler,
+  onNextClick,
+}) => {
+  const stripePromise = getStripe();
+  const [subscriptionData, setSubscriptionData] = useState({});
+
+  const { clientSecret, subscriptionId } = subscriptionData;
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const subscriptionData = await subscribeHandler({
+          insertedId,
+        });
+
+        setSubscriptionData(subscriptionData);
+      } catch (error) {
+        setError({
+          title: "Error",
+          message: "Something went wrong...",
+          stack: error,
+        });
+      }
+    })();
+  }, [insertedId, setError, subscribeHandler]);
+
+  return !!clientSecret ? (
+    <Elements stripe={stripePromise} options={{ clientSecret }}>
+      <SubscribeForm
+        setError={setError}
+        clientSecret={clientSecret}
+        subscriptionId={subscriptionId}
+        onNextClick={onNextClick}
+      />
+    </Elements>
+  ) : null;
+};
+
+export default WrappedComponent;

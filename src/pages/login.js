@@ -35,6 +35,7 @@ export default function Login({ user }) {
       password,
     });
 
+    // TODO: try catch
     if (!!error) {
       console.log("Error: ", error);
       return;

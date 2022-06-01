@@ -30,6 +30,7 @@ const UpdatePasswordForm = ({ user }) => {
 
     const { error, ok } = await updateHandler({ formData: userData });
 
+    // TODO: try catch
     if (!!error) {
       console.log("error: ", error);
     }
