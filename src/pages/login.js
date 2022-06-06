@@ -30,7 +30,7 @@ export default function Login({ user }) {
   const onSubmit = async (event) => {
     const { email, password } = event;
 
-    const { error, loggedIn } = await loginHandler({
+    const { error, ok } = await loginHandler({
       email: email,
       password,
     });
@@ -39,17 +39,22 @@ export default function Login({ user }) {
     if (!!error) {
       console.log("Error: ", error);
       return;
-    }
-
-    if (loggedIn) {
+    } else if (ok) {
       router.push("/dashboard");
     }
   };
 
-  return !!user ? (
-    router.push("/dashboard")
-  ) : (
-    <Grid container direction="column" alignItems="center">
+  if (!!user) {
+    router.push("/dashboard");
+  }
+
+  return !!user ? null : (
+    <Grid
+      container
+      direction="column"
+      alignItems="center"
+      sx={{ maxWidth: "50rem" }}
+    >
       <SpacedTitle>Login</SpacedTitle>
       <FormWrapper onSubmit={handleSubmit(onSubmit)}>
         <EmailField errors={errors} register={register} />

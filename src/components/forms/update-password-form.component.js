@@ -33,14 +33,16 @@ const UpdatePasswordForm = ({ user }) => {
     // TODO: try catch
     if (!!error) {
       console.log("error: ", error);
+    } else if (ok) {
+      console.log("ok: ", ok);
     }
-
-    console.log("ok: ", ok);
   };
 
-  return !user ? (
-    router.push("/login")
-  ) : (
+  if (!user) {
+    router.push("/login");
+  }
+
+  return !user ? null : (
     <>
       <FormWrapper onSubmit={handleSubmit(onSubmit)}>
         <PasswordField

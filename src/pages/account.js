@@ -25,9 +25,11 @@ export default function Account({ user }) {
   const router = useRouter();
   const [value, setValue] = useState(0);
 
-  return !user ? (
-    router.push("/login")
-  ) : (
+  if (!user) {
+    router.push("/login");
+  }
+
+  return !user ? null : (
     <div>
       <SpacedTitle>Account Settings</SpacedTitle>
       <Tabs

@@ -12,8 +12,6 @@ export default async function subscribe(req, res) {
       // const { email } = req.body;
       const email = "rory@test.com";
 
-      // TODO: how to find uer with ID
-
       // create customer on stripe servers
       const { id: customerId } = await stripe.customers.create({
         email,

@@ -6,12 +6,15 @@ import NextLink from "next/link";
 
 import { Button, IconButton } from "@/src/components";
 
-const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
+const Drawer = ({ user, clearUser, drawerIsOpen, toggleDrawer }) => {
   const router = useRouter();
 
-  const logout = () => {
-    logoutHandler();
-    return router.push("/");
+  const logout = async () => {
+    const { ok } = await logoutHandler();
+    if (ok) {
+      clearUser();
+      router.push("/");
+    }
   };
 
   return (
@@ -39,7 +42,7 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
         {!!user ? (
           <>
             <NextLink href="/account" passHref>
-              <Button toggleDrawer={toggleDrawer}>My Account</Button>
+              <Button onClick={toggleDrawer}>My Account</Button>
             </NextLink>
             <Button onClick={logout}>Log Out</Button>
           </>

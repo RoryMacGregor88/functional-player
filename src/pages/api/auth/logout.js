@@ -5,7 +5,7 @@ function logout(req, res) {
   if (req.method === "POST") {
     try {
       req.session.destroy();
-      return res.status(200).send({ noSession: true });
+      return res.status(200).send({ ok: true });
     } catch (error) {
       return res.status(500).send({ error });
     }

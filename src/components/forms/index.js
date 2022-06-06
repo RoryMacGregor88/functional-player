@@ -1,6 +1,6 @@
 // forms
 import RegisterForm from "./register-form/register-form.component";
-import SubscribeForm from "./subscribe-form.component";
+import SubscribeForm from "./subscribe-form/subscribe-form.component";
 import UpdatePasswordForm from "./update-password-form.component";
 import DeleteAccountForm from "./delete-account-form.component";
 import UpdateSubscriptionForm from "./update-subscription-form.component";

@@ -13,12 +13,12 @@ import { Button } from "../..";
 
 /**
  * @param {{
- *  insertedId: string,
  *  registerSubmit: function
- *  onNextClick: function
+ *  onNextClick: function,
+ *  disableNextButton: boolean
  * }} props
  */
-const RegisterForm = ({ insertedId, registerSubmit, onNextClick }) => {
+const RegisterForm = ({ registerSubmit, onNextClick, disableNextButton }) => {
   const {
     register,
     handleSubmit,
@@ -58,7 +58,7 @@ const RegisterForm = ({ insertedId, registerSubmit, onNextClick }) => {
       </FormWrapper>
       <Button
         onClick={onNextClick}
-        // disabled={!insertedId}
+        disabled={disableNextButton}
         sx={{ width: "100%" }}
       >
         Next

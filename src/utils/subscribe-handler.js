@@ -14,6 +14,8 @@
 //   return res.json();
 // }
 
+// TODO: deprecated
+
 /**
  * creates an inactive subscription on stripe servers
  * @param {object} formData

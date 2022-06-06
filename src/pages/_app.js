@@ -25,19 +25,21 @@ function App({ Component, pageProps }) {
         // TODO: what do if error fetching user? Old way might be better?
         setError({
           title: "Error",
-          message: "Something went wrong...",
+          message: "An unexpected error occurred.",
           stack: error,
         });
       }
     })();
   }, []);
 
-  if (!user && !noSession) return <LoadingSpinner />;
+  if (!user && !noSession) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
       <Head>
-        {/* // TODO: need one on every page, SEO is vital */}
+        {/* // TODO: need one on every page once fleshed out, SEO is vital */}
         <title>Functional Player</title>
         <meta
           name="description"
@@ -48,7 +50,7 @@ function App({ Component, pageProps }) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Layout user={user}>
+        <Layout user={user} clearUser={() => setUserResponse({})}>
           <Component user={user} {...pageProps} />
         </Layout>
       </ThemeProvider>

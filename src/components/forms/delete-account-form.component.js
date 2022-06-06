@@ -5,7 +5,7 @@ const DeleteAccountForm = () => {
   return (
     <FormWrapper>
       <Typography variant="body1" sx={{ textAlign: "center" }}>
-        This action irreversible, are you sure?
+        This action is irreversible, are you sure?
       </Typography>
       {/* inputs for email and password */}
       <Button onClick={() => console.log("Clicked")}>

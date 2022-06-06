@@ -6,86 +6,89 @@ import {
   Stepper,
   RegisterForm,
   SubscribeForm,
-  RegistrationFinishView,
   SpacedTitle,
   Well,
 } from "@/src/components";
 
-import { registerHandler, subscribeHandler } from "@/src/utils";
-
-/**
- * @param {{
- *  activeStep: number,
- *  registerSubmit: function,
- *  subscribeHandler: function,
- *  insertedId: string,
- *  onNextClick: function,
- * }} props
- */
-const FormView = ({
-  setError,
-  activeStep,
-  registerSubmit,
-  subscribeHandler,
-  insertedId,
-  setInsertedId,
-  onNextClick,
-}) => {
-  if (!activeStep) return null;
-  if (activeStep === 1)
-    return (
-      <RegisterForm
-        registerSubmit={registerSubmit}
-        setInsertedId={setInsertedId}
-        onNextClick={onNextClick}
-      />
-    );
-
-  if (activeStep === 2)
-    return (
-      <SubscribeForm
-        setError={setError}
-        insertedId={insertedId}
-        subscribeHandler={subscribeHandler}
-        onNextClick={onNextClick}
-      />
-    );
-
-  if (activeStep === 3) return <RegistrationFinishView />;
-};
+import { registerHandler } from "@/src/utils";
 
 export default function Register({ user }) {
   const router = useRouter();
 
   const [activeStep, setActiveStep] = useState(1);
-  const [insertedId, setInsertedId] = useState(null);
-  const [error, setError] = useState(null);
+  const [clientSecret, setClientSecret] = useState(null);
+  const [wellData, setWellData] = useState(null);
 
-  const onNextClick = () => setActiveStep((prev) => prev + 1);
+  const onNextClick = () => {
+    setActiveStep(2);
+    setWellData(null);
+  };
 
   const registerSubmit = async (event) => {
     try {
       const { username, email, password } = event;
 
-      const { error, insertedId } = await registerHandler({
+      const { error, clientSecret } = await registerHandler({
         username,
         email: email.toLowerCase(),
         password,
       });
 
-      setInsertedId(insertedId);
+      if (!!error) {
+        setWellData({
+          title: "Error",
+          message: error,
+        });
+      } else if (!!clientSecret) {
+        setClientSecret(clientSecret);
+        setWellData({
+          title: "Success!",
+          severity: "success",
+          message: 'Account successfully created. Click "Next" to continue.',
+        });
+      }
     } catch (error) {
-      setError({
+      setWellData({
         title: "Error",
-        message: "Something went wrong...",
+        message: "An unexpected error occurred.",
         stack: error,
       });
     }
   };
 
-  return !!user ? (
-    router.push("/dashboard")
-  ) : (
+  const subscribeSubmit = async (e) => {
+    e.preventDefault();
+    const return_url = `${process.env.BASE_URL}/registration-success`;
+    try {
+      const result = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url,
+        },
+      });
+
+      // something going wrong here, incomplete, not redirecting
+
+      if (!!result.error) {
+        setWellData({
+          title: "Error",
+          message: error,
+        });
+      }
+    } catch (error) {
+      setWellData({
+        title: "Error",
+        message: "An unexpected error occurred.",
+        stack: error,
+      });
+    }
+  };
+
+  if (!!user) {
+    router.push("/dashboard");
+  }
+
+  return !!user ? null : (
     <Grid
       container
       direction="column"
@@ -93,17 +96,21 @@ export default function Register({ user }) {
       sx={{ maxWidth: "50rem" }}
     >
       <SpacedTitle>Register</SpacedTitle>
-      {!!error ? <Well {...error} /> : null}
+      {!!wellData ? <Well {...wellData} /> : null}
       <Stepper activeStep={activeStep} />
-      <FormView
-        setError={setError}
-        activeStep={activeStep}
-        registerSubmit={registerSubmit}
-        subscribeHandler={subscribeHandler}
-        insertedId={insertedId}
-        setInsertedId={setInsertedId}
-        onNextClick={onNextClick}
-      />
+      {activeStep === 1 ? (
+        <RegisterForm
+          registerSubmit={registerSubmit}
+          onNextClick={onNextClick}
+          disableNextButton={!clientSecret}
+        />
+      ) : null}
+      {activeStep === 2 ? (
+        <SubscribeForm
+          clientSecret={clientSecret}
+          subscribeSubmit={subscribeSubmit}
+        />
+      ) : null}
     </Grid>
   );
 }

@@ -1,3 +1,4 @@
+import stripeFn from "stripe";
 import { compare } from "bcryptjs";
 import { withIronSessionApiRoute } from "iron-session/next";
 
@@ -6,16 +7,19 @@ import { sessionOptions } from "lib/session";
 
 import { USERS } from "@/src/utils/constants";
 
+const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
+
 async function login(req, res) {
   if (req.method === "POST") {
     try {
       const { db } = await connectToDatabase();
 
-      const { email, password } = req.body;
+      const { email, password: formPassword } = req.body;
 
       // email auth
-      // TODO: MUST LOWERCASE ALL EMAILS OR WILL NOT WORK!!!
-      const result = await db.collection(USERS).findOne({ email });
+      const result = await db
+        .collection(USERS)
+        .findOne({ email: email.toLowerCase() });
 
       if (!result) {
         return res.status(200).send({
@@ -23,35 +27,25 @@ async function login(req, res) {
         });
       }
 
-      const { password: currentPassword, ...rest } = result;
+      const { password: dbPassword, subscriptionId, ...restOfUser } = result;
 
-      // password verification
-      const checkPassword = await compare(password, currentPassword);
+      const checkPassword = await compare(formPassword, dbPassword);
 
       if (!checkPassword) {
         return res.status(200).send({ error: "Incorrect password." });
       }
 
-      // subscription status
-      const checkSubscriptionIsActive = async () => {
-        // ping Stripe, make sure subscription is active
-        return true;
-      };
+      const { status: subscriptionStatus } =
+        await stripe.subscriptions.retrieve(subscriptionId);
 
-      // they won't have an account without a subscription
-      // but you need to check if it has run out/been cancelled, etc
-
-      const subscribed = await checkSubscriptionIsActive();
-
-      const user = { ...rest, subscribed };
+      const user = { ...restOfUser, subscriptionStatus };
 
       // TODO: must implement `Keep me signed in` checkbox in form
       req.session.user = user;
       await req.session.save();
 
-      return res.status(200).send({ loggedIn: true });
+      return res.status(200).send({ ok: true });
     } catch (error) {
-      console.log("Error: ", error);
       return res.status(500).send({ error });
     }
   } else {
