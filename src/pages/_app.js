@@ -6,7 +6,7 @@ import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 
 import { Layout, LoadingSpinner } from "@/src/components";
-import { getUser } from "@/src/utils";
+import { getUser, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 
 import theme from "@/src/components/theme";
 
@@ -25,7 +25,7 @@ function App({ Component, pageProps }) {
         // TODO: what do if error fetching user? Old way might be better?
         setError({
           title: "Error",
-          message: "An unexpected error occurred.",
+          message: DEFAULT_ERROR_MESSAGE,
           stack: error,
         });
       }

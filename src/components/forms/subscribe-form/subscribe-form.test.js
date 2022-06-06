@@ -1,24 +1,38 @@
-import fetch from "jest-fetch-mock";
+import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
 
 import { render, screen, userEvent, waitFor } from "@/src/utils/test-utils";
 
 import { SubscribeForm } from "@/src/components";
 
-fetch.enableMocks();
+import { DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+
+enableFetchMocks();
 
 describe("Subscribe Form", () => {
+  beforeEach(() => {
+    fetchMock.resetMocks();
+  });
+
   it("renders", () => {
     render(<SubscribeForm />);
     expect(screen.getByRole("button", { name: "Submit" })).toBeInTheDocument();
   });
 
-  it("fetches stripe client secret upon load", () => {});
+  it("shows error well if error returned from stripe", () => {
+    fetchMock.mockResponse(
+      JSON.stringify(new Error("replace with real stripe error"))
+    );
 
-  it("shows error well if error returned from initial fetch", () => {});
+    const setWellData = jest.fn();
+    render(<SubscribeForm setWellData={setWellData} />);
 
-  it("shows error well if error returned from stripe", () => {});
+    // type into PaymentElement
+
+    expect(setWellData).toHaveBeenCalledWith({});
+    expect(DEFAULT_ERROR_MESSAGE).toBeInTheDocument();
+  });
 
   it("redirects to success page if success returned from stripe", () => {
-    // pass history to util render
+    // TODO: not sure how to test this
   });
 });

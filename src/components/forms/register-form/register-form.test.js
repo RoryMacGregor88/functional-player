@@ -2,22 +2,29 @@ import { render, screen, userEvent, waitFor } from "@/src/utils/test-utils";
 
 import RegisterForm from "./register-form.component";
 
-const renderComponent = ({ insertedId = null } = {}) => {
-  const registerSubmit = jest.fn(),
-    onNextClick = jest.fn();
+const renderComponent = ({ disableNextButton = false } = {}) => {
+  const setClientSecret = jest.fn(),
+    onNextClick = jest.fn(),
+    setWellData = jest.fn();
 
   const utils = render(
     <RegisterForm
-      insertedId={insertedId}
-      registerSubmit={registerSubmit}
+      setClientSecret={setClientSecret}
       onNextClick={onNextClick}
+      setWellData={setWellData}
+      disableNextButton={disableNextButton}
     />
   );
 
-  return { ...utils, registerSubmit, onNextClick };
+  return {
+    ...utils,
+    setClientSecret,
+    onNextClick,
+    setWellData,
+  };
 };
 
-xdescribe("Register Form", () => {
+describe("Register Form", () => {
   it("renders", () => {
     renderComponent();
 
@@ -87,7 +94,7 @@ xdescribe("Register Form", () => {
   });
 
   it("calls submit handler if form is valid and button is clicked", async () => {
-    const { registerSubmit } = renderComponent();
+    const { registerSubmit, setClientSecret } = renderComponent();
 
     userEvent.type(
       screen.getByRole("textbox", { name: /email/i }),
@@ -119,23 +126,30 @@ xdescribe("Register Form", () => {
     await waitFor(() => {
       userEvent.click(screen.getByRole("button", { name: /submit/i }));
       expect(registerSubmit).toHaveBeenCalledWith(expected);
+      // mock response, expect setClientSecret to have been called
     });
   });
 
-  // deal with request errors, register fail, no id returned etc
+  it("shows error message if form fields are rejected", () => {
+    // errors
+  });
 
-  it("disables `Next` button if no `insertedId`", () => {
-    renderComponent();
+  it("shows error message when server returns error", () => {
+    // errors
+  });
+
+  it("disables `Next` button if disabled prop is passed", () => {
+    renderComponent({ disableNextButton: true });
     expect(screen.getByRole("button", { name: /next/i })).toBeDisabled();
   });
 
   it("enables `Next` button if `insertedId` is present", () => {
-    renderComponent({ insertedId: "123" });
+    renderComponent();
     expect(screen.getByRole("button", { name: /next/i })).toBeEnabled();
   });
 
-  it("calls next handler if form is valid and id returned", async () => {
-    const { onNextClick } = renderComponent({ insertedId: "123" });
+  it("calls next handler if form is valid and secret returned", async () => {
+    const { onNextClick } = renderComponent();
 
     userEvent.click(screen.getByRole("button", { name: /next/i }));
 

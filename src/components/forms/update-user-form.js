@@ -16,7 +16,9 @@ const UpdateUserForm = ({ user }) => {
     },
   });
 
-  const onSubmit = () => console.log("Submit");
+  const onSubmit = (values) => {
+    console.log("values: ", values);
+  };
 
   return (
     <FormWrapper onSubmit={handleSubmit(onSubmit)}>

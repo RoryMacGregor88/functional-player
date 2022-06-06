@@ -1,20 +1,24 @@
+import { useState } from "react";
+
 import { useRouter } from "next/router";
 
 import { useForm } from "react-hook-form";
 
 import { Grid } from "@mui/material";
 
-import { loginHandler } from "@/src/utils";
+import { loginHandler, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 import {
   Button,
   SpacedTitle,
   FormWrapper,
   EmailField,
   PasswordField,
+  Well,
 } from "@/src/components";
 
 export default function Login({ user }) {
   const router = useRouter();
+  const [wellData, setWellData] = useState(null);
 
   const {
     register,
@@ -28,19 +32,28 @@ export default function Login({ user }) {
   });
 
   const onSubmit = async (event) => {
-    const { email, password } = event;
+    try {
+      const { email, password } = event;
+      const { error, ok } = await loginHandler({
+        email: email.toLowerCase(),
+        password,
+      });
 
-    const { error, ok } = await loginHandler({
-      email: email,
-      password,
-    });
-
-    // TODO: try catch
-    if (!!error) {
-      console.log("Error: ", error);
-      return;
-    } else if (ok) {
-      router.push("/dashboard");
+      if (!!error) {
+        setWellData({
+          title: "Error!",
+          message: error,
+        });
+      } else if (ok) {
+        // TODO: not redirecting anymore, was working
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      setWellData({
+        title: "Error!",
+        message: DEFAULT_ERROR_MESSAGE,
+        stack: error,
+      });
     }
   };
 
@@ -56,6 +69,7 @@ export default function Login({ user }) {
       sx={{ maxWidth: "50rem" }}
     >
       <SpacedTitle>Login</SpacedTitle>
+      {!!wellData ? <Well {...wellData} /> : null}
       <FormWrapper onSubmit={handleSubmit(onSubmit)}>
         <EmailField errors={errors} register={register} />
         <PasswordField
