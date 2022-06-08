@@ -14,7 +14,7 @@
 //   return res.json();
 // }
 
-// TODO: deprecated
+// TODO: deprecated, all done in 'register' now
 
 /**
  * creates an inactive subscription on stripe servers

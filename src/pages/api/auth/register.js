@@ -47,6 +47,8 @@ export default async function register(req, res) {
         subscriptionId,
       });
 
+      // TODO: add count in here, to measure how many have registered in total
+
       return res
         .status(201)
         .json({ clientSecret: latest_invoice.payment_intent.client_secret });

@@ -2,34 +2,14 @@ import { useState } from "react";
 
 import { useRouter } from "next/router";
 
-import { useForm } from "react-hook-form";
-
 import { Grid } from "@mui/material";
 
 import { loginHandler, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
-import {
-  Button,
-  SpacedTitle,
-  FormWrapper,
-  EmailField,
-  PasswordField,
-  Well,
-} from "@/src/components";
+import { LoginForm, SpacedTitle, Well } from "@/src/components";
 
 export default function Login({ user }) {
   const router = useRouter();
   const [wellData, setWellData] = useState(null);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isDirty },
-  } = useForm({
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
 
   const onSubmit = async (event) => {
     try {
@@ -70,21 +50,7 @@ export default function Login({ user }) {
     >
       <SpacedTitle>Login</SpacedTitle>
       {!!wellData ? <Well {...wellData} /> : null}
-      <FormWrapper onSubmit={handleSubmit(onSubmit)}>
-        <EmailField errors={errors} register={register} />
-        <PasswordField
-          errors={errors}
-          register={register}
-          label="Password"
-          name="password"
-        />
-        <Button
-          type="submit"
-          disabled={!isDirty || !!Object.keys(errors).length}
-        >
-          Submit
-        </Button>
-      </FormWrapper>
+      <LoginForm onSubmit={onSubmit} />
     </Grid>
   );
 }

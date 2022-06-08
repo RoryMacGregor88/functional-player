@@ -12,7 +12,7 @@ import {
   Well,
 } from "@/src/components";
 
-import { getStripe } from "@/src/utils";
+import { getStripe, registerHandler, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 
 export default function Register({ user }) {
   const router = useRouter();
@@ -24,6 +24,39 @@ export default function Register({ user }) {
   const onNextClick = () => {
     setActiveStep(2);
     setWellData(null);
+  };
+
+  const registerSubmit = async (event) => {
+    try {
+      const { username, email, password } = event;
+
+      const { error, clientSecret } = await registerHandler({
+        username,
+        email: email.toLowerCase(),
+        password,
+      });
+
+      if (!!error) {
+        setWellData({
+          title: "Error",
+          message: error,
+        });
+      } else if (!!clientSecret) {
+        setClientSecret(clientSecret);
+        setWellData({
+          title: "Success!",
+          severity: "success",
+          message:
+            'Account successfully created. Click "Next" button to continue.',
+        });
+      }
+    } catch (error) {
+      setWellData({
+        title: "Error",
+        message: DEFAULT_ERROR_MESSAGE,
+        stack: error,
+      });
+    }
   };
 
   if (!!user) {
@@ -43,9 +76,9 @@ export default function Register({ user }) {
       <Stepper activeStep={activeStep} />
       {activeStep === 1 ? (
         <RegisterForm
-          setClientSecret={setClientSecret}
+          onSubmit={registerSubmit}
           onNextClick={onNextClick}
-          setWellData={setWellData}
+          disableSubmitButton={!!wellData?.severity}
           disableNextButton={!clientSecret}
         />
       ) : null}

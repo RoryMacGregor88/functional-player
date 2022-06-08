@@ -8,6 +8,7 @@ import SpacedTitle from "./spaced-title.component";
 import Stepper from "./stepper.component";
 import Well from "./well.component";
 import TextField from "./text-field.component";
+import Attention from "./attention.component";
 import Button from "./button.component";
 import Footer from "./footer.component";
 
@@ -27,6 +28,7 @@ export {
   Stepper,
   Well,
   TextField,
+  Attention,
   Button,
   Footer,
 };

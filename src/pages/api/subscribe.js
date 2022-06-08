@@ -2,6 +2,8 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_TEST_SECRET_KEY);
 
+// TODO: deprecated, not used, all in register now but double check
+
 export default async function subscribe(req, res) {
   if (req.method === "POST") {
     try {

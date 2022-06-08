@@ -6,6 +6,8 @@ import { USERS } from "@/src/utils/constants";
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
+// TODO: deprecated, not used, all in register now but double check
+
 export default async function subscribe(req, res) {
   if (req.method === "POST") {
     try {

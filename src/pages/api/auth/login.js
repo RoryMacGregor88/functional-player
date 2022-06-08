@@ -38,7 +38,7 @@ async function login(req, res) {
       const { status: subscriptionStatus } =
         await stripe.subscriptions.retrieve(subscriptionId);
 
-      const user = { ...restOfUser, subscriptionStatus };
+      const user = { ...restOfUser, subscriptionId, subscriptionStatus };
 
       // TODO: must implement `Keep me signed in` checkbox in form
       req.session.user = user;

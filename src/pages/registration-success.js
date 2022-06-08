@@ -1,5 +1,9 @@
 import { useRouter } from "next/router";
 
+import { Grid, Button, Typography } from "@mui/material";
+
+import { Attention } from "@/src/components";
+
 export default function RegistrationSuccess({ user }) {
   const router = useRouter();
 
@@ -9,26 +13,21 @@ export default function RegistrationSuccess({ user }) {
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-start",
-        alignItems: "center",
-      }}
+    <Grid
+      container
+      direction="column"
+      justifyContent="flex-start"
+      alignItems="center"
     >
-      <p>Thank you, your subscription was successful.</p>
-      <p>
+      <Typography variant="h4">
+        Thank you, your subscription was successful.
+      </Typography>
+      <Typography variant="p">
         You can access your account information by clicking the{" "}
-        <span style={{ fontWeight: "bold" }}>My Account</span> button in the
-        sidebar.
-      </p>
-      <button
-        style={{ padding: "0.5rem 1rem" }}
-        onClick={() => router.push("/login")}
-      >
-        Login
-      </button>
-    </div>
+        <Attention>My Account</Attention> button in the sidebar.
+      </Typography>
+      <Typography variant="p">Click the button below to login.</Typography>
+      <Button onClick={() => router.push("/login")}>Login</Button>
+    </Grid>
   );
 }
