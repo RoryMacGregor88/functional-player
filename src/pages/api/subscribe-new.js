@@ -2,7 +2,7 @@ import stripeFn from "stripe";
 
 import { connectToDatabase } from "lib/mongodb";
 
-import { USERS } from "@/src/utils/constants";
+import { USERS, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
@@ -42,8 +42,6 @@ export default async function subscribe(req, res) {
       return res.status(400).send({ error });
     }
   } else {
-    return res
-      .status(500)
-      .send({ error: "Invalid method, only POST requests permitted." });
+    return res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
   }
 }

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { Button, Typography } from "@mui/material";
 
 import { FormWrapper, Well } from "@/src/components";
-import { deleteHandler, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+import { http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 
 /** @param {{user: object}} props */
 const DeleteAccountForm = ({ user }) => {
@@ -16,18 +16,18 @@ const DeleteAccountForm = ({ user }) => {
   const handleDelete = async () => {
     try {
       const { email, subscriptionId } = user;
-      await deleteHandler({ email, subscriptionId });
-      setWellData({
-        title: "Success",
-        severity: "success",
-        message: "Your account and subscription have been permanently deleted.",
-      });
+      const { ok } = await http("/auth/delete", { email, subscriptionId });
+
+      if (ok) {
+        setWellData({
+          severity: "success",
+          message:
+            "Your account and subscription have been permanently deleted.",
+        });
+      }
       router.push("/");
     } catch (error) {
-      setWellData({
-        title: "Error!",
-        message: DEFAULT_ERROR_MESSAGE,
-      });
+      setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
     }
   };
 

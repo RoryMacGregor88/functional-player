@@ -34,6 +34,8 @@ const OPTIONS = {
   },
 };
 
+// TODO: all this shit is deprecated, only one stripe element now. Things like styles can possible be made constants.
+
 /**
  * @param {{onChange: function}} props
  */

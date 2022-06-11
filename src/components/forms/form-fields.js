@@ -1,9 +1,14 @@
 import { useState } from "react";
 
 import { InputAdornment } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-import { TextField, IconButton } from "..";
+import {
+  TextField,
+  IconButton,
+  VisibilityIcon,
+  VisibilityOffIcon,
+} from "@/src/components";
+
 import { PASSWORD_MIN, PASSWORD_MAX } from "@/src/utils";
 
 /**
@@ -24,6 +29,29 @@ const EmailField = ({ errors, register }) => (
     helperText={errors.email?.message}
     {...register("email", {
       required: "Email address is required",
+    })}
+    autoFocus
+  />
+);
+
+/**
+ * @param {{
+ *  errors: object
+ *  register: function
+ * }} props
+ */
+const ConfirmEmailField = ({ errors, register }) => (
+  <TextField
+    variant="outlined"
+    label="Confirm email"
+    id="confirmEmail"
+    name="confirmEmail"
+    type="email"
+    aria-describedby="confirmEmail"
+    error={!!errors.confirmEmail}
+    helperText={errors.confirmEmail?.message}
+    {...register("confirmEmail", {
+      required: "Email confirmation is required",
     })}
     autoFocus
   />
@@ -102,9 +130,9 @@ const PasswordField = ({ errors, register, label, name, validate = false }) => {
             >
               {showPassword ? (
                 // TODO: which way around?
-                <Visibility sx={iconStyles} />
+                <VisibilityIcon sx={iconStyles} />
               ) : (
-                <VisibilityOff sx={iconStyles} />
+                <VisibilityOffIcon sx={iconStyles} />
               )}
             </IconButton>
           </InputAdornment>
@@ -118,4 +146,4 @@ const PasswordField = ({ errors, register, label, name, validate = false }) => {
   );
 };
 
-export { UsernameField, EmailField, PasswordField };
+export { UsernameField, EmailField, ConfirmEmailField, PasswordField };

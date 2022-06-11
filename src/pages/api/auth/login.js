@@ -5,7 +5,7 @@ import { withIronSessionApiRoute } from "iron-session/next";
 import { connectToDatabase } from "lib/mongodb";
 import { sessionOptions } from "lib/session";
 
-import { USERS } from "@/src/utils/constants";
+import { USERS, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
@@ -16,10 +16,7 @@ async function login(req, res) {
 
       const { email, password: formPassword } = req.body;
 
-      // email auth
-      const result = await db
-        .collection(USERS)
-        .findOne({ email: email.toLowerCase() });
+      const result = await db.collection(USERS).findOne({ email });
 
       if (!result) {
         return res.status(200).send({
@@ -35,6 +32,7 @@ async function login(req, res) {
         return res.status(200).send({ error: "Incorrect password." });
       }
 
+      // fresh check of stripe status upon every login
       const { status: subscriptionStatus } =
         await stripe.subscriptions.retrieve(subscriptionId);
 
@@ -49,9 +47,7 @@ async function login(req, res) {
       return res.status(500).send({ error });
     }
   } else {
-    return res
-      .status(500)
-      .send({ error: "Invalid method, only POST requests permitted." });
+    return res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
   }
 }
 

@@ -1,16 +1,60 @@
-import { Close as CloseIcon } from "@mui/icons-material";
-import { Drawer as MuiDrawer, Grid } from "@mui/material";
-import { useRouter } from "next/router";
-import { logoutHandler } from "@/src/utils";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 
-import { Button, IconButton } from "@/src/components";
+import { Drawer as MuiDrawer, Grid } from "@mui/material";
+
+import { Button, IconButton, CloseIcon, ProfileIcon } from "@/src/components";
+
+import { http } from "@/src/utils";
+
+// TODO: Icons are broken for some reason
+
+const LINK_METADATA = {
+  browse: {
+    Icon: ProfileIcon,
+    label: "Browse Series",
+  },
+  login: {
+    Icon: ProfileIcon,
+    label: "Login",
+  },
+  register: {
+    Icon: ProfileIcon,
+    label: "Register",
+  },
+  account: {
+    Icon: ProfileIcon,
+    label: "My Account",
+  },
+  logout: {
+    Icon: ProfileIcon,
+    label: "Log Out",
+  },
+  faq: {
+    Icon: ProfileIcon,
+    label: "FAQ",
+  },
+};
+
+const SidebarItem = ({ label, Icon, onClick }) => (
+  <Button
+    onClick={onClick}
+    style={{
+      display: "flex",
+      justifyContent: "flex-end",
+      alignItems: "center",
+    }}
+  >
+    {label}
+    <ProfileIcon sx={{ height: "2rem", width: "2rem", marginLeft: "1rem" }} />
+  </Button>
+);
 
 const Drawer = ({ user, clearUser, drawerIsOpen, toggleDrawer }) => {
   const router = useRouter();
 
   const logout = async () => {
-    const { ok } = await logoutHandler();
+    const { ok } = await http("/auth/logout");
     if (ok) {
       clearUser();
       router.push("/");
@@ -37,27 +81,27 @@ const Drawer = ({ user, clearUser, drawerIsOpen, toggleDrawer }) => {
         </IconButton>
 
         <NextLink href="/series" passHref>
-          <Button onClick={toggleDrawer}>Browse Series</Button>
+          <SidebarItem {...LINK_METADATA.browse} onClick={toggleDrawer} />
         </NextLink>
         {!!user ? (
           <>
             <NextLink href="/account" passHref>
-              <Button onClick={toggleDrawer}>My Account</Button>
+              <SidebarItem {...LINK_METADATA.account} onClick={toggleDrawer} />
             </NextLink>
-            <Button onClick={logout}>Log Out</Button>
+            <SidebarItem {...LINK_METADATA.logout} onClick={logout} />
           </>
         ) : (
           <>
             <NextLink href="/login" passHref>
-              <Button onClick={toggleDrawer}>Login</Button>
+              <SidebarItem {...LINK_METADATA.login} onClick={toggleDrawer} />
             </NextLink>
             <NextLink href="/register" passHref>
-              <Button onClick={toggleDrawer}>Sign Up</Button>
+              <SidebarItem {...LINK_METADATA.register} onClick={toggleDrawer} />
             </NextLink>
           </>
         )}
         <NextLink href="/faq" passHref>
-          <Button onClick={toggleDrawer}>FAQ</Button>
+          <SidebarItem {...LINK_METADATA.faq} onClick={toggleDrawer} />
         </NextLink>
       </Grid>
     </MuiDrawer>

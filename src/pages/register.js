@@ -12,7 +12,7 @@ import {
   Well,
 } from "@/src/components";
 
-import { getStripe, registerHandler, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+import { getStripe, http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 
 export default function Register({ user }) {
   const router = useRouter();
@@ -30,32 +30,24 @@ export default function Register({ user }) {
     try {
       const { username, email, password } = event;
 
-      const { error, clientSecret } = await registerHandler({
+      const { error, clientSecret } = await http("/auth/register", {
         username,
         email: email.toLowerCase(),
         password,
       });
 
       if (!!error) {
-        setWellData({
-          title: "Error",
-          message: error,
-        });
+        setWellData({ message: error });
       } else if (!!clientSecret) {
         setClientSecret(clientSecret);
         setWellData({
-          title: "Success!",
           severity: "success",
           message:
             'Account successfully created. Click "Next" button to continue.',
         });
       }
     } catch (error) {
-      setWellData({
-        title: "Error",
-        message: DEFAULT_ERROR_MESSAGE,
-        stack: error,
-      });
+      setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
     }
   };
 

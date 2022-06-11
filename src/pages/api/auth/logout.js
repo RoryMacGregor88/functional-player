@@ -1,6 +1,8 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import { sessionOptions } from "lib/session";
 
+import { HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
+
 function logout(req, res) {
   if (req.method === "POST") {
     try {
@@ -10,9 +12,7 @@ function logout(req, res) {
       return res.status(500).send({ error });
     }
   } else {
-    return res
-      .status(500)
-      .send({ error: "Invalid method, only POST requests permitted." });
+    return res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
   }
 }
 

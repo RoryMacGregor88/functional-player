@@ -1,6 +1,6 @@
 import NextLink from "next/link";
 import { AppBar, Toolbar, Typography } from "@mui/material";
-import { Menu as MenuIcon } from "@mui/icons-material";
+import { MenuIcon } from "@/src/components";
 
 import { IconButton } from ".";
 

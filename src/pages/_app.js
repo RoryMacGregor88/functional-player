@@ -6,7 +6,7 @@ import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 
 import { Layout, LoadingSpinner } from "@/src/components";
-import { getUser, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+import { http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 
 import theme from "@/src/components/theme";
 
@@ -16,18 +16,16 @@ function App({ Component, pageProps }) {
 
   const { user, noSession } = userResponse;
 
+  //TODO: do something with error: 'Please reload page' or something
+
   useEffect(() => {
     (async () => {
       try {
-        const { user, noSession } = await getUser();
+        const { user, noSession } = await http("/user", null, "GET");
         setUserResponse({ user, noSession });
       } catch (error) {
         // TODO: what do if error fetching user? Old way might be better?
-        setError({
-          title: "Error",
-          message: DEFAULT_ERROR_MESSAGE,
-          stack: error,
-        });
+        setError({ message: DEFAULT_ERROR_MESSAGE, stack: error });
       }
     })();
   }, []);

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import { Grid } from "@mui/material";
 
-import { loginHandler, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+import { http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 import { LoginForm, SpacedTitle, Well } from "@/src/components";
 
 export default function Login({ user }) {
@@ -14,26 +14,19 @@ export default function Login({ user }) {
   const onSubmit = async (event) => {
     try {
       const { email, password } = event;
-      const { error, ok } = await loginHandler({
+      const { error, ok } = await http("/auth/login", {
         email: email.toLowerCase(),
         password,
       });
 
       if (!!error) {
-        setWellData({
-          title: "Error!",
-          message: error,
-        });
+        setWellData({ message: error });
       } else if (ok) {
         // TODO: not redirecting anymore, was working
         router.push("/dashboard");
       }
     } catch (error) {
-      setWellData({
-        title: "Error!",
-        message: DEFAULT_ERROR_MESSAGE,
-        stack: error,
-      });
+      setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
     }
   };
 

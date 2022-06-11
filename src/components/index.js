@@ -6,7 +6,7 @@ import Navbar from "./navbar.component";
 import IconButton from "./icon-button.component";
 import SpacedTitle from "./spaced-title.component";
 import Stepper from "./stepper.component";
-import Well from "./well.component";
+import Well from "./well/well.component";
 import TextField from "./text-field.component";
 import Attention from "./attention.component";
 import Button from "./button.component";
@@ -15,8 +15,8 @@ import Footer from "./footer.component";
 // forms
 export * from "./forms";
 
-// stripe
-export * from "./stripe-elements";
+// icons
+export * from "./icons";
 
 export {
   Layout,

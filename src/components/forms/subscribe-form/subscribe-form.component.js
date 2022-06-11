@@ -27,18 +27,11 @@ const SubscribeForm = ({ setWellData }) => {
       });
 
       if (!!result.error) {
-        setWellData({
-          title: "Error",
-          message: error,
-        });
+        setWellData({ message: error });
       }
     } catch (error) {
       // TODO: stripe's errors (insufficient funds, card declined etc) need to go here
-      setWellData({
-        title: "Error",
-        message: DEFAULT_ERROR_MESSAGE,
-        stack: error,
-      });
+      setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
     }
   };
 

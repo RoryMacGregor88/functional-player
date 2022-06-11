@@ -1,31 +1,28 @@
-import stripeFn from "stripe";
-
 import { withIronSessionApiRoute } from "iron-session/next";
-import { sessionOptions } from "lib/session";
-
 import { connectToDatabase } from "lib/mongodb";
-
+import { sessionOptions } from "lib/session";
 import {
   USERS,
   DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
 } from "@/src/utils";
 
-const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
-
-async function deleteAccount(req, res) {
+async function updateEmail(req, res) {
   if (req.method === "POST") {
     if (req.session.user?.email !== req.body.email) {
       return res.status(403).send({ error: DEFAULT_TOKEN_FORBIDDEN_MESSAGE });
     }
     try {
-      const { email, subscriptionId } = req.body;
+      const { email, newEmail } = req.body;
+
       const { db } = await connectToDatabase();
 
-      // await stripe.subscriptions.del(subscriptionId);
+      await db
+        .collection(USERS)
+        .findOneAndUpdate({ email }, { $set: { email: newEmail } });
 
-      await db.collection(USERS).deleteOne({ email });
-      req.session.destroy();
+      req.session.user = { ...req.session.user, email: newEmail };
+      await req.session.save();
 
       return res.status(200).json({ ok: true });
     } catch (error) {
@@ -36,4 +33,4 @@ async function deleteAccount(req, res) {
   }
 }
 
-export default withIronSessionApiRoute(deleteAccount, sessionOptions);
+export default withIronSessionApiRoute(updateEmail, sessionOptions);

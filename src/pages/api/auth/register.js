@@ -1,7 +1,10 @@
 import stripeFn from "stripe";
+
 import { hash } from "bcryptjs";
+
 import { connectToDatabase } from "lib/mongodb";
-import { USERS } from "@/src/utils/constants";
+
+import { USERS, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
@@ -32,19 +35,23 @@ export default async function register(req, res) {
       });
 
       // create (inactive) subscription on stripe servers
-      const { id: subscriptionId, latest_invoice } =
-        await stripe.subscriptions.create({
-          customer: customerId,
-          items: [{ price: process.env.TEST_SUBSCRIPTION_PRICE_ID }],
-          payment_behavior: "default_incomplete",
-          expand: ["latest_invoice.payment_intent"],
-        });
+      const {
+        id: subscriptionId,
+        status,
+        latest_invoice,
+      } = await stripe.subscriptions.create({
+        customer: customerId,
+        items: [{ price: process.env.TEST_SUBSCRIPTION_PRICE_ID }],
+        payment_behavior: "default_incomplete",
+        expand: ["latest_invoice.payment_intent"],
+      });
 
       await db.collection(USERS).insertOne({
         email,
         username,
         password: await hash(password, 12),
         subscriptionId,
+        subscriptionStatus: status,
       });
 
       // TODO: add count in here, to measure how many have registered in total
@@ -53,12 +60,9 @@ export default async function register(req, res) {
         .status(201)
         .json({ clientSecret: latest_invoice.payment_intent.client_secret });
     } catch (error) {
-      // TODO: test error states (timeouts and stuff too, see MongoDB docs)
       return res.status(500).send({ error });
     }
   } else {
-    res
-      .status(500)
-      .send({ error: "Invalid method, only POST requests permitted." });
+    res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
   }
 }

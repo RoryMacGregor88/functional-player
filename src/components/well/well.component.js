@@ -4,18 +4,23 @@ import { Alert, AlertTitle } from "@mui/material";
  * @param {{
  *  title?: string,
  *  message: string,
- *  stack: any,
+ *  stack?: any,
  *  severity?: string
  * }} props
  */
-const Well = ({ title, message, stack, severity = "error" }) => {
-  console.error("ERROR STACK: ", stack);
+const Well = ({ title = null, message, stack, severity = "error" }) => {
+  if (!!stack) {
+    console.error("ERROR STACK: ", stack);
+  }
+
+  const defaultTitle = severity === "error" ? "Error!" : "Success!";
+
   return (
     <Alert
       severity={severity}
       sx={{ width: "100%", padding: "1rem", marginBottom: "2rem" }}
     >
-      {!!title ? <AlertTitle>{title}</AlertTitle> : null}
+      <AlertTitle>{title ?? defaultTitle}</AlertTitle>
       {message}
     </Alert>
   );
