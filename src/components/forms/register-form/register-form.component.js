@@ -12,6 +12,7 @@ import {
 
 /**
  * @param {{
+ *  isLoading: boolean,
  *  onSubmit: function,
  *  onNextClick: function,
  *  disableSubmitButton: boolean
@@ -19,6 +20,7 @@ import {
  * }} props
  */
 const RegisterForm = ({
+  isLoading,
   onSubmit,
   onNextClick,
   disableSubmitButton,
@@ -67,6 +69,7 @@ const RegisterForm = ({
       <Button
         onClick={onNextClick}
         disabled={disableNextButton}
+        loading={isLoading}
         sx={{ width: "100%" }}
       >
         Next

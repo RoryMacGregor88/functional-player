@@ -5,18 +5,18 @@ import { useState, useEffect } from "react";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 
-import { Layout, LoadingSpinner } from "@/src/components";
+import { Layout, LoadMask } from "@/src/components";
 import { http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 
 import theme from "@/src/components/theme";
 
 function App({ Component, pageProps }) {
   const [userResponse, setUserResponse] = useState({});
-  const [error, setError] = useState(null);
 
   const { user, noSession } = userResponse;
 
-  //TODO: do something with error: 'Please reload page' or something
+  // TODO: do something with error: 'Please reload page' or something
+  // TODO: re-visit this, maybe a better way
 
   useEffect(() => {
     (async () => {
@@ -25,13 +25,13 @@ function App({ Component, pageProps }) {
         setUserResponse({ user, noSession });
       } catch (error) {
         // TODO: what do if error fetching user? Old way might be better?
-        setError({ message: DEFAULT_ERROR_MESSAGE, stack: error });
+        setUserResponse({ noSession: true });
       }
     })();
   }, []);
 
   if (!user && !noSession) {
-    return <LoadingSpinner />;
+    return <LoadMask />;
   }
 
   return (

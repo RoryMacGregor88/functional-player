@@ -16,13 +16,16 @@ const Layout = ({ user, clearUser, children }) => {
         drawerIsOpen={drawerIsOpen}
         toggleDrawer={toggleDrawer}
       />
-      <Navbar user={user} toggleDrawer={toggleDrawer} />
+      <Navbar
+        user={user}
+        drawerIsOpen={drawerIsOpen}
+        toggleDrawer={toggleDrawer}
+      />
       <main
         style={{
           display: "flex",
           justifyContent: "center",
           minHeight: "85vh",
-          padding: "0 1rem",
         }}
       >
         {children}

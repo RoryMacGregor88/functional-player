@@ -7,7 +7,7 @@ import { Attention } from "@/src/components";
 export default function RegistrationSuccess({ user }) {
   const router = useRouter();
 
-  if (user) {
+  if (!!user) {
     router.push("/dashboard");
     return null;
   }

@@ -1,7 +1,5 @@
 import { createTheme } from "@mui/material/styles";
 
-const BORDER_RADIUS = "5px";
-
 // TODO: black colors are mixed up in header, main, footer
 
 const boneWhite = "#faf9f7",
@@ -16,7 +14,7 @@ const boneWhite = "#faf9f7",
 
 const theme = {
   shape: {
-    borderRadius: BORDER_RADIUS,
+    borderRadius: "5px",
   },
   palette: {
     mode: "dark",
@@ -35,15 +33,6 @@ const theme = {
       main: lightGrey,
     },
   },
-  // components: {
-  //   MuiTextField: {
-  //     styleOverrides: {
-  //       input: {
-  //         WebkitBoxShadow: "0 0 0 1000px #ff0000 inset",
-  //       },
-  //     },
-  //   },
-  // },
 };
 
 export default createTheme(theme);

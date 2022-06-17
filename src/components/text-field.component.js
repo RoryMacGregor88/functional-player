@@ -1,21 +1,35 @@
 import { forwardRef } from "react";
-import { TextField as MuiTextField } from "@mui/material";
+import { TextField as MuiTextField, GlobalStyles } from "@mui/material";
 
-// TODO: focused background color is blue for some reason
+// TODO: user agent makes background white
 
 // TODO: maybe theme this, as there are many variants/errors etc
 
-const TextField = (props, ref) => (
-  <MuiTextField
-    fullWidth
-    inputProps={{
-      sx: {
-        WebkitBoxShadow: "none !important",
+const globalStyles = (
+  <GlobalStyles
+    styles={{
+      input: {
+        backgroundColor: "#080808 !important",
+        color: "#fff !important",
       },
     }}
-    {...props}
-    ref={ref}
   />
+);
+
+const TextField = (props, ref) => (
+  <>
+    {globalStyles}
+    <MuiTextField
+      fullWidth
+      inputProps={{
+        sx: {
+          WebkitBoxShadow: "none !important",
+        },
+      }}
+      {...props}
+      ref={ref}
+    />
+  </>
 );
 
 export default forwardRef(TextField);

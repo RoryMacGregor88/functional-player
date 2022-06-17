@@ -20,6 +20,12 @@ export default function Register({ user }) {
   const [activeStep, setActiveStep] = useState(1);
   const [clientSecret, setClientSecret] = useState(null);
   const [wellData, setWellData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (!!user) {
+    router.push("/dashboard");
+    return null;
+  }
 
   const onNextClick = () => {
     setActiveStep(2);
@@ -27,6 +33,7 @@ export default function Register({ user }) {
   };
 
   const registerSubmit = async (event) => {
+    setIsLoading(true);
     try {
       const { username, email, password } = event;
 
@@ -35,6 +42,8 @@ export default function Register({ user }) {
         email: email.toLowerCase(),
         password,
       });
+
+      setIsLoading(false);
 
       if (!!error) {
         setWellData({ message: error });
@@ -47,14 +56,10 @@ export default function Register({ user }) {
         });
       }
     } catch (error) {
+      setIsLoading(false);
       setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
     }
   };
-
-  if (!!user) {
-    router.push("/dashboard");
-    return null;
-  }
 
   return (
     <Grid
@@ -68,6 +73,7 @@ export default function Register({ user }) {
       <Stepper activeStep={activeStep} />
       {activeStep === 1 ? (
         <RegisterForm
+          isLoading={isLoading}
           onSubmit={registerSubmit}
           onNextClick={onNextClick}
           disableSubmitButton={!!wellData?.severity}

@@ -11,7 +11,6 @@ async function user(req, res) {
       return res.status(500).send({ error });
     }
   } else {
-    // TODO: is 500 correct status? It's a successful request
     return res
       .status(500)
       .send({ error: "Invalid method, only GET requests permitted." });

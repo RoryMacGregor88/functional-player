@@ -1,11 +1,12 @@
-import { Backdrop, CircularProgress } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 
-// TODO: color is broken
+// TODO: theme mapping ('primary.main') not working
 
-const LoadingSpinner = () => (
-  <Backdrop open sx={{ backgroundColor: "#080808", zIndex: "1000" }}>
-    <CircularProgress />
-  </Backdrop>
+const LoadingSpinner = ({ sx = {} }) => (
+  <CircularProgress
+    data-testid="loading-spinner"
+    sx={{ color: "#faf9f7", ...sx }}
+  />
 );
 
 export default LoadingSpinner;

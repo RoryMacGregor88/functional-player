@@ -7,8 +7,8 @@ import {
   PasswordField,
 } from "@/src/components";
 
-/** @param {{ onSubmit: function }} props */
-const LoginForm = ({ onSubmit }) => {
+/** @param {{ onSubmit: function, isLoading: boolean }} props */
+const LoginForm = ({ onSubmit, isLoading }) => {
   const {
     register,
     handleSubmit,
@@ -29,7 +29,11 @@ const LoginForm = ({ onSubmit }) => {
         label="Password"
         name="password"
       />
-      <Button type="submit" disabled={!isDirty || !!Object.keys(errors).length}>
+      <Button
+        type="submit"
+        disabled={!isDirty || !!Object.keys(errors).length}
+        loading={isLoading}
+      >
         Submit
       </Button>
     </FormWrapper>

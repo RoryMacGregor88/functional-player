@@ -17,20 +17,23 @@ const SubscribeForm = ({ setWellData }) => {
 
   const subscribeSubmit = async (e) => {
     e.preventDefault();
-    const return_url = `${process.env.BASE_URL}/registration-success`;
+    setIsLoading(true);
     try {
       const result = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url,
+          return_url: `${process.env.BASE_URL}/registration-success`,
         },
       });
 
+      setIsLoading(false);
+
       if (!!result.error) {
-        setWellData({ message: error });
+        setWellData({ message: result.error });
       }
     } catch (error) {
       // TODO: stripe's errors (insufficient funds, card declined etc) need to go here
+      setIsLoading(false);
       setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
     }
   };

@@ -9,12 +9,7 @@ import { Alert, AlertTitle } from "@mui/material";
  * }} props
  */
 const Well = ({ title = null, message, stack, severity = "error" }) => {
-  if (!!stack) {
-    console.error("ERROR STACK: ", stack);
-  }
-
   const defaultTitle = severity === "error" ? "Error!" : "Success!";
-
   return (
     <Alert
       severity={severity}
