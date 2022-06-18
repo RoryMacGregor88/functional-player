@@ -5,6 +5,12 @@ import Drawer from "./drawer.component";
 import Navbar from "./navbar.component";
 import HeaderImage from "./header-image.component";
 import SidebarItem from "./sidebar-item.component";
+import PageWrapper from "./page-wrapper.component";
+import SeriesDisplay from "./series-display.component";
+import CourseDisplay from "./course-display.component";
+import MultiCourseDisplay from "./multi-course-display.component";
+import VideoDisplay from "./video-display.component";
+import VideoPlayer from "./video-player.component";
 import IconButton from "./icon-button.component";
 import NextImage from "./next-image.component";
 import SpacedTitle from "./spaced-title.component";
@@ -26,6 +32,12 @@ export {
   Navbar,
   HeaderImage,
   SidebarItem,
+  PageWrapper,
+  SeriesDisplay,
+  CourseDisplay,
+  MultiCourseDisplay,
+  VideoDisplay,
+  VideoPlayer,
   IconButton,
   NextImage,
   SpacedTitle,

@@ -5,9 +5,9 @@ import { NextImage } from "@/src/components";
  * @param {{
  *  src: string,
  *  alt: string,
- *  title: 'string',
+ *  title: string,
  *  imageProps?: object,
- *  deviceSize: 'string'
+ *  deviceSize: string
  * }} props
  */
 const Device = ({ src, alt, title, imageProps = {}, deviceSize }) => (

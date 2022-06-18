@@ -1,8 +1,8 @@
 import NextLink from "next/link";
-import { AppBar, Toolbar, Typography } from "@mui/material";
-import { MenuIcon } from "@/src/components";
 
-import { IconButton } from ".";
+import { AppBar, Toolbar, Typography } from "@mui/material";
+
+import { MenuIcon, IconButton } from "@/src/components";
 
 /**
  * @param {{

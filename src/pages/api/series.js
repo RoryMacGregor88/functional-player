@@ -1,5 +1,5 @@
 import { connectToDatabase } from "lib/mongodb";
-import { SERIES } from "src/constants";
+import { SERIES } from "@/src/utils";
 
 export const getAllSeries = async () => {
   const { db } = await connectToDatabase();

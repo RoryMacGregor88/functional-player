@@ -1,5 +1,5 @@
 import { connectToDatabase } from "lib/mongodb";
-import { SERIES } from "@/src/constants";
+import { SERIES } from "@/src/utils";
 
 // TODO: should all of these be utils somewhere? They are all endpoints if in this directory.
 

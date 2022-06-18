@@ -1,6 +1,8 @@
 import { useState } from "react";
+
 import Head from "next/head";
-import { Navbar, Footer, Drawer } from ".";
+
+import { Navbar, Footer, Drawer } from "@/src/components";
 
 const Layout = ({ user, clearUser, children }) => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
