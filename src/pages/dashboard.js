@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 
-import { NextImage } from "@/src/components";
+import { HeaderImage } from "@/src/components";
 
 export default function Dashboard({ user }) {
   const router = useRouter();
@@ -14,27 +14,18 @@ export default function Dashboard({ user }) {
 
   return (
     <Grid container direction="column" sx={{ width: "100%" }}>
-      <Grid
-        item
-        sx={{
-          position: "fixed",
-          height: "85vh",
-          width: "100%",
-          zIndex: -1,
+      <HeaderImage
+        src="/stratocaster"
+        alt="stratocaster"
+        title="Stratocaster Image"
+      />
+      <h1
+        style={{
+          margin: "2rem",
         }}
       >
-        <NextImage
-          src="/blue-strat-large.jpg"
-          alt="test-image"
-          objectFit="cover"
-          layout="fill"
-          quality={100}
-        />
-      </Grid>
-      <Grid item direction="column" sx={{ padding: "1rem" }}>
-        <Typography variant="h4">Dashboard</Typography>
-        <Typography variant="h4">Logged in as: {user.username}</Typography>
-      </Grid>
+        More stuff
+      </h1>
     </Grid>
   );
 }

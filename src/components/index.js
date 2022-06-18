@@ -1,9 +1,9 @@
-// components
 import Layout from "./layout.component";
 import LoadingSpinner from "./loading-spinner.component";
 import LoadMask from "./load-mask.component";
 import Drawer from "./drawer.component";
 import Navbar from "./navbar.component";
+import HeaderImage from "./header-image.component";
 import SidebarItem from "./sidebar-item.component";
 import IconButton from "./icon-button.component";
 import NextImage from "./next-image.component";
@@ -15,10 +15,7 @@ import Attention from "./attention.component";
 import Button from "./button.component";
 import Footer from "./footer.component";
 
-// forms
 export * from "./forms";
-
-// icons
 export * from "./icons";
 
 export {
@@ -27,6 +24,7 @@ export {
   LoadMask,
   Drawer,
   Navbar,
+  HeaderImage,
   SidebarItem,
   IconButton,
   NextImage,
