@@ -1,9 +1,7 @@
 import { connectToDatabase } from "lib/mongodb";
 import { SERIES } from "@/src/utils";
 
-// TODO: should all of these be utils somewhere? They are all endpoints if in this directory.
-
-export const getAllCourses = async () => {
+const getAllCourses = async () => {
   const { db } = await connectToDatabase();
   const series = await db.collection(SERIES).find({}).toArray();
 
@@ -14,10 +12,12 @@ export const getAllCourses = async () => {
   return courses;
 };
 
-export const getCourseById = async (seriesPath, coursePath) => {
+const getCourseById = async (seriesPath, coursePath) => {
   const { db } = await connectToDatabase();
   const series = await db.collection(SERIES).find({ seriesPath }).toArray();
 
   const course = series?.[0].courses?.find((c) => c.coursePath === coursePath);
   return course;
 };
+
+export { getAllCourses, getCourseById };

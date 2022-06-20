@@ -68,6 +68,7 @@ const Drawer = ({ user, clearUser, drawerIsOpen, toggleDrawer }) => {
           alignItems: "flex-start",
           backgroundColor: "transparent",
           backgroundImage: "none",
+          boxShadow: "none",
         },
       }}
     >

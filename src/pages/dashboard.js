@@ -2,9 +2,17 @@ import { useRouter } from "next/router";
 
 import { Grid } from "@mui/material";
 
-import { HeaderImage } from "@/src/components";
+import { getAllCourses } from "@/src/pages/api/course";
 
-const user = {
+import {
+  HeaderImage,
+  PageWrapper,
+  SpacedTitle,
+  CourseDisplay,
+  MultiCourseDisplay,
+} from "@/src/components";
+
+const tempUser = {
   user_name: "John Smith",
   lastWatched: {
     seriesPath: "stevie-ray-vaughan",
@@ -17,13 +25,49 @@ const user = {
   ],
 };
 
-export default function Dashboard({ user }) {
+export const getServerSideProps = async (ctx) => ({
+  props: { allCourses: await getAllCourses() },
+});
+
+const ContinueWatching = ({ lastWatched }) => {
+  const { seriesPath, coursePath } = lastWatched;
+  return (
+    <CourseDisplay
+      title="Continue Watching: "
+      src="/stratocaster-small.jpg"
+      alt="This is some alt text"
+      seriesPath={seriesPath}
+      coursePath={coursePath}
+    />
+  );
+};
+
+const LatestCourses = ({ latestCourses }) => (
+  <MultiCourseDisplay title="Most Recent Courses: " courses={latestCourses} />
+);
+
+const Bookmarks = ({ bookmarks }) => (
+  <MultiCourseDisplay title="Your Bookmarks: " courses={bookmarks} />
+);
+
+export default function Dashboard({ user, allCourses }) {
   const router = useRouter();
 
   if (!user) {
     router.push("/login");
     return null;
   }
+
+  const latestCourses = allCourses
+    ?.sort((a, b) => {
+      // TODO: change these to 'creation_date' when you can be arsed
+      return a.CreationDate > b.CreationDate ? -1 : 1;
+    })
+    .slice(0, 5);
+
+  const bookmarks = allCourses.filter((course) =>
+    tempUser.bookmarks.includes(course._id)
+  );
 
   return (
     <Grid container direction="column" sx={{ width: "100%" }}>
@@ -32,13 +76,27 @@ export default function Dashboard({ user }) {
         alt="stratocaster"
         title="Stratocaster Image"
       />
-      <h1
-        style={{
-          margin: "2rem",
-        }}
-      >
-        More stuff
-      </h1>
+      <PageWrapper>
+        <SpacedTitle>Welcome back, {user.username}</SpacedTitle>
+        <Grid
+          container
+          justifyContent="space-between"
+          alignItems="stretch"
+          wrap="wrap"
+          spacing={4}
+        >
+          <ContinueWatching lastWatched={tempUser.lastWatched} />
+          <CourseDisplay
+            title="Coming Soon: "
+            src="/stratocaster-small.jpg"
+            alt="This is some alt text"
+            coursePath="pride-and-joy"
+            seriesPath="stevie-ray-vaughan"
+          />
+          <LatestCourses latestCourses={latestCourses} />
+          <Bookmarks bookmarks={bookmarks} />
+        </Grid>
+      </PageWrapper>
     </Grid>
   );
 }
