@@ -1,6 +1,10 @@
 import { useEffect } from "react";
+
 import { Typography } from "@mui/material";
+
 import { PageWrapper, VideoDisplay, SpacedTitle } from "@/src/components";
+import { http } from "@/src/utils";
+
 import { getAllCourses, getCourseById } from "@/src/pages/api/course";
 
 // TODO: strip out styles from copied pages, redo
@@ -26,22 +30,18 @@ export const getStaticProps = async ({ params }) => {
   };
 };
 
-export default function Series({ course }) {
-  const { title, description, videoUrl } = course;
-
-  // const allowAccess = !!session?.user.subscriptionIsActive;
+export default function Series({ user, course }) {
+  const { email, subscriptionStatus } = user;
+  const { _id, title, description, videoUrl } = course;
 
   useEffect(() => {
-    console.log(
-      `POST video seriesPath and coursePath to 'continueWatching'`,
-      course
-    );
-  });
+    http("/update-last-watched", { email, _id });
+  }, []);
 
   return (
     <PageWrapper>
       <SpacedTitle title="Single course page (level 3)" />
-      {true ? (
+      {subscriptionStatus === "active" ? (
         <>
           <Typography variant="h6">This is LIVE version</Typography>
           <VideoDisplay

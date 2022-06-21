@@ -29,8 +29,8 @@ export const getServerSideProps = async (ctx) => ({
   props: { allCourses: await getAllCourses() },
 });
 
-const ContinueWatching = ({ lastWatched }) => {
-  const { seriesPath, coursePath } = lastWatched;
+const ContinueWatching = ({ course }) => {
+  const { seriesPath, coursePath } = course;
   return (
     <CourseDisplay
       title="Continue Watching: "
@@ -42,12 +42,25 @@ const ContinueWatching = ({ lastWatched }) => {
   );
 };
 
-const LatestCourses = ({ latestCourses }) => (
-  <MultiCourseDisplay title="Most Recent Courses: " courses={latestCourses} />
+const ComingSoon = ({ course }) => {
+  // TODO: fix, course not being used
+  return (
+    <CourseDisplay
+      title="Coming Soon: "
+      src="/stratocaster-small.jpg"
+      alt="This is some alt text"
+      coursePath="pride-and-joy"
+      seriesPath="stevie-ray-vaughan"
+    />
+  );
+};
+
+const LatestCourses = ({ courses }) => (
+  <MultiCourseDisplay title="Most Recent Courses: " courses={courses} />
 );
 
-const Bookmarks = ({ bookmarks }) => (
-  <MultiCourseDisplay title="Your Bookmarks: " courses={bookmarks} />
+const Bookmarks = ({ courses }) => (
+  <MultiCourseDisplay title="Your Bookmarks: " courses={courses} />
 );
 
 export default function Dashboard({ user, allCourses }) {
@@ -58,6 +71,12 @@ export default function Dashboard({ user, allCourses }) {
     return null;
   }
 
+  const lastWatched = allCourses.find(
+    (course) => course._id === user.lastWatched
+  );
+
+  console.log("lastWatched: ", lastWatched);
+
   const latestCourses = allCourses
     ?.sort((a, b) => {
       // TODO: change these to 'creation_date' when you can be arsed
@@ -65,8 +84,8 @@ export default function Dashboard({ user, allCourses }) {
     })
     .slice(0, 5);
 
-  const bookmarks = allCourses.filter((course) =>
-    tempUser.bookmarks.includes(course._id)
+  const bookmarks = allCourses.filter(({ _id }) =>
+    user.bookmarks.includes(_id)
   );
 
   return (
@@ -85,16 +104,10 @@ export default function Dashboard({ user, allCourses }) {
           wrap="wrap"
           spacing={4}
         >
-          <ContinueWatching lastWatched={tempUser.lastWatched} />
-          <CourseDisplay
-            title="Coming Soon: "
-            src="/stratocaster-small.jpg"
-            alt="This is some alt text"
-            coursePath="pride-and-joy"
-            seriesPath="stevie-ray-vaughan"
-          />
-          <LatestCourses latestCourses={latestCourses} />
-          <Bookmarks bookmarks={bookmarks} />
+          <ContinueWatching course={lastWatched} />
+          <ComingSoon course={{}} />
+          <LatestCourses courses={latestCourses} />
+          <Bookmarks courses={bookmarks} />
         </Grid>
       </PageWrapper>
     </Grid>

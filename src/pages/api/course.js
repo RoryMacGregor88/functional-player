@@ -5,7 +5,7 @@ const getAllCourses = async () => {
   const { db } = await connectToDatabase();
   const series = await db.collection(SERIES).find({}).toArray();
 
-  const courses = series?.reduce((acc, cur) => {
+  const courses = series.reduce((acc, cur) => {
     return [...acc, ...cur.courses];
   }, []);
 

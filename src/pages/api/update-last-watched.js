@@ -7,20 +7,20 @@ import {
   HTTP_METHOD_ERROR_MESSAGE,
 } from "@/src/utils";
 
-async function updateEmail(req, res) {
+async function updateLastWatched(req, res) {
   if (req.method === "POST") {
     if (req.session.user?.email !== req.body.email) {
       return res.status(403).send({ error: DEFAULT_TOKEN_FORBIDDEN_MESSAGE });
     }
     try {
-      const { email, newEmail } = req.body;
-
+      const { email, _id } = req.body;
       const { db } = await connectToDatabase();
+
       await db
         .collection(USERS)
-        .findOneAndUpdate({ email }, { $set: { email: newEmail } });
+        .findOneAndUpdate({ email }, { $set: { lastWatched: _id } });
 
-      req.session.user = { ...req.session.user, email: newEmail };
+      req.session.user = { ...req.session.user, lastWatched: _id };
       await req.session.save();
 
       return res.status(200).json({ ok: true });
@@ -32,4 +32,4 @@ async function updateEmail(req, res) {
   }
 }
 
-export default withIronSessionApiRoute(updateEmail, sessionOptions);
+export default withIronSessionApiRoute(updateLastWatched, sessionOptions);
