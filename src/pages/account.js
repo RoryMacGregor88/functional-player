@@ -25,6 +25,7 @@ const TabPanel = ({ children, name, value, index }) => (
   </Box>
 );
 
+/** @param {{user: object}} props */
 export default function Account({ user }) {
   const router = useRouter();
 

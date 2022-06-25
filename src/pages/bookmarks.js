@@ -16,7 +16,7 @@ export const getServerSideProps = async (ctx) => ({
   props: { courses: await getAllCourses() },
 });
 
-/** @param {{user: object}} props */
+/** @param {{user: object, courses: object[]}} props */
 export default function Bookmarks({ user, courses }) {
   const router = useRouter();
 

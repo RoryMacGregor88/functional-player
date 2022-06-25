@@ -12,6 +12,7 @@ import {
 
 import { http } from "@/src/utils";
 
+/** @param {{user: object}} props */
 const Drawer = ({ user, clearUser, drawerIsOpen, toggleDrawer }) => {
   const router = useRouter();
 

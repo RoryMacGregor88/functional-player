@@ -13,17 +13,19 @@ import { MenuIcon, IconButton } from "@/src/components";
  */
 const Navbar = ({ user, drawerIsOpen, toggleDrawer }) => {
   const options = {
+    padding: "0",
     visibility: drawerIsOpen ? "hidden" : "visible",
   };
 
   return (
     <AppBar
-      position="static"
+      position="fixed"
       sx={{
+        zIndex: "1100",
         border: "none",
-        borderBottomColor: "palette.primary.main",
-        borderBottomStyle: "solid",
-        borderBottomWidth: "1px",
+        backgroundColor: "transparent",
+        boxShadow: "none",
+        backgroundImage: "none",
       }}
     >
       <Toolbar
@@ -32,7 +34,8 @@ const Navbar = ({ user, drawerIsOpen, toggleDrawer }) => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: "1rem",
+          padding: "0.5rem 1rem",
+          minHeight: "fit-content !important",
         }}
       >
         <NextLink href={!!user ? "/dashboard" : "/"} passHref>

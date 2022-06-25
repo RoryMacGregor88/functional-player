@@ -61,6 +61,7 @@ const Bookmarks = ({ courses }) => (
   <MultiCourseDisplay title="Your Bookmarks: " courses={courses} />
 );
 
+/** @param {{user: object, allCourses: object[] }} props */
 export default function Dashboard({ user, allCourses }) {
   const router = useRouter();
 

@@ -6,7 +6,7 @@ import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 
 import { Layout, LoadMask } from "@/src/components";
-import { http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+import { http } from "@/src/utils";
 
 import theme from "@/src/components/theme";
 

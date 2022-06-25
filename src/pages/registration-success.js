@@ -4,6 +4,7 @@ import { Grid, Button, Typography, LoadMask } from "@mui/material";
 
 import { Attention } from "@/src/components";
 
+/** @param {{user: object}} props */
 export default function RegistrationSuccess({ user }) {
   const router = useRouter();
 
