@@ -5,8 +5,9 @@ import { Drawer as MuiDrawer, Grid } from "@mui/material";
 import {
   IconButton,
   CloseIcon,
-  ProfileIcon,
   SidebarItem,
+  ProfileIcon,
+  BookmarksIcon,
 } from "@/src/components";
 
 import { http } from "@/src/utils";
@@ -34,6 +35,11 @@ const Drawer = ({ user, clearUser, drawerIsOpen, toggleDrawer }) => {
       Icon: ProfileIcon,
       label: "My Account",
       href: "/account",
+    },
+    bookmarks: {
+      Icon: BookmarksIcon,
+      label: "Bookmarks",
+      href: "/bookmarks",
     },
     logout: {
       Icon: ProfileIcon,
@@ -85,6 +91,7 @@ const Drawer = ({ user, clearUser, drawerIsOpen, toggleDrawer }) => {
         <SidebarItem {...LINK_METADATA.browse} onClick={toggleDrawer} />
         {!!user ? (
           <>
+            <SidebarItem {...LINK_METADATA.bookmarks} onClick={toggleDrawer} />
             <SidebarItem {...LINK_METADATA.account} onClick={toggleDrawer} />
             <SidebarItem {...LINK_METADATA.logout} onClick={logout} />
           </>

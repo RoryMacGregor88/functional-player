@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { Grid } from "@mui/material";
 
 import { http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
-import { LoginForm, SpacedTitle, Well } from "@/src/components";
+import { LoginForm, SpacedTitle, Well, LoadMask } from "@/src/components";
 
 export default function Login({ user }) {
   const router = useRouter();
@@ -15,7 +15,7 @@ export default function Login({ user }) {
 
   if (!!user) {
     router.push("/dashboard");
-    return null;
+    return <LoadMask />;
   }
 
   const onSubmit = async (event) => {

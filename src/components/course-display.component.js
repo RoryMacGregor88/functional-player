@@ -3,37 +3,61 @@ import NextLink from "next/link";
 
 import { Typography, Grid, Box } from "@mui/material";
 
-import { Button } from "@/src/components";
+import {
+  Button,
+  IconButton,
+  BookmarkAddIcon,
+  BookmarkAddedIcon,
+} from "@/src/components";
+
+// TODO: styling of this is broke, height width, now that description has been added
+
+const handleBookmarkClick = () => {
+  console.log("clicked bookmark");
+};
 
 /**
  * @param {{
  *  title: string,
+ *  description: string,
  *  src: string,
  *  alt: string,
  *  seriesPath: string,
  *  coursePath: string
  * }} props
  */
-const CourseDisplay = ({ title, src, alt, seriesPath, coursePath }) => {
+const CourseDisplay = ({
+  title,
+  description,
+  src,
+  alt,
+  seriesPath,
+  coursePath,
+}) => {
   const href = `/series/${seriesPath}/${coursePath}`;
   return (
     <Grid
       item
       container
       direction="column"
-      sx={{ maxWidth: "35rem" }}
+      sx={{ maxWidth: "35rem", minWidth: "35rem" }}
       xs={12}
       md={6}
     >
-      <Typography
-        variant="h4"
-        sx={{
-          margin: "1rem 0",
-        }}
-      >
-        {title}
-      </Typography>
-      {/* put some kind of hover effect on the image and title */}
+      <Grid item container justifyContent="space-between" alignItems="center">
+        {/* TODO: put some kind of hover effect on the image and title */}
+        <Typography
+          variant="h4"
+          sx={{
+            margin: "1rem 0",
+          }}
+        >
+          {title}
+        </Typography>
+        <IconButton onClick={handleBookmarkClick}>
+          <BookmarkAddIcon sx={{ height: "2rem", width: "2rem" }} />
+        </IconButton>
+      </Grid>
       <Box
         sx={{
           position: "relative",
@@ -54,10 +78,7 @@ const CourseDisplay = ({ title, src, alt, seriesPath, coursePath }) => {
         </NextLink>
       </Box>
       <Grid item container direction="column" alignItems="flex-start">
-        <Typography>
-          This is the description of this video, it is currently hardcoded into
-          the component, but will not be when I get around to fixing it.
-        </Typography>
+        <Typography>{description}</Typography>
       </Grid>
       <NextLink href={href} passHref>
         <Button>Watch Now</Button>

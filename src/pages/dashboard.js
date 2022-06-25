@@ -10,19 +10,13 @@ import {
   SpacedTitle,
   CourseDisplay,
   MultiCourseDisplay,
+  LoadMask,
 } from "@/src/components";
 
-const tempUser = {
-  user_name: "John Smith",
-  lastWatched: {
-    seriesPath: "stevie-ray-vaughan",
-    coursePath: "pride-and-joy",
-  },
-  bookmarks: [
-    "e522a8af-d60a-456e-986b-332afdd485e0",
-    "d7281f32-e007-48cb-a5db-a2f25acd5991",
-    "05173b44-be77-4ef0-b263-444163a509c8",
-  ],
+// TODO: make real, not fake data
+const comingSoonCourse = {
+  coursePath: "pride-and-joy",
+  seriesPath: "stevie-ray-vaughan",
 };
 
 export const getServerSideProps = async (ctx) => ({
@@ -30,12 +24,14 @@ export const getServerSideProps = async (ctx) => ({
 });
 
 const ContinueWatching = ({ course }) => {
-  const { seriesPath, coursePath } = course;
+  // TODO: will need some kind of wrapper to indicate it's latest watched
+  const { title, description, seriesPath, coursePath } = course;
   return (
     <CourseDisplay
-      title="Continue Watching: "
+      title={title}
+      description={description}
       src="/stratocaster-small.jpg"
-      alt="This is some alt text"
+      alt={title}
       seriesPath={seriesPath}
       coursePath={coursePath}
     />
@@ -43,14 +39,16 @@ const ContinueWatching = ({ course }) => {
 };
 
 const ComingSoon = ({ course }) => {
-  // TODO: fix, course not being used
+  // TODO: same here as continue watching, wrapper
+  const { title, description, seriesPath, coursePath } = course;
   return (
     <CourseDisplay
-      title="Coming Soon: "
+      title={title}
+      description={description}
       src="/stratocaster-small.jpg"
-      alt="This is some alt text"
-      coursePath="pride-and-joy"
-      seriesPath="stevie-ray-vaughan"
+      alt={title}
+      seriesPath={seriesPath}
+      coursePath={coursePath}
     />
   );
 };
@@ -68,7 +66,7 @@ export default function Dashboard({ user, allCourses }) {
 
   if (!user) {
     router.push("/login");
-    return null;
+    return <LoadMask />;
   }
 
   const lastWatched = allCourses.find(
@@ -105,7 +103,7 @@ export default function Dashboard({ user, allCourses }) {
           spacing={4}
         >
           <ContinueWatching course={lastWatched} />
-          <ComingSoon course={{}} />
+          <ComingSoon course={comingSoonCourse} />
           <LatestCourses courses={latestCourses} />
           <Bookmarks courses={bookmarks} />
         </Grid>

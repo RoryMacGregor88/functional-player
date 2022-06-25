@@ -10,6 +10,7 @@ import {
   SubscribeForm,
   SpacedTitle,
   Well,
+  LoadMask,
 } from "@/src/components";
 
 import { getStripe, http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
@@ -24,7 +25,7 @@ export default function Register({ user }) {
 
   if (!!user) {
     router.push("/dashboard");
-    return null;
+    return <LoadMask />;
   }
 
   const onNextClick = () => {

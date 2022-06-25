@@ -9,6 +9,7 @@ import {
   UpdateSubscriptionForm,
   UpdateEmailForm,
   Well,
+  LoadMask,
 } from "@/src/components";
 
 import { http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
@@ -32,7 +33,7 @@ export default function Account({ user }) {
 
   if (!user) {
     router.push("/login");
-    return null;
+    return <LoadMask />;
   }
 
   const { email, subscriptionStatus, subscriptionId } = user;
@@ -106,6 +107,8 @@ export default function Account({ user }) {
   const handleResubscribe = () => {
     console.log("hit handleResubcribe");
   };
+
+  // TODO: pagewrapper?
 
   return (
     <div>

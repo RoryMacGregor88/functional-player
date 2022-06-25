@@ -4,11 +4,10 @@ import { getAllSeries, getSeriesById } from "@/src/pages/api/series";
 
 export const getStaticPaths = async () => {
   const series = await getAllSeries();
-  const paths = series.map((series) => {
-    return {
-      params: { seriesId: series.seriesPath },
-    };
-  });
+
+  const paths = series.map(({ seriesPath }) => ({
+    params: { seriesId: seriesPath },
+  }));
 
   return {
     paths,
@@ -25,16 +24,19 @@ export default function Series({ series }) {
     <PageWrapper>
       <SpacedTitle title={`${series.title} Series (level 2)`} />
       <Grid container wrap="wrap">
-        {series?.courses?.map((course) => (
-          <CourseDisplay
-            key={course._id}
-            title={course.title}
-            src="/stratocaster-small.jpg"
-            alt="stratocaster"
-            seriesPath={series.seriesPath}
-            coursePath={course.coursePath}
-          />
-        ))}
+        {series?.courses?.map(
+          ({ _id, title, description, seriesPath, coursePath }) => (
+            <CourseDisplay
+              key={_id}
+              title={title}
+              description={description}
+              src="/stratocaster-small.jpg"
+              alt={title}
+              seriesPath={seriesPath}
+              coursePath={coursePath}
+            />
+          )
+        )}
       </Grid>
     </PageWrapper>
   );

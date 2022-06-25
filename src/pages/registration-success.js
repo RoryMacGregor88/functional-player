@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 
-import { Grid, Button, Typography } from "@mui/material";
+import { Grid, Button, Typography, LoadMask } from "@mui/material";
 
 import { Attention } from "@/src/components";
 
@@ -9,7 +9,7 @@ export default function RegistrationSuccess({ user }) {
 
   if (!!user) {
     router.push("/dashboard");
-    return null;
+    return <LoadMask />;
   }
 
   return (

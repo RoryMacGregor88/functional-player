@@ -10,6 +10,11 @@ import {
   BookmarkAdded as BookmarkAddedIcon,
   Help as HelpIcon,
   Info as InfoIcon,
+  Facebook as FacebookIcon,
+  Instagram as InstagramIcon,
+  Twitter as TwitterIcon,
+  Reddit as RedditIcon,
+  YouTube as YouTubeIcon,
 } from "@mui/icons-material";
 
 export {
@@ -24,4 +29,9 @@ export {
   BookmarkAddedIcon,
   HelpIcon,
   InfoIcon,
+  FacebookIcon,
+  InstagramIcon,
+  TwitterIcon,
+  RedditIcon,
+  YouTubeIcon,
 };

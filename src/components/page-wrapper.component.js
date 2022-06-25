@@ -4,7 +4,7 @@ const PageWrapper = ({ children }) => (
   <Box
     sx={{
       maxWidth: "80rem",
-      margin: "auto",
+      margin: "0 auto",
       padding: "0 2rem",
     }}
   >

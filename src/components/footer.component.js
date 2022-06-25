@@ -1,23 +1,89 @@
-import { Grid, Typography } from "@mui/material";
+import { IconButton, Grid, Typography, Link } from "@mui/material";
 
-const Footer = () => (
-  <Grid
-    container
-    component="footer"
-    justifyContent="center"
-    alignItems="center"
-    sx={{
-      minHeight: "20rem",
-      backgroundColor: "palette.background.default",
-      borderTopColor: "palette.primary.main",
-      borderTopStyle: "solid",
-      borderTopWidth: "1px",
-    }}
-  >
-    <Grid item component={Typography} variant="h2">
-      Footer
+import {
+  FacebookIcon,
+  InstagramIcon,
+  TwitterIcon,
+  RedditIcon,
+  YouTubeIcon,
+} from "@/src/components";
+
+// TODO: use theme for styles
+
+const Footer = () => {
+  const icons = [
+    { Icon: FacebookIcon, url: "https://www.facebook.com", label: "Facebook" },
+    {
+      Icon: InstagramIcon,
+      url: "https://www.instagram.com",
+      label: "Instagram",
+    },
+    { Icon: TwitterIcon, url: "https://www.twitter.com", label: "Twitter" },
+    { Icon: RedditIcon, url: "https://www.reddit.com", label: "Reddit" },
+    { Icon: YouTubeIcon, url: "https://www.youtube.com", label: "YouTube" },
+  ];
+
+  return (
+    <Grid
+      container
+      direction="column"
+      justifyContent="space-between"
+      component="footer"
+      sx={{
+        padding: "1rem",
+        backgroundColor: "palette.background.default",
+        borderTopColor: "palette.primary.main",
+        borderTopStyle: "solid",
+        borderTopWidth: "1px",
+      }}
+    >
+      <Grid
+        item
+        container
+        justifyContent="space-evenly"
+        alignItems="center"
+        sx={{ marginBottom: "1rem" }}
+      >
+        {icons.map(({ Icon, url, label }) => (
+          <Link
+            key={label}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              minWidth: "10rem",
+              textDecoration: "none",
+              opacity: "0.75",
+              "&:hover": {
+                color: "#fff",
+                opacity: "1",
+              },
+            }}
+          >
+            <IconButton color="primary" disableRipple>
+              <Icon
+                sx={{
+                  height: "2.5rem",
+                  width: "2.5rem",
+                  marginRight: "0.5rem",
+                }}
+              />
+            </IconButton>
+            <Typography variant="h6">{label}</Typography>
+          </Link>
+        ))}
+      </Grid>
+      <Typography
+        variant="body1"
+        sx={{ textAlign: "center", marginBottom: "0.25rem" }}
+      >
+        Copyright &copy; {new Date().getFullYear()} Functional Player | Terms
+        &amp; Conditions | Privacy Policy
+      </Typography>
     </Grid>
-  </Grid>
-);
+  );
+};
 
 export default Footer;
