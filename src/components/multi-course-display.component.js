@@ -1,20 +1,29 @@
+import { useContext } from "react";
+
 import NextImage from "next/image";
 import NextLink from "next/link";
 
 import { Grid, Typography } from "@mui/material";
 
-import { Button } from "@/src/components";
+import { Button, BookmarkIconButton } from "@/src/components";
+
+import { Context as ctx } from "@/src/utils";
 
 /**
  * @param {{
- *  title: string,
- *  description: string,
- *  seriesPath: string,
- *  coursePath: string
+ *  user: object,
+ *  course: object
+ *  isBookmarked: boolean,
+ *  handleBookmarkClick: function
  * }} props
  */
-const MiniCourseDisplay = ({ course }) => {
-  const { title, description, seriesPath, coursePath } = course;
+const MiniCourseDisplay = ({
+  user,
+  course,
+  isBookmarked,
+  handleBookmarkClick,
+}) => {
+  const { title, alt, description, seriesPath, coursePath } = course;
   const href = `/series/${seriesPath}/${coursePath}`;
   return (
     <Grid item container direction="column" alignItems="center" wrap="nowrap">
@@ -38,7 +47,7 @@ const MiniCourseDisplay = ({ course }) => {
           <NextLink href={href} passHref>
             <NextImage
               src="/stratocaster-small.jpg"
-              alt="stratocaster"
+              alt={alt}
               layout="fill"
               objectFit="cover"
             />
@@ -55,6 +64,16 @@ const MiniCourseDisplay = ({ course }) => {
           <Typography variant="h6">{title}</Typography>
           <Typography variant="body1">{description}</Typography>
         </Grid>
+        {!!user ? (
+          <BookmarkIconButton
+            isBookmarked={isBookmarked}
+            handleBookmarkClick={handleBookmarkClick}
+            sx={{
+              marginLeft: "auto",
+              alignSelf: "flex-start",
+            }}
+          />
+        ) : null}
       </Grid>
       <NextLink href={href} passHref>
         <Button>Watch Now</Button>
@@ -69,23 +88,38 @@ const MiniCourseDisplay = ({ course }) => {
  *  courses: object[],
  * }} props
  */
-const MultiCourseDisplay = ({ title, courses }) => (
-  <Grid
-    item
-    container
-    direction="column"
-    justifyContent="flex-start"
-    xs={12}
-    md={6}
-    sx={{ maxWidth: "35rem" }}
-  >
-    <Typography variant="h4" sx={{ margin: "1rem 0" }}>
-      {title}
-    </Typography>
-    {courses.map(({ _id, ...course }) => (
-      <MiniCourseDisplay key={_id} course={course} />
-    ))}
-  </Grid>
-);
+const MultiCourseDisplay = ({ title, courses }) => {
+  const { user } = useContext(ctx);
+
+  const handleBookmarkClick = () => {};
+
+  return (
+    <Grid
+      item
+      container
+      direction="column"
+      justifyContent="flex-start"
+      xs={12}
+      md={6}
+      sx={{ maxWidth: "35rem" }}
+    >
+      <Typography variant="h4" sx={{ margin: "1rem 0" }}>
+        {title}
+      </Typography>
+      {courses.map(({ _id, ...course }) => {
+        const isBookmarked = !!user?.bookmarks.includes(_id);
+        return (
+          <MiniCourseDisplay
+            key={_id}
+            user={user}
+            course={course}
+            isBookmarked={isBookmarked}
+            handleBookmarkClick={handleBookmarkClick}
+          />
+        );
+      })}
+    </Grid>
+  );
+};
 
 export default MultiCourseDisplay;

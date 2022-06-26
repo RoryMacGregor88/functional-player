@@ -147,11 +147,15 @@ const Desktop = ({ src, alt, title, imageProps = {} }) => (
 
 /** @param {object} props */
 const HeaderImage = (props) => {
-  const medium = useMediaQuery("(max-width:1000px)");
-  const small = useMediaQuery("(max-width:600px)");
-  if (small) {
+  const isMedium = useMediaQuery("(max-width:1000px)");
+  const isSmall = useMediaQuery("(max-width:600px)");
+
+  // TODO: make this re-usable across all pages but with different images and text
+
+  // TODO: make sure this shit working. NextImage better for this? is it SSR?
+  if (isSmall) {
     return <Device {...props} deviceSize="small" />;
-  } else if (medium) {
+  } else if (isMedium) {
     return <Device {...props} deviceSize="medium" />;
   } else {
     return <Desktop {...props} />;

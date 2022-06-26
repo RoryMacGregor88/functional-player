@@ -13,8 +13,11 @@ import {
   LoadMask,
 } from "@/src/components";
 
-// TODO: make real, not fake data
+// TODO: make real, not fake data, also all videos need alts and aria labels
 const comingSoonCourse = {
+  _id: "e522a8af-d60a-456e-986b-332afdd485e0",
+  title: "Pride and Joy",
+  description: "this is a description of Pride and Joy",
   coursePath: "pride-and-joy",
   seriesPath: "stevie-ray-vaughan",
 };
@@ -23,40 +26,24 @@ export const getServerSideProps = async (ctx) => ({
   props: { allCourses: await getAllCourses() },
 });
 
+/** @param {{ course: object}} props */
 const ContinueWatching = ({ course }) => {
-  // TODO: will need some kind of wrapper to indicate it's latest watched
-  const { title, description, seriesPath, coursePath } = course;
-  return (
-    <CourseDisplay
-      title={title}
-      description={description}
-      src="/stratocaster-small.jpg"
-      alt={title}
-      seriesPath={seriesPath}
-      coursePath={coursePath}
-    />
-  );
+  // TODO: custom component for this? there's only one
+  return <CourseDisplay src="/stratocaster-small.jpg" {...course} />;
 };
 
+/** @param {{course: object}} props */
 const ComingSoon = ({ course }) => {
-  // TODO: same here as continue watching, wrapper
-  const { title, description, seriesPath, coursePath } = course;
-  return (
-    <CourseDisplay
-      title={title}
-      description={description}
-      src="/stratocaster-small.jpg"
-      alt={title}
-      seriesPath={seriesPath}
-      coursePath={coursePath}
-    />
-  );
+  // TODO: custom component for this? there's only one
+  return <CourseDisplay src="/stratocaster-small.jpg" {...course} />;
 };
 
+/** @param {{course: object}} props */
 const LatestCourses = ({ courses }) => (
   <MultiCourseDisplay title="Most Recent Courses: " courses={courses} />
 );
 
+/** @param {{ course: object}} props */
 const Bookmarks = ({ courses }) => (
   <MultiCourseDisplay title="Your Bookmarks: " courses={courses} />
 );
@@ -73,8 +60,6 @@ export default function Dashboard({ user, allCourses }) {
   const lastWatched = allCourses.find(
     (course) => course._id === user.lastWatched
   );
-
-  console.log("lastWatched: ", lastWatched);
 
   const latestCourses = allCourses
     ?.sort((a, b) => {

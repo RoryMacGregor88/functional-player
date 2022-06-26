@@ -35,7 +35,7 @@ export default function Series({ user, course }) {
   const { _id, title, description, videoUrl } = course;
 
   useEffect(() => {
-    http("/update-last-watched", { email, _id });
+    http("/last-watched", { email, _id });
   }, []);
 
   return (

@@ -12,10 +12,12 @@ import MultiCourseDisplay from "./multi-course-display.component";
 import VideoDisplay from "./video-display.component";
 import VideoPlayer from "./video-player.component";
 import IconButton from "./icon-button.component";
+import BookmarkIconButton from "./bookmark-icon-button.component";
 import NextImage from "./next-image.component";
 import SpacedTitle from "./spaced-title.component";
 import Stepper from "./stepper.component";
 import Well from "./well/well.component";
+import Toast from "./toast.component";
 import TextField from "./text-field.component";
 import Attention from "./attention.component";
 import Button from "./button.component";
@@ -39,10 +41,12 @@ export {
   VideoDisplay,
   VideoPlayer,
   IconButton,
+  BookmarkIconButton,
   NextImage,
   SpacedTitle,
   Stepper,
   Well,
+  Toast,
   TextField,
   Attention,
   Button,

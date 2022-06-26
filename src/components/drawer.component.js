@@ -86,7 +86,7 @@ const Drawer = ({ user, clearUser, drawerIsOpen, toggleDrawer }) => {
         alignItems="flex-end"
       >
         <IconButton onClick={toggleDrawer}>
-          <CloseIcon sx={{ height: "2rem", width: "2rem" }}>Close</CloseIcon>
+          <CloseIcon sx={{ height: "2rem", width: "2rem" }} />
         </IconButton>
 
         <SidebarItem {...LINK_METADATA.browse} onClick={toggleDrawer} />
