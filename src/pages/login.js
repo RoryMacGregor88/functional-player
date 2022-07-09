@@ -7,7 +7,13 @@ import { Grid } from "@mui/material";
 import { http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 import { LoginForm, SpacedTitle, Well, LoadMask } from "@/src/components";
 
-export default function Login({ user }) {
+/**
+ * @param {{
+ *  user: object,
+ *  fetchToken: function
+ * }} props
+ */
+export default function Login({ user, fetchToken }) {
   const router = useRouter();
 
   const [wellData, setWellData] = useState(null);
@@ -32,7 +38,7 @@ export default function Login({ user }) {
       if (!!error) {
         setWellData({ message: error });
       } else if (ok) {
-        // TODO: not redirecting anymore, was working
+        fetchToken();
         router.push("/dashboard");
       }
     } catch (error) {

@@ -15,7 +15,7 @@ import {
  */
 const BookmarkIconButton = ({ isBookmarked, handleBookmarkClick, sx = {} }) => {
   const text = isBookmarked ? "In your list" : "Add to list";
-  const color = isBookmarked ? "green" : "red";
+  const color = isBookmarked ? "green" : "white";
 
   const iconSx = {
     height: "2rem",

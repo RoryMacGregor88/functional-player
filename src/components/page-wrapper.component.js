@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 
+/** @param {{ children: React.ReactChildren }} props */
 const PageWrapper = ({ children }) => (
   <Box
     sx={{

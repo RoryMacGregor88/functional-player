@@ -14,7 +14,15 @@ import {
 
 import { http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 
-const TabPanel = ({ children, name, value, index }) => (
+/**
+ * @param {{
+ *  name: string,
+ *  value: number,
+ *  index: number,
+ *  children: React.ReactChildren
+ * }} props
+ */
+const TabPanel = ({ name, value, index, children }) => (
   <Box
     role="tabpanel"
     hidden={value !== index}

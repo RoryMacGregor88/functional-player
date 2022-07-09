@@ -12,8 +12,15 @@ import {
 
 import { http } from "@/src/utils";
 
-/** @param {{user: object}} props */
-const Drawer = ({ user, clearUser, drawerIsOpen, toggleDrawer }) => {
+/**
+ * @param {{
+ *  user: object,
+ *  fetchToken: function,
+ *  drawerIsOpen: boolean,
+ *  toggleDrawer: function
+ * }} props
+ */
+const Drawer = ({ user, fetchToken, drawerIsOpen, toggleDrawer }) => {
   const router = useRouter();
 
   const LINK_METADATA = {
@@ -56,8 +63,8 @@ const Drawer = ({ user, clearUser, drawerIsOpen, toggleDrawer }) => {
   const logout = async () => {
     const { ok } = await http("/auth/logout");
     if (ok) {
-      // TODO: why is this required? Navigating to landing page should wipe local state and re-run useEffect, returning noSession because session was destroyed.
-      // clearUser();
+      fetchToken();
+      // TODO: redirects to login now instead of landing, why?
       router.push("/");
     }
   };
@@ -94,7 +101,13 @@ const Drawer = ({ user, clearUser, drawerIsOpen, toggleDrawer }) => {
           <>
             <SidebarItem {...LINK_METADATA.bookmarks} onClick={toggleDrawer} />
             <SidebarItem {...LINK_METADATA.account} onClick={toggleDrawer} />
-            <SidebarItem {...LINK_METADATA.logout} onClick={logout} />
+            <SidebarItem
+              {...LINK_METADATA.logout}
+              onClick={() => {
+                logout();
+                toggleDrawer();
+              }}
+            />
           </>
         ) : (
           <>

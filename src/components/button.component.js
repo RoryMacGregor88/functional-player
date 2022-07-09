@@ -8,7 +8,7 @@ import { LoadingSpinner } from "@/src/components";
  * @param {{
  *  disabled?: boolean,
  *  loading?: boolean,
- *  children: string
+ *  children: React.ReactChildren,
  *  props: any
  * }} props
  */

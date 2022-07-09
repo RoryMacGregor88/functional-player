@@ -1,3 +1,4 @@
+/** @param {{ children: React.ReactChildren }} props */
 const Attention = ({ children }) => (
   <span
     style={{

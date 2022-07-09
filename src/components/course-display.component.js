@@ -1,13 +1,19 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 import NextImage from "next/image";
 import NextLink from "next/link";
 
 import { Typography, Grid, Box } from "@mui/material";
 
-import { Button, BookmarkIconButton, Toast } from "@/src/components";
+import { Button, BookmarkIconButton } from "@/src/components";
 
-import { Context as ctx } from "@/src/utils";
+import {
+  http,
+  Context,
+  DEFAULT_ERROR_MESSAGE,
+  BOOKMARK_SUCCESS_REMOVE_MESSAGE,
+  BOOKMARK_SUCCESS_ADD_MESSAGE,
+} from "@/src/utils";
 
 // TODO: styling of this is broke, height width, now that description has been added
 
@@ -31,42 +37,42 @@ const CourseDisplay = ({
   seriesPath,
   coursePath,
 }) => {
-  const { user } = useContext(ctx);
+  const { ctx, updateCtx } = useContext(Context);
 
-  const [snack, setSnack] = useState(false);
-
-  const { isOpen, message, severity } = snack;
+  const { email, bookmarks: currentBookmarks } = ctx.user ?? {};
 
   const href = `/series/${seriesPath}/${coursePath}`;
-  const isBookmarked = !!user?.bookmarks.includes(_id);
+  const isBookmarked = currentBookmarks.includes(_id);
 
-  // TODO: extract all this shit to bookmarks util, need to handle multiple toasts
   const handleBookmarkClick = async () => {
-    setSnack({ isOpen: true, message: "Added to list" });
+    try {
+      const bookmarks = isBookmarked
+        ? currentBookmarks.filter((b) => b !== _id)
+        : [...currentBookmarks, _id];
 
-    if (!severity) {
-      setSnack({
-        isOpen: true,
-        message: "Removed from list",
-        severity: "error",
+      const { ok } = await http("/update-bookmarks", {
+        email,
+        bookmarks,
       });
-    } else {
-      setSnack({ isOpen: true, message: "Added to list" });
+
+      if (ok) {
+        updateCtx({
+          user: { ...ctx.user, bookmarks },
+          toastData: {
+            message: isBookmarked
+              ? BOOKMARK_SUCCESS_REMOVE_MESSAGE
+              : BOOKMARK_SUCCESS_ADD_MESSAGE,
+          },
+        });
+      }
+    } catch (error) {
+      updateCtx({
+        toastData: {
+          message: DEFAULT_ERROR_MESSAGE,
+          severity: "error",
+        },
+      });
     }
-    // try {
-    //   const { email, bookmarks: currentBookmarks } = user;
-
-    //   const bookmarks = isBookmarked
-    //     ? currentBookmarks.filter((id) => id !== _id)
-    //     : { ...currentBookmarks, _id };
-
-    //   const { ok } = await http("/bookmark", { email, bookmarks });
-
-    //   if (ok) {
-    //   }
-    // } catch (error) {
-
-    // }
   };
 
   return (
@@ -78,12 +84,6 @@ const CourseDisplay = ({
       xs={12}
       md={6}
     >
-      <Toast
-        open={isOpen}
-        message={message}
-        severity={severity}
-        onClose={() => setSnack(false)}
-      />
       <Grid item container justifyContent="space-between" alignItems="center">
         {/* TODO: put some kind of hover effect on the image and title */}
         <Typography
@@ -94,7 +94,7 @@ const CourseDisplay = ({
         >
           {title}
         </Typography>
-        {!!user ? (
+        {!!ctx.user ? (
           <BookmarkIconButton
             isBookmarked={isBookmarked}
             handleBookmarkClick={handleBookmarkClick}

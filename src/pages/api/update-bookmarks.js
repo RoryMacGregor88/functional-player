@@ -6,9 +6,10 @@ import { connectToDatabase } from "lib/mongodb";
 import {
   HTTP_METHOD_ERROR_MESSAGE,
   DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
+  USERS,
 } from "@/src/utils";
 
-async function bookmark(req, res) {
+async function updateBookmarks(req, res) {
   if (req.method === "POST") {
     if (req.session.user?.email !== req.body.email) {
       return res.status(403).send({ error: DEFAULT_TOKEN_FORBIDDEN_MESSAGE });
@@ -34,4 +35,4 @@ async function bookmark(req, res) {
   }
 }
 
-export default withIronSessionApiRoute(bookmark, sessionOptions);
+export default withIronSessionApiRoute(updateBookmarks, sessionOptions);

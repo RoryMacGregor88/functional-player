@@ -14,7 +14,7 @@ const boneWhite = "#faf9f7",
 
 const theme = {
   shape: {
-    borderRadius: "5px",
+    borderRadius: 5,
   },
   palette: {
     mode: "dark",

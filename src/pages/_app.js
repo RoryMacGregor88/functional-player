@@ -5,32 +5,36 @@ import { useState, useEffect } from "react";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 
-import { Layout, LoadMask } from "@/src/components";
+import { Layout, LoadMask, Toast, Dialog } from "@/src/components";
 import { http, Context } from "@/src/utils";
 
 import theme from "@/src/components/theme";
 
 function App({ Component, pageProps }) {
-  const [userResponse, setUserResponse] = useState({});
+  const [ctx, setCtx] = useState({});
 
-  const { user, noSession } = userResponse;
+  /** @param {object} newData */
+  const updateCtx = (newData) => setCtx((prev) => ({ ...prev, ...newData }));
 
   // TODO: do something with error: 'Please reload page' or something
   // TODO: re-visit this, maybe a better way
 
+  const fetchToken = async () => {
+    try {
+      const { user } = await http("/user", null, "GET");
+      updateCtx(!!user ? { user } : { user: null });
+    } catch (error) {
+      updateCtx({ user: null });
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        const { user, noSession } = await http("/user", null, "GET");
-        setUserResponse({ user, noSession });
-      } catch (error) {
-        // TODO: what do if error fetching user? Old way might be better?
-        setUserResponse({ noSession: true });
-      }
-    })();
+    fetchToken();
   }, []);
 
-  if (!user && !noSession) {
+  const { user, toastData, dialogData } = ctx;
+
+  if (!user && user !== null) {
     return <LoadMask />;
   }
 
@@ -48,9 +52,22 @@ function App({ Component, pageProps }) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Context.Provider value={{ user }}>
-          <Layout user={user} clearUser={() => setUserResponse({})}>
-            <Component user={user} {...pageProps} />
+        <Context.Provider value={{ ctx, updateCtx }}>
+          <Dialog
+            open={!!dialogData}
+            onClose={() => updateCtx({ dialogData: null })}
+            title={dialogData?.title}
+            message={dialogData?.message}
+            actions={dialogData?.actions}
+          />
+          <Toast
+            open={!!toastData}
+            message={toastData?.message}
+            severity={toastData?.severity}
+            onClose={() => updateCtx({ toastData: null })}
+          />
+          <Layout user={user} fetchToken={fetchToken}>
+            <Component user={user} fetchToken={fetchToken} {...pageProps} />
           </Layout>
         </Context.Provider>
       </ThemeProvider>

@@ -34,7 +34,7 @@ const Navbar = ({ user, drawerIsOpen, toggleDrawer }) => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: "0.5rem 1rem",
+          padding: "1rem 1.5rem",
           minHeight: "fit-content !important",
         }}
       >

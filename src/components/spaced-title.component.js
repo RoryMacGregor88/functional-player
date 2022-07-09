@@ -1,5 +1,6 @@
 import { Grid, Typography } from "@mui/material";
 
+/** @param {{ children: React.ReactChildren }} props */
 const SpacedTitle = ({ children }) => (
   <Grid
     item

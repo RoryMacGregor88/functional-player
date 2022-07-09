@@ -2,12 +2,19 @@ import { useContext } from "react";
 
 import NextImage from "next/image";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 
 import { Grid, Typography } from "@mui/material";
 
 import { Button, BookmarkIconButton } from "@/src/components";
 
-import { Context as ctx } from "@/src/utils";
+import {
+  Context,
+  BOOKMARK_SUCCESS_ADD_MESSAGE,
+  BOOKMARK_SUCCESS_REMOVE_MESSAGE,
+  DEFAULT_ERROR_MESSAGE,
+  http,
+} from "@/src/utils";
 
 /**
  * @param {{
@@ -89,9 +96,63 @@ const MiniCourseDisplay = ({
  * }} props
  */
 const MultiCourseDisplay = ({ title, courses }) => {
-  const { user } = useContext(ctx);
+  const { ctx, updateCtx } = useContext(Context);
+  const router = useRouter();
 
-  const handleBookmarkClick = () => {};
+  const { email, bookmarks: currentBookmarks } = ctx.user ?? {};
+
+  const handleBookmarkClick = async (_id, isBookmarked) => {
+    if (!ctx.user) {
+      return updateCtx({
+        dialogData: {
+          title: "You must be logged in to bookmark courses.",
+          message:
+            "Click below to log in or register if you don't already have an account.",
+          actions: [
+            {
+              label: "Login",
+              onClick: () => router.push("/login"),
+              closeOnClick: true,
+            },
+            {
+              label: "Register",
+              onClick: () => router.push("/register"),
+              closeOnClick: true,
+            },
+          ],
+        },
+      });
+    }
+
+    try {
+      const bookmarks = isBookmarked
+        ? currentBookmarks.filter((b) => b !== _id)
+        : [...currentBookmarks, _id];
+
+      const { ok } = await http("/update-bookmarks", {
+        email,
+        bookmarks,
+      });
+
+      if (ok) {
+        updateCtx({
+          user: { ...ctx.user, bookmarks },
+          toastData: {
+            message: isBookmarked
+              ? BOOKMARK_SUCCESS_REMOVE_MESSAGE
+              : BOOKMARK_SUCCESS_ADD_MESSAGE,
+          },
+        });
+      }
+    } catch (error) {
+      updateCtx({
+        toastData: {
+          message: DEFAULT_ERROR_MESSAGE,
+          severity: "error",
+        },
+      });
+    }
+  };
 
   return (
     <Grid
@@ -107,14 +168,14 @@ const MultiCourseDisplay = ({ title, courses }) => {
         {title}
       </Typography>
       {courses.map(({ _id, ...course }) => {
-        const isBookmarked = !!user?.bookmarks.includes(_id);
+        const isBookmarked = currentBookmarks?.includes(_id);
         return (
           <MiniCourseDisplay
             key={_id}
-            user={user}
+            user={ctx.user}
             course={course}
             isBookmarked={isBookmarked}
-            handleBookmarkClick={handleBookmarkClick}
+            handleBookmarkClick={() => handleBookmarkClick(_id, isBookmarked)}
           />
         );
       })}

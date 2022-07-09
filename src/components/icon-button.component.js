@@ -1,5 +1,11 @@
 import { IconButton as MuiIconButton } from "@mui/material";
 
+/**
+ * @param {{
+ *  children: React.ReactChildren,
+ *  props: any
+ * }} props
+ */
 const IconButton = ({ children, ...props }) => (
   <MuiIconButton
     disableRipple
