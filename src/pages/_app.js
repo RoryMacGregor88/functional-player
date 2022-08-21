@@ -13,16 +13,17 @@ import theme from "@/src/components/theme";
 function App({ Component, pageProps }) {
   const [ctx, setCtx] = useState({});
 
+  const { user, toastData, dialogData } = ctx;
+
   /** @param {object} newData */
   const updateCtx = (newData) => setCtx((prev) => ({ ...prev, ...newData }));
 
   // TODO: do something with error: 'Please reload page' or something
   // TODO: re-visit this, maybe a better way
-
   const fetchToken = async () => {
     try {
       const { user } = await http("/user", null, "GET");
-      updateCtx(!!user ? { user } : { user: null });
+      updateCtx({ user });
     } catch (error) {
       updateCtx({ user: null });
     }
@@ -31,8 +32,6 @@ function App({ Component, pageProps }) {
   useEffect(() => {
     fetchToken();
   }, []);
-
-  const { user, toastData, dialogData } = ctx;
 
   if (!user && user !== null) {
     return <LoadMask />;

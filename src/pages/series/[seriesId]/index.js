@@ -22,7 +22,7 @@ export const getStaticProps = async ({ params }) => ({
 export default function Series({ series }) {
   return (
     <PageWrapper>
-      <SpacedTitle title={`${series.title} Series (level 2)`} />
+      <SpacedTitle>{`${series.title} Series (level 2)`}</SpacedTitle>
       <Grid container wrap="wrap">
         {series?.courses?.map(
           ({ _id, title, description, seriesPath, coursePath }) => (

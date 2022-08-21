@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import {
   Button,
@@ -7,13 +8,17 @@ import {
   PasswordField,
 } from "@/src/components";
 
+import { loginFormSchema } from "@/src/utils";
+
 /** @param {{ onSubmit: function, isLoading: boolean }} props */
 const LoginForm = ({ onSubmit, isLoading }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty },
+    formState: { errors },
   } = useForm({
+    mode: "onBlur",
+    resolver: yupResolver(loginFormSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -29,11 +34,7 @@ const LoginForm = ({ onSubmit, isLoading }) => {
         label="Password"
         name="password"
       />
-      <Button
-        type="submit"
-        disabled={!isDirty || !!Object.keys(errors).length}
-        loading={isLoading}
-      >
+      <Button type="submit" loading={isLoading}>
         Submit
       </Button>
     </FormWrapper>

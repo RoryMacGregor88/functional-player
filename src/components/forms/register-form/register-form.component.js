@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Box } from "@mui/material";
 
@@ -9,6 +10,8 @@ import {
   PasswordField,
   Button,
 } from "@/src/components";
+
+import { registerFormSchema } from "@/src/utils";
 
 /**
  * @param {{
@@ -31,6 +34,8 @@ const RegisterForm = ({
     handleSubmit,
     formState: { errors },
   } = useForm({
+    mode: "onBlur",
+    resolver: yupResolver(registerFormSchema),
     defaultValues: {
       email: "",
       username: "",
@@ -39,11 +44,9 @@ const RegisterForm = ({
     },
   });
 
-  // TODO: is Object.keys... required with UseForm
-
   return (
     <Box sx={{ width: "100%" }} justifyContent="center" alignItems="center">
-      <FormWrapper onSubmit={handleSubmit(onSubmit)}>
+      <FormWrapper onSubmit={handleSubmit((values) => onSubmit(values))}>
         <EmailField errors={errors} register={register} />
         <UsernameField errors={errors} register={register} />
         <PasswordField
@@ -59,10 +62,7 @@ const RegisterForm = ({
           label="Confirm password"
           name="confirmPassword"
         />
-        <Button
-          type="submit"
-          disabled={disableSubmitButton || !!Object.keys(errors).length}
-        >
+        <Button type="submit" disabled={disableSubmitButton}>
           Submit
         </Button>
       </FormWrapper>

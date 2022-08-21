@@ -9,7 +9,7 @@ export const getStaticProps = async (ctx) => ({
 export default function Series({ series }) {
   return (
     <PageWrapper>
-      <SpacedTitle title="All series (level 1)" />
+      <SpacedTitle>All series (level 1)</SpacedTitle>
       <List>
         {series?.map((series) => (
           <SeriesDisplay key={series._id} series={series} />

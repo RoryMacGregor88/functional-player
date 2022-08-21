@@ -40,7 +40,7 @@ export default function Series({ user, course }) {
 
   return (
     <PageWrapper>
-      <SpacedTitle title="Single course page (level 3)" />
+      <SpacedTitle>Single course page (level 3)</SpacedTitle>
       {subscriptionStatus === "active" ? (
         <>
           <Typography variant="h6">This is LIVE version</Typography>

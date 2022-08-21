@@ -2,25 +2,26 @@ import { render, screen, userEvent, waitFor } from "@/src/utils/test-utils";
 
 import RegisterForm from "./register-form.component";
 
-const renderComponent = ({ disableNextButton = false } = {}) => {
-  const setClientSecret = jest.fn(),
-    onNextClick = jest.fn(),
-    setWellData = jest.fn();
+const renderComponent = ({
+  disableSubmitButton = false,
+  disableNextButton = false,
+} = {}) => {
+  const onSubmit = jest.fn(),
+    onNextClick = jest.fn();
 
   const utils = render(
     <RegisterForm
-      setClientSecret={setClientSecret}
+      onSubmit={onSubmit}
       onNextClick={onNextClick}
-      setWellData={setWellData}
+      disableSubmitButton={disableSubmitButton}
       disableNextButton={disableNextButton}
     />
   );
 
   return {
     ...utils,
-    setClientSecret,
+    onSubmit,
     onNextClick,
-    setWellData,
   };
 };
 
@@ -44,11 +45,11 @@ describe("Register Form", () => {
   });
 
   it("does not submit if form is invalid", async () => {
-    const { registerSubmit } = renderComponent();
+    const { onSubmit } = renderComponent();
 
-    userEvent.type(
-      screen.getByRole("textbox", { name: /email/i }),
-      "email@test.com"
+    await userEvent.type(
+      screen.getByRole("textbox", { name: /^email/i }),
+      "test@email.com"
     );
 
     const submitButton = screen.getByRole("button", { name: /submit/i });
@@ -56,62 +57,84 @@ describe("Register Form", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Username is required")).toBeInTheDocument();
-      expect(registerSubmit).not.toHaveBeenCalled();
+      expect(screen.getByText("Password is required")).toBeInTheDocument();
+      expect(
+        screen.getByText("Password confirmation is required")
+      ).toBeInTheDocument();
+      expect(onSubmit).not.toHaveBeenCalled();
     });
   });
 
   it("only allows passwords greater than minimum password length", async () => {
-    const { registerSubmit } = renderComponent();
+    const { onSubmit } = renderComponent();
 
-    userEvent.type(screen.getByRole("textbox", { name: /^password/i }), "123");
+    await userEvent.type(
+      screen.getByRole("textbox", { name: /^password/i }),
+      "test"
+    );
 
     const submitButton = screen.getByRole("button", { name: /submit/i });
     userEvent.click(submitButton);
 
     await waitFor(() => {
       expect(
-        screen.getByText("Password is too short (minimum 5 characters)")
+        screen.getByText("Password must be at least 5 characters")
       ).toBeInTheDocument();
-      expect(registerSubmit).not.toHaveBeenCalled();
+      expect(onSubmit).not.toHaveBeenCalled();
     });
   });
 
-  it("only allows matching passwords", () => {
-    const { registerSubmit } = renderComponent();
+  it("only allows matching passwords", async () => {
+    const { onSubmit } = renderComponent();
 
-    userEvent.type(screen.getByRole("textbox", { name: /^password/i }), "123");
-
-    userEvent.type(
-      screen.getByRole("textbox", { name: /^confirm password/i }),
-      "456"
+    await userEvent.type(
+      screen.getByRole("textbox", { name: /^password/i }),
+      "testpass"
     );
 
-    expect(
-      screen.getByText("Password and password confirmation do not match")
-    ).toBeInTheDocument();
+    await userEvent.type(
+      screen.getByRole("textbox", { name: /^confirm password/i }),
+      "restpass2"
+    );
 
-    expect(registerSubmit).not.toHaveBeenCalled();
+    const submitButton = screen.getByRole("button", { name: /submit/i });
+    userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText("Passwords do not match")).toBeInTheDocument();
+      expect(onSubmit).not.toHaveBeenCalled();
+    });
+  });
+
+  it("disables `Submit` button if disabled prop is passed", () => {
+    renderComponent({ disableSubmitButton: true });
+    expect(screen.getByRole("button", { name: /submit/i })).toBeDisabled();
+  });
+
+  it("disables `Next` button if disabled prop is passed", () => {
+    renderComponent({ disableNextButton: true });
+    expect(screen.getByRole("button", { name: /next/i })).toBeDisabled();
   });
 
   it("calls submit handler if form is valid and button is clicked", async () => {
-    const { registerSubmit, setClientSecret } = renderComponent();
+    const { onSubmit } = renderComponent();
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByRole("textbox", { name: /email/i }),
       "test@email.com"
     );
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByRole("textbox", { name: /username/i }),
       "test-username"
     );
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByRole("textbox", { name: /^password/i }),
       "pass123"
     );
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByRole("textbox", { name: /^confirm password/i }),
       "pass123"
     );
@@ -124,37 +147,11 @@ describe("Register Form", () => {
     };
 
     await waitFor(() => {
-      userEvent.click(screen.getByRole("button", { name: /submit/i }));
-      expect(registerSubmit).toHaveBeenCalledWith(expected);
-      // mock response, expect setClientSecret to have been called
-    });
-  });
+      const submitButton = screen.getByRole("button", { name: /submit/i });
 
-  it("shows error message if form fields are rejected", () => {
-    // errors
-  });
-
-  it("shows error message when server returns error", () => {
-    // errors
-  });
-
-  it("disables `Next` button if disabled prop is passed", () => {
-    renderComponent({ disableNextButton: true });
-    expect(screen.getByRole("button", { name: /next/i })).toBeDisabled();
-  });
-
-  it("enables `Next` button if `insertedId` is present", () => {
-    renderComponent();
-    expect(screen.getByRole("button", { name: /next/i })).toBeEnabled();
-  });
-
-  it("calls next handler if form is valid and secret returned", async () => {
-    const { onNextClick } = renderComponent();
-
-    userEvent.click(screen.getByRole("button", { name: /next/i }));
-
-    await waitFor(() => {
-      expect(onNextClick).toHaveBeenCalled();
+      expect(submitButton).toBeEnabled();
+      userEvent.click(submitButton);
+      expect(onSubmit).toHaveBeenCalledWith(expected);
     });
   });
 });

@@ -9,8 +9,6 @@ import {
   VisibilityOffIcon,
 } from "@/src/components";
 
-import { PASSWORD_MIN, PASSWORD_MAX } from "@/src/utils";
-
 /**
  * @param {{
  *  errors: object
@@ -27,9 +25,7 @@ const EmailField = ({ errors, register }) => (
     aria-describedby="email"
     error={!!errors.email}
     helperText={errors.email?.message}
-    {...register("email", {
-      required: "Email address is required",
-    })}
+    {...register("email")}
     autoFocus
   />
 );
@@ -50,9 +46,7 @@ const ConfirmEmailField = ({ errors, register }) => (
     aria-describedby="confirmEmail"
     error={!!errors.confirmEmail}
     helperText={errors.confirmEmail?.message}
-    {...register("confirmEmail", {
-      required: "Email confirmation is required",
-    })}
+    {...register("confirmEmail")}
     autoFocus
   />
 );
@@ -74,9 +68,7 @@ const UsernameField = ({ errors, register }) => (
     aria-describedby="username"
     error={!!errors.username}
     helperText={errors.username?.message}
-    {...register("username", {
-      required: "Username is required",
-    })}
+    {...register("username")}
   />
 );
 
@@ -89,31 +81,17 @@ const UsernameField = ({ errors, register }) => (
  *  validate?: boolean
  * }} props
  */
-const PasswordField = ({ errors, register, label, name, validate = false }) => {
+const PasswordField = ({ errors, register, label, name }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   // TODO: this is broke, negative margin -12px being implemented somewhere
   const iconStyles = { marginRight: "1rem", color: "palette.primary.main" };
-
-  const validation = validate
-    ? {
-        minLength: {
-          value: PASSWORD_MIN,
-          message: `Password is too short (minimum ${PASSWORD_MIN} characters)`,
-        },
-        maxLength: {
-          value: PASSWORD_MAX,
-          message: `Password is too long (maximum ${PASSWORD_MAX} characters)`,
-        },
-      }
-    : {};
 
   return (
     <TextField
       variant="outlined"
       label={label}
       id={name}
-      data-testid="test-password"
       type={showPassword ? "input" : "password"}
       aria-describedby={name}
       error={!!errors[name]}
@@ -138,10 +116,7 @@ const PasswordField = ({ errors, register, label, name, validate = false }) => {
           </InputAdornment>
         ),
       }}
-      {...register(name, {
-        required: `${label} is required`,
-        ...validation,
-      })}
+      {...register(name)}
     />
   );
 };
