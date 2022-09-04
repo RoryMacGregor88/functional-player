@@ -26,7 +26,7 @@ const LoginForm = ({ onSubmit, isLoading }) => {
   });
 
   return (
-    <FormWrapper onSubmit={handleSubmit(onSubmit)}>
+    <FormWrapper onSubmit={handleSubmit((values) => onSubmit(values))}>
       <EmailField errors={errors} register={register} />
       <PasswordField
         errors={errors}

@@ -8,8 +8,6 @@ import {
   YouTubeIcon,
 } from "@/src/components";
 
-// TODO: use theme for styles
-
 const Footer = () => {
   const icons = [
     { Icon: FacebookIcon, url: "https://www.facebook.com", label: "Facebook" },
@@ -57,7 +55,7 @@ const Footer = () => {
               textDecoration: "none",
               opacity: "0.75",
               "&:hover": {
-                color: "#fff",
+                color: "primary.main",
                 opacity: "1",
               },
             }}

@@ -9,11 +9,11 @@ import {
 /**
  * @param {{
  *  isBookmarked: boolean,
- *  handleBookmarkClick: function
+ *  onBookmarkClick: function
  *  sx: object
  * }} props
  */
-const BookmarkIconButton = ({ isBookmarked, handleBookmarkClick, sx = {} }) => {
+const BookmarkIconButton = ({ isBookmarked, onBookmarkClick, sx = {} }) => {
   const text = isBookmarked ? "In your list" : "Add to list";
   const color = isBookmarked ? "green" : "white";
 
@@ -28,7 +28,7 @@ const BookmarkIconButton = ({ isBookmarked, handleBookmarkClick, sx = {} }) => {
 
   return (
     <IconButton
-      onClick={handleBookmarkClick}
+      onClick={onBookmarkClick}
       sx={{
         padding: "0 0.5rem",
         border: `2px solid ${color}`,

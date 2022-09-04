@@ -29,8 +29,6 @@ export default function Bookmarks({ user, courses }) {
     user.bookmarks.includes(course._id)
   );
 
-  console.log("bookmarks: ", bookmarks);
-
   return (
     <PageWrapper>
       <SpacedTitle>Your Bookmarks</SpacedTitle>

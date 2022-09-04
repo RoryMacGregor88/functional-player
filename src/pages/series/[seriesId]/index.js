@@ -28,6 +28,7 @@ export default function Series({ series }) {
           ({ _id, title, description, seriesPath, coursePath }) => (
             <CourseDisplay
               key={_id}
+              _id={_id}
               title={title}
               description={description}
               src="/stratocaster-small.jpg"

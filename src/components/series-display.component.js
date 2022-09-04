@@ -6,18 +6,19 @@ import { NextImage } from "@/src/components";
 
 const SeriesDisplay = ({ series }) => (
   <Grid container direction="column" component={ListItem}>
-    {/* make thumb clickable, with hover and cursor */}
     <Grid
       item
       sx={{
         position: "relative",
         height: "30rem",
         width: "100%",
-        // does this need overflow?
-        borderRadius: "5px", // make theme borderRadius,
+        overflow: "hidden",
+        cursor: "pointer",
+        borderRadius: 1,
         border: "2px solid transparent",
         "&:hover": {
-          border: `2px solid #fff`, // make theme, was action.hover
+          border: "2px solid",
+          borderColor: "primary.main",
         },
       }}
     >

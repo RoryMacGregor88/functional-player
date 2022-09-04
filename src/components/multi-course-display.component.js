@@ -8,28 +8,17 @@ import { Grid, Typography } from "@mui/material";
 
 import { Button, BookmarkIconButton } from "@/src/components";
 
-import {
-  Context,
-  BOOKMARK_SUCCESS_ADD_MESSAGE,
-  BOOKMARK_SUCCESS_REMOVE_MESSAGE,
-  DEFAULT_ERROR_MESSAGE,
-  http,
-} from "@/src/utils";
+import { Context, updateBookmarks } from "@/src/utils";
 
 /**
  * @param {{
  *  user: object,
  *  course: object
  *  isBookmarked: boolean,
- *  handleBookmarkClick: function
+ *  onBookmarkClick: function
  * }} props
  */
-const MiniCourseDisplay = ({
-  user,
-  course,
-  isBookmarked,
-  handleBookmarkClick,
-}) => {
+const MiniCourseDisplay = ({ user, course, isBookmarked, onBookmarkClick }) => {
   const { title, alt, description, seriesPath, coursePath } = course;
   const href = `/series/${seriesPath}/${coursePath}`;
   return (
@@ -41,13 +30,14 @@ const MiniCourseDisplay = ({
             position: "relative",
             width: "7.5rem",
             height: "7.5rem",
-            borderRadius: "10px", // use theme borderRadius
+            borderRadius: 1,
             overflow: "hidden",
             marginRight: "1rem",
             cursor: "pointer",
             border: "2px solid transparent",
             "&:hover": {
-              border: "2px solid #fff", // make theme, was action.hover
+              border: "2px solid",
+              borderColor: "primary.main",
             },
           }}
         >
@@ -74,7 +64,7 @@ const MiniCourseDisplay = ({
         {!!user ? (
           <BookmarkIconButton
             isBookmarked={isBookmarked}
-            handleBookmarkClick={handleBookmarkClick}
+            onBookmarkClick={onBookmarkClick}
             sx={{
               marginLeft: "auto",
               alignSelf: "flex-start",
@@ -96,62 +86,15 @@ const MiniCourseDisplay = ({
  * }} props
  */
 const MultiCourseDisplay = ({ title, courses }) => {
-  const { ctx, updateCtx } = useContext(Context);
+  const {
+    ctx: { user },
+    updateCtx,
+  } = useContext(Context);
   const router = useRouter();
 
-  const { email, bookmarks: currentBookmarks } = ctx.user ?? {};
-
-  const handleBookmarkClick = async (_id, isBookmarked) => {
-    if (!ctx.user) {
-      return updateCtx({
-        dialogData: {
-          title: "You must be logged in to bookmark courses.",
-          message:
-            "Click below to log in or register if you don't already have an account.",
-          actions: [
-            {
-              label: "Login",
-              onClick: () => router.push("/login"),
-              closeOnClick: true,
-            },
-            {
-              label: "Register",
-              onClick: () => router.push("/register"),
-              closeOnClick: true,
-            },
-          ],
-        },
-      });
-    }
-
-    try {
-      const bookmarks = isBookmarked
-        ? currentBookmarks.filter((b) => b !== _id)
-        : [...currentBookmarks, _id];
-
-      const { ok } = await http("/update-bookmarks", {
-        email,
-        bookmarks,
-      });
-
-      if (ok) {
-        updateCtx({
-          user: { ...ctx.user, bookmarks },
-          toastData: {
-            message: isBookmarked
-              ? BOOKMARK_SUCCESS_REMOVE_MESSAGE
-              : BOOKMARK_SUCCESS_ADD_MESSAGE,
-          },
-        });
-      }
-    } catch (error) {
-      updateCtx({
-        toastData: {
-          message: DEFAULT_ERROR_MESSAGE,
-          severity: "error",
-        },
-      });
-    }
+  /** @param {string} _id */
+  const onBookmarkClick = (_id) => {
+    updateBookmarks(_id, user, updateCtx);
   };
 
   return (
@@ -168,14 +111,14 @@ const MultiCourseDisplay = ({ title, courses }) => {
         {title}
       </Typography>
       {courses.map(({ _id, ...course }) => {
-        const isBookmarked = currentBookmarks?.includes(_id);
+        const isBookmarked = user.bookmarks?.includes(_id);
         return (
           <MiniCourseDisplay
             key={_id}
-            user={ctx.user}
+            user={user}
             course={course}
             isBookmarked={isBookmarked}
-            handleBookmarkClick={() => handleBookmarkClick(_id, isBookmarked)}
+            onBookmarkClick={() => onBookmarkClick(_id)}
           />
         );
       })}

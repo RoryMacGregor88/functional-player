@@ -1,6 +1,14 @@
 import { render, screen, userEvent, waitFor } from "@/src/utils/test-utils";
 
 import RegisterForm from "./register-form.component";
+import {} from "../../../utils/constants";
+
+import {
+  USERNAME_REQUIRED_MESSAGE,
+  PASSWORD_REQUIRED_MESSAGE,
+  PASSWORD_MIN_LENGTH_MESSAGE,
+  PASSWORDS_MATCH_MESSAGE,
+} from "@/src/utils";
 
 const renderComponent = ({
   disableSubmitButton = false,
@@ -56,8 +64,8 @@ describe("Register Form", () => {
     userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText("Username is required")).toBeInTheDocument();
-      expect(screen.getByText("Password is required")).toBeInTheDocument();
+      expect(screen.getByText(USERNAME_REQUIRED_MESSAGE)).toBeInTheDocument();
+      expect(screen.getByText(PASSWORD_REQUIRED_MESSAGE)).toBeInTheDocument();
       expect(
         screen.getByText("Password confirmation is required")
       ).toBeInTheDocument();
@@ -77,9 +85,7 @@ describe("Register Form", () => {
     userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(
-        screen.getByText("Password must be at least 5 characters")
-      ).toBeInTheDocument();
+      expect(screen.getByText(PASSWORD_MIN_LENGTH_MESSAGE)).toBeInTheDocument();
       expect(onSubmit).not.toHaveBeenCalled();
     });
   });
@@ -101,7 +107,7 @@ describe("Register Form", () => {
     userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText("Passwords do not match")).toBeInTheDocument();
+      expect(screen.getByText(PASSWORDS_MATCH_MESSAGE)).toBeInTheDocument();
       expect(onSubmit).not.toHaveBeenCalled();
     });
   });

@@ -20,6 +20,7 @@ describe("Register Page", () => {
     expect(screen.getByText(/finish/i)).toBeInTheDocument();
   });
 
+  // TODO: not sure how to test this
   xit("redirects to dashboard if user present", () => {});
 
   it("enables Next button page if register form is submitted", async () => {

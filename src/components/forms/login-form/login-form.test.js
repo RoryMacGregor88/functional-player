@@ -27,11 +27,31 @@ describe("Login Form", () => {
     expect(screen.getByRole("button", { name: /submit/i })).toBeInTheDocument();
   });
 
+  it("blocks non-emails in email field", async () => {
+    const onSubmit = jest.fn();
+    render(<LoginForm onSubmit={onSubmit} />);
+
+    await userEvent.type(
+      screen.getByRole("textbox", { name: /email/i }),
+      "not-a-valid-email"
+    );
+
+    await userEvent.type(
+      screen.getByRole("textbox", { name: /password/i }),
+      "test-password123"
+    );
+
+    await userEvent.click(screen.getByRole("button", { name: /submit/i }));
+
+    expect(onSubmit).not.toHaveBeenCalled();
+    expect(screen.getByText(EMAIL_INVALID_MESSAGE)).toBeInTheDocument();
+  });
+
   it("disables submit button if form is invalid", async () => {
     const onSubmit = jest.fn();
     render(<LoginForm onSubmit={onSubmit} />);
 
-    userEvent.click(screen.getByRole("button", { name: /submit/i }));
+    await userEvent.click(screen.getByRole("button", { name: /submit/i }));
 
     await waitFor(() => {
       expect(screen.getByText(EMAIL_REQUIRED_MESSAGE)).toBeInTheDocument();
@@ -41,34 +61,8 @@ describe("Login Form", () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  it.only("blocks non-emails in email field", async () => {
-    // TODO: same here, only types first characer
-
-    const onSubmit = jest.fn();
-    render(<LoginForm onSubmit={onSubmit} />);
-
-    const TEST_EMAIL = "testemail";
-    const TEST_PASSWORD = "testpassword123";
-
-    userEvent.type(screen.getByRole("textbox", { name: /email/i }), TEST_EMAIL);
-    userEvent.type(
-      screen.getByRole("textbox", { name: /password/i }),
-      TEST_PASSWORD
-    );
-
-    userEvent.click(screen.getByRole("button", { name: /submit/i }));
-
-    expect(onSubmit).not.toHaveBeenCalled();
-
-    await waitFor(() => {
-      expect(screen.getByText(EMAIL_INVALID_MESSAGE)).toBeInTheDocument();
-    });
-  });
-
-  it("submits form when form is valid and button is clicked", async () => {
+  it("calls onSubmit when form is valid and button is clicked", async () => {
     fetchMock.mockResponse(JSON.stringify({}));
-
-    // TODO: broken, only types first character into field
 
     const onSubmit = jest.fn();
     render(<LoginForm onSubmit={onSubmit} />);
@@ -76,21 +70,21 @@ describe("Login Form", () => {
     const TEST_EMAIL = "test@email.com";
     const TEST_PASSWORD = "testpassword123";
 
-    waitFor(() => {
-      userEvent.type(screen.getByRole("textbox", { name: /email/i }), "pat");
-      userEvent.type(
-        screen.getByRole("textbox", { name: /password/i }),
-        "crab"
-      );
-    });
+    await userEvent.type(
+      screen.getByRole("textbox", { name: /email/i }),
+      TEST_EMAIL
+    );
 
-    userEvent.click(screen.getByRole("button", { name: /submit/i }));
+    await userEvent.type(
+      screen.getByRole("textbox", { name: /password/i }),
+      TEST_PASSWORD
+    );
 
-    await waitFor(() => {
-      expect(onSubmit).toHaveBeenCalledWith({
-        email: TEST_EMAIL,
-        password: TEST_PASSWORD,
-      });
+    await userEvent.click(screen.getByRole("button", { name: /submit/i }));
+
+    expect(onSubmit).toHaveBeenCalledWith({
+      email: TEST_EMAIL,
+      password: TEST_PASSWORD,
     });
   });
 });

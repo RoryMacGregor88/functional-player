@@ -7,13 +7,9 @@ import { Typography, Grid, Box } from "@mui/material";
 
 import { Button, BookmarkIconButton } from "@/src/components";
 
-import {
-  http,
-  Context,
-  DEFAULT_ERROR_MESSAGE,
-  BOOKMARK_SUCCESS_REMOVE_MESSAGE,
-  BOOKMARK_SUCCESS_ADD_MESSAGE,
-} from "@/src/utils";
+import { updateBookmarks } from "@/src/utils";
+
+import { Context } from "@/src/utils";
 
 // TODO: styling of this is broke, height width, now that description has been added
 
@@ -37,42 +33,17 @@ const CourseDisplay = ({
   seriesPath,
   coursePath,
 }) => {
-  const { ctx, updateCtx } = useContext(Context);
+  const {
+    ctx: { user },
+    updateCtx,
+  } = useContext(Context);
 
-  const { email, bookmarks: currentBookmarks } = ctx.user ?? {};
+  const isBookmarked = user.bookmarks.includes(_id);
 
   const href = `/series/${seriesPath}/${coursePath}`;
-  const isBookmarked = currentBookmarks.includes(_id);
 
-  const handleBookmarkClick = async () => {
-    try {
-      const bookmarks = isBookmarked
-        ? currentBookmarks.filter((b) => b !== _id)
-        : [...currentBookmarks, _id];
-
-      const { ok } = await http("/update-bookmarks", {
-        email,
-        bookmarks,
-      });
-
-      if (ok) {
-        updateCtx({
-          user: { ...ctx.user, bookmarks },
-          toastData: {
-            message: isBookmarked
-              ? BOOKMARK_SUCCESS_REMOVE_MESSAGE
-              : BOOKMARK_SUCCESS_ADD_MESSAGE,
-          },
-        });
-      }
-    } catch (error) {
-      updateCtx({
-        toastData: {
-          message: DEFAULT_ERROR_MESSAGE,
-          severity: "error",
-        },
-      });
-    }
+  const onBookmarkClick = () => {
+    updateBookmarks(_id, user, updateCtx);
   };
 
   return (
@@ -94,10 +65,10 @@ const CourseDisplay = ({
         >
           {title}
         </Typography>
-        {!!ctx.user ? (
+        {!!user ? (
           <BookmarkIconButton
             isBookmarked={isBookmarked}
-            handleBookmarkClick={handleBookmarkClick}
+            onBookmarkClick={onBookmarkClick}
           />
         ) : null}
       </Grid>
@@ -108,11 +79,12 @@ const CourseDisplay = ({
           width: "100%",
           marginBottom: "1rem",
           cursor: "pointer",
-          borderRadius: "10px", // use theme borderRadius
+          borderRadius: 1,
           overflow: "hidden",
           border: "2px solid transparent",
           "&:hover": {
-            border: `2px solid #fff`, // make theme, was action.hover
+            border: "2px solid",
+            borderColor: "palette.main",
           },
         }}
       >
