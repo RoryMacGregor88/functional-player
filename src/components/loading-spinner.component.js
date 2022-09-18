@@ -1,9 +1,10 @@
 import { CircularProgress } from "@mui/material";
 
-const LoadingSpinner = () => (
+/** @param {{sx: object}} props */
+const LoadingSpinner = ({ sx = {} }) => (
   <CircularProgress
     data-testid="loading-spinner"
-    sx={{ color: "primary.main" }}
+    sx={{ color: "primary.main", ...sx }}
   />
 );
 

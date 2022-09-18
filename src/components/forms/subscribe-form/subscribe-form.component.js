@@ -1,48 +1,27 @@
 import {
+  PaymentElement,
   useStripe,
   useElements,
-  PaymentElement,
 } from "@stripe/react-stripe-js";
 
 import { Button, FormWrapper } from "@/src/components";
 
-import { DEFAULT_ERROR_MESSAGE } from "@/src/utils";
-
-/** @param {{setWellData: function}} props */
-const SubscribeForm = ({ setWellData }) => {
+/**
+ * @param {{
+ *  subscribeSubmit: function
+ *  isLoading: boolean
+ * }} props
+ */
+const SubscribeForm = ({ subscribeSubmit, isLoading }) => {
   const stripe = useStripe();
   const elements = useElements();
 
-  const isLoaded = !!stripe && !!elements;
+  const stripeIsLoaded = !!stripe && !!elements;
 
-  const subscribeSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-      const result = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          return_url: `${process.env.BASE_URL}/registration-success`,
-        },
-      });
-
-      setIsLoading(false);
-
-      if (!!result.error) {
-        setWellData({ message: result.error });
-      }
-    } catch (error) {
-      // TODO: stripe's errors (insufficient funds, card declined etc) need to go here
-      setIsLoading(false);
-      setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
-    }
-  };
-
-  return isLoaded ? (
-    <FormWrapper onSubmit={subscribeSubmit}>
-      <p style={{ textAlign: "center" }}>Subscribe</p>
+  return stripeIsLoaded ? (
+    <FormWrapper onSubmit={() => subscribeSubmit(stripe, elements)}>
       <PaymentElement />
-      <Button type="submit" disabled={!isLoaded}>
+      <Button type="submit" loading={isLoading}>
         Submit
       </Button>
     </FormWrapper>

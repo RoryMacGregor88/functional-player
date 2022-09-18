@@ -5,7 +5,7 @@ import {
   BOOKMARK_SUCCESS_ADD_MESSAGE,
 } from ".";
 
-// TODO: so something with this?
+// TODO: do something with this? Remember you have a dialog now!
 
 // if (!ctx.user) {
 //   return updateCtx({

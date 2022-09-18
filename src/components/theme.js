@@ -10,7 +10,8 @@ const boneWhite = "#faf9f7",
   // hovers
   lightGrey = "#757575",
   //dividers
-  darkGrey = "#242424";
+  darkGrey = "#242424",
+  amazonOrange = "#ff9900";
 
 const theme = {
   shape: {
@@ -27,7 +28,7 @@ const theme = {
       default: lightBlack,
     },
     primary: {
-      main: boneWhite,
+      main: amazonOrange,
     },
     secondary: {
       main: lightGrey,

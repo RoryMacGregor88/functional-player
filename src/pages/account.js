@@ -33,19 +33,39 @@ const TabPanel = ({ name, value, index, children }) => (
   </Box>
 );
 
-/** @param {{user: object}} props */
-export default function Account({ user }) {
+/**
+ * @param {{
+ *  user: object,
+ *  updateCtx: function
+ * }} props
+ */
+export default function Account({ user, updateCtx }) {
   const router = useRouter();
 
   const [value, setValue] = useState(0);
   const [wellData, setWellData] = useState(null);
+  const [clientSecret, setClientSecret] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   if (!user) {
     router.push("/login");
     return <LoadMask />;
   }
 
-  const { email, subscriptionStatus, subscriptionId } = user;
+  const { email, username, subscriptionStatus, customerId } = user;
+
+  const handleSuccess = (message) => {
+    setIsLoading(false);
+    setWellData({
+      severity: "success",
+      message,
+    });
+  };
+
+  const handleError = (error) => {
+    setIsLoading(false);
+    setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
+  };
 
   const handleTabChange = (_, newValue) => {
     if (!!wellData) {
@@ -55,66 +75,85 @@ export default function Account({ user }) {
   };
 
   const handleUpdateEmail = async (values) => {
-    try {
-      const { ok } = await http("/auth/update-email", {
-        email,
-        newEmail: values.email.toLowerCase(),
-      });
+    setIsLoading(true);
 
-      if (ok) {
-        setWellData({
-          severity: "success",
-          message: "Your email has been successfully updated.",
-        });
-      }
-    } catch (error) {
-      setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
+    const { error, ok } = await http("/auth/update-email", {
+      email,
+      newEmail: values.email.toLowerCase(),
+    });
+
+    if (!!error) {
+      handleError(error);
+    } else if (ok) {
+      handleSuccess("Your email has been successfully updated.");
     }
   };
 
   const handleUpdatePassword = async (values) => {
-    try {
-      const formData = {
-        email: user.email,
-        ...values,
-      };
+    setIsLoading(true);
 
-      const { error, ok } = await http("/auth/update-password", formData);
+    const formData = {
+      email: user.email,
+      ...values,
+    };
 
-      if (!!error) {
-        setWellData({ message: error });
-      } else if (ok) {
-        setWellData({
-          severity: "success",
-          message: "Your password has been successfully updated.",
-        });
-      }
-    } catch (error) {
-      setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
+    const { error, ok } = await http("/auth/update-password", formData);
+
+    if (!!error) {
+      handleError(error);
+    } else if (ok) {
+      handleSuccess("Your password has been successfully updated.");
     }
   };
 
   const handleUnsubscribe = async (e) => {
-    e.preventDefault();
-    try {
-      const { ok } = await http("/auth/unsubscribe", { email, subscriptionId });
+    setIsLoading(true);
 
+    const { error, ok, user } = await http("/auth/unsubscribe", {
+      email,
+      customerId,
+    });
+
+    if (!!error) {
+      handleError(error);
+    } else if (ok) {
       // TODO: do Well better, how to have Attention passed as 'message'?
-
-      if (ok) {
-        setWellData({
-          severity: "success",
-          message:
-            "Your subscription has been successfully cancelled. You can re-activate your subscription any time from your Accounts tab.",
-        });
-      }
-    } catch (error) {
-      setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
+      updateCtx({ user });
+      handleSuccess(
+        "Your subscription has been successfully cancelled. You can re-activate your subscription any time by clicking the 'RE-ENABLE SUBSCRIPTION' button below."
+      );
     }
   };
 
-  const handleResubscribe = () => {
-    console.log("hit handleResubcribe");
+  const handleStripeCustomer = async () => {
+    setIsLoading(true);
+
+    const { error, clientSecret } = await http("/auth/resubscribe", {
+      username,
+      email,
+    });
+
+    if (!!error) {
+      handleError(error);
+    } else if (!!clientSecret) {
+      setIsLoading(false);
+      setClientSecret(clientSecret);
+    }
+  };
+
+  const handleResubscribe = async (stripe, elements) => {
+    setIsLoading(true);
+
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${process.env.BASE_URL}/reactivation-success`,
+      },
+    });
+
+    if (!!error) {
+      handleError(error);
+    }
   };
 
   // TODO: pagewrapper?
@@ -122,7 +161,7 @@ export default function Account({ user }) {
   return (
     <div>
       <SpacedTitle>Account Settings</SpacedTitle>
-      {!!wellData ? <Well {...wellData} /> : null}
+      {!!wellData && !clientSecret ? <Well {...wellData} /> : null}
       <Tabs
         value={value}
         onChange={handleTabChange}
@@ -144,7 +183,10 @@ export default function Account({ user }) {
         <UpdateSubscriptionForm
           subscriptionStatus={subscriptionStatus}
           handleUnsubscribe={handleUnsubscribe}
+          handleStripeCustomer={handleStripeCustomer}
           handleResubscribe={handleResubscribe}
+          clientSecret={clientSecret}
+          isLoading={isLoading}
         />
       </TabPanel>
       <TabPanel name="update-user" value={value} index={2}>

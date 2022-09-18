@@ -18,11 +18,11 @@ function App({ Component, pageProps }) {
   /** @param {object} newData */
   const updateCtx = (newData) => setCtx((prev) => ({ ...prev, ...newData }));
 
-  // TODO: do something with error: 'Please reload page' or something
-  // TODO: re-visit this, maybe a better way
-  const fetchToken = async () => {
+  // token is checked upon initial app request (not page navigations)
+  const authenticateToken = async () => {
     try {
-      const { user } = await http("/user", null, "GET");
+      const { user } = await http("/auth/authenticate-token", null, "GET");
+      console.log("HIT FETCH USER: ", user);
       updateCtx({ user });
     } catch (error) {
       updateCtx({ user: null });
@@ -30,7 +30,7 @@ function App({ Component, pageProps }) {
   };
 
   useEffect(() => {
-    fetchToken();
+    authenticateToken();
   }, []);
 
   if (!user && user !== null) {
@@ -65,8 +65,8 @@ function App({ Component, pageProps }) {
             severity={toastData?.severity}
             onClose={() => updateCtx({ toastData: null })}
           />
-          <Layout user={user} fetchToken={fetchToken}>
-            <Component user={user} fetchToken={fetchToken} {...pageProps} />
+          <Layout user={user}>
+            <Component user={user} updateCtx={updateCtx} {...pageProps} />
           </Layout>
         </Context.Provider>
       </ThemeProvider>

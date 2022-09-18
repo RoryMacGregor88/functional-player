@@ -31,11 +31,13 @@ export const getStaticProps = async ({ params }) => {
 };
 
 export default function Series({ user, course }) {
-  const { email, subscriptionStatus } = user;
+  const { email, subscriptionStatus } = user ?? {};
   const { _id, title, description, videoUrl } = course;
 
   useEffect(() => {
-    http("/last-watched", { email, _id });
+    if (!!user) {
+      http("/last-watched", { email, _id });
+    }
   }, []);
 
   return (

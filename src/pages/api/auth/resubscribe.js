@@ -1,35 +1,28 @@
 import stripeFn from "stripe";
 
-import { hash } from "bcryptjs";
+import { withIronSessionApiRoute } from "iron-session/next";
 
 import { connectToDatabase } from "lib/mongodb";
+
+import { sessionOptions } from "lib/session";
 
 import { USERS, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
-export default async function register(req, res) {
+async function resubscribe(req, res) {
   if (req.method === "POST") {
+    if (req.session.user?.email !== req.body.email) {
+      return res.status(403).send({ error: DEFAULT_TOKEN_FORBIDDEN_MESSAGE });
+    }
     try {
-      const { email, username, password } = req.body;
-
       const { db } = await connectToDatabase();
 
-      const checkExistingEmail = await db.collection(USERS).findOne({ email });
+      const { email, username } = req.body;
 
-      if (!!checkExistingEmail) {
-        return res.status(200).send({ error: "Email already exists." });
-      }
+      // TODO: prevent making second subscription with same email
 
-      const checkExistingUsername = await db
-        .collection(USERS)
-        .findOne({ username });
-
-      if (!!checkExistingUsername) {
-        return res.status(200).send({ error: "Username is taken." });
-      }
-
-      // if credentials are valid, create customer on stripe servers
+      // create customer on stripe servers
       const { id: customerId } = await stripe.customers.create({
         email,
         name: username,
@@ -47,24 +40,37 @@ export default async function register(req, res) {
         expand: ["latest_invoice.payment_intent"],
       });
 
-      await db.collection(USERS).insertOne({
-        email,
-        username,
-        password: await hash(password, 12),
-        subscriptionId,
+      const updatedProperties = {
         customerId,
+        subscriptionId,
         subscriptionStatus,
-        bookmarks: [],
-      });
+      };
+
+      await db.collection(USERS).findOneAndUpdate(
+        { email },
+        {
+          $set: {
+            ...updatedProperties,
+          },
+        }
+      );
+
+      req.session.user = {
+        ...req.session.user,
+        ...updatedProperties,
+      };
+      await req.session.save();
 
       return res
         .status(201)
         .json({ clientSecret: latest_invoice.payment_intent.client_secret });
     } catch (error) {
-      console.log("ERROR in register: ", error);
-      return res.status(500).send({ error });
+      console.log("ERROR in resubscribe: ", error);
+      return res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
     }
   } else {
     return res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
   }
 }
+
+export default withIronSessionApiRoute(resubscribe, sessionOptions);

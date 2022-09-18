@@ -25,6 +25,7 @@ async function updateEmail(req, res) {
 
       return res.status(200).json({ ok: true });
     } catch (error) {
+      console.log("ERROR in updateEmail: ", error);
       return res.status(500).send({ error });
     }
   } else {

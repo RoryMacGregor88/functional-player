@@ -34,7 +34,7 @@ const RegisterForm = ({
     handleSubmit,
     formState: { errors },
   } = useForm({
-    mode: "onBlur",
+    mode: "all",
     resolver: yupResolver(registerFormSchema),
     defaultValues: {
       email: "",
@@ -62,14 +62,17 @@ const RegisterForm = ({
           label="Confirm password"
           name="confirmPassword"
         />
-        <Button type="submit" disabled={disableSubmitButton}>
+        <Button
+          type="submit"
+          disabled={disableSubmitButton}
+          loading={isLoading}
+        >
           Submit
         </Button>
       </FormWrapper>
       <Button
         onClick={onNextClick}
         disabled={disableNextButton}
-        loading={isLoading}
         sx={{ width: "100%" }}
       >
         Next

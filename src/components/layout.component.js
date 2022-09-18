@@ -7,11 +7,10 @@ import { Navbar, Footer, Drawer } from "@/src/components";
 /**
  * @param {{
  *  user: object,
- *  fetchToken: function,
  *  children: React.ReactChildren
  * }} props
  */
-const Layout = ({ user, fetchToken, children }) => {
+const Layout = ({ user, children }) => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const toggleDrawer = () => setDrawerIsOpen(!drawerIsOpen);
   return (
@@ -21,7 +20,6 @@ const Layout = ({ user, fetchToken, children }) => {
       </Head>
       <Drawer
         user={user}
-        fetchToken={fetchToken}
         drawerIsOpen={drawerIsOpen}
         toggleDrawer={toggleDrawer}
       />

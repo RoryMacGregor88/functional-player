@@ -10,6 +10,8 @@ import {
   PASSWORD_CONFIRM_REQUIRED_MESSAGE,
 } from "@/src/utils";
 
+// TODO: move this shit into each form, this is stupid
+
 const loginFormSchema = Yup.object().shape({
   email: Yup.string()
     .email(EMAIL_INVALID_MESSAGE)

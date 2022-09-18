@@ -6,7 +6,7 @@ import { connectToDatabase } from "lib/mongodb";
 
 import { sessionOptions } from "lib/session";
 
-import { HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
+import { USERS, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
@@ -16,25 +16,37 @@ async function unsubscribe(req, res) {
       return res.status(403).send({ error: DEFAULT_TOKEN_FORBIDDEN_MESSAGE });
     }
     try {
-      const { email, subscriptionId } = req.body;
+      const { email, customerId } = req.body;
 
-      const { status } = await stripe.subscriptions.del(subscriptionId);
+      await stripe.customers.del(customerId);
 
       const { db } = await connectToDatabase();
 
+      const updatedProperties = {
+        customerId: null,
+        subscriptionId: null,
+        subscriptionStatus: null,
+      };
+
       await db
         .collection(USERS)
-        .findOneAndUpdate({ email }, { $set: { subscriptionStatus: status } });
+        .findOneAndUpdate({ email }, { $set: { ...updatedProperties } });
 
-      req.session.user = { ...req.session.user, subscriptionStatus: status };
+      const updatedUser = {
+        ...req.session.user,
+        ...updatedProperties,
+      };
+
+      req.session.user = updatedUser;
       await req.session.save();
 
-      return res.status(200).send({ ok: true });
+      return res.status(200).send({ ok: true, user: updatedUser });
     } catch (error) {
-      res.status(500).send({ error });
+      console.log("ERROR in unsubscribe: ", error);
+      return res.status(500).send({ error });
     }
   } else {
-    res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
+    return res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
   }
 }
 

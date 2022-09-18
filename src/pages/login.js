@@ -10,10 +10,10 @@ import { LoginForm, SpacedTitle, Well, LoadMask } from "@/src/components";
 /**
  * @param {{
  *  user: object,
- *  fetchToken: function
+ *  updateCtx: function
  * }} props
  */
-export default function Login({ user, fetchToken }) {
+export default function Login({ user, updateCtx }) {
   const router = useRouter();
 
   const [wellData, setWellData] = useState(null);
@@ -28,7 +28,7 @@ export default function Login({ user, fetchToken }) {
     setIsLoading(true);
     try {
       const { email, password } = event;
-      const { error, ok } = await http("/auth/login", {
+      const { error, ok, user } = await http("/auth/login", {
         email: email.toLowerCase(),
         password,
       });
@@ -38,7 +38,7 @@ export default function Login({ user, fetchToken }) {
       if (!!error) {
         setWellData({ message: error });
       } else if (ok) {
-        fetchToken();
+        updateCtx({ user });
         router.push("/dashboard");
       }
     } catch (error) {

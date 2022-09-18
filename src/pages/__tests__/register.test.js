@@ -85,7 +85,7 @@ describe("Register Page", () => {
     await waitFor(() => {
       expect(
         screen.getByText(
-          'Account successfully created. Click "Next" button to continue.'
+          'Account successfully created. Click "NEXT" button to continue.'
         )
       ).toBeInTheDocument();
     });

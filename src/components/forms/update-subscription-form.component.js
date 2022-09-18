@@ -1,38 +1,33 @@
 import { Typography } from "@mui/material";
 
-import { FormWrapper, Button, Attention } from "@/src/components";
+import { Elements } from "@stripe/react-stripe-js";
 
-const STATUS_LABELS = {
-  active: "Active",
-  incomplete: "Incomplete",
-};
+import { getStripe, STATUS_LABELS } from "@/src/utils";
 
-const Unsubscribe = () => (
-  <>
-    <Button type="submit">Cancel Subscription</Button>
-  </>
-);
-
-const Resubscribe = () => {
-  // TODO: will need stripe Elements wrapper in here again maybe
-  return (
-    <Button type="submit" onClick={() => console.log("Enable subscription")}>
-      Re-enable Subscription
-    </Button>
-  );
-};
+import {
+  FormWrapper,
+  Button,
+  Attention,
+  SubscribeForm,
+} from "@/src/components";
 
 /**
  * @param {{
  *  subscriptionStatus: boolean,
  *  handleUnsubscribe: function,
- *  handleResubscribe: function
+ *  handleStripeCustomer: function,
+ *  handleResubscribe: function,
+ *  clientSecret: function,
+ *  isLoading: boolean
  * }} props
  */
 const UpdateSubscriptionForm = ({
   subscriptionStatus,
   handleUnsubscribe,
+  handleStripeCustomer,
   handleResubscribe,
+  clientSecret,
+  isLoading,
 }) => {
   return (
     <>
@@ -41,18 +36,30 @@ const UpdateSubscriptionForm = ({
         sx={{ textAlign: "center", marginBottom: "1rem" }}
       >
         Your subscription status:{" "}
-        <Attention>{STATUS_LABELS[subscriptionStatus]}</Attention>
+        <Attention>
+          {!!subscriptionStatus
+            ? STATUS_LABELS[subscriptionStatus]
+            : "Subscription not found"}
+        </Attention>
       </Typography>
-      {subscriptionStatus === "active" ? (
-        <FormWrapper onSubmit={handleUnsubscribe}>
-          <Unsubscribe
-            subscriptionStatus={subscriptionStatus}
-            handleUnsubscribe={handleUnsubscribe}
+      {!!clientSecret ? (
+        <Elements stripe={getStripe()} options={{ clientSecret }}>
+          <SubscribeForm
+            subscribeSubmit={handleResubscribe}
+            isLoading={isLoading}
           />
+        </Elements>
+      ) : subscriptionStatus === "active" ? (
+        <FormWrapper onSubmit={handleUnsubscribe}>
+          <Button type="submit" loading={isLoading}>
+            Cancel Subscription
+          </Button>
         </FormWrapper>
       ) : (
-        <FormWrapper onSubmit={handleResubscribe}>
-          <Resubscribe subscriptionStatus={subscriptionStatus} />
+        <FormWrapper onSubmit={handleStripeCustomer}>
+          <Button type="submit" loading={isLoading}>
+            Re-enable Subscription
+          </Button>
         </FormWrapper>
       )}
     </>

@@ -24,7 +24,7 @@ const UpdateEmailForm = ({ handleUpdateEmail }) => {
   };
 
   return (
-    <FormWrapper onSubmit={handleSubmit(onSubmit)}>
+    <FormWrapper onSubmit={handleSubmit((values) => onSubmit(values))}>
       <EmailField errors={errors} register={register} />
       <ConfirmEmailField errors={errors} register={register} />
       <Button type="submit" disabled={!isDirty}>

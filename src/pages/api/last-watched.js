@@ -25,6 +25,7 @@ async function lastWatched(req, res) {
 
       return res.status(200).json({ ok: true });
     } catch (error) {
+      console.log("ERROR in lastWatched: ", error);
       return res.status(500).send({ error });
     }
   } else {

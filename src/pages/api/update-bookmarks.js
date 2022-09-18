@@ -28,6 +28,7 @@ async function updateBookmarks(req, res) {
 
       return res.status(200).json({ ok: true });
     } catch (error) {
+      console.log("ERROR in updateBookmarks: ", error);
       return res.status(500).send({ error });
     }
   } else {

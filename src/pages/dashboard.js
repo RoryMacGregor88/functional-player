@@ -29,7 +29,9 @@ export const getServerSideProps = async (ctx) => ({
 /** @param {{ course: object}} props */
 const ContinueWatching = ({ course }) => {
   // TODO: custom component for this? there's only one
-  return <CourseDisplay src="/stratocaster-small.jpg" {...course} />;
+  return course ? (
+    <CourseDisplay src="/stratocaster-small.jpg" {...course} />
+  ) : null;
 };
 
 /** @param {{course: object}} props */
@@ -44,9 +46,10 @@ const LatestCourses = ({ courses }) => (
 );
 
 /** @param {{ course: object}} props */
-const Bookmarks = ({ courses }) => (
-  <MultiCourseDisplay title="Your Bookmarks: " courses={courses} />
-);
+const Bookmarks = ({ courses }) =>
+  courses.length ? (
+    <MultiCourseDisplay title="Your Bookmarks: " courses={courses} />
+  ) : null;
 
 /**
  * @param {{

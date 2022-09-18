@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { useRouter } from "next/router";
 
 import { Drawer as MuiDrawer, Grid } from "@mui/material";
@@ -10,18 +11,18 @@ import {
   BookmarksIcon,
 } from "@/src/components";
 
-import { http } from "@/src/utils";
+import { http, Context } from "@/src/utils";
 
 /**
  * @param {{
  *  user: object,
- *  fetchToken: function,
  *  drawerIsOpen: boolean,
  *  toggleDrawer: function
  * }} props
  */
-const Drawer = ({ user, fetchToken, drawerIsOpen, toggleDrawer }) => {
+const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
   const router = useRouter();
+  const { updateCtx } = useContext(Context);
 
   const LINK_METADATA = {
     browse: {
@@ -61,11 +62,17 @@ const Drawer = ({ user, fetchToken, drawerIsOpen, toggleDrawer }) => {
   };
 
   const logout = async () => {
-    const { ok } = await http("/auth/logout");
-    if (ok) {
-      fetchToken();
-      // TODO: redirects to login now instead of landing, why?
-      router.push("/");
+    const { error, ok, user } = await http("/auth/logout");
+    if (error) {
+      updateCtx({
+        toastData: {
+          message: DEFAULT_ERROR_MESSAGE,
+          severity: "error",
+        },
+      });
+    } else if (ok) {
+      updateCtx({ user });
+      router.push("/login");
     }
   };
 

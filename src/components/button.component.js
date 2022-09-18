@@ -23,6 +23,8 @@ const Button = (
       padding: "0.5rem 0",
       width: "100%",
       textAlign: "center",
+      backgroundColor: "primary.main",
+      color: "background.paper",
     }}
     disabled={disabled}
     {...props}
@@ -33,6 +35,7 @@ const Button = (
           width: "1.5rem !important",
           height: "1.5rem !important",
           alignSelf: "center",
+          color: "background.paper",
         }}
       />
     ) : (

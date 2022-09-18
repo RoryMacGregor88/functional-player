@@ -111,7 +111,7 @@ const MultiCourseDisplay = ({ title, courses }) => {
         {title}
       </Typography>
       {courses.map(({ _id, ...course }) => {
-        const isBookmarked = user.bookmarks?.includes(_id);
+        const isBookmarked = user.bookmarks.includes(_id);
         return (
           <MiniCourseDisplay
             key={_id}

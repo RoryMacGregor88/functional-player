@@ -17,7 +17,7 @@ const LoginForm = ({ onSubmit, isLoading }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    mode: "onBlur",
+    mode: "all",
     resolver: yupResolver(loginFormSchema),
     defaultValues: {
       email: "",

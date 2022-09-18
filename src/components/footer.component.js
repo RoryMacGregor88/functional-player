@@ -21,6 +21,8 @@ const Footer = () => {
     { Icon: YouTubeIcon, url: "https://www.youtube.com", label: "YouTube" },
   ];
 
+  // TODO: footer colors are broke
+
   return (
     <Grid
       container
@@ -55,7 +57,7 @@ const Footer = () => {
               textDecoration: "none",
               opacity: "0.75",
               "&:hover": {
-                color: "primary.main",
+                color: "text.primary",
                 opacity: "1",
               },
             }}

@@ -15,8 +15,8 @@ const DeleteAccountForm = ({ user }) => {
 
   const handleDelete = async () => {
     try {
-      const { email, subscriptionId } = user;
-      const { ok } = await http("/auth/delete", { email, subscriptionId });
+      const { email, customerId } = user;
+      const { ok } = await http("/auth/delete", { email, customerId });
 
       if (ok) {
         setWellData({

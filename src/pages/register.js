@@ -29,37 +29,59 @@ export default function Register({ user }) {
     return <LoadMask />;
   }
 
+  const handleSuccess = (message) => {
+    setIsLoading(false);
+    setWellData({
+      severity: "success",
+      message,
+    });
+  };
+
+  const handleError = (error) => {
+    setIsLoading(false);
+    setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
+  };
+
   const onNextClick = () => {
+    if (!!wellData) {
+      setWellData(null);
+    }
     setActiveStep(2);
-    setWellData(null);
   };
 
   const registerSubmit = async (event) => {
     setIsLoading(true);
-    try {
-      const { username, email, password } = event;
 
-      const { error, clientSecret } = await http("/auth/register", {
-        username,
-        email: email.toLowerCase(),
-        password,
-      });
+    const { username, email, password } = event;
 
-      setIsLoading(false);
+    const { error, clientSecret } = await http("/auth/register", {
+      username,
+      email: email.toLowerCase(),
+      password,
+    });
 
-      if (!!error) {
-        setWellData({ message: error });
-      } else if (!!clientSecret) {
-        setClientSecret(clientSecret);
-        setWellData({
-          severity: "success",
-          message:
-            'Account successfully created. Click "Next" button to continue.',
-        });
-      }
-    } catch (error) {
-      setIsLoading(false);
-      setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
+    if (!!error) {
+      handleError(error);
+    } else if (!!clientSecret) {
+      setClientSecret(clientSecret);
+      handleSuccess(
+        "Account successfully created. Click 'NEXT' button to continue."
+      );
+    }
+  };
+
+  const subscribeSubmit = async (stripe, elements) => {
+    setIsLoading(true);
+
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${process.env.BASE_URL}/registration-success`,
+      },
+    });
+
+    if (!!error) {
+      handleError(error);
     }
   };
 
@@ -84,7 +106,12 @@ export default function Register({ user }) {
       ) : null}
       {activeStep === 2 && !!clientSecret ? (
         <Elements stripe={getStripe()} options={{ clientSecret }}>
-          <SubscribeForm setWellData={setWellData} />
+          {/* // TODO: Replace P with details about cost/recurrence */}
+          <p style={{ textAlign: "center" }}>Subscribe</p>
+          <SubscribeForm
+            subscribeSubmit={subscribeSubmit}
+            isLoading={isLoading}
+          />
         </Elements>
       ) : null}
     </Grid>

@@ -4,7 +4,7 @@ export const USERS = "users-2";
 export const PASSWORD_MIN = 5;
 export const PASSWORD_MAX = 15;
 
-export const DEFAULT_ERROR_MESSAGE = "An unexpected error has occurred";
+export const DEFAULT_ERROR_MESSAGE = "An unexpected error has occurred.";
 
 export const HTTP_METHOD_ERROR_MESSAGE =
   "Invalid method, only POST requests permitted.";
@@ -26,3 +26,14 @@ export const PASSWORD_CONFIRM_REQUIRED_MESSAGE =
 export const PASSWORDS_MATCH_MESSAGE = "Passwords do not match";
 export const PASSWORD_MIN_LENGTH_MESSAGE =
   "Password must be at least 5 characters";
+
+// All possible Stripe scenarios. Just for explicitness, not all are used
+export const STATUS_LABELS = {
+  active: "Active",
+  incomplete: "Incomplete",
+  incomplete_expired: "Incomplete expired",
+  trialing: "Trialing",
+  past_due: "Past due",
+  unpaid: "Unpaid",
+  canceled: "Cancelled",
+};

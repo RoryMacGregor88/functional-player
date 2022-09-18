@@ -12,7 +12,10 @@ const FormWrapper = ({ onSubmit, children }) => (
     component="form"
     direction="column"
     gap="1rem"
-    onSubmit={onSubmit}
+    onSubmit={(e) => {
+      e.preventDefault();
+      onSubmit();
+    }}
   >
     {children}
   </Grid>
