@@ -8,13 +8,13 @@ async function authenticateToken(req, res) {
       const user = req.session.user ?? null;
       return res.status(200).json({ user });
     } catch (error) {
-      console.log("ERROR in user: ", error);
+      console.log("ERROR in authenticateToken: ", error);
       return res.status(500).send({ error });
     }
   } else {
     return res
       .status(500)
-      .send({ error: "Invalid method, only GET and POST requests permitted." });
+      .send({ error: "Invalid method, only GET requests permitted." });
   }
 }
 
