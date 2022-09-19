@@ -33,11 +33,13 @@ export default function RegistrationSuccess({ user }) {
         <Typography variant="h4">
           Thank you, your subscription was successful.
         </Typography>
-        <Typography variant="p">
+        <Typography variant="body1">
           You can access your account information by clicking the{" "}
           <Attention>My Account</Attention> tab in the sidebar.
         </Typography>
-        <Typography variant="p">Click the button below to login.</Typography>
+        <Typography variant="body1">
+          Click the button below to login.
+        </Typography>
         <Button onClick={() => router.push("/login")}>Login</Button>
       </Grid>
     </PageWrapper>

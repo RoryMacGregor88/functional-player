@@ -28,6 +28,8 @@ import {
 //     },
 //   });
 
+// TODO: something wrong with bookmarking. Staying in bookmarks when not bookmarked, in bookmarks when white etc. Needs tightening!
+
 export default async function updateBookmarks(_id, user = {}, callback) {
   try {
     const { email, bookmarks: currentBookmarks } = user;
@@ -37,6 +39,7 @@ export default async function updateBookmarks(_id, user = {}, callback) {
       ? currentBookmarks.filter((b) => b !== _id)
       : [...currentBookmarks, _id];
 
+    // TODO: updatedUser returned here like others?
     const { ok } = await http("/update-bookmarks", {
       email,
       bookmarks,

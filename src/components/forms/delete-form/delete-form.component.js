@@ -1,34 +1,49 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 import { useRouter } from "next/router";
 import { Button, Typography } from "@mui/material";
 
 import { FormWrapper, Well } from "@/src/components";
-import { http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+import { http, DEFAULT_ERROR_MESSAGE, Context } from "@/src/utils";
 
-/** @param {{user: object}} props */
-const DeleteAccountForm = ({ user }) => {
+// TODO: check this works right
+
+const DeleteAccountForm = () => {
   const router = useRouter();
+  const {
+    ctx: { user },
+    updateCtx,
+  } = useContext(Context);
 
   const [showConfirmButton, setShowConfirmButton] = useState(false);
   const [wellData, setWellData] = useState(false);
 
   const handleDelete = async () => {
-    try {
-      const { email, customerId } = user;
-      const { ok } = await http("/auth/delete", { email, customerId });
+    const { email, customerId } = user;
+    const {
+      error,
+      ok,
+      user: updatedUser,
+    } = await http("/auth/delete", {
+      email,
+      customerId,
+    });
 
-      if (ok) {
-        setWellData({
-          severity: "success",
-          message:
-            "Your account and subscription have been permanently deleted.",
-        });
-      }
-      router.push("/");
-    } catch (error) {
-      setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
+    if (!!error) {
+      setWellData({
+        message: DEFAULT_ERROR_MESSAGE,
+        stack: error,
+      });
     }
+
+    if (ok) {
+      updateCtx({ user: updatedUser });
+      setWellData({
+        severity: "success",
+        message: "Your account and subscription have been permanently deleted.",
+      });
+    }
+    router.push("/");
   };
 
   return (

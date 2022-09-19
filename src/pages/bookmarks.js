@@ -42,6 +42,7 @@ export default function Bookmarks({ user, courses }) {
             ({ _id, title, description, seriesPath, coursePath }) => (
               <CourseDisplay
                 key={_id}
+                _id={_id}
                 title={title}
                 description={description}
                 src="/stratocaster-small.jpg"

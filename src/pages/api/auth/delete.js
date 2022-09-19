@@ -27,7 +27,7 @@ async function deleteAccount(req, res) {
       await db.collection(USERS).deleteOne({ email });
       req.session.destroy();
 
-      return res.status(200).json({ ok: true });
+      return res.status(200).json({ ok: true, user: null });
     } catch (error) {
       console.log("ERROR in deleteAccount: ", error);
       return res.status(500).send({ error });

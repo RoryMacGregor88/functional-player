@@ -2,7 +2,7 @@ import { Grid } from "@mui/material";
 
 /**
  * @param {
- *  onSubmit: function
+ *  onSubmit: function,
  *  children: React.ReactNode
  * } props
  */

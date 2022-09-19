@@ -1,5 +1,8 @@
 import { useForm } from "react-hook-form";
+import NextLink from "next/link";
 import { yupResolver } from "@hookform/resolvers/yup";
+
+import { Typography, Grid } from "@mui/material";
 
 import {
   Button,
@@ -37,6 +40,22 @@ const LoginForm = ({ onSubmit, isLoading }) => {
       <Button type="submit" loading={isLoading}>
         Submit
       </Button>
+      <Grid container alignItems="center" justifyContent="center">
+        {/* // TODO: fix this (span should be ling, theme styles, hover styles) */}
+        <Typography variant="body1">Forgot password?</Typography>
+        <NextLink href={"/reset-password"} passHref>
+          <span
+            style={{
+              cursor: "pointer",
+              borderBottom: "2px solid orange",
+              width: "fit-content",
+              marginLeft: "0.5rem",
+            }}
+          >
+            Click here
+          </span>
+        </NextLink>
+      </Grid>
     </FormWrapper>
   );
 };

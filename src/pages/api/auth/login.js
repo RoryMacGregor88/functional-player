@@ -16,6 +16,7 @@ async function login(req, res) {
 
       const result = await db.collection(USERS).findOne({ email });
 
+      // TODO: 'Successful' errors need changed to 'message'
       if (!result) {
         return res.status(200).send({
           error: "No user account associated with that email address.",

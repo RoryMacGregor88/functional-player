@@ -10,6 +10,7 @@ import {
   UpdateEmailForm,
   Well,
   LoadMask,
+  PageWrapper,
 } from "@/src/components";
 
 import { http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
@@ -128,6 +129,7 @@ export default function Account({ user, updateCtx }) {
   const handleStripeCustomer = async () => {
     setIsLoading(true);
 
+    // TODO: updatedUser returned here?
     const { error, clientSecret } = await http("/auth/resubscribe", {
       username,
       email,
@@ -159,7 +161,7 @@ export default function Account({ user, updateCtx }) {
   // TODO: pagewrapper?
 
   return (
-    <div>
+    <PageWrapper>
       <SpacedTitle>Account Settings</SpacedTitle>
       {!!wellData && !clientSecret ? <Well {...wellData} /> : null}
       <Tabs
@@ -193,8 +195,8 @@ export default function Account({ user, updateCtx }) {
         <UpdatePasswordForm handleUpdatePassword={handleUpdatePassword} />
       </TabPanel>
       <TabPanel name="delete-account" value={value} index={3}>
-        <DeleteAccountForm user={user} />
+        <DeleteAccountForm />
       </TabPanel>
-    </div>
+    </PageWrapper>
   );
 }

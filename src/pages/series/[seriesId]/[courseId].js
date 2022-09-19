@@ -36,6 +36,7 @@ export default function Series({ user, course }) {
 
   useEffect(() => {
     if (!!user) {
+      // TODO: updatedUser returned here?
       http("/last-watched", { email, _id });
     }
   }, []);

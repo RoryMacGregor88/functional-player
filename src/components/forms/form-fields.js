@@ -47,7 +47,6 @@ const ConfirmEmailField = ({ errors, register }) => (
     error={!!errors.confirmEmail}
     helperText={errors.confirmEmail?.message}
     {...register("confirmEmail")}
-    autoFocus
   />
 );
 

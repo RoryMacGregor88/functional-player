@@ -30,6 +30,7 @@ export default function ReactivationSuccess({ user, updateCtx }) {
           subscriptionId,
         });
         if (!!error) {
+          // TODO: updatedUser returned here instead of hardcoded null?
           await http("/auth/logout");
           updateCtx({ user: null });
         } else if (ok) {
@@ -60,7 +61,7 @@ export default function ReactivationSuccess({ user, updateCtx }) {
         <Typography variant="h4">
           Your subscription has been successfully reactivated.
         </Typography>
-        <Typography variant="p">
+        <Typography variant="body1">
           Click the button below to return to your dashboard.
         </Typography>
         <Button onClick={() => router.push("/dashboard")}>
