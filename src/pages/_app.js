@@ -22,7 +22,6 @@ function App({ Component, pageProps }) {
   const authenticateToken = async () => {
     try {
       const { user } = await http("/auth/authenticate-token", null, "GET");
-      console.log("HIT FETCH USER: ", user);
       updateCtx({ user });
     } catch (error) {
       updateCtx({ user: null });

@@ -3,6 +3,7 @@ import LoadingSpinner from "./loading-spinner.component";
 import LoadMask from "./load-mask.component";
 import Drawer from "./drawer.component";
 import Navbar from "./navbar.component";
+import Link from "./link.component";
 import HeaderImage from "./header-image.component";
 import SidebarItem from "./sidebar-item.component";
 import PageWrapper from "./page-wrapper.component";
@@ -13,7 +14,6 @@ import VideoDisplay from "./video-display.component";
 import VideoPlayer from "./video-player.component";
 import IconButton from "./icon-button.component";
 import BookmarkIconButton from "./bookmark-icon-button.component";
-import NextImage from "./next-image.component";
 import SpacedTitle from "./spaced-title.component";
 import Stepper from "./stepper.component";
 import Dialog from "./dialog.component";
@@ -33,6 +33,7 @@ export {
   LoadMask,
   Drawer,
   Navbar,
+  Link,
   HeaderImage,
   SidebarItem,
   PageWrapper,
@@ -43,7 +44,6 @@ export {
   VideoPlayer,
   IconButton,
   BookmarkIconButton,
-  NextImage,
   SpacedTitle,
   Stepper,
   Dialog,

@@ -1,5 +1,5 @@
+import NextImage from "next/image";
 import { Grid, Typography, useMediaQuery } from "@mui/material";
-import { NextImage } from "@/src/components";
 
 /**
  * @param {{

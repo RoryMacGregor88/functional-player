@@ -3,13 +3,7 @@ import { useRouter } from "next/router";
 
 import { Drawer as MuiDrawer, Grid } from "@mui/material";
 
-import {
-  IconButton,
-  CloseIcon,
-  SidebarItem,
-  ProfileIcon,
-  BookmarksIcon,
-} from "@/src/components";
+import { SidebarItem, ProfileIcon, BookmarksIcon } from "@/src/components";
 
 import { http, Context } from "@/src/utils";
 
@@ -78,7 +72,7 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
 
   return (
     <MuiDrawer
-      anchor="right"
+      anchor="left"
       open={drawerIsOpen}
       onClose={toggleDrawer}
       sx={{
@@ -96,13 +90,11 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
       <Grid
         container
         direction="column"
-        justifyContent="space-between"
-        alignItems="flex-end"
+        justifyContent="center"
+        alignItems="flex-start"
+        gap={5}
+        sx={{ height: "100%" }}
       >
-        <IconButton onClick={toggleDrawer}>
-          <CloseIcon sx={{ height: "2rem", width: "2rem" }} />
-        </IconButton>
-
         <SidebarItem {...LINK_METADATA.browse} onClick={toggleDrawer} />
         {!!user ? (
           <>

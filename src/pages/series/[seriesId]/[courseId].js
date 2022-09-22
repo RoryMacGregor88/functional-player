@@ -1,11 +1,9 @@
 import { useEffect } from "react";
 
-import { Typography } from "@mui/material";
-
-import { PageWrapper, VideoDisplay, SpacedTitle } from "@/src/components";
+import { VideoDisplay } from "@/src/components";
 import { http } from "@/src/utils";
 
-import { getAllCourses, getCourseById } from "@/src/pages/api/course";
+import { getAllCourses, getCourseById } from "lib/course";
 
 // TODO: strip out styles from copied pages, redo
 // TODO: Also, implement continue watching and bookmarking, will be fun
@@ -32,7 +30,7 @@ export const getStaticProps = async ({ params }) => {
 
 export default function Series({ user, course }) {
   const { email, subscriptionStatus } = user ?? {};
-  const { _id, title, description, videoUrl } = course;
+  const { _id, title, description, videoId } = course;
 
   useEffect(() => {
     if (!!user) {
@@ -41,28 +39,30 @@ export default function Series({ user, course }) {
     }
   }, []);
 
+  // TODO: add trailerId to all videos in db
+  const trailerId = videoId;
+
   return (
-    <PageWrapper>
-      <SpacedTitle>Single course page (level 3)</SpacedTitle>
+    <div
+      style={{
+        position: "absolute",
+        height: "100%",
+        width: "100%",
+      }}
+    >
       {subscriptionStatus === "active" ? (
-        <>
-          <Typography variant="h6">This is LIVE version</Typography>
-          <VideoDisplay
-            title={title}
-            description={description}
-            videoUrl={videoUrl}
-          />
-        </>
+        <VideoDisplay
+          title={title}
+          description={description}
+          videoId={videoId}
+        />
       ) : (
-        <>
-          <Typography variant="h6">This is TRAILER version</Typography>
-          <VideoDisplay
-            title={title}
-            description={description}
-            videoUrl={videoUrl}
-          />
-        </>
+        <VideoDisplay
+          title={title}
+          description={description}
+          videoId={trailerId}
+        />
       )}
-    </PageWrapper>
+    </div>
   );
 }

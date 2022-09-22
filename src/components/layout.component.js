@@ -16,7 +16,7 @@ const Layout = ({ user, children }) => {
   return (
     <>
       <Head>
-        <title>FunctionalPlayer</title>
+        <title>Functional Player</title>
       </Head>
       <Drawer
         user={user}

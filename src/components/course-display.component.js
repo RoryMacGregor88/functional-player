@@ -1,11 +1,10 @@
 import { useContext } from "react";
 
 import NextImage from "next/image";
-import NextLink from "next/link";
 
 import { Typography, Grid, Box } from "@mui/material";
 
-import { Button, BookmarkIconButton } from "@/src/components";
+import { Button, BookmarkIconButton, Link } from "@/src/components";
 
 import { updateBookmarks } from "@/src/utils";
 
@@ -88,16 +87,16 @@ const CourseDisplay = ({
           },
         }}
       >
-        <NextLink href={href} passHref>
+        <Link href={href} passHref>
           <NextImage layout="fill" objectFit="cover" src={src} alt={alt} />
-        </NextLink>
+        </Link>
       </Box>
       <Grid item container direction="column" alignItems="flex-start">
         <Typography>{description}</Typography>
       </Grid>
-      <NextLink href={href} passHref>
+      <Link href={href} passHref>
         <Button>Watch Now</Button>
-      </NextLink>
+      </Link>
     </Grid>
   );
 };

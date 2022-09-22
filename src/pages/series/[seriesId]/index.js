@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
 import { PageWrapper, SpacedTitle, CourseDisplay } from "@/src/components";
-import { getAllSeries, getSeriesById } from "@/src/pages/api/series";
+import { getAllSeries, getSeriesById } from "lib/series";
 
 export const getStaticPaths = async () => {
   const series = await getAllSeries();

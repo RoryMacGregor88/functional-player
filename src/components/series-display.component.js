@@ -1,8 +1,8 @@
-import NextLink from "next/link";
+import NextImage from "next/image";
 
 import { Grid, Typography, Button, ListItem } from "@mui/material";
 
-import { NextImage } from "@/src/components";
+import { Link } from "@/src/components";
 
 const SeriesDisplay = ({ series }) => (
   <Grid container direction="column" component={ListItem}>
@@ -22,7 +22,7 @@ const SeriesDisplay = ({ series }) => (
         },
       }}
     >
-      <NextLink href={`series/${series.seriesPath}`} passHref>
+      <Link href={`series/${series.seriesPath}`} passHref>
         <NextImage
           src="/stratocaster-medium.jpg"
           alt="stratocaster"
@@ -30,7 +30,7 @@ const SeriesDisplay = ({ series }) => (
           objectFit="cover"
           priority
         />
-      </NextLink>
+      </Link>
     </Grid>
     <Grid
       item
@@ -41,9 +41,9 @@ const SeriesDisplay = ({ series }) => (
     >
       <Typography variant="h3">{series.title}</Typography>
       <Typography>{series.description}</Typography>
-      <NextLink href={`series/${series.seriesPath}`} passHref>
+      <Link href={`series/${series.seriesPath}`} passHref>
         <Button>View this series</Button>
-      </NextLink>
+      </Link>
     </Grid>
   </Grid>
 );

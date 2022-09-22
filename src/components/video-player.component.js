@@ -1,6 +1,6 @@
-const VideoPlayer = ({ videoUrl, alt, height = "360", width = "640" }) => (
+const VideoPlayer = ({ videoId, alt, height = "360", width = "640" }) => (
   <iframe
-    src={`https://player.vimeo.com/video/${videoUrl}`}
+    src={`https://player.vimeo.com/video/${videoId}`}
     alt={alt}
     width={width}
     height={height}

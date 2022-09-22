@@ -1,8 +1,6 @@
-import NextLink from "next/link";
-
 import { AppBar, Toolbar, Typography } from "@mui/material";
 
-import { MenuIcon, IconButton } from "@/src/components";
+import { MenuIcon, IconButton, Link } from "@/src/components";
 
 /**
  * @param {{
@@ -12,11 +10,6 @@ import { MenuIcon, IconButton } from "@/src/components";
  * }} props
  */
 const Navbar = ({ user, drawerIsOpen, toggleDrawer }) => {
-  const options = {
-    padding: "0",
-    visibility: drawerIsOpen ? "hidden" : "visible",
-  };
-
   return (
     <AppBar
       position="fixed"
@@ -32,20 +25,29 @@ const Navbar = ({ user, drawerIsOpen, toggleDrawer }) => {
         disableGutters
         sx={{
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
-          padding: "1rem 1.5rem",
+          padding: "1rem",
           minHeight: "fit-content !important",
         }}
       >
-        <NextLink href={!!user ? "/dashboard" : "/"} passHref>
+        <IconButton
+          aria-label="menu"
+          onClick={toggleDrawer}
+          sx={{
+            padding: "0",
+            visibility: drawerIsOpen ? "hidden" : "visible",
+            margin: 0,
+          }}
+        >
+          <MenuIcon
+            sx={{ height: "2.5rem", width: "2.5rem", marginRight: "1rem" }}
+          />
+        </IconButton>
+        <Link href={!!user ? "/dashboard" : "/"} passHref>
           <Typography variant="h4" sx={{ cursor: "pointer" }}>
             Functional Player
           </Typography>
-        </NextLink>
-        <IconButton aria-label="menu" onClick={toggleDrawer} sx={options}>
-          <MenuIcon sx={{ height: "2.5rem", width: "2.5rem" }} />
-        </IconButton>
+        </Link>
       </Toolbar>
     </AppBar>
   );

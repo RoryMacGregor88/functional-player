@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 
 import { Grid } from "@mui/material";
 
-import { getAllCourses } from "@/src/pages/api/course";
+import { getAllCourses } from "lib/course";
 
 import {
   HeaderImage,

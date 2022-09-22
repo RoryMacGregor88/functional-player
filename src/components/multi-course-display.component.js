@@ -1,12 +1,11 @@
 import { useContext } from "react";
 
 import NextImage from "next/image";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
 
 import { Grid, Typography } from "@mui/material";
 
-import { Button, BookmarkIconButton } from "@/src/components";
+import { Button, BookmarkIconButton, Link } from "@/src/components";
 
 import { Context, updateBookmarks } from "@/src/utils";
 
@@ -41,14 +40,14 @@ const MiniCourseDisplay = ({ user, course, isBookmarked, onBookmarkClick }) => {
             },
           }}
         >
-          <NextLink href={href} passHref>
+          <Link href={href} passHref>
             <NextImage
               src="/stratocaster-small.jpg"
               alt={alt}
               layout="fill"
               objectFit="cover"
             />
-          </NextLink>
+          </Link>
         </Grid>
         <Grid
           item
@@ -72,9 +71,9 @@ const MiniCourseDisplay = ({ user, course, isBookmarked, onBookmarkClick }) => {
           />
         ) : null}
       </Grid>
-      <NextLink href={href} passHref>
+      <Link href={href} passHref>
         <Button>Watch Now</Button>
-      </NextLink>
+      </Link>
     </Grid>
   );
 };

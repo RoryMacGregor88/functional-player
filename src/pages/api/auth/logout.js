@@ -1,10 +1,16 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import { sessionOptions } from "lib/session";
 
-import { HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
+import {
+  HTTP_METHOD_ERROR_MESSAGE,
+  DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
+} from "@/src/utils";
 
 function logout(req, res) {
   if (req.method === "POST") {
+    if (req.session.user?.email !== req.body.email) {
+      return res.status(403).send({ error: DEFAULT_TOKEN_FORBIDDEN_MESSAGE });
+    }
     try {
       req.session.destroy();
       return res.status(200).send({ ok: true, user: null });
