@@ -5,15 +5,22 @@ import { useState, useEffect } from "react";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 
-import { Layout, LoadMask, Toast, Dialog } from "@/src/components";
+import { Layout, LoadMask, Toast, Dialog, VideoDialog } from "@/src/components";
 import { http, Context } from "@/src/utils";
 
 import theme from "@/src/components/theme";
 
 function App({ Component, pageProps }) {
-  const [ctx, setCtx] = useState({});
+  const [ctx, setCtx] = useState({
+    user: null,
+    selectedVideo: null,
+    dialogData: null,
+    toastData: null,
+  });
 
-  const { user, toastData, dialogData } = ctx;
+  const { user, toastData, dialogData, selectedVideo } = ctx;
+
+  console.log("selectedVideo: ", selectedVideo);
 
   /** @param {object} newData */
   const updateCtx = (newData) => setCtx((prev) => ({ ...prev, ...newData }));
@@ -57,6 +64,11 @@ function App({ Component, pageProps }) {
             title={dialogData?.title}
             message={dialogData?.message}
             actions={dialogData?.actions}
+          />
+          <VideoDialog
+            open={!!selectedVideo}
+            selectedVideo={selectedVideo}
+            onClose={() => updateCtx({ selectedVideo: null })}
           />
           <Toast
             open={!!toastData}

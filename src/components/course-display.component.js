@@ -25,6 +25,7 @@ import { Context } from "@/src/utils";
  */
 const CourseDisplay = ({
   _id,
+  videoId,
   title,
   description,
   src,
@@ -43,6 +44,19 @@ const CourseDisplay = ({
 
   const onBookmarkClick = () => {
     updateBookmarks(_id, user, updateCtx);
+  };
+
+  const handleClick = () => {
+    const selectedVideo = {
+      _id,
+      videoId,
+      title,
+      description,
+      src,
+      alt,
+    };
+
+    updateCtx({ selectedVideo });
   };
 
   return (
@@ -94,9 +108,10 @@ const CourseDisplay = ({
       <Grid item container direction="column" alignItems="flex-start">
         <Typography>{description}</Typography>
       </Grid>
-      <Link href={href} passHref>
+      {/* <Link href={href} passHref>
         <Button>Watch Now</Button>
-      </Link>
+      </Link> */}
+      <Button onClick={handleClick}>Watch Now</Button>
     </Grid>
   );
 };

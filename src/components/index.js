@@ -17,6 +17,7 @@ import BookmarkIconButton from "./bookmark-icon-button.component";
 import SpacedTitle from "./spaced-title.component";
 import Stepper from "./stepper.component";
 import Dialog from "./dialog.component";
+import VideoDialog from "./video-dialog.component";
 import Well from "./well/well.component";
 import Toast from "./toast.component";
 import TextField from "./text-field.component";
@@ -47,6 +48,7 @@ export {
   SpacedTitle,
   Stepper,
   Dialog,
+  VideoDialog,
   Well,
   Toast,
   TextField,
