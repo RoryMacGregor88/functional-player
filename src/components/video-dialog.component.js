@@ -72,7 +72,7 @@ const VideoDialog = ({ open, selectedVideo, onClose }) => {
   }
 
   return (
-    <Dialog open={open} fullScreen>
+    <Dialog open={open} fullScreen transitionDuration={500}>
       <Grid
         container
         sx={{
