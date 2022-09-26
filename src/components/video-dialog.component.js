@@ -82,7 +82,12 @@ const VideoDialog = ({ open, selectedVideo, onClose }) => {
   const deviceSize = isSmall ? "small" : isMedium ? "medium" : "large";
 
   return !!selectedVideo ? (
-    <Dialog open={open} fullScreen transitionDuration={500}>
+    <Dialog
+      open={open}
+      fullScreen
+      transitionDuration={500}
+      sx={{ zIndex: 2000 }}
+    >
       <Grid
         container
         sx={{

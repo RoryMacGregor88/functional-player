@@ -23,11 +23,7 @@ const Layout = ({ user, children }) => {
         drawerIsOpen={drawerIsOpen}
         toggleDrawer={toggleDrawer}
       />
-      <Navbar
-        user={user}
-        drawerIsOpen={drawerIsOpen}
-        toggleDrawer={toggleDrawer}
-      />
+      <Navbar user={user} toggleDrawer={toggleDrawer} />
       <main
         style={{
           display: "flex",

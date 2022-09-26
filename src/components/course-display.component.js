@@ -94,9 +94,9 @@ const CourseDisplay = ({
           cursor: "pointer",
           borderRadius: 1,
           overflow: "hidden",
-          border: "2px solid transparent",
+          border: "5px solid transparent",
           "&:hover": {
-            border: "2px solid",
+            border: "5px solid",
             borderColor: "palette.main",
           },
         }}

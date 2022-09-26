@@ -5,16 +5,15 @@ import { MenuIcon, IconButton, Link } from "@/src/components";
 /**
  * @param {{
  *  user?: object,
- *  drawerIsOpen: boolean,
  *  toggleDrawer: function
  * }} props
  */
-const Navbar = ({ user, drawerIsOpen, toggleDrawer }) => {
+const Navbar = ({ user, toggleDrawer }) => {
   return (
     <AppBar
       position="fixed"
       sx={{
-        zIndex: "1100",
+        zIndex: 2000,
         border: "none",
         backgroundColor: "transparent",
         boxShadow: "none",
@@ -35,7 +34,6 @@ const Navbar = ({ user, drawerIsOpen, toggleDrawer }) => {
           onClick={toggleDrawer}
           sx={{
             padding: "0",
-            visibility: drawerIsOpen ? "hidden" : "visible",
             margin: 0,
           }}
         >
