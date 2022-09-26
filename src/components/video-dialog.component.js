@@ -9,6 +9,13 @@ import {
 
 import { ArrowBackIcon, VideoPlayer, Button } from "@/src/components";
 
+/**
+ * @param {
+ *  selectedVideo: object,
+ *  onClose: function,
+ *  deviceSize: string
+ * } params
+ */
 const Overlay = ({ selectedVideo, onClose, deviceSize }) => {
   const { videoId, title, description } = selectedVideo;
   const isLarge = deviceSize === "large";
@@ -61,17 +68,20 @@ const Overlay = ({ selectedVideo, onClose, deviceSize }) => {
   );
 };
 
+/**
+ * @param {
+ *  open: boolean,
+ *  selectedVideo: object,
+ *  onClose: function
+ * } params
+ */
 const VideoDialog = ({ open, selectedVideo, onClose }) => {
   const isMedium = useMediaQuery("(max-width:1200px)");
   const isSmall = useMediaQuery("(max-width:600px)");
 
   const deviceSize = isSmall ? "small" : isMedium ? "medium" : "large";
 
-  if (!selectedVideo) {
-    return null;
-  }
-
-  return (
+  return !!selectedVideo ? (
     <Dialog open={open} fullScreen transitionDuration={500}>
       <Grid
         container
@@ -110,7 +120,7 @@ const VideoDialog = ({ open, selectedVideo, onClose }) => {
         </Grid>
       </Grid>
     </Dialog>
-  );
+  ) : null;
 };
 
 export default VideoDialog;

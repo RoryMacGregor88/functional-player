@@ -20,8 +20,6 @@ function App({ Component, pageProps }) {
 
   const { user, toastData, dialogData, selectedVideo } = ctx;
 
-  console.log("selectedVideo: ", selectedVideo);
-
   /** @param {object} newData */
   const updateCtx = (newData) => setCtx((prev) => ({ ...prev, ...newData }));
 
