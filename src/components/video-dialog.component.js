@@ -7,16 +7,33 @@ import {
   useMediaQuery,
 } from "@mui/material";
 
-import { ArrowBackIcon, VideoPlayer, Button } from "@/src/components";
+import {
+  ArrowBackIcon,
+  VideoPlayer,
+  Button,
+  BookmarkIconButton,
+} from "@/src/components";
+
+import { updateBookmarks } from "@/src/utils";
 
 /**
  * @param {
+ *  user: object,
  *  selectedVideo: object,
+ *  isBookmarked: boolean,
+ *  onBookmarkClick: function,
  *  onClose: function,
  *  deviceSize: string
  * } params
  */
-const Overlay = ({ selectedVideo, onClose, deviceSize }) => {
+const Overlay = ({
+  user,
+  selectedVideo,
+  isBookmarked,
+  onBookmarkClick,
+  onClose,
+  deviceSize,
+}) => {
   const { videoId, title, description } = selectedVideo;
   const isLarge = deviceSize === "large";
   return (
@@ -39,12 +56,19 @@ const Overlay = ({ selectedVideo, onClose, deviceSize }) => {
         alignItems={isLarge ? "flex-start" : "center"}
         sx={{ width: isLarge ? "50%" : "100%" }}
       >
-        <IconButton
-          onClick={onClose}
-          sx={{ width: "fit-content", padding: "0" }}
-        >
-          <ArrowBackIcon sx={{ height: "2.5rem", width: "2.5rem" }} />
-        </IconButton>
+        <Grid item container justifyContent="space-between" alignItems="center">
+          <IconButton
+            onClick={onClose}
+            sx={{ width: "fit-content", padding: "0" }}
+          >
+            <ArrowBackIcon sx={{ height: "2.5rem", width: "2.5rem" }} />
+          </IconButton>
+          <BookmarkIconButton
+            isBookmarked={isBookmarked}
+            onBookmarkClick={onBookmarkClick}
+          />
+        </Grid>
+
         <>
           <Typography variant="h2">{title}</Typography>
           <Typography variant="body1">{description}</Typography>
@@ -71,17 +95,31 @@ const Overlay = ({ selectedVideo, onClose, deviceSize }) => {
 /**
  * @param {
  *  open: boolean,
+ *  user: object,
  *  selectedVideo: object,
  *  onClose: function
  * } params
  */
-const VideoDialog = ({ open, selectedVideo, onClose }) => {
+const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
   const isMedium = useMediaQuery("(max-width:1200px)");
   const isSmall = useMediaQuery("(max-width:600px)");
 
+  if (!selectedVideo) {
+    return null;
+  }
+
   const deviceSize = isSmall ? "small" : isMedium ? "medium" : "large";
 
-  return !!selectedVideo ? (
+  const isBookmarked = user?.bookmarks.includes(selectedVideo._id) ?? false;
+
+  const onBookmarkClick = () => {
+    if (!user) {
+      //show dialog with prompt to sign up
+    }
+    updateBookmarks(_id, user, updateCtx);
+  };
+
+  return (
     <Dialog
       open={open}
       fullScreen
@@ -118,14 +156,17 @@ const VideoDialog = ({ open, selectedVideo, onClose }) => {
           }}
         >
           <Overlay
+            user={user}
             selectedVideo={selectedVideo}
+            isBookmarked={isBookmarked}
+            onBookmarkClick={onBookmarkClick}
             onClose={onClose}
             deviceSize={deviceSize}
           />
         </Grid>
       </Grid>
     </Dialog>
-  ) : null;
+  );
 };
 
 export default VideoDialog;

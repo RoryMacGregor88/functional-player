@@ -9,7 +9,6 @@ import SidebarItem from "./sidebar-item.component";
 import PageWrapper from "./page-wrapper.component";
 import SeriesDisplay from "./series-display.component";
 import CourseDisplay from "./course-display.component";
-import MultiCourseDisplay from "./multi-course-display.component";
 import VideoDisplay from "./video-display.component";
 import VideoPlayer from "./video-player.component";
 import IconButton from "./icon-button.component";
@@ -40,7 +39,6 @@ export {
   PageWrapper,
   SeriesDisplay,
   CourseDisplay,
-  MultiCourseDisplay,
   VideoDisplay,
   VideoPlayer,
   IconButton,

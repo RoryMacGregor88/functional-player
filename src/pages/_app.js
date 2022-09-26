@@ -65,6 +65,8 @@ function App({ Component, pageProps }) {
           />
           <VideoDialog
             open={!!selectedVideo}
+            user={user}
+            updateCtx={updateCtx}
             selectedVideo={selectedVideo}
             onClose={() => updateCtx({ selectedVideo: null })}
           />

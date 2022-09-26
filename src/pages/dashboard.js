@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 
 import { getAllCourses } from "lib/course";
 
@@ -9,7 +9,6 @@ import {
   PageWrapper,
   SpacedTitle,
   CourseDisplay,
-  MultiCourseDisplay,
   LoadMask,
 } from "@/src/components";
 
@@ -26,30 +25,78 @@ export const getServerSideProps = async (ctx) => ({
   props: { allCourses: await getAllCourses() },
 });
 
-/** @param {{ course: object}} props */
-const ContinueWatching = ({ course }) => {
-  // TODO: custom component for this? there's only one
-  return course ? (
-    <CourseDisplay src="/stratocaster-small.jpg" {...course} />
-  ) : null;
-};
-
-/** @param {{course: object}} props */
-const ComingSoon = ({ course }) => {
-  // TODO: custom component for this? there's only one
-  return <CourseDisplay src="/stratocaster-small.jpg" {...course} />;
-};
-
-/** @param {{course: object}} props */
-const LatestCourses = ({ courses }) => (
-  <MultiCourseDisplay title="Most Recent Courses: " courses={courses} />
+/**
+ * @param {{
+ *  category: string,
+ *  children: React.ReactChildren
+ * }} props
+ */
+const CategoryWrapper = ({ category, children }) => (
+  <Grid
+    container
+    direction="column"
+    gap={1}
+    sx={{
+      padding: "2rem 0",
+    }}
+  >
+    <Typography variant="h4">{category}</Typography>
+    <Grid
+      item
+      container
+      justifyContent="flex-start"
+      gap={2}
+      wrap="nowrap"
+      sx={{
+        overflowX: "auto",
+      }}
+    >
+      {children}
+    </Grid>
+  </Grid>
 );
 
-/** @param {{ course: object}} props */
-const Bookmarks = ({ courses }) =>
-  courses.length ? (
-    <MultiCourseDisplay title="Your Bookmarks: " courses={courses} />
-  ) : null;
+/** @param {{ course: object }} props */
+const ContinueWatching = ({ course }) => (
+  <CourseDisplay
+    src="/stratocaster-small.jpg"
+    course={{ ...course, src: "/stratocaster-small.jpg" }}
+  />
+);
+
+/** @param {{ course: object }} props */
+const ComingSoon = ({ course }) => (
+  <CourseDisplay
+    src="/stratocaster-small.jpg"
+    course={{ ...course, src: "/stratocaster-small.jpg" }}
+  />
+);
+
+/** @param {{ course: object }} props */
+const LatestCourses = ({ courses }) => (
+  <CategoryWrapper category="Latest Courses:">
+    {courses.map((course) => (
+      <CourseDisplay
+        key={course._id}
+        src="/telecaster-large.jpg"
+        course={{ ...course, src: "/stratocaster-small.jpg" }}
+      />
+    ))}
+  </CategoryWrapper>
+);
+
+/** @param {{ course: object }} props */
+const Bookmarks = ({ courses }) => (
+  <CategoryWrapper category="Your List:">
+    {courses.map((course) => (
+      <CourseDisplay
+        key={course._id}
+        src="/stratocaster-small.jpg"
+        course={{ ...course, src: "/stratocaster-small.jpg" }}
+      />
+    ))}
+  </CategoryWrapper>
+);
 
 /**
  * @param {{
@@ -65,9 +112,8 @@ export default function Dashboard({ user, allCourses }) {
     return <LoadMask />;
   }
 
-  const lastWatched = allCourses.find(
-    (course) => course._id === user.lastWatched
-  );
+  const lastWatched =
+    allCourses.find((course) => course._id === user.lastWatched) ?? null;
 
   const latestCourses = allCourses
     ?.sort((a, b) => {
@@ -89,18 +135,10 @@ export default function Dashboard({ user, allCourses }) {
       />
       <PageWrapper>
         <SpacedTitle>Welcome back, {user.username}</SpacedTitle>
-        <Grid
-          container
-          justifyContent="space-between"
-          alignItems="stretch"
-          wrap="wrap"
-          spacing={4}
-        >
-          <ContinueWatching course={lastWatched} />
-          <ComingSoon course={comingSoonCourse} />
-          <LatestCourses courses={latestCourses} />
-          <Bookmarks courses={bookmarks} />
-        </Grid>
+        {!!lastWatched ? <ContinueWatching course={lastWatched} /> : null}
+        <ComingSoon course={comingSoonCourse} />
+        <LatestCourses courses={latestCourses} />
+        {!!bookmarks.length ? <Bookmarks courses={bookmarks} /> : null}
       </PageWrapper>
     </Grid>
   );

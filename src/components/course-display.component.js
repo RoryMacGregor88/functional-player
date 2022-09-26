@@ -2,61 +2,45 @@ import { useContext } from "react";
 
 import NextImage from "next/image";
 
-import { Typography, Grid, Box } from "@mui/material";
-
-import { Button, BookmarkIconButton, Link } from "@/src/components";
-
-import { updateBookmarks } from "@/src/utils";
+import { Grid, Box, Typography } from "@mui/material";
 
 import { Context } from "@/src/utils";
 
-// TODO: styling of this is broke, height width, now that description has been added
+const Overlay = ({ course }) => {
+  const { title, description } = course;
+  return (
+    <Grid
+      container
+      direction="column"
+      justifyContent="center"
+      style={{
+        position: "absolute",
+        padding: "1rem",
+        zIndex: "100",
+      }}
+    >
+      <Typography variant="h5">{title}</Typography>
+      <Typography variant="body1">{description}</Typography>
+    </Grid>
+  );
+};
 
-/**
- * @param {{
- *  _id: string,
- *  title: string,
- *  description: string,
- *  src: string,
- *  alt: string,
- *  seriesPath: string,
- *  coursePath: string
- * }} props
- */
-const CourseDisplay = ({
-  _id,
-  videoId,
-  title,
-  description,
-  src,
-  alt,
-  seriesPath,
-  coursePath,
-}) => {
-  const {
-    ctx: { user },
-    updateCtx,
-  } = useContext(Context);
+// TODO: styling of this still broke on any pages?
 
-  const isBookmarked = user.bookmarks.includes(_id);
+/** @param {{ course: object }} props */
+const CourseDisplay = ({ course }) => {
+  const { updateCtx } = useContext(Context);
 
-  const href = `/series/${seriesPath}/${coursePath}`;
+  if (!course) {
+    return null;
+  }
 
-  const onBookmarkClick = () => {
-    updateBookmarks(_id, user, updateCtx);
-  };
+  const { src, alt } = course;
 
   const handleClick = () => {
-    const selectedVideo = {
-      _id,
-      videoId,
-      title,
-      description,
-      src,
-      alt,
-    };
-
-    updateCtx({ selectedVideo });
+    updateCtx({
+      selectedVideo: course,
+    });
   };
 
   return (
@@ -64,33 +48,16 @@ const CourseDisplay = ({
       item
       container
       direction="column"
-      sx={{ maxWidth: "35rem", minWidth: "35rem" }}
       xs={12}
       md={6}
+      onClick={handleClick}
     >
-      <Grid item container justifyContent="space-between" alignItems="center">
-        {/* TODO: put some kind of hover effect on the image and title */}
-        <Typography
-          variant="h4"
-          sx={{
-            margin: "1rem 0",
-          }}
-        >
-          {title}
-        </Typography>
-        {!!user ? (
-          <BookmarkIconButton
-            isBookmarked={isBookmarked}
-            onBookmarkClick={onBookmarkClick}
-          />
-        ) : null}
-      </Grid>
       <Box
         sx={{
           position: "relative",
           height: "25rem",
-          width: "100%",
-          marginBottom: "1rem",
+          width: "30rem",
+          margin: "0",
           cursor: "pointer",
           borderRadius: 1,
           overflow: "hidden",
@@ -101,17 +68,9 @@ const CourseDisplay = ({
           },
         }}
       >
-        <Link href={href} passHref>
-          <NextImage layout="fill" objectFit="cover" src={src} alt={alt} />
-        </Link>
+        <Overlay course={course} />
+        <NextImage layout="fill" objectFit="cover" src={src} alt={alt} />
       </Box>
-      <Grid item container direction="column" alignItems="flex-start">
-        <Typography>{description}</Typography>
-      </Grid>
-      {/* <Link href={href} passHref>
-        <Button>Watch Now</Button>
-      </Link> */}
-      <Button onClick={handleClick}>Watch Now</Button>
     </Grid>
   );
 };
