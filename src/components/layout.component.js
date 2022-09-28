@@ -6,7 +6,7 @@ import { Navbar, Footer, Drawer } from "@/src/components";
 
 /**
  * @param {{
- *  user: object,
+ *  user: object|null,
  *  children: React.ReactChildren
  * }} props
  */

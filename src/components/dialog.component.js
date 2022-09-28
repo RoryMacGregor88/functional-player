@@ -24,6 +24,7 @@ const Dialog = ({ open = false, onClose, title, message, actions }) => {
       aria-labelledby={title}
       aria-describedby={title}
       sx={{
+        zIndex: 4000,
         ".MuiDialog-paper": {
           justifyContent: "space-evenly",
           alignItems: "center",
@@ -39,7 +40,14 @@ const Dialog = ({ open = false, onClose, title, message, actions }) => {
       ) : null}
       <DialogContent>{message}</DialogContent>
       {!!actions ? (
-        <DialogActions>
+        <DialogActions
+          disableSpacing
+          sx={{
+            width: "100%",
+            padding: "0.5rem 1rem",
+            gap: "1rem",
+          }}
+        >
           {actions.map(({ label, onClick, closeOnClick }) => (
             <Button
               key={label}

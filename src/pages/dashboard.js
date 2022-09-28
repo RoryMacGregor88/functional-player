@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { Grid, Typography } from "@mui/material";
 
 import { getAllCourses } from "lib/course";
+import { getAllSeries } from "lib/series";
 
 import {
   HeaderImage,
@@ -21,9 +22,13 @@ const comingSoonCourse = {
   seriesPath: "stevie-ray-vaughan",
 };
 
-export const getServerSideProps = async (ctx) => ({
-  props: { allCourses: await getAllCourses() },
-});
+export const getServerSideProps = async (ctx) => {
+  const courses = await getAllCourses();
+  const series = await getAllSeries();
+  return {
+    props: { courses, series },
+  };
+};
 
 /**
  * @param {{
@@ -38,19 +43,12 @@ const CategoryWrapper = ({ category, children }) => (
     gap={1}
     sx={{
       padding: "2rem 0",
+      overflowX: "scroll",
+      maxWidth: "90vw",
     }}
   >
     <Typography variant="h4">{category}</Typography>
-    <Grid
-      item
-      container
-      justifyContent="flex-start"
-      gap={2}
-      wrap="nowrap"
-      sx={{
-        overflowX: "auto",
-      }}
-    >
+    <Grid item container justifyContent="flex-start" gap={2} wrap="nowrap">
       {children}
     </Grid>
   </Grid>
@@ -58,53 +56,63 @@ const CategoryWrapper = ({ category, children }) => (
 
 /** @param {{ course: object }} props */
 const ContinueWatching = ({ course }) => (
-  <CourseDisplay
-    src="/stratocaster-small.jpg"
-    course={{ ...course, src: "/stratocaster-small.jpg" }}
-  />
+  <CategoryWrapper category="Continue Watching">
+    <CourseDisplay course={{ ...course, src: "/stratocaster-small.jpg" }} />
+  </CategoryWrapper>
 );
 
 /** @param {{ course: object }} props */
 const ComingSoon = ({ course }) => (
-  <CourseDisplay
-    src="/stratocaster-small.jpg"
-    course={{ ...course, src: "/stratocaster-small.jpg" }}
-  />
+  <CategoryWrapper category="Coming Soon">
+    <CourseDisplay course={{ ...course, src: "/stratocaster-small.jpg" }} />
+  </CategoryWrapper>
 );
 
 /** @param {{ course: object }} props */
 const LatestCourses = ({ courses }) => (
-  <CategoryWrapper category="Latest Courses:">
+  <CategoryWrapper category="Latest Courses">
     {courses.map((course) => (
       <CourseDisplay
         key={course._id}
-        src="/telecaster-large.jpg"
         course={{ ...course, src: "/stratocaster-small.jpg" }}
       />
     ))}
   </CategoryWrapper>
 );
 
-/** @param {{ course: object }} props */
+/** @param {{ courses: object[] }} props */
 const Bookmarks = ({ courses }) => (
-  <CategoryWrapper category="Your List:">
+  <CategoryWrapper category="Your List">
     {courses.map((course) => (
       <CourseDisplay
         key={course._id}
-        src="/stratocaster-small.jpg"
         course={{ ...course, src: "/stratocaster-small.jpg" }}
       />
     ))}
   </CategoryWrapper>
 );
+
+/** @param {{ series: object[] }} props */
+const Series = ({ series }) =>
+  series.map(({ _id, title, courses }) => (
+    <CategoryWrapper category={`${title} series`} key={_id}>
+      {courses.map((course) => (
+        <CourseDisplay
+          key={course._id}
+          course={{ ...course, src: "/stratocaster-small.jpg" }}
+        />
+      ))}
+    </CategoryWrapper>
+  ));
 
 /**
  * @param {{
- *  user: object,
- *  allCourses: object[]
+ *  user: object|null,
+ *  courses: object[]
+ *  series: object[]
  * }} props
  */
-export default function Dashboard({ user, allCourses }) {
+export default function Dashboard({ user, courses, series }) {
   const router = useRouter();
 
   if (!user) {
@@ -113,18 +121,16 @@ export default function Dashboard({ user, allCourses }) {
   }
 
   const lastWatched =
-    allCourses.find((course) => course._id === user.lastWatched) ?? null;
+    courses.find((course) => course._id === user.lastWatched) ?? null;
 
-  const latestCourses = allCourses
+  const latestCourses = courses
     ?.sort((a, b) => {
       // TODO: change these to 'creation_date' when you can be arsed
       return a.CreationDate > b.CreationDate ? -1 : 1;
     })
     .slice(0, 5);
 
-  const bookmarks = allCourses.filter(({ _id }) =>
-    user.bookmarks.includes(_id)
-  );
+  const bookmarks = courses.filter(({ _id }) => user.bookmarks.includes(_id));
 
   return (
     <Grid container direction="column" sx={{ width: "100%" }}>
@@ -139,6 +145,7 @@ export default function Dashboard({ user, allCourses }) {
         <ComingSoon course={comingSoonCourse} />
         <LatestCourses courses={latestCourses} />
         {!!bookmarks.length ? <Bookmarks courses={bookmarks} /> : null}
+        <Series series={series} />
       </PageWrapper>
     </Grid>
   );

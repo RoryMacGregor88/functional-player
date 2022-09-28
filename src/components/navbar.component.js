@@ -4,7 +4,7 @@ import { MenuIcon, IconButton, Link } from "@/src/components";
 
 /**
  * @param {{
- *  user?: object,
+ *  user: object|null,
  *  toggleDrawer: function
  * }} props
  */

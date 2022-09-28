@@ -56,6 +56,12 @@ function App({ Component, pageProps }) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Context.Provider value={{ ctx, updateCtx }}>
+          <Toast
+            open={!!toastData}
+            message={toastData?.message}
+            severity={toastData?.severity}
+            onClose={() => updateCtx({ toastData: null })}
+          />
           <Dialog
             open={!!dialogData}
             onClose={() => updateCtx({ dialogData: null })}
@@ -69,12 +75,6 @@ function App({ Component, pageProps }) {
             updateCtx={updateCtx}
             selectedVideo={selectedVideo}
             onClose={() => updateCtx({ selectedVideo: null })}
-          />
-          <Toast
-            open={!!toastData}
-            message={toastData?.message}
-            severity={toastData?.severity}
-            onClose={() => updateCtx({ toastData: null })}
           />
           <Layout user={user}>
             <Component user={user} updateCtx={updateCtx} {...pageProps} />

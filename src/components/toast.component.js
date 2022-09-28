@@ -30,6 +30,9 @@ const Toast = ({ open, message, onClose, severity = "success" }) => {
       anchorOrigin={anchorOrigin}
       TransitionComponent={Fade}
       action={<Action onClick={onClose} />}
+      sx={{
+        zIndex: 4000,
+      }}
     >
       <Alert severity={severity}>{message}</Alert>
     </Snackbar>

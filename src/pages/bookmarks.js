@@ -16,7 +16,7 @@ export const getServerSideProps = async (ctx) => ({
   props: { courses: await getAllCourses() },
 });
 
-/** @param {{user: object, courses: object[]}} props */
+/** @param {{user: object|null, courses: object[]}} props */
 export default function Bookmarks({ user, courses }) {
   const router = useRouter();
 
@@ -38,20 +38,12 @@ export default function Bookmarks({ user, courses }) {
         </Typography>
       ) : (
         <Grid container spacing={4}>
-          {bookmarks.map(
-            ({ _id, title, description, seriesPath, coursePath }) => (
-              <CourseDisplay
-                key={_id}
-                _id={_id}
-                title={title}
-                description={description}
-                src="/stratocaster-small.jpg"
-                alt="some alt text"
-                seriesPath={seriesPath}
-                coursePath={coursePath}
-              />
-            )
-          )}
+          {bookmarks.map((course) => (
+            <CourseDisplay
+              key={course._id}
+              course={{ ...course, src: "/stratocaster-small.jpg" }}
+            />
+          ))}
         </Grid>
       )}
     </PageWrapper>

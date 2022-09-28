@@ -9,7 +9,7 @@ import { LoginForm, SpacedTitle, Well, LoadMask } from "@/src/components";
 
 /**
  * @param {{
- *  user: object,
+ *  user: object|null,
  *  updateCtx: function
  * }} props
  */

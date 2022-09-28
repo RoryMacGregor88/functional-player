@@ -15,7 +15,7 @@ import {
 
 import { getStripe, http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 
-/** @param {{user: object}} props */
+/** @param {{user: object|null}} props */
 export default function Register({ user }) {
   const router = useRouter();
 

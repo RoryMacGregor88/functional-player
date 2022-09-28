@@ -19,6 +19,11 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
   const { updateCtx } = useContext(Context);
 
   const LINK_METADATA = {
+    home: {
+      Icon: ProfileIcon,
+      label: "Home",
+      href: !user ? "/" : "/dashboard",
+    },
     browse: {
       Icon: ProfileIcon,
       label: "Browse Series",
@@ -95,6 +100,7 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
         gap={5}
         sx={{ height: "100%" }}
       >
+        <SidebarItem {...LINK_METADATA.home} onClick={toggleDrawer} />
         <SidebarItem {...LINK_METADATA.browse} onClick={toggleDrawer} />
         {!!user ? (
           <>

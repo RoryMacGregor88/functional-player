@@ -36,7 +36,7 @@ const TabPanel = ({ name, value, index, children }) => (
 
 /**
  * @param {{
- *  user: object,
+ *  user: object|null,
  *  updateCtx: function
  * }} props
  */

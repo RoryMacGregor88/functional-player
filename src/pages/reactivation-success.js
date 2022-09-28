@@ -8,7 +8,7 @@ import { http } from "@/src/utils";
 
 /**
  * @param {{
- *  user: object,
+ *  user: object|null,
  *  updateCtx: function
  * }} props
  */

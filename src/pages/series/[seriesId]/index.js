@@ -23,21 +23,13 @@ export default function Series({ series }) {
   return (
     <PageWrapper>
       <SpacedTitle>{`${series.title} Series (level 2)`}</SpacedTitle>
-      <Grid container wrap="wrap">
-        {series?.courses?.map(
-          ({ _id, title, description, seriesPath, coursePath }) => (
-            <CourseDisplay
-              key={_id}
-              _id={_id}
-              title={title}
-              description={description}
-              src="/stratocaster-small.jpg"
-              alt={title}
-              seriesPath={seriesPath}
-              coursePath={coursePath}
-            />
-          )
-        )}
+      <Grid container wrap="nowrap" gap={1}>
+        {series?.courses?.map((course) => (
+          <CourseDisplay
+            key={course._id}
+            course={{ ...course, src: "/stratocaster-small.jpg" }}
+          />
+        ))}
       </Grid>
     </PageWrapper>
   );

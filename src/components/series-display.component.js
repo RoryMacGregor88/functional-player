@@ -1,11 +1,11 @@
 import NextImage from "next/image";
 
-import { Grid, Typography, Button, ListItem } from "@mui/material";
+import { Grid, Typography, Button } from "@mui/material";
 
 import { Link } from "@/src/components";
 
 const SeriesDisplay = ({ series }) => (
-  <Grid container direction="column" component={ListItem}>
+  <Grid item container direction="column">
     <Grid
       item
       sx={{

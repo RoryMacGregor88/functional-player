@@ -6,7 +6,6 @@ import { http } from "@/src/utils";
 import { getAllCourses, getCourseById } from "lib/course";
 
 // TODO: strip out styles from copied pages, redo
-// TODO: Also, implement continue watching and bookmarking, will be fun
 
 export const getStaticPaths = async () => {
   const courses = await getAllCourses();

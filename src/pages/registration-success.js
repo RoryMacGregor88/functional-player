@@ -10,7 +10,7 @@ import {
   Stepper,
 } from "@/src/components";
 
-/** @param {{user: object}} props */
+/** @param {{user: object|null}} props */
 export default function RegistrationSuccess({ user }) {
   const router = useRouter();
 

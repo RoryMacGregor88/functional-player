@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import NextImage from "next/image";
 import {
   Dialog,
@@ -18,7 +19,7 @@ import { updateBookmarks } from "@/src/utils";
 
 /**
  * @param {
- *  user: object,
+ *  user: object|null,
  *  selectedVideo: object,
  *  isBookmarked: boolean,
  *  onBookmarkClick: function,
@@ -95,12 +96,14 @@ const Overlay = ({
 /**
  * @param {
  *  open: boolean,
- *  user: object,
+ *  user: object|null,
  *  selectedVideo: object,
  *  onClose: function
  * } params
  */
 const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
+  const router = useRouter();
+
   const isMedium = useMediaQuery("(max-width:1200px)");
   const isSmall = useMediaQuery("(max-width:600px)");
 
@@ -109,15 +112,35 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
   }
 
   const deviceSize = isSmall ? "small" : isMedium ? "medium" : "large";
+  const isBookmarked = !!user?.bookmarks.includes(selectedVideo._id) ?? false;
 
-  const isBookmarked = user?.bookmarks.includes(selectedVideo._id) ?? false;
-
-  const onBookmarkClick = () => {
-    if (!user) {
-      //show dialog with prompt to sign up
-    }
-    updateBookmarks(_id, user, updateCtx);
+  const onActionClick = (path) => {
+    router.push(path);
+    onClose();
   };
+
+  const onBookmarkClick = () =>
+    !!user
+      ? updateBookmarks(_id, user, updateCtx)
+      : updateCtx({
+          dialogData: {
+            title: "Welcome to Functional Player",
+            message:
+              "You must have a user account to save courses to your list. Please either login or register with us using the buttons below.",
+            actions: [
+              {
+                label: "Login",
+                onClick: () => onActionClick("/login"),
+                closeOnClick: true,
+              },
+              {
+                label: "Register",
+                onClick: () => onActionClick("/register"),
+                closeOnClick: true,
+              },
+            ],
+          },
+        });
 
   return (
     <Dialog
