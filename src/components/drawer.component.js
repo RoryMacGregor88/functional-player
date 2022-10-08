@@ -87,7 +87,8 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
           display: "flex",
           alignItems: "flex-start",
           backgroundColor: "transparent",
-          backgroundImage: "none",
+          backgroundImage:
+            "linear-gradient(to right, rgb(8, 8, 8) 50%, rgba(8, 8, 8, 0) 100%)",
           boxShadow: "none",
         },
       }}

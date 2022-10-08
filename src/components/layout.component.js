@@ -29,6 +29,7 @@ const Layout = ({ user, children }) => {
           display: "flex",
           justifyContent: "center",
           minHeight: "85vh",
+          overflow: "hidden",
         }}
       >
         {children}

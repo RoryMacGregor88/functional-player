@@ -7,6 +7,7 @@ import Link from "./link.component";
 import HeaderImage from "./header-image.component";
 import SidebarItem from "./sidebar-item.component";
 import PageWrapper from "./page-wrapper.component";
+import Slider from "./slider.component";
 import SeriesDisplay from "./series-display.component";
 import CourseDisplay from "./course-display.component";
 import VideoDisplay from "./video-display.component";
@@ -37,6 +38,7 @@ export {
   HeaderImage,
   SidebarItem,
   PageWrapper,
+  Slider,
   SeriesDisplay,
   CourseDisplay,
   VideoDisplay,

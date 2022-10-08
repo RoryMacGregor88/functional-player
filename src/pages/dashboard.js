@@ -8,9 +8,9 @@ import { getAllSeries } from "lib/series";
 import {
   HeaderImage,
   PageWrapper,
-  SpacedTitle,
   CourseDisplay,
   LoadMask,
+  Slider,
 } from "@/src/components";
 
 // TODO: make real, not fake data, also all videos need alts and aria labels
@@ -43,7 +43,6 @@ const CategoryWrapper = ({ category, children }) => (
     gap={1}
     sx={{
       padding: "2rem 0",
-      overflowX: "scroll",
       maxWidth: "90vw",
     }}
   >
@@ -67,43 +66,6 @@ const ComingSoon = ({ course }) => (
     <CourseDisplay course={{ ...course, src: "/stratocaster-small.jpg" }} />
   </CategoryWrapper>
 );
-
-/** @param {{ course: object }} props */
-const LatestCourses = ({ courses }) => (
-  <CategoryWrapper category="Latest Courses">
-    {courses.map((course) => (
-      <CourseDisplay
-        key={course._id}
-        course={{ ...course, src: "/stratocaster-small.jpg" }}
-      />
-    ))}
-  </CategoryWrapper>
-);
-
-/** @param {{ courses: object[] }} props */
-const Bookmarks = ({ courses }) => (
-  <CategoryWrapper category="Your List">
-    {courses.map((course) => (
-      <CourseDisplay
-        key={course._id}
-        course={{ ...course, src: "/stratocaster-small.jpg" }}
-      />
-    ))}
-  </CategoryWrapper>
-);
-
-/** @param {{ series: object[] }} props */
-const Series = ({ series }) =>
-  series.map(({ _id, title, courses }) => (
-    <CategoryWrapper category={`${title} series`} key={_id}>
-      {courses.map((course) => (
-        <CourseDisplay
-          key={course._id}
-          course={{ ...course, src: "/stratocaster-small.jpg" }}
-        />
-      ))}
-    </CategoryWrapper>
-  ));
 
 /**
  * @param {{
@@ -140,12 +102,15 @@ export default function Dashboard({ user, courses, series }) {
         title="Stratocaster Image"
       />
       <PageWrapper>
-        <SpacedTitle>Welcome back, {user.username}</SpacedTitle>
-        {!!lastWatched ? <ContinueWatching course={lastWatched} /> : null}
-        <ComingSoon course={comingSoonCourse} />
-        <LatestCourses courses={latestCourses} />
-        {!!bookmarks.length ? <Bookmarks courses={bookmarks} /> : null}
-        <Series series={series} />
+        {/* {!!lastWatched ? <ContinueWatching course={lastWatched} /> : null} */}
+        {!!bookmarks.length ? (
+          <Slider title="Your List" courses={bookmarks} />
+        ) : null}
+        <Slider title="Latest Releases" courses={latestCourses} />
+        {/* <ComingSoon course={comingSoonCourse} /> */}
+        {series.map(({ _id, title, courses }) => (
+          <Slider key={_id} title={`${title} Series`} courses={courses} />
+        ))}
       </PageWrapper>
     </Grid>
   );
