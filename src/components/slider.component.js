@@ -1,5 +1,5 @@
 import NextImage from "next/image";
-import { useState, useRef, useContext } from "react";
+import { useState, useContext } from "react";
 import { Grid, Box, Typography } from "@mui/material";
 import {
   ChevronLeftIcon,
@@ -8,8 +8,9 @@ import {
 } from "@/src/components";
 import { Context } from "@/src/utils";
 
-const ITEM_WIDTH = 30;
+const ITEM_WIDTH_REM = 52.5;
 
+/** @param {{ course: object }} props */
 const Overlay = ({ course }) => {
   const { title, description } = course;
   return (
@@ -17,19 +18,28 @@ const Overlay = ({ course }) => {
       container
       direction="column"
       justifyContent="center"
+      alignItems="center"
       style={{
         position: "absolute",
-        padding: "1rem",
-        zIndex: "100",
+        zIndex: "1",
+        height: "100%",
+        width: "100%",
       }}
     >
-      <Typography variant="h5">{title}</Typography>
-      <Typography variant="body1">{description}</Typography>
+      <Typography variant="h3">{title}</Typography>
+      <Typography variant="h5">{description}</Typography>
     </Grid>
   );
 };
 
-const ChevronWrapper = ({ children, onClick, orientation = "left" }) => (
+/**
+ * @param {{
+ *  onClick: function,
+ *  orientation: string,
+ *  children: React.ReactChildren
+ * }} props
+ */
+const ChevronWrapper = ({ onClick, orientation = "left", children }) => (
   <Grid
     item
     container
@@ -40,8 +50,8 @@ const ChevronWrapper = ({ children, onClick, orientation = "left" }) => (
       position: "absolute",
       top: 0,
       [orientation]: 0,
-      zIndex: "100",
-      width: "10rem",
+      zIndex: "2",
+      width: "5rem",
       height: "100%",
       "&:hover": {
         backgroundColor: "rgb(8, 8, 8, 0.5)",
@@ -52,10 +62,15 @@ const ChevronWrapper = ({ children, onClick, orientation = "left" }) => (
   </Grid>
 );
 
+/**
+ * @param {{
+ *  title: string,
+ *  courses: object[]
+ * }} props
+ */
 const Slider = ({ title, courses }) => {
   const { updateCtx } = useContext(Context);
   const [position, setPosition] = useState(0);
-  const containerRef = useRef();
 
   if (!courses?.length) {
     return null;
@@ -74,69 +89,74 @@ const Slider = ({ title, courses }) => {
   };
 
   return (
-    <Grid
-      container
-      ref={containerRef}
-      sx={{
-        position: "relative",
-        overflow: "hidden",
-        width: "100vw",
-        margin: "2rem 0",
-      }}
-    >
-      {courses.length > 1 ? (
-        <>
-          <ChevronWrapper onClick={() => handleChevronClick("left")}>
-            <ChevronLeftIcon sx={{ width: "5rem", height: "5rem" }} />
-          </ChevronWrapper>
-          <ChevronWrapper
-            onClick={() => handleChevronClick("right")}
-            orientation="right"
-          >
-            <ChevronRightIcon sx={{ width: "5rem", height: "5rem" }} />
-          </ChevronWrapper>
-        </>
-      ) : null}
-      <Typography variant="h4">{title}</Typography>
+    <>
+      <Typography variant="h4" sx={{ paddingLeft: "0.5rem" }}>
+        {title}
+      </Typography>
       <Grid
-        item
         container
-        wrap="nowrap"
-        gap={2}
         sx={{
-          transform:
-            position === 0
-              ? "none"
-              : `translateX(-${(ITEM_WIDTH + 1) * position}rem)`,
-          transitionDuration: "1s",
+          position: "relative",
+          overflow: "hidden",
+          width: "calc(100vw - 4rem)",
+          marginBottom: "2rem",
         }}
       >
-        {courses.map((course) => (
-          <Box
-            key={course._id}
-            onClick={() => handleClick(course)}
-            sx={{
-              position: "relative",
-              minWidth: `${ITEM_WIDTH}rem`,
-              height: "20rem",
-              border: "4px solid transparent",
-              cursor: "pointer",
-              "&:hover": {
-                border: "4px solid #fff",
-              },
-            }}
-          >
-            <Overlay course={course} />
-            <NextImage
-              src="/stratocaster-small.jpg"
-              alt="stratocaster"
-              layout="fill"
-              objectFit="cover"
-            />
-          </Box>
-        ))}
+        {courses.length > 1 ? (
+          <>
+            <ChevronWrapper onClick={() => handleChevronClick("left")}>
+              <ChevronLeftIcon sx={{ width: "5rem", height: "5rem" }} />
+            </ChevronWrapper>
+            <ChevronWrapper
+              onClick={() => handleChevronClick("right")}
+              orientation="right"
+            >
+              <ChevronRightIcon sx={{ width: "5rem", height: "5rem" }} />
+            </ChevronWrapper>
+          </>
+        ) : null}
+        <Grid
+          item
+          container
+          wrap="nowrap"
+          gap={2}
+          sx={{
+            transform:
+              position === 0
+                ? "none"
+                : `translateX(-${(ITEM_WIDTH_REM + 1) * position}rem)`,
+            transitionDuration: "0.25s",
+          }}
+        >
+          {courses.map((course) => (
+            <Box
+              key={course._id}
+              onClick={() => handleClick(course)}
+              sx={{
+                position: "relative",
+                minWidth: `${ITEM_WIDTH_REM}rem`,
+                height: "35rem",
+                border: "8px solid transparent",
+                borderRadius: "0.5rem",
+                overflow: "hidden",
+                cursor: "pointer",
+                "&:hover": {
+                  border: "8px solid #fff",
+                },
+              }}
+            >
+              <Overlay course={course} />
+              <NextImage
+                src="/stratocaster-medium.jpg"
+                alt="stratocaster"
+                layout="fill"
+                objectFit="cover"
+              />
+            </Box>
+          ))}
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 

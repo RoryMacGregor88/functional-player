@@ -83,12 +83,11 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
       sx={{
         ".MuiDrawer-paper": {
           padding: "1rem",
-          minWidth: "15%",
+          minWidth: "12.5%",
           display: "flex",
           alignItems: "flex-start",
-          backgroundColor: "transparent",
-          backgroundImage:
-            "linear-gradient(to right, rgb(8, 8, 8) 50%, rgba(8, 8, 8, 0) 100%)",
+          backgroundColor: "background.paper",
+          backgroundImage: "none",
           boxShadow: "none",
         },
       }}

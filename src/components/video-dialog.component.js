@@ -19,7 +19,6 @@ import { updateBookmarks } from "@/src/utils";
 
 /**
  * @param {
- *  user: object|null,
  *  selectedVideo: object,
  *  isBookmarked: boolean,
  *  onBookmarkClick: function,
@@ -27,26 +26,21 @@ import { updateBookmarks } from "@/src/utils";
  *  deviceSize: string
  * } params
  */
-const Overlay = ({
-  user,
-  selectedVideo,
-  isBookmarked,
-  onBookmarkClick,
-  onClose,
-  deviceSize,
-}) => {
+const Overlay = ({ selectedVideo, isBookmarked, onBookmarkClick, onClose }) => {
   const { videoId, title, description } = selectedVideo;
-  const isLarge = deviceSize === "large";
   return (
     <Grid
       item
       container
-      gap={4}
-      direction={isLarge ? "row" : "column"}
-      alignItems={"stretch"}
       wrap="nowrap"
+      gap={4}
+      direction="column"
+      justifyContent="center"
+      alignItems="flex-start"
       sx={{
-        maxWidth: isLarge ? "80rem" : "100%",
+        position: "relative",
+        width: "50%",
+        height: "100%",
       }}
     >
       <Grid
@@ -54,8 +48,8 @@ const Overlay = ({
         container
         direction="column"
         justifyContent="space-between"
-        alignItems={isLarge ? "flex-start" : "center"}
-        sx={{ width: isLarge ? "50%" : "100%" }}
+        alignItems="flex-start"
+        sx={{ width: "100%" }}
       >
         <Grid item container justifyContent="space-between" alignItems="center">
           <IconButton
@@ -69,25 +63,23 @@ const Overlay = ({
             onBookmarkClick={onBookmarkClick}
           />
         </Grid>
-
         <>
           <Typography variant="h2">{title}</Typography>
           <Typography variant="body1">{description}</Typography>
         </>
-
-        <Grid item container alignItems="center" gap="1rem" wrap="nowrap">
-          <Button>More</Button>
-          <Button>Feedback</Button>
-        </Grid>
       </Grid>
       <Grid
         item
         container
         direction="column"
         alignItems="center"
-        sx={{ width: isLarge ? "50%" : "100%" }}
+        sx={{ width: "100%", height: "50%", position: "relative" }}
       >
         <VideoPlayer videoId={videoId} />
+      </Grid>
+      <Grid item container alignItems="center" gap="1rem" wrap="nowrap">
+        <Button>More</Button>
+        <Button>Feedback</Button>
       </Grid>
     </Grid>
   );
@@ -112,7 +104,7 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
   }
 
   const deviceSize = isSmall ? "small" : isMedium ? "medium" : "large";
-  const isBookmarked = !!user?.bookmarks.includes(selectedVideo._id) ?? false;
+  const isBookmarked = !!user?.bookmarks.includes(selectedVideo._id);
 
   const onActionClick = (path) => {
     router.push(path);
@@ -121,7 +113,7 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
 
   const onBookmarkClick = () =>
     !!user
-      ? updateBookmarks(_id, user, updateCtx)
+      ? updateBookmarks(selectedVideo._id, user, updateCtx)
       : updateCtx({
           dialogData: {
             title: "Welcome to Functional Player",
@@ -179,12 +171,10 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
           }}
         >
           <Overlay
-            user={user}
             selectedVideo={selectedVideo}
             isBookmarked={isBookmarked}
             onBookmarkClick={onBookmarkClick}
             onClose={onClose}
-            deviceSize={deviceSize}
           />
         </Grid>
       </Grid>

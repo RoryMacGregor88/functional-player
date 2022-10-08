@@ -1,15 +1,24 @@
-const VideoPlayer = ({ videoId, alt, height = "360", width = "640" }) => (
+/**
+ * @param {{
+ *  videoId: string,
+ *  alt: string
+ * }} props
+ */
+const VideoPlayer = ({ videoId, alt }) => (
   <iframe
     src={`https://player.vimeo.com/video/${videoId}`}
     alt={alt}
-    width={width}
-    height={height}
     frameBorder="0"
     webkitallowfullscreen="true"
     mozallowfullscreen="true"
     allowFullScreen
     style={{
-      display: "block",
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      border: 0,
     }}
   />
 );

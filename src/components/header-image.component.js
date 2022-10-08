@@ -18,6 +18,7 @@ const Device = ({ src, alt, title, imageProps = {}, deviceSize }) => (
       position: "relative",
       height: "85vh",
       width: "100%",
+      marginBottom: "2rem",
     }}
   >
     <Grid
@@ -91,6 +92,7 @@ const Desktop = ({ src, alt, title, imageProps = {} }) => (
       position: "relative",
       height: "85vh",
       width: "100%",
+      marginBottom: "2rem",
     }}
   >
     <Grid

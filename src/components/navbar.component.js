@@ -15,7 +15,7 @@ const Navbar = ({ user, toggleDrawer }) => {
       sx={{
         zIndex: 2000,
         border: "none",
-        backgroundColor: "transparent",
+        backgroundColor: "background.default",
         boxShadow: "none",
         backgroundImage: "none",
       }}
