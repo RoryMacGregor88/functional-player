@@ -23,7 +23,7 @@ const DeleteAccountForm = () => {
     const {
       error,
       ok,
-      user: updatedUser,
+      user: resUser,
     } = await http("/auth/delete", {
       email,
       customerId,
@@ -37,7 +37,7 @@ const DeleteAccountForm = () => {
     }
 
     if (ok) {
-      updateCtx({ user: updatedUser });
+      updateCtx({ user: resUser });
       setWellData({
         severity: "success",
         message: "Your account and subscription have been permanently deleted.",

@@ -61,16 +61,20 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
   };
 
   const logout = async () => {
-    const { error, ok, user } = await http("/auth/logout");
+    const {
+      error,
+      ok,
+      user: resUser,
+    } = await http("/auth/logout", { email: user.email });
     if (error) {
       updateCtx({
         toastData: {
-          message: DEFAULT_ERROR_MESSAGE,
+          message: error,
           severity: "error",
         },
       });
     } else if (ok) {
-      updateCtx({ user });
+      updateCtx({ user: resUser });
       router.push("/login");
     }
   };

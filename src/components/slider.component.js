@@ -46,6 +46,7 @@ const ChevronWrapper = ({ onClick, orientation = "left", children }) => (
     direction="column"
     justifyContent="center"
     alignItems="center"
+    onClick={onClick}
     sx={{
       position: "absolute",
       top: 0,
@@ -53,12 +54,13 @@ const ChevronWrapper = ({ onClick, orientation = "left", children }) => (
       zIndex: "2",
       width: "5rem",
       height: "100%",
+      cursor: "pointer",
       "&:hover": {
         backgroundColor: "rgb(8, 8, 8, 0.5)",
       },
     }}
   >
-    <IconButton onClick={onClick}>{children}</IconButton>
+    <IconButton>{children}</IconButton>
   </Grid>
 );
 

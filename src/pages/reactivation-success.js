@@ -23,19 +23,19 @@ export default function ReactivationSuccess({ user, updateCtx }) {
         const {
           error,
           ok,
-          user: updatedUser,
+          user: resUser,
         } = await http("/auth/update-subscription-status", {
           email,
           subscriptionStatus,
           subscriptionId,
         });
         if (!!error) {
-          // TODO: updatedUser returned here instead of hardcoded null?
+          // TODO: resUser returned here instead of hardcoded null?
           await http("/auth/logout");
           updateCtx({ user: null });
         } else if (ok) {
           setIsUpdated(true);
-          updateCtx({ user: updatedUser });
+          updateCtx({ user: resUser });
         }
       }
     })();
