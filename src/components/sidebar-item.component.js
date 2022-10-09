@@ -1,6 +1,6 @@
 import { IconButton, Link } from "@/src/components";
 
-const SidebarItem = ({ href = "", label, Icon, onClick }) => (
+const SidebarItem = ({ href = "", label, Icon, onClick, isSelected }) => (
   <Link href={href} passHref>
     <IconButton
       onClick={onClick}
@@ -8,6 +8,7 @@ const SidebarItem = ({ href = "", label, Icon, onClick }) => (
         display: "flex",
         justifyContent: "flex-start",
         alignItems: "center",
+        color: isSelected ? "primary.main" : "common.white",
       }}
     >
       <Icon sx={{ height: "2rem", width: "2rem", marginRight: "1rem" }} />

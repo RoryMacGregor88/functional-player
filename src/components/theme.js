@@ -2,16 +2,9 @@ import { createTheme } from "@mui/material/styles";
 
 // TODO: black colors are mixed up in header, main, footer
 
-const boneWhite = "#faf9f7",
-  // primary
-  lightBlack = "#121212",
-  // secondary
-  darkBlack = "#080808",
-  // hovers
-  lightGrey = "#757575",
-  //dividers
-  darkGrey = "#242424",
-  amazonOrange = "#ff9900";
+import { THEME_COLORS } from "@/src/utils";
+
+const { white, black, yellow, green, red } = THEME_COLORS;
 
 const theme = {
   shape: {
@@ -21,17 +14,28 @@ const theme = {
     mode: "dark",
     // This is maybe not necessary when using all Mui components
     text: {
-      primary: boneWhite,
+      primary: white,
     },
     background: {
-      paper: darkBlack,
-      default: lightBlack,
+      paper: black,
+      // change this to something better
+      default: black,
     },
     primary: {
-      main: amazonOrange,
+      main: yellow,
     },
     secondary: {
-      main: lightGrey,
+      main: green,
+    },
+    error: {
+      main: red,
+    },
+    success: {
+      main: green,
+    },
+    common: {
+      black: "#000",
+      white: "#fff",
     },
   },
 };

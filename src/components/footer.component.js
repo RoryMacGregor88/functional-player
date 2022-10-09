@@ -31,8 +31,8 @@ const Footer = () => {
       component="footer"
       sx={{
         padding: "1rem",
-        backgroundColor: "palette.background.default",
-        borderTopColor: "palette.primary.main",
+        backgroundColor: "background.default",
+        borderTopColor: "common.white",
         borderTopStyle: "solid",
         borderTopWidth: "1px",
       }}
@@ -45,24 +45,30 @@ const Footer = () => {
         sx={{ marginBottom: "1rem" }}
       >
         {icons.map(({ Icon, url, label }) => (
-          <Link
+          <IconButton
             key={label}
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
+            disableRipple
             sx={{
-              display: "flex",
-              alignItems: "center",
-              minWidth: "10rem",
-              textDecoration: "none",
+              color: "common.white",
               opacity: "0.75",
               "&:hover": {
-                color: "text.primary",
+                color: "primary.main",
                 opacity: "1",
               },
             }}
           >
-            <IconButton color="primary" disableRipple>
+            <Link
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                minWidth: "10rem",
+                textDecoration: "none",
+                color: "inherit",
+              }}
+            >
               <Icon
                 sx={{
                   height: "2.5rem",
@@ -70,9 +76,9 @@ const Footer = () => {
                   marginRight: "0.5rem",
                 }}
               />
-            </IconButton>
-            <Typography variant="h6">{label}</Typography>
-          </Link>
+              <Typography variant="h6">{label}</Typography>
+            </Link>
+          </IconButton>
         ))}
       </Grid>
       <Typography

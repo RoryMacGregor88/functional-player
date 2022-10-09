@@ -23,31 +23,37 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
       Icon: ProfileIcon,
       label: "Home",
       href: !user ? "/" : "/dashboard",
+      isSelected: router.pathname === "/dashboard",
     },
     browse: {
       Icon: ProfileIcon,
       label: "Browse Series",
       href: "/series",
+      isSelected: router.pathname === "/series",
     },
     login: {
       Icon: ProfileIcon,
       label: "Login",
       href: "/login",
+      isSelected: router.pathname === "/login",
     },
     register: {
       Icon: ProfileIcon,
       label: "Register",
       href: "/register",
+      isSelected: router.pathname === "/register",
     },
     account: {
       Icon: ProfileIcon,
       label: "My Account",
       href: "/account",
+      isSelected: router.pathname === "/account",
     },
     bookmarks: {
       Icon: BookmarksIcon,
-      label: "Bookmarks",
+      label: "My List",
       href: "/bookmarks",
+      isSelected: router.pathname === "/bookmarks",
     },
     logout: {
       Icon: ProfileIcon,

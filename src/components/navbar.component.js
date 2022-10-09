@@ -1,5 +1,5 @@
-import { AppBar, Toolbar, Typography } from "@mui/material";
-
+import { useRouter } from "next/router";
+import { AppBar, Toolbar, Typography, Grid } from "@mui/material";
 import { MenuIcon, IconButton, Link } from "@/src/components";
 
 /**
@@ -9,13 +9,39 @@ import { MenuIcon, IconButton, Link } from "@/src/components";
  * }} props
  */
 const Navbar = ({ user, toggleDrawer }) => {
+  const router = useRouter();
+  const LINK_METADATA = [
+    {
+      label: "Home",
+      href: !user ? "/" : "/dashboard",
+      isSelected: router.pathname === "/dashboard",
+    },
+    {
+      label: "Browse Series",
+      href: "/series",
+      isSelected: router.pathname === "/series",
+    },
+    {
+      label: "My Account",
+      href: "/account",
+      isSelected: router.pathname === "/account",
+    },
+    {
+      label: "My List",
+      href: "/bookmarks",
+      isSelected: router.pathname === "/bookmarks",
+    },
+  ];
+
+  // TODO: clicking logo does not close drawer
+
   return (
     <AppBar
       position="fixed"
       sx={{
         zIndex: 2000,
         border: "none",
-        backgroundColor: "background.default",
+        backgroundColor: "background.paper",
         boxShadow: "none",
         backgroundImage: "none",
       }}
@@ -46,6 +72,29 @@ const Navbar = ({ user, toggleDrawer }) => {
             Functional Player
           </Typography>
         </Link>
+        <Grid
+          container
+          alignItems="center"
+          gap={2}
+          sx={{ marginLeft: "auto", width: "fit-content" }}
+        >
+          {LINK_METADATA.map(({ label, href, isSelected }) => (
+            <Link key={label} href={href} passHref>
+              <span
+                style={{
+                  cursor: "pointer",
+                  borderBottom: isSelected
+                    ? "2px solid orange"
+                    : "2px solid transparent",
+                  width: "fit-content",
+                  marginLeft: "0.5rem",
+                }}
+              >
+                {label}
+              </span>
+            </Link>
+          ))}
+        </Grid>
       </Toolbar>
     </AppBar>
   );

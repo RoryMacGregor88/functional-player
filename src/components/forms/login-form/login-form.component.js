@@ -41,7 +41,7 @@ const LoginForm = ({ onSubmit, isLoading }) => {
         Submit
       </Button>
       <Grid container alignItems="center" justifyContent="center">
-        {/* // TODO: fix this (span should be ling, theme styles, hover styles) */}
+        {/* // TODO: fix this (span should be link, theme styles, hover styles) */}
         <Typography variant="body1">Forgot password?</Typography>
         <Link href={"/reset-password"} passHref>
           <span

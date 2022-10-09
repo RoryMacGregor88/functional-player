@@ -12,7 +12,6 @@ import theme from "@/src/components/theme";
 
 function App({ Component, pageProps }) {
   const [ctx, setCtx] = useState({
-    user: null,
     selectedVideo: null,
     dialogData: null,
     toastData: null,
@@ -24,17 +23,15 @@ function App({ Component, pageProps }) {
   const updateCtx = (newData) => setCtx((prev) => ({ ...prev, ...newData }));
 
   // token is checked upon initial app request (not page navigations)
-  const authenticateToken = async () => {
-    try {
-      const { user } = await http("/auth/authenticate-token", null, "GET");
-      updateCtx({ user });
-    } catch (error) {
-      updateCtx({ user: null });
-    }
-  };
-
   useEffect(() => {
-    authenticateToken();
+    (async () => {
+      try {
+        const { user } = await http("/auth/authenticate-token", null, "GET");
+        updateCtx({ user });
+      } catch (error) {
+        updateCtx({ user: null });
+      }
+    })();
   }, []);
 
   if (!user && user !== null) {
