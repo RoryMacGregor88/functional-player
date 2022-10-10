@@ -16,7 +16,7 @@ const Device = ({ src, alt, title, imageProps = {}, deviceSize }) => (
     alignItems="flex-start"
     sx={{
       position: "relative",
-      height: "85vh",
+      height: "75vh",
       width: "100%",
       marginBottom: "2rem",
     }}
@@ -59,7 +59,7 @@ const Device = ({ src, alt, title, imageProps = {}, deviceSize }) => (
     <Grid
       item
       sx={{
-        height: "76.5vh",
+        height: "75vh",
         width: "100vw",
         position: "relative",
       }}
@@ -90,7 +90,7 @@ const Desktop = ({ src, alt, title, imageProps = {} }) => (
     justifyContent="flex-end"
     sx={{
       position: "relative",
-      height: "85vh",
+      height: "75vh",
       width: "100%",
       marginBottom: "2rem",
     }}
@@ -104,7 +104,7 @@ const Desktop = ({ src, alt, title, imageProps = {} }) => (
         position: "absolute",
         top: 0,
         left: 0,
-        height: "85vh",
+        height: "75vh",
         width: "50vw",
         zIndex: 1000,
         backgroundImage:
@@ -131,7 +131,8 @@ const Desktop = ({ src, alt, title, imageProps = {} }) => (
     <Grid
       item
       sx={{
-        width: "90vw",
+        width: "75vw",
+        height: "75vh",
         position: "relative",
       }}
     >

@@ -51,7 +51,7 @@ const Navbar = ({ user, toggleDrawer }) => {
         sx={{
           display: "flex",
           alignItems: "center",
-          padding: "1rem",
+          padding: "0.5rem",
           minHeight: "fit-content !important",
         }}
       >
@@ -64,11 +64,11 @@ const Navbar = ({ user, toggleDrawer }) => {
           }}
         >
           <MenuIcon
-            sx={{ height: "2.5rem", width: "2.5rem", marginRight: "1rem" }}
+            sx={{ height: "2rem", width: "2rem", marginRight: "1rem" }}
           />
         </IconButton>
         <Link href={!!user ? "/dashboard" : "/"} passHref>
-          <Typography variant="h4" sx={{ cursor: "pointer" }}>
+          <Typography variant="h5" sx={{ cursor: "pointer" }}>
             Functional Player
           </Typography>
         </Link>

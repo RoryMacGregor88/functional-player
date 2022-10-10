@@ -8,7 +8,8 @@ import {
 } from "@/src/components";
 import { Context } from "@/src/utils";
 
-const ITEM_WIDTH_REM = 52.5;
+const ITEM_WIDTH_REM = 37.5;
+const ITEM_HEIGHT_REM = 25;
 
 /** @param {{ course: object }} props */
 const Overlay = ({ course }) => {
@@ -107,13 +108,28 @@ const Slider = ({ title, courses }) => {
         {courses.length > 1 ? (
           <>
             <ChevronWrapper onClick={() => handleChevronClick("left")}>
-              <ChevronLeftIcon sx={{ width: "5rem", height: "5rem" }} />
+              <ChevronLeftIcon
+                sx={{
+                  width: "5rem",
+                  height: "5rem",
+                  color: "common.white",
+                  visibility: position === 0 ? "hidden" : "normal",
+                }}
+              />
             </ChevronWrapper>
             <ChevronWrapper
               onClick={() => handleChevronClick("right")}
               orientation="right"
             >
-              <ChevronRightIcon sx={{ width: "5rem", height: "5rem" }} />
+              <ChevronRightIcon
+                sx={{
+                  width: "5rem",
+                  height: "5rem",
+                  color: "common.white",
+                  visibility:
+                    position === courses.length - 1 ? "hidden" : "normal",
+                }}
+              />
             </ChevronWrapper>
           </>
         ) : null}
@@ -137,7 +153,7 @@ const Slider = ({ title, courses }) => {
               sx={{
                 position: "relative",
                 minWidth: `${ITEM_WIDTH_REM}rem`,
-                height: "35rem",
+                height: `${ITEM_HEIGHT_REM}rem`,
                 border: "8px solid transparent",
                 borderRadius: "0.5rem",
                 overflow: "hidden",

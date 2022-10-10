@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { TextField as MuiTextField, GlobalStyles } from "@mui/material";
 
-// TODO: user agent makes background white
+// TODO: user agent still makes background white
 
 const globalStyles = (
   <GlobalStyles

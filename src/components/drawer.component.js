@@ -18,54 +18,6 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
   const router = useRouter();
   const { updateCtx } = useContext(Context);
 
-  const LINK_METADATA = {
-    home: {
-      Icon: ProfileIcon,
-      label: "Home",
-      href: !user ? "/" : "/dashboard",
-      isSelected: router.pathname === "/dashboard",
-    },
-    browse: {
-      Icon: ProfileIcon,
-      label: "Browse Series",
-      href: "/series",
-      isSelected: router.pathname === "/series",
-    },
-    login: {
-      Icon: ProfileIcon,
-      label: "Login",
-      href: "/login",
-      isSelected: router.pathname === "/login",
-    },
-    register: {
-      Icon: ProfileIcon,
-      label: "Register",
-      href: "/register",
-      isSelected: router.pathname === "/register",
-    },
-    account: {
-      Icon: ProfileIcon,
-      label: "My Account",
-      href: "/account",
-      isSelected: router.pathname === "/account",
-    },
-    bookmarks: {
-      Icon: BookmarksIcon,
-      label: "My List",
-      href: "/bookmarks",
-      isSelected: router.pathname === "/bookmarks",
-    },
-    logout: {
-      Icon: ProfileIcon,
-      label: "Log Out",
-    },
-    faq: {
-      Icon: ProfileIcon,
-      label: "FAQ",
-      href: "/faq",
-    },
-  };
-
   const logout = async () => {
     const {
       error,
@@ -93,7 +45,7 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
       sx={{
         ".MuiDrawer-paper": {
           padding: "1rem",
-          minWidth: "12.5%",
+          minWidth: "15rem",
           display: "flex",
           alignItems: "flex-start",
           backgroundColor: "background.paper",
@@ -107,17 +59,42 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
         direction="column"
         justifyContent="center"
         alignItems="flex-start"
-        gap={5}
+        gap={4}
         sx={{ height: "100%" }}
       >
-        <SidebarItem {...LINK_METADATA.home} onClick={toggleDrawer} />
-        <SidebarItem {...LINK_METADATA.browse} onClick={toggleDrawer} />
+        <SidebarItem
+          Icon={ProfileIcon}
+          label="Home"
+          href={!user ? "/" : "/dashboard"}
+          isSelected={router.pathname === "/dashboard"}
+          onClick={toggleDrawer}
+        />
+        <SidebarItem
+          Icon={ProfileIcon}
+          label="Browse series"
+          href="/series"
+          isSelected={router.pathname === "/series"}
+          onClick={toggleDrawer}
+        />
         {!!user ? (
           <>
-            <SidebarItem {...LINK_METADATA.bookmarks} onClick={toggleDrawer} />
-            <SidebarItem {...LINK_METADATA.account} onClick={toggleDrawer} />
             <SidebarItem
-              {...LINK_METADATA.logout}
+              Icon={ProfileIcon}
+              label="My List"
+              href="/series"
+              isSelected={router.pathname === "/bookmarks"}
+              onClick={toggleDrawer}
+            />
+            <SidebarItem
+              Icon={ProfileIcon}
+              label="My Account"
+              href="/account"
+              isSelected={router.pathname === "/account"}
+              onClick={toggleDrawer}
+            />
+            <SidebarItem
+              Icon={ProfileIcon}
+              label="Logout"
               onClick={() => {
                 logout();
                 toggleDrawer();
@@ -126,11 +103,29 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
           </>
         ) : (
           <>
-            <SidebarItem {...LINK_METADATA.login} onClick={toggleDrawer} />
-            <SidebarItem {...LINK_METADATA.register} onClick={toggleDrawer} />
+            <SidebarItem
+              Icon={ProfileIcon}
+              label="Login"
+              href="/login"
+              isSelected={router.pathname === "/login"}
+              onClick={toggleDrawer}
+            />
+            <SidebarItem
+              Icon={ProfileIcon}
+              label="Register"
+              href="/register"
+              isSelected={router.pathname === "/register"}
+              onClick={toggleDrawer}
+            />
           </>
         )}
-        <SidebarItem {...LINK_METADATA.faq} onClick={toggleDrawer} />
+        <SidebarItem
+          Icon={ProfileIcon}
+          label="FAQ"
+          href="/faq"
+          isSelected={router.pathname === "/faq"}
+          onClick={toggleDrawer}
+        />
       </Grid>
     </MuiDrawer>
   );

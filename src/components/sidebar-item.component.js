@@ -9,9 +9,10 @@ const SidebarItem = ({ href = "", label, Icon, onClick, isSelected }) => (
         justifyContent: "flex-start",
         alignItems: "center",
         color: isSelected ? "primary.main" : "common.white",
+        fontSize: "1.25rem",
       }}
     >
-      <Icon sx={{ height: "2rem", width: "2rem", marginRight: "1rem" }} />
+      <Icon sx={{ height: "1.5rem", width: "1.5rem", marginRight: "1rem" }} />
       {label}
     </IconButton>
   </Link>
