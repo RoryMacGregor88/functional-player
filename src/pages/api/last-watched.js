@@ -20,10 +20,12 @@ async function lastWatched(req, res) {
         .collection(USERS)
         .findOneAndUpdate({ email }, { $set: { lastWatched: _id } });
 
-      req.session.user = { ...req.session.user, lastWatched: _id };
+      const resUser = { ...req.session.user, lastWatched: _id };
+
+      req.session.user = resUser;
       await req.session.save();
 
-      return res.status(200).json({ ok: true });
+      return res.status(200).json({ ok: true, resUser });
     } catch (error) {
       console.log("ERROR in lastWatched: ", error);
       return res.status(500).send({ error });

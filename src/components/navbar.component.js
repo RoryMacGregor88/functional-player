@@ -28,8 +28,8 @@ const Navbar = ({ user, toggleDrawer }) => {
     },
     {
       label: "My List",
-      href: "/bookmarks",
-      isSelected: router.pathname === "/bookmarks",
+      href: "/list",
+      isSelected: router.pathname === "/list",
     },
   ];
 

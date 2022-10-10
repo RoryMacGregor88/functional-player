@@ -17,7 +17,7 @@ export const getServerSideProps = async (ctx) => ({
 });
 
 /** @param {{user: object|null, courses: object[]}} props */
-export default function Bookmarks({ user, courses }) {
+export default function List({ user, courses }) {
   const router = useRouter();
 
   if (!user) {

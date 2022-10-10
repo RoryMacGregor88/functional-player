@@ -8,7 +8,7 @@ import {
 } from "@/src/components";
 import { Context } from "@/src/utils";
 
-const ITEM_WIDTH_REM = 37.5;
+const ITEM_WIDTH_REM = 40;
 const ITEM_HEIGHT_REM = 25;
 
 /** @param {{ course: object }} props */

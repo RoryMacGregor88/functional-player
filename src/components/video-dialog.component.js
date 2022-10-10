@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import NextImage from "next/image";
 import {
@@ -15,7 +16,7 @@ import {
   BookmarkIconButton,
 } from "@/src/components";
 
-import { updateBookmarks } from "@/src/utils";
+import { updateBookmarks, http } from "@/src/utils";
 
 /**
  * @param {
@@ -26,8 +27,14 @@ import { updateBookmarks } from "@/src/utils";
  *  deviceSize: string
  * } params
  */
-const Overlay = ({ selectedVideo, isBookmarked, onBookmarkClick, onClose }) => {
-  const { videoId, title, description } = selectedVideo;
+const Overlay = ({
+  videoId,
+  selectedVideo,
+  isBookmarked,
+  onBookmarkClick,
+  onClose,
+}) => {
+  const { title, description } = selectedVideo;
   return (
     <Grid
       item
@@ -96,6 +103,25 @@ const Overlay = ({ selectedVideo, isBookmarked, onBookmarkClick, onClose }) => {
 const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
   const router = useRouter();
 
+  // TODO: useEffect not running
+  useEffect(() => {
+    if (!!user) {
+      (async () => {
+        const { ok, resUser } = await http("/last-watched", {
+          email: user.email,
+          _id: selectedVideo?._id,
+        });
+
+        if (ok) {
+          updateCtx({ user: resUser });
+        }
+      })();
+    }
+  }, []);
+
+  // TODO: add trailerId to all videos in db
+  const trailerId = videoId;
+
   const isMedium = useMediaQuery("(max-width:1200px)");
   const isSmall = useMediaQuery("(max-width:600px)");
 
@@ -103,8 +129,10 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
     return null;
   }
 
+  const { _id, videoId } = selectedVideo;
+
   const deviceSize = isSmall ? "small" : isMedium ? "medium" : "large";
-  const isBookmarked = !!user?.bookmarks.includes(selectedVideo._id);
+  const isBookmarked = !!user?.bookmarks.includes(_id);
 
   const onActionClick = (path) => {
     router.push(path);
@@ -113,7 +141,7 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
 
   const onBookmarkClick = () =>
     !!user
-      ? updateBookmarks(selectedVideo._id, user, updateCtx)
+      ? updateBookmarks(_id, user, updateCtx)
       : updateCtx({
           dialogData: {
             title: "Welcome to Functional Player",
@@ -171,6 +199,9 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
           }}
         >
           <Overlay
+            videoId={
+              user?.subscriptionStatus === "active" ? videoId : trailerId
+            }
             selectedVideo={selectedVideo}
             isBookmarked={isBookmarked}
             onBookmarkClick={onBookmarkClick}

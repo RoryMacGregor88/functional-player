@@ -81,8 +81,8 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
             <SidebarItem
               Icon={ProfileIcon}
               label="My List"
-              href="/series"
-              isSelected={router.pathname === "/bookmarks"}
+              href="/list"
+              isSelected={router.pathname === "/list"}
               onClick={toggleDrawer}
             />
             <SidebarItem

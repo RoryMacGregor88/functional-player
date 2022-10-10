@@ -102,7 +102,9 @@ export default function Dashboard({ user, courses, series }) {
         title="Stratocaster Image"
       />
       <PageWrapper>
-        {/* {!!lastWatched ? <ContinueWatching course={lastWatched} /> : null} */}
+        {!!lastWatched ? (
+          <Slider title="Continue Watching" courses={[lastWatched]} />
+        ) : null}
         {!!bookmarks.length ? (
           <Slider title="Your List" courses={bookmarks} />
         ) : null}
