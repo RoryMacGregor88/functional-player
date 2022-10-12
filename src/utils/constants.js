@@ -1,3 +1,5 @@
+// TODO: Move all notification messages to constants
+
 export const SERIES = "series-2";
 export const USERS = "users-2";
 
@@ -11,6 +13,9 @@ export const HTTP_METHOD_ERROR_MESSAGE =
 
 export const DEFAULT_TOKEN_FORBIDDEN_MESSAGE =
   "Not allowed. Authorization token required.";
+
+export const REGISTRATION_SUCCESS_MESSAGE =
+  "Account successfully created. Click 'NEXT' button to continue.";
 
 export const BOOKMARK_SUCCESS_ADD_MESSAGE = "Added to your list";
 export const BOOKMARK_SUCCESS_REMOVE_MESSAGE = "Removed from your list";

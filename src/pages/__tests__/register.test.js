@@ -3,6 +3,10 @@ import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
 import { render, screen, userEvent, waitFor } from "@/src/utils/test-utils";
 
 import Register from "../register";
+import {
+  DEFAULT_ERROR_MESSAGE,
+  REGISTRATION_SUCCESS_MESSAGE,
+} from "@/src/utils";
 
 enableFetchMocks();
 
@@ -19,9 +23,6 @@ describe("Register Page", () => {
     expect(screen.getByText(/subscribe/i)).toBeInTheDocument();
     expect(screen.getByText(/finish/i)).toBeInTheDocument();
   });
-
-  // TODO: not sure how to test this
-  xit("redirects to dashboard if user present", () => {});
 
   it("enables Next button page if register form is submitted", async () => {
     fetchMock.mockResponse(JSON.stringify({ clientSecret: "123" }));
@@ -84,9 +85,7 @@ describe("Register Page", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(
-          'Account successfully created. Click "NEXT" button to continue.'
-        )
+        screen.getByText(REGISTRATION_SUCCESS_MESSAGE)
       ).toBeInTheDocument();
     });
   });
@@ -151,9 +150,14 @@ describe("Register Page", () => {
     await userEvent.click(screen.getByRole("button", { name: /submit/i }));
 
     await waitFor(() => {
-      expect(
-        screen.getByText("An unexpected error has occurred")
-      ).toBeInTheDocument();
+      expect(screen.getByText(DEFAULT_ERROR_MESSAGE)).toBeInTheDocument();
     });
+  });
+
+  it("redirects to dashboard if user present", () => {
+    const testUser = { username: "John smith" };
+    const { router } = render(<Register user={testUser} />);
+
+    expect(router.push).toHaveBeenCalledWith("/dashboard");
   });
 });

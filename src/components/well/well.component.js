@@ -1,5 +1,7 @@
 import { Alert, AlertTitle } from "@mui/material";
 
+// TODO: do something with 'stack', maybe display message to user
+
 /**
  * @param {{
  *  title?: string,

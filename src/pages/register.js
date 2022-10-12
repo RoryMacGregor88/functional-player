@@ -13,7 +13,12 @@ import {
   LoadMask,
 } from "@/src/components";
 
-import { getStripe, http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+import {
+  getStripe,
+  http,
+  DEFAULT_ERROR_MESSAGE,
+  REGISTRATION_SUCCESS_MESSAGE,
+} from "@/src/utils";
 
 /** @param {{user: object|null}} props */
 export default function Register({ user }) {
@@ -37,11 +42,6 @@ export default function Register({ user }) {
     });
   };
 
-  const handleError = (error) => {
-    setIsLoading(false);
-    setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
-  };
-
   const onNextClick = () => {
     if (!!wellData) {
       setWellData(null);
@@ -51,22 +51,25 @@ export default function Register({ user }) {
 
   const registerSubmit = async (event) => {
     setIsLoading(true);
+    try {
+      const { username, email, password } = event;
 
-    const { username, email, password } = event;
+      const { error, clientSecret } = await http("/auth/register", {
+        username,
+        email: email.toLowerCase(),
+        password,
+      });
 
-    const { error, clientSecret } = await http("/auth/register", {
-      username,
-      email: email.toLowerCase(),
-      password,
-    });
-
-    if (!!error) {
-      handleError(error);
-    } else if (!!clientSecret) {
-      setClientSecret(clientSecret);
-      handleSuccess(
-        "Account successfully created. Click 'NEXT' button to continue."
-      );
+      if (!!error) {
+        setIsLoading(false);
+        setWellData({ message: error });
+      } else if (!!clientSecret) {
+        setClientSecret(clientSecret);
+        handleSuccess(REGISTRATION_SUCCESS_MESSAGE);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
     }
   };
 
@@ -81,7 +84,8 @@ export default function Register({ user }) {
     });
 
     if (!!error) {
-      handleError(error);
+      setIsLoading(false);
+      setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
     }
   };
 

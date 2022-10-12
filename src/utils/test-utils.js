@@ -1,8 +1,22 @@
 import { render as rtlRender } from "@testing-library/react";
+import { Context } from "@/src/utils";
+import { RouterContext } from "next/dist/shared/lib/router-context";
 
-const render = (ui, { ...options } = {}) => {
-  const utils = rtlRender(ui, { ...options });
-  return { ...utils };
+const mockRouterConfig = {
+  push: jest.fn(),
+  prefetch: () => ({ catch: () => {} }),
+};
+
+const render = (ui, { ctx = {}, ...options } = {}) => {
+  const updateCtx = jest.fn();
+  const router = mockRouterConfig;
+  const Wrapper = ({ children }) => (
+    <Context.Provider value={{ ctx, updateCtx }}>
+      <RouterContext.Provider value={router}>{children}</RouterContext.Provider>
+    </Context.Provider>
+  );
+  const utils = rtlRender(ui, { wrapper: Wrapper, ...options });
+  return { ...utils, ctx, updateCtx, router };
 };
 
 export * from "@testing-library/react";
