@@ -4,7 +4,11 @@ import { hash } from "bcryptjs";
 
 import { connectToDatabase } from "lib/mongodb";
 
-import { USERS, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
+import {
+  USERS,
+  HTTP_METHOD_ERROR_MESSAGE,
+  DEFAULT_ERROR_MESSAGE,
+} from "@/src/utils";
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
@@ -18,7 +22,9 @@ export default async function register(req, res) {
       const checkExistingEmail = await db.collection(USERS).findOne({ email });
 
       if (!!checkExistingEmail) {
-        return res.status(200).send({ error: "Email already exists." });
+        return res
+          .status(400)
+          .send({ error: { message: "Email already exists." } });
       }
 
       const checkExistingUsername = await db
@@ -26,7 +32,9 @@ export default async function register(req, res) {
         .findOne({ username });
 
       if (!!checkExistingUsername) {
-        return res.status(200).send({ error: "Username is taken." });
+        return res
+          .status(400)
+          .send({ error: { message: "Username is taken." } });
       }
 
       // if credentials are valid, create customer on stripe servers
@@ -62,9 +70,13 @@ export default async function register(req, res) {
         .json({ clientSecret: latest_invoice.payment_intent.client_secret });
     } catch (error) {
       console.log("ERROR in register: ", error);
-      return res.status(500).send({ error });
+      return res
+        .status(500)
+        .send({ error: { message: DEFAULT_ERROR_MESSAGE } });
     }
   } else {
-    return res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
+    return res
+      .status(500)
+      .send({ error: { message: HTTP_METHOD_ERROR_MESSAGE } });
   }
 }

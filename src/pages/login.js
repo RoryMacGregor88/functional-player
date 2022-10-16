@@ -28,23 +28,21 @@ export default function Login({ user, updateCtx }) {
     setIsLoading(true);
     try {
       const { email, password } = event;
-      const { error, ok, user } = await http("/auth/login", {
+      const { error, resUser } = await http("/auth/login", {
         email: email.toLowerCase(),
         password,
       });
 
-      setIsLoading(false);
-
       if (!!error) {
-        setWellData({ message: error });
-      } else if (ok) {
-        updateCtx({ user });
+        setWellData({ message: error.message });
+      } else if (!!resUser) {
+        updateCtx({ user: resUser });
         router.push("/dashboard");
       }
-    } catch (error) {
-      setIsLoading(false);
-      setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
+    } catch (e) {
+      setWellData({ message: DEFAULT_ERROR_MESSAGE });
     }
+    setIsLoading(false);
   };
 
   // TODO: no PageWrapper. Make consistent, check others

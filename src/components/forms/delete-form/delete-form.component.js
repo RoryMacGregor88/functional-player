@@ -1,57 +1,17 @@
-import { useState, useContext } from "react";
-
-import { useRouter } from "next/router";
+import { useState } from "react";
 import { Button, Typography } from "@mui/material";
+import { FormWrapper } from "@/src/components";
 
-import { FormWrapper, Well } from "@/src/components";
-import { http, DEFAULT_ERROR_MESSAGE, Context } from "@/src/utils";
+// TODO: check this works right, maybe make enter email and password first
 
-// TODO: check this works right
-
-const DeleteAccountForm = () => {
-  const router = useRouter();
-  const {
-    ctx: { user },
-    updateCtx,
-  } = useContext(Context);
-
+/** @param {{ handleDelete: function }} props */
+const DeleteAccountForm = ({ handleDelete }) => {
   const [showConfirmButton, setShowConfirmButton] = useState(false);
-  const [wellData, setWellData] = useState(false);
-
-  const handleDelete = async () => {
-    const { email, customerId } = user;
-    const {
-      error,
-      ok,
-      user: resUser,
-    } = await http("/auth/delete", {
-      email,
-      customerId,
-    });
-
-    if (!!error) {
-      setWellData({
-        message: DEFAULT_ERROR_MESSAGE,
-        stack: error,
-      });
-    }
-
-    if (ok) {
-      updateCtx({ user: resUser });
-      setWellData({
-        severity: "success",
-        message: "Your account and subscription have been permanently deleted.",
-      });
-    }
-    router.push("/");
-  };
-
   return (
     <FormWrapper>
       <Typography sx={{ textAlign: "center" }}>
         Click below to delete your account
       </Typography>
-      {!!wellData ? <Well {...wellData} /> : null}
       <Button onClick={() => setShowConfirmButton(true)}>Proceed</Button>
       {showConfirmButton ? (
         <>

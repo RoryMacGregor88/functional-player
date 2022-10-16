@@ -5,7 +5,11 @@ import { connectToDatabase } from "lib/mongodb";
 import { sessionOptions } from "lib/session";
 import { syncStripeAndDb } from "lib/syncStripeAndDb";
 
-import { USERS, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
+import {
+  USERS,
+  HTTP_METHOD_ERROR_MESSAGE,
+  DEFAULT_ERROR_MESSAGE,
+} from "@/src/utils";
 
 async function login(req, res) {
   if (req.method === "POST") {
@@ -16,10 +20,11 @@ async function login(req, res) {
 
       const result = await db.collection(USERS).findOne({ email });
 
-      // TODO: 'Successful' errors need changed to 'message'
       if (!result) {
-        return res.status(200).send({
-          error: "No user account associated with that email address.",
+        return res.status(400).send({
+          error: {
+            message: "No user account associated with that email address.",
+          },
         });
       }
 
@@ -33,7 +38,9 @@ async function login(req, res) {
       const checkPassword = await compare(formPassword, dbPassword);
 
       if (!checkPassword) {
-        return res.status(200).send({ error: "Incorrect password." });
+        return res
+          .status(400)
+          .send({ error: { message: "Incorrect password." } });
       }
 
       // fresh sync of stripe subscription status upon every login. If
@@ -45,20 +52,24 @@ async function login(req, res) {
         subscriptionId
       );
 
-      const updatedStatusUser = {
+      const resUser = {
         ...restOfUser,
         subscriptionStatus: syncedStatus,
       };
-      req.session.user = updatedStatusUser;
+      req.session.user = resUser;
       await req.session.save();
 
-      return res.status(200).send({ ok: true, user: updatedStatusUser });
+      return res.status(200).send({ resUser });
     } catch (error) {
       console.log("ERROR in login: ", error);
-      return res.status(500).send({ error });
+      return res
+        .status(500)
+        .send({ error: { message: DEFAULT_ERROR_MESSAGE } });
     }
   } else {
-    return res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
+    return res
+      .status(403)
+      .send({ error: { message: HTTP_METHOD_ERROR_MESSAGE } });
   }
 }
 

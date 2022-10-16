@@ -34,14 +34,6 @@ export default function Register({ user }) {
     return <LoadMask />;
   }
 
-  const handleSuccess = (message) => {
-    setIsLoading(false);
-    setWellData({
-      severity: "success",
-      message,
-    });
-  };
-
   const onNextClick = () => {
     if (!!wellData) {
       setWellData(null);
@@ -61,32 +53,37 @@ export default function Register({ user }) {
       });
 
       if (!!error) {
-        setIsLoading(false);
-        setWellData({ message: error });
+        setWellData({ message: error.message });
       } else if (!!clientSecret) {
         setClientSecret(clientSecret);
-        handleSuccess(REGISTRATION_SUCCESS_MESSAGE);
+        setWellData({
+          severity: "success",
+          message: REGISTRATION_SUCCESS_MESSAGE,
+        });
       }
-    } catch (error) {
-      setIsLoading(false);
-      setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
+    } catch (e) {
+      setWellData({ message: DEFAULT_ERROR_MESSAGE });
     }
+    setIsLoading(false);
   };
 
   const subscribeSubmit = async (stripe, elements) => {
     setIsLoading(true);
+    try {
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${process.env.BASE_URL}/registration-success`,
+        },
+      });
 
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: `${process.env.BASE_URL}/registration-success`,
-      },
-    });
-
-    if (!!error) {
-      setIsLoading(false);
-      setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
+      if (!!error) {
+        setWellData({ message: DEFAULT_ERROR_MESSAGE });
+      }
+    } catch (e) {
+      setWellData({ message: DEFAULT_ERROR_MESSAGE });
     }
+    setIsLoading(false);
   };
 
   return (

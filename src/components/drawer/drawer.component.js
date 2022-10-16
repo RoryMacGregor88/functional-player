@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { useRouter } from "next/router";
+import { DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 
 import { Drawer as MuiDrawer, Grid } from "@mui/material";
 
@@ -19,21 +20,30 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
   const { updateCtx } = useContext(Context);
 
   const logout = async () => {
-    const {
-      error,
-      ok,
-      user: resUser,
-    } = await http("/auth/logout", { email: user.email });
-    if (error) {
+    try {
+      const { error, resUser } = await http("/auth/logout", {
+        email: user.email,
+      });
+
+      if (!!error) {
+        updateCtx({
+          toastData: {
+            message: error.message,
+            severity: "error",
+          },
+        });
+      } else if (!!resUser) {
+        // resUser must be truthy to pass condition, so is empty object
+        updateCtx({ user: null });
+        router.push("/login");
+      }
+    } catch (e) {
       updateCtx({
         toastData: {
-          message: error,
+          message: DEFAULT_ERROR_MESSAGE,
           severity: "error",
         },
       });
-    } else if (ok) {
-      updateCtx({ user: resUser });
-      router.push("/login");
     }
   };
 
@@ -53,6 +63,7 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
           boxShadow: "none",
         },
       }}
+      data-testid="drawer"
     >
       <Grid
         container

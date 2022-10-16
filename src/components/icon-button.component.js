@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { IconButton as MuiIconButton } from "@mui/material";
 
 /**
@@ -6,8 +7,9 @@ import { IconButton as MuiIconButton } from "@mui/material";
  *  props: any
  * }} props
  */
-const IconButton = ({ children, sx = {}, ...props }) => (
+const IconButton = ({ children, sx = {}, ...props }, ref) => (
   <MuiIconButton
+    ref={ref}
     disableRipple
     edge="start"
     color="inherit"
@@ -18,4 +20,4 @@ const IconButton = ({ children, sx = {}, ...props }) => (
   </MuiIconButton>
 );
 
-export default IconButton;
+export default forwardRef(IconButton);

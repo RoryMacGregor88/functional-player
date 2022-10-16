@@ -1,7 +1,5 @@
 import { render, screen, userEvent, waitFor } from "@/src/utils/test-utils";
-
 import RegisterForm from "./register-form.component";
-import {} from "../../../utils/constants";
 
 import {
   USERNAME_REQUIRED_MESSAGE,
@@ -67,7 +65,7 @@ describe("Register Form", () => {
       expect(screen.getByText(USERNAME_REQUIRED_MESSAGE)).toBeInTheDocument();
       expect(screen.getByText(PASSWORD_REQUIRED_MESSAGE)).toBeInTheDocument();
       expect(
-        screen.getByText("Password confirmation is required")
+        screen.getByText(/password confirmation is required/i)
       ).toBeInTheDocument();
       expect(onSubmit).not.toHaveBeenCalled();
     });

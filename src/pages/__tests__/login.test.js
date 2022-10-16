@@ -22,18 +22,20 @@ describe("Login Page", () => {
     expect(screen.getByRole("button", { name: /submit/i })).toBeInTheDocument();
   });
 
-  it("shows application error well if credentials are invalid", async () => {
-    fetchMock.mockResponse(JSON.stringify({ error: "This is an error" }));
+  it("shows error well if submission unsuccessful", async () => {
+    const message = "This is an error";
+
+    fetchMock.mockResponse(JSON.stringify({ error: { message } }));
     render(<Login />);
 
     await userEvent.type(
       screen.getByRole("textbox", { name: /email/i }),
-      "test@emaiil.com"
+      "test@email.com"
     );
 
     await userEvent.type(
       screen.getByRole("textbox", { name: /password/i }),
-      "test@emaiil.com"
+      "test@email.com"
     );
 
     const button = screen.getByRole("button", { name: /submit/i });
@@ -42,12 +44,13 @@ describe("Login Page", () => {
     await userEvent.click(button);
 
     await waitFor(() => {
-      expect(screen.getByText("This is an error")).toBeInTheDocument();
+      expect(screen.getByText(message)).toBeInTheDocument();
     });
   });
 
-  it("shows server error well if there is a server error", async () => {
+  it("shows error well if error", async () => {
     fetchMock.mockResponse(new Error());
+
     render(<Login />);
 
     await userEvent.type(
@@ -72,9 +75,9 @@ describe("Login Page", () => {
 
   it("redirects to dashboard if credentials are valid", async () => {
     const updateCtx = jest.fn();
-    const testUser = { username: "John smith" };
+    const resUser = { username: "John smith" };
 
-    fetchMock.mockResponse(JSON.stringify({ ok: true, user: testUser }));
+    fetchMock.mockResponse(JSON.stringify({ resUser }));
 
     const { router } = render(<Login updateCtx={updateCtx} />);
 
@@ -94,7 +97,7 @@ describe("Login Page", () => {
     await userEvent.click(button);
 
     expect(router.push).toHaveBeenCalledWith("/dashboard");
-    expect(updateCtx).toHaveBeenCalledWith({ user: testUser });
+    expect(updateCtx).toHaveBeenCalledWith({ user: resUser });
   });
 
   it("redirects to dashboard if user present", async () => {

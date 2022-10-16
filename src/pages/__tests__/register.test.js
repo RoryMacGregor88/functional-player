@@ -24,7 +24,7 @@ describe("Register Page", () => {
     expect(screen.getByText(/finish/i)).toBeInTheDocument();
   });
 
-  it("enables Next button page if register form is submitted", async () => {
+  it("shows success well and enables button if registration successful", async () => {
     fetchMock.mockResponse(JSON.stringify({ clientSecret: "123" }));
 
     render(<Register />);
@@ -53,37 +53,6 @@ describe("Register Page", () => {
 
     await waitFor(() => {
       expect(screen.getByRole("button", { name: /next/i })).toBeEnabled();
-    });
-  });
-
-  it("shows success well if registration successful", async () => {
-    fetchMock.mockResponse(JSON.stringify({ clientSecret: "123" }));
-
-    render(<Register />);
-
-    await userEvent.type(
-      screen.getByRole("textbox", { name: /email/i }),
-      "test@email.com"
-    );
-
-    await userEvent.type(
-      screen.getByRole("textbox", { name: /username/i }),
-      "test-username"
-    );
-
-    await userEvent.type(
-      screen.getByRole("textbox", { name: /^password/i }),
-      "pass123"
-    );
-
-    await userEvent.type(
-      screen.getByRole("textbox", { name: /^confirm password/i }),
-      "pass123"
-    );
-
-    await userEvent.click(screen.getByRole("button", { name: /submit/i }));
-
-    await waitFor(() => {
       expect(
         screen.getByText(REGISTRATION_SUCCESS_MESSAGE)
       ).toBeInTheDocument();
@@ -91,7 +60,9 @@ describe("Register Page", () => {
   });
 
   it("shows error well if submission unsuccessful", async () => {
-    fetchMock.mockResponse(JSON.stringify({ error: "I am an error" }));
+    const message = "test-error-message";
+
+    fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
     render(<Register />);
 
@@ -118,11 +89,11 @@ describe("Register Page", () => {
     await userEvent.click(screen.getByRole("button", { name: /submit/i }));
 
     await waitFor(() => {
-      expect(screen.getByText("I am an error")).toBeInTheDocument();
+      expect(screen.getByText(message)).toBeInTheDocument();
     });
   });
 
-  it("shows error well if submission returns error", async () => {
+  it("shows error well if error", async () => {
     fetchMock.mockResponse(new Error());
 
     render(<Register />);

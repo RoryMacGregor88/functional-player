@@ -31,6 +31,8 @@ export const PASSWORD_CONFIRM_REQUIRED_MESSAGE =
 export const PASSWORDS_MATCH_MESSAGE = "Passwords do not match";
 export const PASSWORD_MIN_LENGTH_MESSAGE =
   "Password must be at least 5 characters";
+export const PASSWORD_UPDATE_SUCCESS_MESSAGE =
+  "Your password has been successfully updated.";
 
 // All possible Stripe scenarios. Just for explicitness, not all are used
 export const STATUS_LABELS = {

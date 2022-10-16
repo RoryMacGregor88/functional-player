@@ -107,13 +107,21 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
   useEffect(() => {
     if (!!user) {
       (async () => {
-        const { ok, resUser } = await http("/last-watched", {
+        // TODO: try/catch here for client error
+        const { error, resUser } = await http("/last-watched", {
           email: user.email,
           _id: selectedVideo?._id,
         });
 
-        if (ok) {
+        if (!!user) {
           updateCtx({ user: resUser });
+        } else if (!!error) {
+          updateCtx({
+            toastData: {
+              message: error.message,
+              severity: "error",
+            },
+          });
         }
       })();
     }

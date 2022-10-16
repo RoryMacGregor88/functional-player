@@ -4,11 +4,13 @@ import Well from "./well.component";
 
 describe("Well", () => {
   it("renders with title and message", () => {
-    render(<Well title="test-title" message="test-message" />);
+    const title = "test-title";
+    const message = "test-message";
 
-    expect(screen.getByText("test-title")).toBeInTheDocument();
+    render(<Well title={title} message={message} />);
 
-    expect(screen.getByText("test-message")).toBeInTheDocument();
+    expect(screen.getByText(title)).toBeInTheDocument();
+    expect(screen.getByText(message)).toBeInTheDocument();
   });
 
   it("defaults to Error title if no title given", () => {
