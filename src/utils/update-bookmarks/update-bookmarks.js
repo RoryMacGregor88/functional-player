@@ -18,15 +18,21 @@ export default async function updateBookmarks(_id, user = {}, callback) {
       ? currentBookmarks.filter((b) => b !== _id)
       : [...currentBookmarks, _id];
 
-    // TODO: updatedUser returned here like others?
-    const { ok } = await http("/update-bookmarks", {
+    const { error, resBookmarks } = await http("/update-bookmarks", {
       email,
       bookmarks,
     });
 
-    if (ok) {
+    if (!!error) {
       callback({
-        user: { ...user, bookmarks },
+        toastData: {
+          message: error.message,
+          severity: "error",
+        },
+      });
+    } else if (!!resBookmarks) {
+      callback({
+        user: { ...user, bookmarks: resBookmarks },
         toastData: {
           message: isBookmarked
             ? BOOKMARK_SUCCESS_REMOVE_MESSAGE
@@ -34,12 +40,11 @@ export default async function updateBookmarks(_id, user = {}, callback) {
         },
       });
     }
-  } catch (error) {
+  } catch (e) {
     callback({
       toastData: {
         message: DEFAULT_ERROR_MESSAGE,
         severity: "error",
-        stack: error,
       },
     });
   }

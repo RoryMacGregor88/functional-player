@@ -9,6 +9,7 @@ import {
   USERS,
   DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
+  DEFAULT_ERROR_MESSAGE,
 } from "@/src/utils";
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
@@ -16,7 +17,9 @@ const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 async function deleteAccount(req, res) {
   if (req.method === "POST") {
     if (req.session.user?.email !== req.body.email) {
-      return res.status(403).send({ error: DEFAULT_TOKEN_FORBIDDEN_MESSAGE });
+      return res
+        .status(403)
+        .send({ error: { message: DEFAULT_TOKEN_FORBIDDEN_MESSAGE } });
     }
     try {
       const { email, customerId } = req.body;
@@ -27,13 +30,17 @@ async function deleteAccount(req, res) {
       await db.collection(USERS).deleteOne({ email });
       req.session.destroy();
 
-      return res.status(200).json({ ok: true, user: null });
+      return res.status(200).json({ resUser: {} });
     } catch (error) {
       console.log("ERROR in deleteAccount: ", error);
-      return res.status(500).send({ error });
+      return res
+        .status(500)
+        .send({ error: { message: DEFAULT_ERROR_MESSAGE } });
     }
   } else {
-    return res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
+    return res
+      .status(403)
+      .send({ error: { message: HTTP_METHOD_ERROR_MESSAGE } });
   }
 }
 

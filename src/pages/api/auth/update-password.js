@@ -9,12 +9,15 @@ import {
   USERS,
   DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
+  DEFAULT_ERROR_MESSAGE,
 } from "@/src/utils";
 
 async function updatePassword(req, res) {
   if (req.method === "POST") {
     if (req.session.user?.email !== req.body.email) {
-      return res.status(403).send({ error: DEFAULT_TOKEN_FORBIDDEN_MESSAGE });
+      return res
+        .status(403)
+        .send({ error: { message: DEFAULT_TOKEN_FORBIDDEN_MESSAGE } });
     }
     try {
       const { email, currentPassword, newPassword } = req.body;
@@ -28,7 +31,7 @@ async function updatePassword(req, res) {
       const checkPassword = await compare(currentPassword, dbPassword);
 
       if (!checkPassword) {
-        return res.status(200).send({ error: "Incorrect password." });
+        return res.status(400).send({ error: "Incorrect password." });
       }
 
       await db
@@ -41,10 +44,14 @@ async function updatePassword(req, res) {
       return res.status(200).json({ ok: true });
     } catch (error) {
       console.log("ERROR in updatePassword: ", error);
-      return res.status(500).send({ error });
+      return res
+        .status(500)
+        .send({ error: { message: DEFAULT_ERROR_MESSAGE } });
     }
   } else {
-    return res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
+    return res
+      .status(403)
+      .send({ error: { message: HTTP_METHOD_ERROR_MESSAGE } });
   }
 }
 

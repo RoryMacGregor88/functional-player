@@ -17,6 +17,9 @@ export const DEFAULT_TOKEN_FORBIDDEN_MESSAGE =
 export const REGISTRATION_SUCCESS_MESSAGE =
   "Account successfully created. Click 'NEXT' button to continue.";
 
+export const ACCOUNT_DELETE_SUCCESS_MESSAGE =
+  "Your account and subscription have been permanently deleted.";
+
 export const BOOKMARK_SUCCESS_ADD_MESSAGE = "Added to your list";
 export const BOOKMARK_SUCCESS_REMOVE_MESSAGE = "Removed from your list";
 

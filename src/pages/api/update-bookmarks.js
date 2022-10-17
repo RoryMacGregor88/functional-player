@@ -6,6 +6,7 @@ import { connectToDatabase } from "lib/mongodb";
 import {
   HTTP_METHOD_ERROR_MESSAGE,
   DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
+  DEFAULT_ERROR_MESSAGE,
   USERS,
 } from "@/src/utils";
 
@@ -26,13 +27,17 @@ async function updateBookmarks(req, res) {
       req.session.user = { ...req.session.user, bookmarks };
       await req.session.save();
 
-      return res.status(200).json({ ok: true });
+      return res.status(200).json({ resBookmarks: bookmarks });
     } catch (error) {
       console.log("ERROR in updateBookmarks: ", error);
-      return res.status(500).send({ error });
+      return res
+        .status(500)
+        .send({ error: { message: DEFAULT_ERROR_MESSAGE } });
     }
   } else {
-    return res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
+    return res
+      .status(403)
+      .send({ error: { message: HTTP_METHOD_ERROR_MESSAGE } });
   }
 }
 

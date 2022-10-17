@@ -17,6 +17,7 @@ import {
   http,
   DEFAULT_ERROR_MESSAGE,
   PASSWORD_UPDATE_SUCCESS_MESSAGE,
+  ACCOUNT_DELETE_SUCCESS_MESSAGE,
 } from "@/src/utils";
 
 /**
@@ -94,7 +95,6 @@ export default function Account({ user, updateCtx }) {
     }
   };
 
-  // TODO: try/catch here is for client errors, all handlers need it
   const handleUpdatePassword = async (values) => {
     setIsLoading(true);
     try {
@@ -106,19 +106,17 @@ export default function Account({ user, updateCtx }) {
       const { error, ok } = await http("/auth/update-password", formData);
 
       if (!!error) {
-        setIsLoading(false);
-        setWellData({ message: error });
+        setWellData({ message: error.message });
       } else if (ok) {
-        setIsLoading(false);
         setWellData({
           severity: "success",
           message: PASSWORD_UPDATE_SUCCESS_MESSAGE,
         });
       }
     } catch (error) {
-      setIsLoading(false);
-      setWellData({ message: DEFAULT_ERROR_MESSAGE, stack: error });
+      setWellData({ message: DEFAULT_ERROR_MESSAGE });
     }
+    setIsLoading(false);
   };
 
   const handleUnsubscribe = async (e) => {
@@ -173,31 +171,30 @@ export default function Account({ user, updateCtx }) {
   };
 
   const handleDelete = async () => {
-    const { email, customerId } = user;
-    const {
-      error,
-      ok,
-      user: resUser,
-    } = await http("/auth/delete", {
-      email,
-      customerId,
-    });
+    try {
+      const { email, customerId } = user;
+      const { error, resUser } = await http("/auth/delete", {
+        email,
+        customerId,
+      });
 
-    if (!!error) {
+      if (!!error) {
+        setWellData({
+          message: error.message,
+        });
+      } else if (!!resUser) {
+        updateCtx({ user: null });
+        setWellData({
+          severity: "success",
+          message: ACCOUNT_DELETE_SUCCESS_MESSAGE,
+        });
+        router.push("/");
+      }
+    } catch (e) {
       setWellData({
         message: DEFAULT_ERROR_MESSAGE,
-        stack: error,
       });
     }
-
-    if (ok) {
-      updateCtx({ user: resUser });
-      setWellData({
-        severity: "success",
-        message: "Your account and subscription have been permanently deleted.",
-      });
-    }
-    router.push("/");
   };
 
   // TODO: pagewrapper?
