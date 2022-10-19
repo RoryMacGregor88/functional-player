@@ -1,4 +1,4 @@
-import { render, screen, userEvent, waitFor } from "@/src/utils/test-utils";
+import { render, screen, userEvent, waitFor } from "@/src/utils";
 import DeleteForm from "./delete-form.component";
 
 describe("Delete Form", () => {

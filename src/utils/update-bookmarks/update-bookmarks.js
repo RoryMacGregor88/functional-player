@@ -3,9 +3,7 @@ import {
   DEFAULT_ERROR_MESSAGE,
   BOOKMARK_SUCCESS_REMOVE_MESSAGE,
   BOOKMARK_SUCCESS_ADD_MESSAGE,
-} from "..";
-
-// TODO: do something with this? Remember you have a dialog now!
+} from "@/src/utils";
 
 // TODO: something wrong with bookmarking. Staying in bookmarks when not bookmarked, in bookmarks when white etc. Needs tightened!
 

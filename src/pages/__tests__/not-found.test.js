@@ -1,5 +1,5 @@
 import NotFound from "@/src/pages/[...not-found]";
-import { render } from "@/src/utils/test-utils";
+import { render } from "@/src/utils";
 
 describe("notFound", () => {
   it("redirects to home if no user found", () => {

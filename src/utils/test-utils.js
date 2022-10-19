@@ -1,6 +1,7 @@
 import { render as rtlRender } from "@testing-library/react";
 import { Context } from "@/src/utils";
 import { RouterContext } from "next/dist/shared/lib/router-context";
+import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
 
 const mockRouterConfig = {
   push: jest.fn(),
@@ -21,5 +22,5 @@ const render = (ui, { ctx = {}, ...options } = {}) => {
 
 export * from "@testing-library/react";
 export { default as userEvent } from "@testing-library/user-event";
-
+export { fetchMock, enableFetchMocks };
 export { render };

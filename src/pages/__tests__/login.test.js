@@ -1,9 +1,14 @@
-import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+import {
+  render,
+  screen,
+  userEvent,
+  waitFor,
+  fetchMock,
+  enableFetchMocks,
+  DEFAULT_ERROR_MESSAGE,
+} from "@/src/utils";
 
-import { render, screen, userEvent, waitFor } from "@/src/utils/test-utils";
-
-import Login from "../login";
-import { DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+import Login from "@/src/pages/login";
 
 enableFetchMocks();
 
@@ -22,7 +27,34 @@ describe("Login Page", () => {
     expect(screen.getByRole("button", { name: /submit/i })).toBeInTheDocument();
   });
 
-  it("shows error well if submission unsuccessful", async () => {
+  it("updates state and redirects to dashboard", async () => {
+    const updateCtx = jest.fn();
+    const resUser = { username: "John smith" };
+
+    fetchMock.mockResponse(JSON.stringify({ resUser }));
+
+    const { router } = render(<Login updateCtx={updateCtx} />);
+
+    await userEvent.type(
+      screen.getByRole("textbox", { name: /email/i }),
+      "test@email.com"
+    );
+
+    await userEvent.type(
+      screen.getByRole("textbox", { name: /password/i }),
+      "123456"
+    );
+
+    const button = screen.getByRole("button", { name: /submit/i });
+    expect(button).toBeEnabled();
+
+    await userEvent.click(button);
+
+    expect(router.push).toHaveBeenCalledWith("/dashboard");
+    expect(updateCtx).toHaveBeenCalledWith({ user: resUser });
+  });
+
+  it("handles server error", async () => {
     const message = "This is an error";
 
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
@@ -48,8 +80,10 @@ describe("Login Page", () => {
     });
   });
 
-  it("shows error well if error", async () => {
-    fetchMock.mockResponse(new Error());
+  it("handles client error", async () => {
+    fetchMock.mockResponse(() => {
+      throw new Error();
+    });
 
     render(<Login />);
 
@@ -71,33 +105,6 @@ describe("Login Page", () => {
     await waitFor(() => {
       expect(screen.getByText(DEFAULT_ERROR_MESSAGE)).toBeInTheDocument();
     });
-  });
-
-  it("redirects to dashboard if credentials are valid", async () => {
-    const updateCtx = jest.fn();
-    const resUser = { username: "John smith" };
-
-    fetchMock.mockResponse(JSON.stringify({ resUser }));
-
-    const { router } = render(<Login updateCtx={updateCtx} />);
-
-    await userEvent.type(
-      screen.getByRole("textbox", { name: /email/i }),
-      "test@email.com"
-    );
-
-    await userEvent.type(
-      screen.getByRole("textbox", { name: /password/i }),
-      "123456"
-    );
-
-    const button = screen.getByRole("button", { name: /submit/i });
-    expect(button).toBeEnabled();
-
-    await userEvent.click(button);
-
-    expect(router.push).toHaveBeenCalledWith("/dashboard");
-    expect(updateCtx).toHaveBeenCalledWith({ user: resUser });
   });
 
   it("redirects to dashboard if user present", async () => {

@@ -1,12 +1,15 @@
-import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
-
-import { render, screen, userEvent, waitFor } from "@/src/utils/test-utils";
-
-import Register from "../register";
 import {
+  render,
+  screen,
+  userEvent,
+  waitFor,
+  fetchMock,
+  enableFetchMocks,
   DEFAULT_ERROR_MESSAGE,
   REGISTRATION_SUCCESS_MESSAGE,
 } from "@/src/utils";
+
+import Register from "@/src/pages/register";
 
 enableFetchMocks();
 
@@ -24,7 +27,7 @@ describe("Register Page", () => {
     expect(screen.getByText(/finish/i)).toBeInTheDocument();
   });
 
-  it("shows success well and enables button if registration successful", async () => {
+  it("renders well and enables button", async () => {
     fetchMock.mockResponse(JSON.stringify({ clientSecret: "123" }));
 
     render(<Register />);
@@ -59,7 +62,7 @@ describe("Register Page", () => {
     });
   });
 
-  it("shows error well if submission unsuccessful", async () => {
+  it("handles server error", async () => {
     const message = "test-error-message";
 
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
@@ -93,8 +96,10 @@ describe("Register Page", () => {
     });
   });
 
-  it("shows error well if error", async () => {
-    fetchMock.mockResponse(new Error());
+  it("handles client error", async () => {
+    fetchMock.mockResponse(() => {
+      throw new Error();
+    });
 
     render(<Register />);
 

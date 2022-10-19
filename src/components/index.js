@@ -1,3 +1,4 @@
+import theme from "./theme";
 import Layout from "./layout.component";
 import LoadingSpinner from "./loading-spinner.component";
 import LoadMask from "./load-mask.component";
@@ -29,6 +30,7 @@ export * from "./forms";
 export * from "./icons";
 
 export {
+  theme,
   Layout,
   LoadingSpinner,
   LoadMask,

@@ -1,6 +1,10 @@
-import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
-import { updateBookmarks, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
-import { waitFor } from "@testing-library/react";
+import {
+  updateBookmarks,
+  waitFor,
+  fetchMock,
+  enableFetchMocks,
+  DEFAULT_ERROR_MESSAGE,
+} from "@/src/utils";
 
 enableFetchMocks();
 
@@ -75,7 +79,9 @@ describe("updateBookmarks", () => {
   });
 
   it("handles client error", async () => {
-    fetchMock.mockResponse(new Error());
+    fetchMock.mockResponse(() => {
+      throw new Error();
+    });
 
     const _id = "123",
       user = { email: "email@test.com", bookmarks: [] },

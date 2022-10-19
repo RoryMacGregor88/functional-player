@@ -5,11 +5,22 @@ import { useState, useEffect } from "react";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 
-import { Layout, LoadMask, Toast, Dialog, VideoDialog } from "@/src/components";
-import { http, Context } from "@/src/utils";
+import {
+  Layout,
+  LoadMask,
+  Toast,
+  Dialog,
+  VideoDialog,
+  theme,
+} from "@/src/components";
+import { Context, authenticateToken } from "@/src/utils";
 
-import theme from "@/src/components/theme";
-
+/**
+ * @param {{
+ *  Component: React.ReactNode,
+ *  pageProps: object
+ * }} props
+ */
 function App({ Component, pageProps }) {
   const [ctx, setCtx] = useState({
     selectedVideo: null,
@@ -22,16 +33,9 @@ function App({ Component, pageProps }) {
   /** @param {object} newData */
   const updateCtx = (newData) => setCtx((prev) => ({ ...prev, ...newData }));
 
-  // token is checked upon initial app request (not page navigations)
   useEffect(() => {
-    (async () => {
-      try {
-        const { user } = await http("/auth/authenticate-token", null, "GET");
-        updateCtx({ user });
-      } catch (error) {
-        updateCtx({ user: null });
-      }
-    })();
+    // token is checked upon initial app request (not internal page navigations)
+    (async () => await authenticateToken(updateCtx))();
   }, []);
 
   if (!user && user !== null) {

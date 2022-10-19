@@ -1,4 +1,4 @@
-import { screen, render } from "@/src/utils/test-utils";
+import { screen, render } from "@/src/utils";
 
 import Well from "./well.component";
 

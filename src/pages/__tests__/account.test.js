@@ -1,13 +1,16 @@
-import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
-
-import { render, screen, userEvent, waitFor } from "@/src/utils/test-utils";
-
-import Account from "../account";
 import {
+  render,
+  screen,
+  userEvent,
+  waitFor,
+  fetchMock,
+  enableFetchMocks,
   DEFAULT_ERROR_MESSAGE,
   PASSWORD_UPDATE_SUCCESS_MESSAGE,
   ACCOUNT_DELETE_SUCCESS_MESSAGE,
 } from "@/src/utils";
+
+import Account from "@/src/pages/account";
 
 enableFetchMocks();
 
@@ -48,7 +51,9 @@ describe("Account Page", () => {
     });
 
     it("closes well when tab switched", async () => {
-      fetchMock.mockResponse(new Error());
+      fetchMock.mockResponse(() => {
+        throw new Error();
+      });
 
       render(<Account user={{ subscriptionStatus: "active" }} />);
 
@@ -99,7 +104,7 @@ describe("Account Page", () => {
   });
 
   describe("updatePassword", () => {
-    it("password success", async () => {
+    it("renders success well", async () => {
       fetchMock.mockResponse(JSON.stringify({ ok: true }));
 
       render(<Account user={{ username: "John Smith" }} />);
@@ -133,7 +138,7 @@ describe("Account Page", () => {
       });
     });
 
-    it("password server error", async () => {
+    it("handles server error", async () => {
       const message = "test-error-message";
       fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
@@ -166,8 +171,10 @@ describe("Account Page", () => {
       });
     });
 
-    it("password client error", async () => {
-      fetchMock.mockResponse(new Error());
+    it("handles client error", async () => {
+      fetchMock.mockResponse(() => {
+        throw new Error();
+      });
 
       render(<Account user={{ username: "John Smith" }} />);
 
@@ -265,7 +272,9 @@ describe("Account Page", () => {
     });
 
     it("handler client error", async () => {
-      fetchMock.mockResponse(new Error());
+      fetchMock.mockResponse(() => {
+        throw new Error();
+      });
 
       const { router } = render(<Account user={{ username: "John Smith" }} />);
 

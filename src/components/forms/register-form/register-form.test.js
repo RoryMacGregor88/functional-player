@@ -1,4 +1,3 @@
-import { render, screen, userEvent, waitFor } from "@/src/utils/test-utils";
 import RegisterForm from "./register-form.component";
 
 import {
@@ -6,6 +5,10 @@ import {
   PASSWORD_REQUIRED_MESSAGE,
   PASSWORD_MIN_LENGTH_MESSAGE,
   PASSWORDS_MATCH_MESSAGE,
+  render,
+  screen,
+  userEvent,
+  waitFor,
 } from "@/src/utils";
 
 const renderComponent = ({

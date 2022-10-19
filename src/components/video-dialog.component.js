@@ -104,6 +104,7 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
   const router = useRouter();
 
   // TODO: useEffect not running
+  // TODO: make this another util, test
   useEffect(() => {
     if (!!user) {
       (async () => {
@@ -127,9 +128,6 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
     }
   }, []);
 
-  // TODO: add trailerId to all videos in db
-  const trailerId = videoId;
-
   const isMedium = useMediaQuery("(max-width:1200px)");
   const isSmall = useMediaQuery("(max-width:600px)");
 
@@ -138,6 +136,9 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
   }
 
   const { _id, videoId } = selectedVideo;
+
+  // TODO: add trailerId to all videos in db
+  const trailerId = videoId;
 
   const deviceSize = isSmall ? "small" : isMedium ? "medium" : "large";
   const isBookmarked = !!user?.bookmarks.includes(_id);

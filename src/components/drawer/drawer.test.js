@@ -1,6 +1,11 @@
-import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
-
-import { render, screen, userEvent, waitFor } from "@/src/utils/test-utils";
+import {
+  render,
+  screen,
+  userEvent,
+  waitFor,
+  fetchMock,
+  enableFetchMocks,
+} from "@/src/utils";
 import { Drawer } from "@/src/components";
 
 enableFetchMocks();
