@@ -40,7 +40,7 @@ async function unsubscribe(req, res) {
       req.session.user = updatedUser;
       await req.session.save();
 
-      return res.status(200).send({ ok: true, user: updatedUser });
+      return res.status(200).json({ ok: true, user: updatedUser });
     } catch (error) {
       console.log("ERROR in unsubscribe: ", error);
       return res.status(500).send({ error });

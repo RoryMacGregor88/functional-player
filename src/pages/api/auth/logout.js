@@ -16,7 +16,7 @@ function logout(req, res) {
     }
     try {
       req.session.destroy();
-      return res.status(200).send({ resUser: {} });
+      return res.status(200).json({ resUser: {} });
     } catch (error) {
       console.log("ERROR in logout: ", error);
       return res

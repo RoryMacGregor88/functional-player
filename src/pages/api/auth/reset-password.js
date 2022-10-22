@@ -22,7 +22,7 @@ export default async function resetPassword(req, res) {
       const result = await db.collection(USERS).findOne({ email });
 
       if (!result) {
-        return res.status(200).send({
+        return res.status(200).json({
           message: "No user account associated with that email address.",
         });
       }

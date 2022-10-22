@@ -28,7 +28,7 @@ describe("Account Page", () => {
       ).toBeInTheDocument();
     });
 
-    it("redirects to login if no user present", () => {
+    it("redirects to login if no user found", () => {
       const { router } = render(<Account user={null} />);
 
       expect(router.push).toHaveBeenCalledWith("/login");

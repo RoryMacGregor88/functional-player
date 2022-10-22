@@ -52,7 +52,7 @@ describe("Register Page", () => {
       "pass123"
     );
 
-    await userEvent.click(screen.getByRole("button", { name: /submit/i }));
+    userEvent.click(screen.getByRole("button", { name: /submit/i }));
 
     await waitFor(() => {
       expect(screen.getByRole("button", { name: /next/i })).toBeEnabled();
@@ -89,7 +89,7 @@ describe("Register Page", () => {
       "pass123"
     );
 
-    await userEvent.click(screen.getByRole("button", { name: /submit/i }));
+    userEvent.click(screen.getByRole("button", { name: /submit/i }));
 
     await waitFor(() => {
       expect(screen.getByText(message)).toBeInTheDocument();
@@ -123,14 +123,14 @@ describe("Register Page", () => {
       "pass123"
     );
 
-    await userEvent.click(screen.getByRole("button", { name: /submit/i }));
+    userEvent.click(screen.getByRole("button", { name: /submit/i }));
 
     await waitFor(() => {
       expect(screen.getByText(DEFAULT_ERROR_MESSAGE)).toBeInTheDocument();
     });
   });
 
-  it("redirects to dashboard if user present", () => {
+  it("redirects to dashboard if user found", () => {
     const testUser = { username: "John smith" };
     const { router } = render(<Register user={testUser} />);
 

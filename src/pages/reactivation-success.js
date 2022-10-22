@@ -4,7 +4,10 @@ import { useRouter } from "next/router";
 import { Grid, Button, Typography } from "@mui/material";
 
 import { LoadMask, PageWrapper, SpacedTitle } from "@/src/components";
-import { http } from "@/src/utils";
+import {
+  REACTIVATION_SUCCESS_MESSAGE,
+  syncSubscriptionStatus,
+} from "@/src/utils";
 
 /**
  * @param {{
@@ -16,33 +19,17 @@ export default function ReactivationSuccess({ user, updateCtx }) {
   const router = useRouter();
   const [isUpdated, setIsUpdated] = useState(false);
 
+  // TODO: need to stop this from activating if a user just comes here
+
   useEffect(() => {
-    (async () => {
-      if (!!user) {
-        const { email, subscriptionStatus, subscriptionId } = user;
-        const {
-          error,
-          ok,
-          user: resUser,
-        } = await http("/auth/update-subscription-status", {
-          email,
-          subscriptionStatus,
-          subscriptionId,
-        });
-        if (!!error) {
-          // TODO: resUser returned here instead of hardcoded null?
-          await http("/auth/logout");
-          updateCtx({ user: null });
-        } else if (ok) {
-          setIsUpdated(true);
-          updateCtx({ user: resUser });
-        }
-      }
-    })();
-  }, []);
+    if (!!user) {
+      (async () =>
+        await syncSubscriptionStatus(user, updateCtx, setIsUpdated))();
+    }
+  }, [user, updateCtx]);
 
   if (!user) {
-    router.push("/dashboard");
+    router.push("/login");
     return <LoadMask />;
   }
 
@@ -58,9 +45,7 @@ export default function ReactivationSuccess({ user, updateCtx }) {
         alignItems="center"
         gap={4}
       >
-        <Typography variant="h4">
-          Your subscription has been successfully reactivated.
-        </Typography>
+        <Typography variant="h4">{REACTIVATION_SUCCESS_MESSAGE}</Typography>
         <Typography variant="body1">
           Click the button below to return to your dashboard.
         </Typography>

@@ -14,7 +14,7 @@ describe("authenticateToken", () => {
   });
 
   it("authenticates token", async () => {
-    const resUser = { userName: "John Smith" };
+    const resUser = { username: "John Smith" };
     fetchMock.mockResponse(JSON.stringify({ resUser }));
 
     const updateCtx = jest.fn();

@@ -9,8 +9,8 @@ const mockRouterConfig = {
 };
 
 const render = (ui, { ctx = {}, ...options } = {}) => {
-  const updateCtx = jest.fn();
-  const router = mockRouterConfig;
+  const updateCtx = jest.fn(),
+    router = mockRouterConfig;
   const Wrapper = ({ children }) => (
     <Context.Provider value={{ ctx, updateCtx }}>
       <RouterContext.Provider value={router}>{children}</RouterContext.Provider>

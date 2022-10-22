@@ -23,6 +23,9 @@ export const ACCOUNT_DELETE_SUCCESS_MESSAGE =
 export const BOOKMARK_SUCCESS_ADD_MESSAGE = "Added to your list";
 export const BOOKMARK_SUCCESS_REMOVE_MESSAGE = "Removed from your list";
 
+export const REACTIVATION_SUCCESS_MESSAGE =
+  "Your subscription has been successfully reactivated.";
+
 // form validation
 export const EMAIL_REQUIRED_MESSAGE = "Email is required";
 export const USERNAME_REQUIRED_MESSAGE = "Username is required";

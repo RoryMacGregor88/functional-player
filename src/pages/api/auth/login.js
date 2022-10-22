@@ -59,7 +59,7 @@ async function login(req, res) {
       req.session.user = resUser;
       await req.session.save();
 
-      return res.status(200).send({ resUser });
+      return res.status(200).json({ resUser });
     } catch (error) {
       console.log("ERROR in login: ", error);
       return res

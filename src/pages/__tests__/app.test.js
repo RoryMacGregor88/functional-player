@@ -47,7 +47,17 @@ describe("App", () => {
     render(<App Component={TestComponent} />);
 
     await waitFor(() => {
-      expect(screen.getByText("Test Component")).toBeInTheDocument();
+      expect(screen.getByText(/test component/i)).toBeInTheDocument();
+    });
+  });
+
+  it("shows loadmask if token request has not resolved", async () => {
+    fetchMock.mockResponse(JSON.stringify({}));
+    render(<App Component={TestComponent} />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
+      expect(screen.queryByText(/test component/i)).not.toBeInTheDocument();
     });
   });
 

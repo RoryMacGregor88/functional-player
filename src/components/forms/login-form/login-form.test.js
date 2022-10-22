@@ -43,25 +43,25 @@ describe("Login Form", () => {
       "test-password123"
     );
 
-    // TODO: need to await clicks?
-    await userEvent.click(screen.getByRole("button", { name: /submit/i }));
+    userEvent.click(screen.getByRole("button", { name: /submit/i }));
 
-    expect(onSubmit).not.toHaveBeenCalled();
-    expect(screen.getByText(EMAIL_INVALID_MESSAGE)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(onSubmit).not.toHaveBeenCalled();
+      expect(screen.getByText(EMAIL_INVALID_MESSAGE)).toBeInTheDocument();
+    });
   });
 
   it("disables submit button if form is invalid", async () => {
     const onSubmit = jest.fn();
     render(<LoginForm onSubmit={onSubmit} />);
 
-    await userEvent.click(screen.getByRole("button", { name: /submit/i }));
+    userEvent.click(screen.getByRole("button", { name: /submit/i }));
 
     await waitFor(() => {
+      expect(onSubmit).not.toHaveBeenCalled();
       expect(screen.getByText(EMAIL_REQUIRED_MESSAGE)).toBeInTheDocument();
       expect(screen.getByText(PASSWORD_REQUIRED_MESSAGE)).toBeInTheDocument();
     });
-
-    expect(onSubmit).not.toHaveBeenCalled();
   });
 
   it("calls onSubmit when form is valid and button is clicked", async () => {
@@ -83,11 +83,13 @@ describe("Login Form", () => {
       TEST_PASSWORD
     );
 
-    await userEvent.click(screen.getByRole("button", { name: /submit/i }));
+    userEvent.click(screen.getByRole("button", { name: /submit/i }));
 
-    expect(onSubmit).toHaveBeenCalledWith({
-      email: TEST_EMAIL,
-      password: TEST_PASSWORD,
+    await waitFor(() => {
+      expect(onSubmit).toHaveBeenCalledWith({
+        email: TEST_EMAIL,
+        password: TEST_PASSWORD,
+      });
     });
   });
 });

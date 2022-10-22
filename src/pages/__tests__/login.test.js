@@ -48,10 +48,12 @@ describe("Login Page", () => {
     const button = screen.getByRole("button", { name: /submit/i });
     expect(button).toBeEnabled();
 
-    await userEvent.click(button);
+    userEvent.click(button);
 
-    expect(router.push).toHaveBeenCalledWith("/dashboard");
-    expect(updateCtx).toHaveBeenCalledWith({ user: resUser });
+    await waitFor(() => {
+      expect(router.push).toHaveBeenCalledWith("/dashboard");
+      expect(updateCtx).toHaveBeenCalledWith({ user: resUser });
+    });
   });
 
   it("handles server error", async () => {
@@ -73,7 +75,7 @@ describe("Login Page", () => {
     const button = screen.getByRole("button", { name: /submit/i });
     expect(button).toBeEnabled();
 
-    await userEvent.click(button);
+    userEvent.click(button);
 
     await waitFor(() => {
       expect(screen.getByText(message)).toBeInTheDocument();
@@ -100,14 +102,14 @@ describe("Login Page", () => {
     const button = screen.getByRole("button", { name: /submit/i });
     expect(button).toBeEnabled();
 
-    await userEvent.click(button);
+    userEvent.click(button);
 
     await waitFor(() => {
       expect(screen.getByText(DEFAULT_ERROR_MESSAGE)).toBeInTheDocument();
     });
   });
 
-  it("redirects to dashboard if user present", async () => {
+  it("redirects to dashboard if user found", async () => {
     const testUser = { username: "John smith" };
     const { router } = render(<Login user={testUser} />);
 
