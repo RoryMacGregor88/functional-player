@@ -1,10 +1,10 @@
+import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+
 import {
   render,
   screen,
   userEvent,
   waitFor,
-  fetchMock,
-  enableFetchMocks,
   DEFAULT_ERROR_MESSAGE,
   REGISTRATION_SUCCESS_MESSAGE,
 } from "@/src/utils";
@@ -13,9 +13,12 @@ import Register from "@/src/pages/register";
 
 enableFetchMocks();
 
+let push = null;
+
 describe("Register Page", () => {
   beforeEach(() => {
     fetchMock.resetMocks();
+    push = jest.fn();
   });
 
   it("renders", () => {
@@ -132,7 +135,9 @@ describe("Register Page", () => {
 
   it("redirects to dashboard if user found", () => {
     const testUser = { username: "John smith" };
-    const { router } = render(<Register user={testUser} />);
+    const { router } = render(<Register user={testUser} />, {
+      push: jest.fn(),
+    });
 
     expect(router.push).toHaveBeenCalledWith("/dashboard");
   });

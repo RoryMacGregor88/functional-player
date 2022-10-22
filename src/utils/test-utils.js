@@ -1,20 +1,19 @@
 import { render as rtlRender } from "@testing-library/react";
 import { Context } from "@/src/utils";
 import { RouterContext } from "next/dist/shared/lib/router-context";
-import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
 
-const mockRouterConfig = {
-  push: jest.fn(),
-  prefetch: () => ({ catch: () => {} }),
-};
-
-const render = (ui, { ctx = {}, ...options } = {}) => {
-  const updateCtx = jest.fn(),
-    router = mockRouterConfig;
+const render = (
+  ui,
+  { ctx = {}, updateCtx = () => {}, push = () => {}, ...options } = {}
+) => {
+  const router = {
+    push,
+    prefetch: () => ({ catch: () => {} }),
+  };
   const Wrapper = ({ children }) => (
-    <Context.Provider value={{ ctx, updateCtx }}>
-      <RouterContext.Provider value={router}>{children}</RouterContext.Provider>
-    </Context.Provider>
+    <RouterContext.Provider value={router}>
+      <Context.Provider value={{ ctx, updateCtx }}>{children}</Context.Provider>
+    </RouterContext.Provider>
   );
   const utils = rtlRender(ui, { wrapper: Wrapper, ...options });
   return { ...utils, ctx, updateCtx, router };
@@ -22,5 +21,4 @@ const render = (ui, { ctx = {}, ...options } = {}) => {
 
 export * from "@testing-library/react";
 export { default as userEvent } from "@testing-library/user-event";
-export { fetchMock, enableFetchMocks };
 export { render };

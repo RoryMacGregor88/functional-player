@@ -1,10 +1,10 @@
+import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+
 import {
   render,
   screen,
   userEvent,
   waitFor,
-  fetchMock,
-  enableFetchMocks,
   REACTIVATION_SUCCESS_MESSAGE,
 } from "@/src/utils";
 
@@ -24,7 +24,8 @@ describe("Reactivation success page", () => {
     fetchMock.mockResponse(JSON.stringify({ resUser: user }));
 
     const { router } = render(
-      <ReactivationSuccess user={user} updateCtx={updateCtx} />
+      <ReactivationSuccess user={user} updateCtx={updateCtx} />,
+      { push: jest.fn() }
     );
 
     await waitFor(() => {
@@ -45,7 +46,9 @@ describe("Reactivation success page", () => {
   });
 
   it("redirects to login if user is not found", () => {
-    const { router } = render(<ReactivationSuccess user={null} />);
+    const { router } = render(<ReactivationSuccess user={null} />, {
+      push: jest.fn(),
+    });
 
     expect(router.push).toHaveBeenCalledWith("/login");
   });

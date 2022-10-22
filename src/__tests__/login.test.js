@@ -1,10 +1,10 @@
+import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+
 import {
   render,
   screen,
   userEvent,
   waitFor,
-  fetchMock,
-  enableFetchMocks,
   DEFAULT_ERROR_MESSAGE,
 } from "@/src/utils";
 
@@ -33,7 +33,9 @@ describe("Login Page", () => {
 
     fetchMock.mockResponse(JSON.stringify({ resUser }));
 
-    const { router } = render(<Login updateCtx={updateCtx} />);
+    const { router } = render(<Login updateCtx={updateCtx} />, {
+      push: jest.fn(),
+    });
 
     await userEvent.type(
       screen.getByRole("textbox", { name: /email/i }),
@@ -111,7 +113,7 @@ describe("Login Page", () => {
 
   it("redirects to dashboard if user found", async () => {
     const testUser = { username: "John smith" };
-    const { router } = render(<Login user={testUser} />);
+    const { router } = render(<Login user={testUser} />, { push: jest.fn() });
 
     expect(router.push).toHaveBeenCalledWith("/dashboard");
   });

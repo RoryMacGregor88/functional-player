@@ -2,7 +2,7 @@ import stripeFn from "stripe";
 
 import { hash } from "bcryptjs";
 
-import { connectToDatabase } from "lib/mongodb";
+import { connectToDatabase } from "lib";
 
 import {
   USERS,

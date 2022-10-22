@@ -2,9 +2,7 @@ import stripeFn from "stripe";
 
 import { withIronSessionApiRoute } from "iron-session/next";
 
-import { connectToDatabase } from "lib/mongodb";
-
-import { sessionOptions } from "lib/session";
+import { connectToDatabase, sessionOptions } from "lib";
 
 import { USERS, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
 

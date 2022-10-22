@@ -1,10 +1,6 @@
-import {
-  waitFor,
-  fetchMock,
-  enableFetchMocks,
-  authenticateToken,
-  DEFAULT_ERROR_MESSAGE,
-} from "@/src/utils";
+import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+
+import { waitFor, authenticateToken, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 
 enableFetchMocks();
 

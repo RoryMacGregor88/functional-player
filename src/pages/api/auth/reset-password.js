@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import { hash } from "bcryptjs";
-import { connectToDatabase } from "lib/mongodb";
+import { connectToDatabase } from "lib";
 import { USERS, HTTP_METHOD_ERROR_MESSAGE, CHARS } from "@/src/utils";
 
 const generateTempPassword = () => {

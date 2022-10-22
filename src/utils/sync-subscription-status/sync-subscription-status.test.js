@@ -1,9 +1,6 @@
-import {
-  waitFor,
-  fetchMock,
-  enableFetchMocks,
-  DEFAULT_ERROR_MESSAGE,
-} from "@/src/utils";
+import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+
+import { waitFor, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 
 import syncSubscriptionStatus from "./sync-subscription-status";
 
@@ -34,7 +31,7 @@ describe("Reactivation success page", () => {
     });
   });
 
-  it.only("does not call state setter not found", async () => {
+  it("does not call state setter not found", async () => {
     const user = { username: "John Smith" };
     fetchMock.mockResponse(JSON.stringify({ resUser: user }));
 

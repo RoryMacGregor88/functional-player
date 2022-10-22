@@ -1,7 +1,6 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 
-import { sessionOptions } from "lib/session";
-import { connectToDatabase } from "lib/mongodb";
+import { sessionOptions, connectToDatabase } from "lib";
 
 import {
   HTTP_METHOD_ERROR_MESSAGE,

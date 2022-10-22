@@ -2,8 +2,7 @@ import { useRouter } from "next/router";
 
 import { Grid, Typography } from "@mui/material";
 
-import { getAllCourses } from "lib/course";
-import { getAllSeries } from "lib/series";
+import { getAllCourses, getAllSeries } from "lib";
 
 import {
   HeaderImage,

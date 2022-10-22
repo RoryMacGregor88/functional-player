@@ -1,10 +1,10 @@
+import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+
 import {
   render,
   screen,
   userEvent,
   waitFor,
-  fetchMock,
-  enableFetchMocks,
   EMAIL_REQUIRED_MESSAGE,
   EMAIL_INVALID_MESSAGE,
   PASSWORD_REQUIRED_MESSAGE,

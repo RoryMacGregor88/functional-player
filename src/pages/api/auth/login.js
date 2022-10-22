@@ -1,9 +1,7 @@
 import { compare } from "bcryptjs";
 import { withIronSessionApiRoute } from "iron-session/next";
 
-import { connectToDatabase } from "lib/mongodb";
-import { sessionOptions } from "lib/session";
-import { syncStripeAndDb } from "lib/syncStripeAndDb";
+import { connectToDatabase, sessionOptions, syncStripeAndDb } from "lib";
 
 import {
   USERS,

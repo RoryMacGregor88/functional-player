@@ -9,7 +9,7 @@ import {
   LoadMask,
 } from "@/src/components";
 
-import { getAllCourses } from "lib/course";
+import { getAllCourses } from "lib";
 
 // TODO: this works, but is a dedicated endpoint better, or just unneeded complication?
 export const getServerSideProps = async (ctx) => ({

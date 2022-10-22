@@ -1,10 +1,10 @@
+import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+
 import {
   render,
   screen,
   userEvent,
   waitFor,
-  fetchMock,
-  enableFetchMocks,
   DEFAULT_ERROR_MESSAGE,
   PASSWORD_UPDATE_SUCCESS_MESSAGE,
   ACCOUNT_DELETE_SUCCESS_MESSAGE,
@@ -29,7 +29,7 @@ describe("Account Page", () => {
     });
 
     it("redirects to login if no user found", () => {
-      const { router } = render(<Account user={null} />);
+      const { router } = render(<Account user={null} />, { push: jest.fn() });
 
       expect(router.push).toHaveBeenCalledWith("/login");
     });
@@ -215,7 +215,8 @@ describe("Account Page", () => {
       const updateCtx = jest.fn();
 
       const { router } = render(
-        <Account user={{ username: "John Smith" }} updateCtx={updateCtx} />
+        <Account user={{ username: "John Smith" }} updateCtx={updateCtx} />,
+        { push: jest.fn() }
       );
 
       userEvent.click(screen.getByRole("tab", { name: /delete account/i }));
@@ -247,7 +248,9 @@ describe("Account Page", () => {
       const message = "test-error-message";
       fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
-      const { router } = render(<Account user={{ username: "John Smith" }} />);
+      const { router } = render(<Account user={{ username: "John Smith" }} />, {
+        push: jest.fn(),
+      });
 
       userEvent.click(screen.getByRole("tab", { name: /delete account/i }));
 
@@ -276,7 +279,9 @@ describe("Account Page", () => {
         throw new Error();
       });
 
-      const { router } = render(<Account user={{ username: "John Smith" }} />);
+      const { router } = render(<Account user={{ username: "John Smith" }} />, {
+        push: jest.fn(),
+      });
 
       userEvent.click(screen.getByRole("tab", { name: /delete account/i }));
 

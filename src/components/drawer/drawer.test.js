@@ -1,11 +1,6 @@
-import {
-  render,
-  screen,
-  userEvent,
-  waitFor,
-  fetchMock,
-  enableFetchMocks,
-} from "@/src/utils";
+import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+
+import { render, screen, userEvent, waitFor } from "@/src/utils";
 import { Drawer } from "@/src/components";
 
 enableFetchMocks();
@@ -28,7 +23,8 @@ describe("drawer", () => {
   it("routes to links and closes drawer", async () => {
     const toggleDrawer = jest.fn();
     const { router } = render(
-      <Drawer drawerIsOpen={true} toggleDrawer={toggleDrawer} />
+      <Drawer drawerIsOpen={true} toggleDrawer={toggleDrawer} />,
+      { push: jest.fn() }
     );
 
     userEvent.click(screen.getByRole("link", { name: /login/i }));
@@ -71,7 +67,8 @@ describe("drawer", () => {
         drawerIsOpen={true}
         toggleDrawer={toggleDrawer}
         user={{ username: "John Smith" }}
-      />
+      />,
+      { updateCtx: jest.fn() }
     );
 
     userEvent.click(screen.getByRole("link", { name: /logout/i }));
@@ -82,7 +79,7 @@ describe("drawer", () => {
     });
   });
 
-  it("handler error", async () => {
+  it("handles error", async () => {
     const message = "test error message";
 
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
@@ -93,7 +90,8 @@ describe("drawer", () => {
         drawerIsOpen={true}
         toggleDrawer={toggleDrawer}
         user={{ username: "John Smith" }}
-      />
+      />,
+      { updateCtx: jest.fn() }
     );
 
     userEvent.click(screen.getByRole("link", { name: /logout/i }));

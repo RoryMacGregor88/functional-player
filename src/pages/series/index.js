@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import { getAllSeries } from "lib/series";
+import { getAllSeries } from "lib";
 import { PageWrapper, SpacedTitle, SeriesDisplay } from "@/src/components";
 
 export const getStaticProps = async (ctx) => ({

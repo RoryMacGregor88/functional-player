@@ -1,10 +1,6 @@
-import {
-  updateBookmarks,
-  waitFor,
-  fetchMock,
-  enableFetchMocks,
-  DEFAULT_ERROR_MESSAGE,
-} from "@/src/utils";
+import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+
+import { updateBookmarks, waitFor, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 
 enableFetchMocks();
 

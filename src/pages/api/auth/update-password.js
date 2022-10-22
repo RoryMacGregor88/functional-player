@@ -2,8 +2,7 @@ import { hash, compare } from "bcryptjs";
 
 import { withIronSessionApiRoute } from "iron-session/next";
 
-import { connectToDatabase } from "lib/mongodb";
-import { sessionOptions } from "lib/session";
+import { connectToDatabase, sessionOptions } from "lib";
 
 import {
   USERS,

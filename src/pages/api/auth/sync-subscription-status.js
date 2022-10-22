@@ -1,14 +1,6 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 
-import { syncStripeAndDb } from "lib/syncStripeAndDb";
-
-import { sessionOptions } from "lib/session";
-
-import { logServerError } from "lib/log-server-error";
-
-//TODO: make index for lib, make sure doesn't break anything
-
-// TODO: change all endpoints to use logServerError
+import { syncStripeAndDb, sessionOptions, logServerError } from "lib";
 
 import {
   HTTP_METHOD_ERROR_MESSAGE,
