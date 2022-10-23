@@ -1,22 +1,23 @@
 import { withIronSessionApiRoute } from "iron-session/next";
-import { sessionOptions } from "lib/session";
-import { DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+import {
+  sessionOptions,
+  handleForbidden,
+  handleServerError,
+  logServerError,
+} from "lib";
 
 async function authenticateToken(req, res) {
-  if (req.method === "GET") {
+  if (req.method !== "GET") {
+    return handleForbidden(res, "Invalid method, only GET requests permitted.");
+  } else {
     try {
+      // if no session user found, user is logged out, return null value
       const resUser = req.session.user ?? null;
       return res.status(200).json({ resUser });
     } catch (error) {
-      console.log("ERROR in authenticateToken: ", error);
-      return res
-        .status(500)
-        .send({ error: { message: DEFAULT_ERROR_MESSAGE } });
+      await logServerError("authenticateToken", error);
+      return handleServerError(res);
     }
-  } else {
-    return res.status(403).send({
-      error: { message: "Invalid method, only GET requests permitted." },
-    });
   }
 }
 

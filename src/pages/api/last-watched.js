@@ -1,19 +1,23 @@
 import { withIronSessionApiRoute } from "iron-session/next";
-import { connectToDatabase, sessionOptions } from "lib";
+import {
+  connectToDatabase,
+  sessionOptions,
+  handleForbidden,
+  handleServerError,
+  logServerError,
+} from "lib";
 import {
   USERS,
   DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
-  DEFAULT_ERROR_MESSAGE,
 } from "@/src/utils";
 
 async function lastWatched(req, res) {
-  if (req.method === "POST") {
-    if (req.session.user?.email !== req.body.email) {
-      return res
-        .status(403)
-        .send({ error: { message: DEFAULT_TOKEN_FORBIDDEN_MESSAGE } });
-    }
+  if (req.method !== "POST") {
+    return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
+  } else if (req.session.user?.email !== req.body.email) {
+    return handleForbidden(res, DEFAULT_TOKEN_FORBIDDEN_MESSAGE);
+  } else {
     try {
       const { email, _id } = req.body;
       const { db } = await connectToDatabase();
@@ -29,15 +33,9 @@ async function lastWatched(req, res) {
 
       return res.status(200).json({ resUser });
     } catch (error) {
-      console.log("ERROR in lastWatched: ", error);
-      return res
-        .status(500)
-        .send({ error: { message: DEFAULT_ERROR_MESSAGE } });
+      await logServerError("lastWatched", error);
+      return handleServerError(res);
     }
-  } else {
-    return res
-      .status(403)
-      .send({ error: { message: HTTP_METHOD_ERROR_MESSAGE } });
   }
 }
 

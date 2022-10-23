@@ -32,9 +32,8 @@ const Drawer = ({ user, drawerIsOpen, toggleDrawer }) => {
             severity: "error",
           },
         });
-      } else if (!!resUser) {
-        // resUser must be truthy to pass condition, so is empty object
-        updateCtx({ user: null });
+      } else if (resUser === null) {
+        updateCtx({ user: resUser });
         router.push("/login");
       }
     } catch (e) {

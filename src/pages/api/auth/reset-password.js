@@ -1,7 +1,17 @@
 import nodemailer from "nodemailer";
 import { hash } from "bcryptjs";
-import { connectToDatabase } from "lib";
-import { USERS, HTTP_METHOD_ERROR_MESSAGE, CHARS } from "@/src/utils";
+import {
+  connectToDatabase,
+  handleServerError,
+  handleForbidden,
+  logServerError,
+} from "lib";
+import {
+  USERS,
+  HTTP_METHOD_ERROR_MESSAGE,
+  EMAIL_NOT_FOUND_MESSAGE,
+  CHARS,
+} from "@/src/utils";
 
 const generateTempPassword = () => {
   let str = "";
@@ -13,17 +23,18 @@ const generateTempPassword = () => {
 };
 
 export default async function resetPassword(req, res) {
-  if (req.method === "POST") {
+  if (req.method !== "POST") {
+    return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
+  } else {
     try {
       const { email } = req.body;
-
       const { db } = await connectToDatabase();
 
       const result = await db.collection(USERS).findOne({ email });
 
       if (!result) {
-        return res.status(200).json({
-          message: "No user account associated with that email address.",
+        return res.status(400).json({
+          message: EMAIL_NOT_FOUND_MESSAGE,
         });
       }
 
@@ -58,12 +69,11 @@ export default async function resetPassword(req, res) {
 
       await transporter.sendMail(data);
 
+      // TODO: Do this like others? Get rid of OK? Remember update-password
       return res.status(200).json({ ok: true });
     } catch (error) {
-      console.log("ERROR in resetEmail: ", error);
-      return res.status(500).send({ error });
+      await logServerError("resetEmail", error);
+      return handleServerError(res);
     }
-  } else {
-    return res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
   }
 }

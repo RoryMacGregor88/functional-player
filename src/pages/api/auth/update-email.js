@@ -1,5 +1,11 @@
 import { withIronSessionApiRoute } from "iron-session/next";
-import { connectToDatabase, sessionOptions } from "lib";
+import {
+  connectToDatabase,
+  sessionOptions,
+  handleServerError,
+  handleForbidden,
+  logServerError,
+} from "lib";
 import {
   USERS,
   DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
@@ -7,28 +13,29 @@ import {
 } from "@/src/utils";
 
 async function updateEmail(req, res) {
-  if (req.method === "POST") {
-    if (req.session.user?.email !== req.body.email) {
-      return res.status(403).send({ error: DEFAULT_TOKEN_FORBIDDEN_MESSAGE });
-    }
+  if (req.method !== "POST") {
+    return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
+  } else if (req.session.user?.email !== req.body.email) {
+    return handleForbidden(res, DEFAULT_TOKEN_FORBIDDEN_MESSAGE);
+  } else {
     try {
       const { email, newEmail } = req.body;
-
       const { db } = await connectToDatabase();
+
       await db
         .collection(USERS)
         .findOneAndUpdate({ email }, { $set: { email: newEmail } });
 
-      req.session.user = { ...req.session.user, email: newEmail };
+      const resUser = { ...req.session.user, email: newEmail };
+
+      req.session.user = resUser;
       await req.session.save();
 
-      return res.status(200).json({ ok: true });
+      return res.status(200).json({ resUser });
     } catch (error) {
-      console.log("ERROR in updateEmail: ", error);
-      return res.status(500).send({ error });
+      await logServerError("updateEmail", error);
+      return handleServerError(res);
     }
-  } else {
-    return res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
   }
 }
 

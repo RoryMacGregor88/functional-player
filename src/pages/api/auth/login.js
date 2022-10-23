@@ -1,27 +1,32 @@
 import { compare } from "bcryptjs";
 import { withIronSessionApiRoute } from "iron-session/next";
-
-import { connectToDatabase, sessionOptions, syncStripeAndDb } from "lib";
-
+import {
+  connectToDatabase,
+  sessionOptions,
+  syncStripeAndDb,
+  handleForbidden,
+  handleServerError,
+} from "lib";
 import {
   USERS,
   HTTP_METHOD_ERROR_MESSAGE,
-  DEFAULT_ERROR_MESSAGE,
+  EMAIL_NOT_FOUND_MESSAGE,
 } from "@/src/utils";
 
 async function login(req, res) {
-  if (req.method === "POST") {
+  if (req.method !== "POST") {
+    return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
+  } else {
     try {
-      const { db } = await connectToDatabase();
-
       const { email, password: formPassword } = req.body;
+      const { db } = await connectToDatabase();
 
       const result = await db.collection(USERS).findOne({ email });
 
       if (!result) {
         return res.status(400).send({
           error: {
-            message: "No user account associated with that email address.",
+            message: EMAIL_NOT_FOUND_MESSAGE,
           },
         });
       }
@@ -44,30 +49,29 @@ async function login(req, res) {
       // fresh sync of stripe subscription status upon every login. If
       // subscription status is null (deleted), or is unchanged, original
       // value will be returned
-      const syncedStatus = await syncStripeAndDb(
+      const { error, subscriptionStatus } = await syncStripeAndDb(
+        db,
         email,
         currentSubscriptionStatus,
         subscriptionId
       );
 
+      if (!!error) {
+        return handleServerError(res);
+      }
+
       const resUser = {
         ...restOfUser,
-        subscriptionStatus: syncedStatus,
+        subscriptionStatus,
       };
       req.session.user = resUser;
       await req.session.save();
 
       return res.status(200).json({ resUser });
     } catch (error) {
-      console.log("ERROR in login: ", error);
-      return res
-        .status(500)
-        .send({ error: { message: DEFAULT_ERROR_MESSAGE } });
+      await logServerError("login", error);
+      return handleServerError(res);
     }
-  } else {
-    return res
-      .status(403)
-      .send({ error: { message: HTTP_METHOD_ERROR_MESSAGE } });
   }
 }
 

@@ -1,22 +1,21 @@
 import stripeFn from "stripe";
-
 import { hash } from "bcryptjs";
-
-import { connectToDatabase } from "lib";
-
 import {
-  USERS,
-  HTTP_METHOD_ERROR_MESSAGE,
-  DEFAULT_ERROR_MESSAGE,
-} from "@/src/utils";
+  connectToDatabase,
+  logServerError,
+  handleForbidden,
+  handleServerError,
+} from "lib";
+import { USERS, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
 export default async function register(req, res) {
-  if (req.method === "POST") {
+  if (req.method !== "POST") {
+    return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
+  } else {
     try {
       const { email, username, password } = req.body;
-
       const { db } = await connectToDatabase();
 
       const checkExistingEmail = await db.collection(USERS).findOne({ email });
@@ -69,14 +68,8 @@ export default async function register(req, res) {
         .status(201)
         .json({ clientSecret: latest_invoice.payment_intent.client_secret });
     } catch (error) {
-      console.log("ERROR in register: ", error);
-      return res
-        .status(500)
-        .send({ error: { message: DEFAULT_ERROR_MESSAGE } });
+      await logServerError("register", error);
+      return handleServerError(res);
     }
-  } else {
-    return res
-      .status(500)
-      .send({ error: { message: HTTP_METHOD_ERROR_MESSAGE } });
   }
 }

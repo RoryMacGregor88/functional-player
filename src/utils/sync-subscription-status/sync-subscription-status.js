@@ -26,7 +26,7 @@ export default async function syncSubscriptionStatus(
           message: error.message,
         },
       });
-    } else if (!!resUser) {
+    } else if (resUser === null) {
       if (!!stateSetter) stateSetter(true);
       callback({ user: resUser });
     }

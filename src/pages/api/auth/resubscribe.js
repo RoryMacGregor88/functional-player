@@ -1,22 +1,29 @@
 import stripeFn from "stripe";
-
 import { withIronSessionApiRoute } from "iron-session/next";
-
-import { connectToDatabase, sessionOptions } from "lib";
-
-import { USERS, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
+import {
+  connectToDatabase,
+  sessionOptions,
+  handleServerError,
+  handleForbidden,
+  logServerError,
+} from "lib";
+import {
+  USERS,
+  HTTP_METHOD_ERROR_MESSAGE,
+  DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
+} from "@/src/utils";
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
 async function resubscribe(req, res) {
-  if (req.method === "POST") {
-    if (req.session.user?.email !== req.body.email) {
-      return res.status(403).send({ error: DEFAULT_TOKEN_FORBIDDEN_MESSAGE });
-    }
+  if (req.method !== "POST") {
+    return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
+  } else if (req.session.user?.email !== req.body.email) {
+    return handleForbidden(res, DEFAULT_TOKEN_FORBIDDEN_MESSAGE);
+  } else {
     try {
-      const { db } = await connectToDatabase();
-
       const { email, username } = req.body;
+      const { db } = await connectToDatabase();
 
       // TODO: prevent making second subscription with same email
 
@@ -57,17 +64,16 @@ async function resubscribe(req, res) {
         ...req.session.user,
         ...updatedProperties,
       };
+
       await req.session.save();
 
       return res
         .status(201)
         .json({ clientSecret: latest_invoice.payment_intent.client_secret });
     } catch (error) {
-      console.log("ERROR in resubscribe: ", error);
-      return res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
+      await logServerError("resubscribe", error);
+      return handleServerError(res);
     }
-  } else {
-    return res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
   }
 }
 

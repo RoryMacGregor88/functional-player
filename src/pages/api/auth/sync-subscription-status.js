@@ -1,20 +1,23 @@
 import { withIronSessionApiRoute } from "iron-session/next";
-
-import { syncStripeAndDb, sessionOptions, logServerError } from "lib";
-
+import {
+  connectToDatabase,
+  syncStripeAndDb,
+  sessionOptions,
+  logServerError,
+  handleForbidden,
+  handleServerError,
+} from "lib";
 import {
   HTTP_METHOD_ERROR_MESSAGE,
   DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
-  DEFAULT_ERROR_MESSAGE,
 } from "@/src/utils";
 
 async function syncSubscriptionStatus(req, res) {
-  if (req.method === "POST") {
-    if (req.session.user?.email !== req.body.email) {
-      return res
-        .status(403)
-        .send({ error: { message: DEFAULT_TOKEN_FORBIDDEN_MESSAGE } });
-    }
+  if (req.method !== "POST") {
+    return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
+  } else if (req.session.user?.email !== req.body.email) {
+    return handleForbidden(res, DEFAULT_TOKEN_FORBIDDEN_MESSAGE);
+  } else {
     try {
       const {
         email,
@@ -22,14 +25,17 @@ async function syncSubscriptionStatus(req, res) {
         subscriptionId,
       } = req.body;
 
+      const { db } = await connectToDatabase();
+
       const { error, subscriptionStatus } = await syncStripeAndDb(
+        db,
         email,
         currentSubscriptionStatus,
         subscriptionId
       );
 
       if (!!error) {
-        return res.status(500).send(error);
+        return handleServerError(res);
       }
 
       const resUser = {
@@ -42,15 +48,9 @@ async function syncSubscriptionStatus(req, res) {
 
       return res.status(200).json({ resUser });
     } catch (error) {
-      logServerError("syncSubscriptionStatus", error);
-      return res
-        .status(500)
-        .send({ error: { message: DEFAULT_ERROR_MESSAGE } });
+      await logServerError("syncSubscriptionStatus", error);
+      return handleServerError(res);
     }
-  } else {
-    return res
-      .status(403)
-      .send({ error: { message: HTTP_METHOD_ERROR_MESSAGE } });
   }
 }
 

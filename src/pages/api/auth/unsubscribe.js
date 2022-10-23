@@ -1,18 +1,22 @@
 import stripeFn from "stripe";
-
 import { withIronSessionApiRoute } from "iron-session/next";
-
-import { connectToDatabase, sessionOptions } from "lib";
-
+import {
+  connectToDatabase,
+  sessionOptions,
+  handleServerError,
+  handleForbidden,
+  logServerError,
+} from "lib";
 import { USERS, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
 async function unsubscribe(req, res) {
-  if (req.method === "POST") {
-    if (req.session.user?.email !== req.body.email) {
-      return res.status(403).send({ error: DEFAULT_TOKEN_FORBIDDEN_MESSAGE });
-    }
+  if (req.method !== "POST") {
+    return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
+  } else if (req.session.user?.email !== req.body.email) {
+    return handleForbidden(res, DEFAULT_TOKEN_FORBIDDEN_MESSAGE);
+  } else {
     try {
       const { email, customerId } = req.body;
 
@@ -30,21 +34,19 @@ async function unsubscribe(req, res) {
         .collection(USERS)
         .findOneAndUpdate({ email }, { $set: { ...updatedProperties } });
 
-      const updatedUser = {
+      const resUser = {
         ...req.session.user,
         ...updatedProperties,
       };
 
-      req.session.user = updatedUser;
+      req.session.user = resUser;
       await req.session.save();
 
-      return res.status(200).json({ ok: true, user: updatedUser });
+      return res.status(200).json({ resUser });
     } catch (error) {
-      console.log("ERROR in unsubscribe: ", error);
-      return res.status(500).send({ error });
+      await logServerError("unsubscribe", error);
+      return handleServerError(res);
     }
-  } else {
-    return res.status(500).send({ error: HTTP_METHOD_ERROR_MESSAGE });
   }
 }
 

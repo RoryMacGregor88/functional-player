@@ -83,14 +83,15 @@ export default function Account({ user, updateCtx }) {
   const handleUpdateEmail = async (values) => {
     setIsLoading(true);
 
-    const { error, ok } = await http("/auth/update-email", {
+    const { error, resUser } = await http("/auth/update-email", {
       email,
       newEmail: values.email.toLowerCase(),
     });
 
     if (!!error) {
       handleError(error);
-    } else if (ok) {
+    } else if (!!resUser) {
+      // TODO: must updateCtx with resUser here, like others
       handleSuccess("Your email has been successfully updated.");
     }
   };
@@ -122,16 +123,16 @@ export default function Account({ user, updateCtx }) {
   const handleUnsubscribe = async (e) => {
     setIsLoading(true);
 
-    const { error, ok, user } = await http("/auth/unsubscribe", {
+    const { error, resUser } = await http("/auth/unsubscribe", {
       email,
       customerId,
     });
 
     if (!!error) {
       handleError(error);
-    } else if (ok) {
+    } else if (!!resUser) {
       // TODO: do Well better, how to have Attention passed as 'message'?
-      updateCtx({ user });
+      updateCtx({ user: resUser });
       handleSuccess(
         "Your subscription has been successfully cancelled. You can re-activate your subscription any time by clicking the 'RE-ENABLE SUBSCRIPTION' button below."
       );
@@ -182,8 +183,8 @@ export default function Account({ user, updateCtx }) {
         setWellData({
           message: error.message,
         });
-      } else if (!!resUser) {
-        updateCtx({ user: null });
+      } else if (resUser === null) {
+        updateCtx({ user: resUser });
         setWellData({
           severity: "success",
           message: ACCOUNT_DELETE_SUCCESS_MESSAGE,

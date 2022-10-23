@@ -1,32 +1,29 @@
 import { withIronSessionApiRoute } from "iron-session/next";
-import { sessionOptions } from "lib";
-
+import {
+  sessionOptions,
+  logServerError,
+  handleForbidden,
+  handleServerError,
+} from "lib";
 import {
   HTTP_METHOD_ERROR_MESSAGE,
   DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
-  DEFAULT_ERROR_MESSAGE,
 } from "@/src/utils";
 
-function logout(req, res) {
-  if (req.method === "POST") {
+async function logout(req, res) {
+  if (req.method !== "POST") {
+    return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
+  } else {
     if (req.session.user?.email !== req.body.email) {
-      return res
-        .status(403)
-        .send({ error: { message: DEFAULT_TOKEN_FORBIDDEN_MESSAGE } });
+      return handleForbidden(res, DEFAULT_TOKEN_FORBIDDEN_MESSAGE);
     }
     try {
       req.session.destroy();
-      return res.status(200).json({ resUser: {} });
+      return res.status(200).json({ resUser: null });
     } catch (error) {
-      console.log("ERROR in logout: ", error);
-      return res
-        .status(500)
-        .send({ error: { message: DEFAULT_ERROR_MESSAGE } });
+      await logServerError("logout", error);
+      return handleServerError(res);
     }
-  } else {
-    return res
-      .status(403)
-      .send({ error: { message: HTTP_METHOD_ERROR_MESSAGE } });
   }
 }
 

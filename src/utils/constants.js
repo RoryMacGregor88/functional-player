@@ -9,10 +9,14 @@ export const PASSWORD_MAX = 15;
 export const DEFAULT_ERROR_MESSAGE = "An unexpected error has occurred.";
 
 export const HTTP_METHOD_ERROR_MESSAGE =
-  "Invalid method, only POST requests permitted.";
+  "Invalid method. Only POST requests permitted.";
 
+// TODO: change to TOKEN_ERROR_MESSAGE
 export const DEFAULT_TOKEN_FORBIDDEN_MESSAGE =
   "Not allowed. Authorization token required.";
+
+export const EMAIL_NOT_FOUND_MESSAGE =
+  "No user account associated with that email address.";
 
 export const REGISTRATION_SUCCESS_MESSAGE =
   "Account successfully created. Click 'NEXT' button to continue.";

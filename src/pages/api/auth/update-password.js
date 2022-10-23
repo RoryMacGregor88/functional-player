@@ -1,26 +1,26 @@
 import { hash, compare } from "bcryptjs";
-
 import { withIronSessionApiRoute } from "iron-session/next";
-
-import { connectToDatabase, sessionOptions } from "lib";
-
+import {
+  connectToDatabase,
+  sessionOptions,
+  handleServerError,
+  handleForbidden,
+  logServerError,
+} from "lib";
 import {
   USERS,
   DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
-  DEFAULT_ERROR_MESSAGE,
 } from "@/src/utils";
 
 async function updatePassword(req, res) {
-  if (req.method === "POST") {
-    if (req.session.user?.email !== req.body.email) {
-      return res
-        .status(403)
-        .send({ error: { message: DEFAULT_TOKEN_FORBIDDEN_MESSAGE } });
-    }
+  if (req.method !== "POST") {
+    return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
+  } else if (req.session.user?.email !== req.body.email) {
+    return handleForbidden(res, DEFAULT_TOKEN_FORBIDDEN_MESSAGE);
+  } else {
     try {
       const { email, currentPassword, newPassword } = req.body;
-
       const { db } = await connectToDatabase();
 
       const { password: dbPassword } = await db
@@ -30,7 +30,9 @@ async function updatePassword(req, res) {
       const checkPassword = await compare(currentPassword, dbPassword);
 
       if (!checkPassword) {
-        return res.status(400).send({ error: "Incorrect password." });
+        return res
+          .status(400)
+          .send({ error: { message: "Incorrect password." } });
       }
 
       await db
@@ -40,17 +42,12 @@ async function updatePassword(req, res) {
           { $set: { password: await hash(newPassword, 12) } }
         );
 
+      // TODO: Do this like others? Get rid of OK? Remember reset-password
       return res.status(200).json({ ok: true });
     } catch (error) {
-      console.log("ERROR in updatePassword: ", error);
-      return res
-        .status(500)
-        .send({ error: { message: DEFAULT_ERROR_MESSAGE } });
+      await logServerError("updatePassword", error);
+      return handleServerError(res);
     }
-  } else {
-    return res
-      .status(403)
-      .send({ error: { message: HTTP_METHOD_ERROR_MESSAGE } });
   }
 }
 

@@ -1,23 +1,28 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 
-import { sessionOptions, connectToDatabase } from "lib";
+import {
+  sessionOptions,
+  connectToDatabase,
+  handleForbidden,
+  logServerError,
+  handleServerError,
+} from "lib";
 
 import {
   HTTP_METHOD_ERROR_MESSAGE,
   DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
-  DEFAULT_ERROR_MESSAGE,
   USERS,
 } from "@/src/utils";
 
 async function updateBookmarks(req, res) {
-  if (req.method === "POST") {
-    if (req.session.user?.email !== req.body.email) {
-      return res.status(403).send({ error: DEFAULT_TOKEN_FORBIDDEN_MESSAGE });
-    }
+  if (req.method !== "POST") {
+    return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
+  } else if (req.session.user?.email !== req.body.email) {
+    return handleForbidden(res, DEFAULT_TOKEN_FORBIDDEN_MESSAGE);
+  } else {
     try {
-      const { db } = await connectToDatabase();
-
       const { email, bookmarks } = req.body;
+      const { db } = await connectToDatabase();
 
       await db
         .collection(USERS)
@@ -28,15 +33,9 @@ async function updateBookmarks(req, res) {
 
       return res.status(200).json({ resBookmarks: bookmarks });
     } catch (error) {
-      console.log("ERROR in updateBookmarks: ", error);
-      return res
-        .status(500)
-        .send({ error: { message: DEFAULT_ERROR_MESSAGE } });
+      await logServerError("updateBookmarks", error);
+      return handleServerError(res);
     }
-  } else {
-    return res
-      .status(403)
-      .send({ error: { message: HTTP_METHOD_ERROR_MESSAGE } });
   }
 }
 
