@@ -9,7 +9,7 @@ import {
 } from "lib";
 import {
   USERS,
-  DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
+  TOKEN_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
 } from "@/src/utils";
 
@@ -17,7 +17,7 @@ async function updatePassword(req, res) {
   if (req.method !== "POST") {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
-    return handleForbidden(res, DEFAULT_TOKEN_FORBIDDEN_MESSAGE);
+    return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {
     try {
       const { email, currentPassword, newPassword } = req.body;
@@ -32,7 +32,7 @@ async function updatePassword(req, res) {
       if (!checkPassword) {
         return res
           .status(400)
-          .send({ error: { message: "Incorrect password." } });
+          .json({ error: { message: "Incorrect password." } });
       }
 
       await db

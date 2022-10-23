@@ -7,16 +7,13 @@ import {
   handleForbidden,
   handleServerError,
 } from "lib";
-import {
-  HTTP_METHOD_ERROR_MESSAGE,
-  DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
-} from "@/src/utils";
+import { HTTP_METHOD_ERROR_MESSAGE, TOKEN_ERROR_MESSAGE } from "@/src/utils";
 
 async function syncSubscriptionStatus(req, res) {
   if (req.method !== "POST") {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
-    return handleForbidden(res, DEFAULT_TOKEN_FORBIDDEN_MESSAGE);
+    return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {
     try {
       const {

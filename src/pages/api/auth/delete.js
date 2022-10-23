@@ -11,7 +11,7 @@ import {
 
 import {
   USERS,
-  DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
+  TOKEN_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
 } from "@/src/utils";
 
@@ -21,7 +21,7 @@ async function deleteAccount(req, res) {
   if (req.method !== "POST") {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
-    return handleForbidden(res, DEFAULT_TOKEN_FORBIDDEN_MESSAGE);
+    return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {
     try {
       const { email, customerId } = req.body;

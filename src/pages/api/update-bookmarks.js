@@ -10,7 +10,7 @@ import {
 
 import {
   HTTP_METHOD_ERROR_MESSAGE,
-  DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
+  TOKEN_ERROR_MESSAGE,
   USERS,
 } from "@/src/utils";
 
@@ -18,7 +18,7 @@ async function updateBookmarks(req, res) {
   if (req.method !== "POST") {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
-    return handleForbidden(res, DEFAULT_TOKEN_FORBIDDEN_MESSAGE);
+    return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {
     try {
       const { email, bookmarks } = req.body;

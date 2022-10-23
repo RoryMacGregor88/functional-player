@@ -11,9 +11,7 @@ export const DEFAULT_ERROR_MESSAGE = "An unexpected error has occurred.";
 export const HTTP_METHOD_ERROR_MESSAGE =
   "Invalid method. Only POST requests permitted.";
 
-// TODO: change to TOKEN_ERROR_MESSAGE
-export const DEFAULT_TOKEN_FORBIDDEN_MESSAGE =
-  "Not allowed. Authorization token required.";
+export const TOKEN_ERROR_MESSAGE = "Not allowed. Authorization token required.";
 
 export const EMAIL_NOT_FOUND_MESSAGE =
   "No user account associated with that email address.";

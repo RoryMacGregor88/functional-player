@@ -23,7 +23,7 @@ export default async function register(req, res) {
       if (!!checkExistingEmail) {
         return res
           .status(400)
-          .send({ error: { message: "Email already exists." } });
+          .json({ error: { message: "Email already exists." } });
       }
 
       const checkExistingUsername = await db
@@ -33,7 +33,7 @@ export default async function register(req, res) {
       if (!!checkExistingUsername) {
         return res
           .status(400)
-          .send({ error: { message: "Username is taken." } });
+          .json({ error: { message: "Username is taken." } });
       }
 
       // if credentials are valid, create customer on stripe servers

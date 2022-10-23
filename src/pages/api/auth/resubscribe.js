@@ -10,7 +10,7 @@ import {
 import {
   USERS,
   HTTP_METHOD_ERROR_MESSAGE,
-  DEFAULT_TOKEN_FORBIDDEN_MESSAGE,
+  TOKEN_ERROR_MESSAGE,
 } from "@/src/utils";
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
@@ -19,7 +19,7 @@ async function resubscribe(req, res) {
   if (req.method !== "POST") {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
-    return handleForbidden(res, DEFAULT_TOKEN_FORBIDDEN_MESSAGE);
+    return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {
     try {
       const { email, username } = req.body;

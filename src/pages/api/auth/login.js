@@ -24,7 +24,7 @@ async function login(req, res) {
       const result = await db.collection(USERS).findOne({ email });
 
       if (!result) {
-        return res.status(400).send({
+        return res.status(400).json({
           error: {
             message: EMAIL_NOT_FOUND_MESSAGE,
           },
@@ -43,7 +43,7 @@ async function login(req, res) {
       if (!checkPassword) {
         return res
           .status(400)
-          .send({ error: { message: "Incorrect password." } });
+          .json({ error: { message: "Incorrect password." } });
       }
 
       // fresh sync of stripe subscription status upon every login. If
