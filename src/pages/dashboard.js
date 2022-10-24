@@ -68,7 +68,7 @@ const ComingSoon = ({ course }) => (
 
 /**
  * @param {{
- *  user: object|null,
+ *  user: object|null
  *  courses: object[]
  *  series: object[]
  * }} props

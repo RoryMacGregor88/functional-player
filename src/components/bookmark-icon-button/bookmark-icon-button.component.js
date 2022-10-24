@@ -8,9 +8,9 @@ import {
 
 /**
  * @param {{
- *  isBookmarked: boolean,
+ *  isBookmarked: boolean
  *  onBookmarkClick: function
- *  sx: object
+ *  sx?: object
  * }} props
  */
 const BookmarkIconButton = ({ isBookmarked, onBookmarkClick, sx = {} }) => {
@@ -35,6 +35,7 @@ const BookmarkIconButton = ({ isBookmarked, onBookmarkClick, sx = {} }) => {
         borderRadius: "5px",
         ...sx,
       }}
+      data-testid="bookmark-icon"
     >
       <Typography sx={{ color }}>{text}</Typography>
       {isBookmarked ? (

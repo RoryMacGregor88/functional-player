@@ -3,10 +3,10 @@ import { Grid, Typography, useMediaQuery } from "@mui/material";
 
 /**
  * @param {{
- *  src: string,
- *  alt: string,
- *  title: string,
- *  imageProps?: object,
+ *  src: string
+ *  alt: string
+ *  title: string
+ *  imageProps?: object
  *  deviceSize: string
  * }} props
  */
@@ -78,10 +78,10 @@ const Device = ({ src, alt, title, imageProps = {}, deviceSize }) => (
 
 /**
  * @param {{
- *  src: string,
- *  alt: string,
- *  title: 'string',
- *  imageProps?: object,
+ *  src: string
+ *  alt: string
+ *  title: 'string'
+ *  imageProps?: object
  * }} props
  */
 const Desktop = ({ src, alt, title, imageProps = {} }) => (

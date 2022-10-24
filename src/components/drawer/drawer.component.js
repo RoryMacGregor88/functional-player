@@ -4,14 +4,14 @@ import { DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 
 import { Drawer as MuiDrawer, Grid } from "@mui/material";
 
-import { SidebarItem, ProfileIcon, BookmarksIcon } from "@/src/components";
+import { SidebarItem, ProfileIcon } from "@/src/components";
 
 import { http, Context } from "@/src/utils";
 
 /**
  * @param {{
- *  user: object,
- *  drawerIsOpen: boolean,
+ *  user: object|null
+ *  drawerIsOpen: boolean
  *  toggleDrawer: function
  * }} props
  */

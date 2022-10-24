@@ -11,6 +11,14 @@ const Action = ({ onClick }) => {
   );
 };
 
+/**
+ * @param {{
+ *  open: boolean
+ *  message: string
+ *  onClose: function
+ *  severity?: string
+ * }} props
+ */
 const Toast = ({ open, message, onClose, severity = "success" }) => {
   const isMedium = useMediaQuery("(max-width:1000px)");
 

@@ -35,8 +35,8 @@ const Overlay = ({ course }) => {
 
 /**
  * @param {{
- *  onClick: function,
- *  orientation: string,
+ *  onClick: function
+ *  orientation: string
  *  children: React.ReactChildren
  * }} props
  */
@@ -67,7 +67,7 @@ const ChevronWrapper = ({ onClick, orientation = "left", children }) => (
 
 /**
  * @param {{
- *  title: string,
+ *  title: string
  *  courses: object[]
  * }} props
  */

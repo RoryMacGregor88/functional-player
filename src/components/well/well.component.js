@@ -2,8 +2,8 @@ import { Alert, AlertTitle } from "@mui/material";
 
 /**
  * @param {{
- *  title?: string,
- *  message: string,
+ *  title?: string
+ *  message: string
  *  severity?: string
  * }} props
  */

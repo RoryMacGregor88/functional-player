@@ -11,7 +11,7 @@ import {
 
 /**
  * @param {{
- *  user: object|null,
+ *  user: object|null
  *  updateCtx: function
  * }} props
  */

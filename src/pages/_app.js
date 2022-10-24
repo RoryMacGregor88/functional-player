@@ -17,7 +17,7 @@ import { Context, authenticateToken } from "@/src/utils";
 
 /**
  * @param {{
- *  Component: React.ReactNode,
+ *  Component: React.ReactNode
  *  pageProps: object
  * }} props
  */

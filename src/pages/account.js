@@ -22,9 +22,9 @@ import {
 
 /**
  * @param {{
- *  name: string,
- *  value: number,
- *  index: number,
+ *  name: string
+ *  value: number
+ *  index: number
  *  children: React.ReactChildren
  * }} props
  */

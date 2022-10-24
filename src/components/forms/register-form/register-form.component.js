@@ -15,9 +15,9 @@ import { registerFormSchema } from "@/src/utils";
 
 /**
  * @param {{
- *  isLoading: boolean,
- *  onSubmit: function,
- *  onNextClick: function,
+ *  isLoading: boolean
+ *  onSubmit: function
+ *  onNextClick: function
  *  disableSubmitButton: boolean
  *  disableNextButton: boolean
  * }} props

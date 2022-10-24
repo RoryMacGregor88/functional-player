@@ -13,11 +13,11 @@ import {
 
 /**
  * @param {{
- *  subscriptionStatus: boolean,
- *  handleUnsubscribe: function,
- *  handleStripeCustomer: function,
- *  handleResubscribe: function,
- *  clientSecret: function,
+ *  subscriptionStatus: boolean
+ *  handleUnsubscribe: function
+ *  handleStripeCustomer: function
+ *  handleResubscribe: function
+ *  clientSecret: function
  *  isLoading: boolean
  * }} props
  */

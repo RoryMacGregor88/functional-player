@@ -20,10 +20,10 @@ import { updateBookmarks, http } from "@/src/utils";
 
 /**
  * @param {
- *  selectedVideo: object,
- *  isBookmarked: boolean,
- *  onBookmarkClick: function,
- *  onClose: function,
+ *  selectedVideo: object
+ *  isBookmarked: boolean
+ *  onBookmarkClick: function
+ *  onClose: function
  *  deviceSize: string
  * } params
  */
@@ -94,9 +94,9 @@ const Overlay = ({
 
 /**
  * @param {
- *  open: boolean,
- *  user: object|null,
- *  selectedVideo: object,
+ *  open: boolean
+ *  user: object|null
+ *  selectedVideo: object
  *  onClose: function
  * } params
  */

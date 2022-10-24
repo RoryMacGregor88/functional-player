@@ -2,8 +2,8 @@ import { Grid } from "@mui/material";
 
 /**
  * @param {
- *  onSubmit: function,
- *  children: React.ReactNode
+ *  onSubmit: function
+ *  children: React.ReactChildren
  * } props
  */
 const FormWrapper = ({ onSubmit, children }) => (

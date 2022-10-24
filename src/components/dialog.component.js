@@ -9,11 +9,11 @@ import { Button, CloseIcon } from "@/src/components";
 
 /**
  * @param {{
- *  open: boolean,
- *  onClose: function,
- *  title: string,
- *  message?: string,
- *  actions?: React.ReactNode[],
+ *  open: boolean
+ *  onClose: function
+ *  title: string
+ *  message?: string
+ *  actions?: React.ReactNode[]
  * }} props
  */
 const Dialog = ({ open = false, onClose, title, message, actions }) => (

@@ -1,6 +1,6 @@
 /**
  * @param {{
- *  videoId: string,
+ *  videoId: string
  *  alt: string
  * }} props
  */

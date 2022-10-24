@@ -3,7 +3,7 @@ import { IconButton as MuiIconButton } from "@mui/material";
 
 /**
  * @param {{
- *  children: React.ReactChildren,
+ *  children: React.ReactChildren
  *  props: any
  * }} props
  */
