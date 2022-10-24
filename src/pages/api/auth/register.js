@@ -1,11 +1,14 @@
 import stripeFn from "stripe";
+
 import { hash } from "bcryptjs";
+
 import {
   connectToDatabase,
   logServerError,
   handleForbidden,
   handleServerError,
 } from "lib";
+
 import { USERS, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);

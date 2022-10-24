@@ -1,11 +1,14 @@
 import nodemailer from "nodemailer";
+
 import { hash } from "bcryptjs";
+
 import {
   connectToDatabase,
   handleServerError,
   handleForbidden,
   logServerError,
 } from "lib";
+
 import {
   USERS,
   HTTP_METHOD_ERROR_MESSAGE,

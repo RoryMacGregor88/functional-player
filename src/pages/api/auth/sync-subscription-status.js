@@ -1,4 +1,5 @@
 import { withIronSessionApiRoute } from "iron-session/next";
+
 import {
   connectToDatabase,
   syncStripeAndDb,
@@ -7,6 +8,7 @@ import {
   handleForbidden,
   handleServerError,
 } from "lib";
+
 import { HTTP_METHOD_ERROR_MESSAGE, TOKEN_ERROR_MESSAGE } from "@/src/utils";
 
 async function syncSubscriptionStatus(req, res) {

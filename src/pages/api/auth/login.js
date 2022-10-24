@@ -1,5 +1,7 @@
 import { compare } from "bcryptjs";
+
 import { withIronSessionApiRoute } from "iron-session/next";
+
 import {
   connectToDatabase,
   sessionOptions,
@@ -7,6 +9,7 @@ import {
   handleForbidden,
   handleServerError,
 } from "lib";
+
 import {
   USERS,
   HTTP_METHOD_ERROR_MESSAGE,
