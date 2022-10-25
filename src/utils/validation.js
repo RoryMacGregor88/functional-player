@@ -5,7 +5,7 @@ import {
   EMAIL_INVALID_MESSAGE,
   USERNAME_REQUIRED_MESSAGE,
   PASSWORD_REQUIRED_MESSAGE,
-  PASSWORDS_MATCH_MESSAGE,
+  NO_PASSWORD_MATCH_MESSAGE,
   PASSWORD_MIN_LENGTH_MESSAGE,
   PASSWORD_CONFIRM_REQUIRED_MESSAGE,
 } from "@/src/utils";
@@ -28,7 +28,7 @@ const registerFormSchema = Yup.object().shape({
     .required(PASSWORD_REQUIRED_MESSAGE)
     .min(5, PASSWORD_MIN_LENGTH_MESSAGE),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], PASSWORDS_MATCH_MESSAGE)
+    .oneOf([Yup.ref("password"), null], NO_PASSWORD_MATCH_MESSAGE)
     .required(PASSWORD_CONFIRM_REQUIRED_MESSAGE),
 });
 

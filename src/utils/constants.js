@@ -34,9 +34,10 @@ export const USERNAME_REQUIRED_MESSAGE = "Username is required";
 export const EMAIL_INVALID_MESSAGE =
   "Email must include '@' and '.' characters";
 export const PASSWORD_REQUIRED_MESSAGE = "Password is required";
+export const NEW_PASSWORD_REQUIRED_MESSAGE = "Password is required";
 export const PASSWORD_CONFIRM_REQUIRED_MESSAGE =
   "Password confirmation is required";
-export const PASSWORDS_MATCH_MESSAGE = "Passwords do not match";
+export const NO_PASSWORD_MATCH_MESSAGE = "Passwords do not match";
 export const PASSWORD_MIN_LENGTH_MESSAGE =
   "Password must be at least 5 characters";
 export const PASSWORD_UPDATE_SUCCESS_MESSAGE =

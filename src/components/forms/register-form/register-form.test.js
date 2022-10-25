@@ -4,7 +4,7 @@ import {
   USERNAME_REQUIRED_MESSAGE,
   PASSWORD_REQUIRED_MESSAGE,
   PASSWORD_MIN_LENGTH_MESSAGE,
-  PASSWORDS_MATCH_MESSAGE,
+  NO_PASSWORD_MATCH_MESSAGE,
   render,
   screen,
   userEvent,
@@ -108,7 +108,7 @@ describe("Register Form", () => {
     userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(PASSWORDS_MATCH_MESSAGE)).toBeInTheDocument();
+      expect(screen.getByText(NO_PASSWORD_MATCH_MESSAGE)).toBeInTheDocument();
       expect(onSubmit).not.toHaveBeenCalled();
     });
   });

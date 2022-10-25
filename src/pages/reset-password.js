@@ -50,22 +50,24 @@ export default function ResetPassword({ user }) {
   }
 
   const onSubmit = async (values) => {
-    const { email } = values;
+    try {
+      const { email } = values;
 
-    const { error, message, ok } = await http("/auth/reset-password", {
-      email: email.toLowerCase(),
-    });
-
-    if (!!message) {
-      setWellData({ message });
-    } else if (!!error) {
-      setWellData({ message: DEFAULT_ERROR_MESSAGE });
-    } else if (ok) {
-      setIsSubmitDisabled(true);
-      setWellData({
-        severity: "success",
-        message: `An email has been sent to ${email}. Please follow the steps to reset your password. Don't forget to check your junk folder.`,
+      const { error, ok } = await http("/auth/reset-password", {
+        email: email.toLowerCase(),
       });
+
+      if (!!error) {
+        setWellData({ message: error.message });
+      } else if (ok) {
+        setIsSubmitDisabled(true);
+        setWellData({
+          severity: "success",
+          message: `An email has been sent to ${email}. Please follow the steps to reset your password. Don't forget to check your junk folder.`,
+        });
+      }
+    } catch (e) {
+      setWellData({ message: DEFAULT_ERROR_MESSAGE });
     }
   };
 

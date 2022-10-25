@@ -51,11 +51,14 @@ describe("Login Form", () => {
     });
   });
 
+  // TODO: might now be broken. Update all forms' submit buttons
   it("disables submit button if form is invalid", async () => {
     const onSubmit = jest.fn();
     render(<LoginForm onSubmit={onSubmit} />);
 
-    userEvent.click(screen.getByRole("button", { name: /submit/i }));
+    const submitButton = screen.getByRole("button", { name: /submit/i });
+    expect(submitButton).toBeDisabled();
+    userEvent.click(submitButton);
 
     await waitFor(() => {
       expect(onSubmit).not.toHaveBeenCalled();

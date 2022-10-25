@@ -4,18 +4,19 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FormWrapper, Button, PasswordField } from "@/src/components";
 import {
   PASSWORD_REQUIRED_MESSAGE,
-  PASSWORDS_MATCH_MESSAGE,
+  NEW_PASSWORD_REQUIRED_MESSAGE,
   PASSWORD_CONFIRM_REQUIRED_MESSAGE,
+  NO_PASSWORD_MATCH_MESSAGE,
   PASSWORD_MIN_LENGTH_MESSAGE,
 } from "@/src/utils";
 
 const updatePasswordSchema = Yup.object().shape({
   currentPassword: Yup.string().required(PASSWORD_REQUIRED_MESSAGE),
   newPassword: Yup.string()
-    .required(PASSWORD_REQUIRED_MESSAGE)
+    .required(NEW_PASSWORD_REQUIRED_MESSAGE)
     .min(5, PASSWORD_MIN_LENGTH_MESSAGE),
   confirmNewPassword: Yup.string()
-    .oneOf([Yup.ref("newPassword"), null], PASSWORDS_MATCH_MESSAGE)
+    .oneOf([Yup.ref("newPassword"), null], NO_PASSWORD_MATCH_MESSAGE)
     .required(PASSWORD_CONFIRM_REQUIRED_MESSAGE),
 });
 
@@ -35,6 +36,8 @@ const UpdatePasswordForm = ({ handleUpdatePassword }) => {
       confirmNewPassword: "",
     },
   });
+
+  const isDisabled = !isDirty || Object.keys(errors).length;
 
   const onSubmit = ({ currentPassword, newPassword }) => {
     handleUpdatePassword({ currentPassword, newPassword });
@@ -62,7 +65,7 @@ const UpdatePasswordForm = ({ handleUpdatePassword }) => {
         label="Confirm new password"
         name="confirmNewPassword"
       />
-      <Button type="submit" disabled={!isDirty}>
+      <Button type="submit" disabled={isDisabled}>
         Submit
       </Button>
     </FormWrapper>

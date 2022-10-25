@@ -16,7 +16,7 @@ import {
   BookmarkIconButton,
 } from "@/src/components";
 
-import { updateBookmarks, http } from "@/src/utils";
+import { updateBookmarks, http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
 
 /**
  * @param {
@@ -103,29 +103,39 @@ const Overlay = ({
 const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
   const router = useRouter();
 
-  // TODO: useEffect not running
-  // TODO: make this another util, test
-  useEffect(() => {
+  const updateLastWatched = async (user, _id) => {
     if (!!user) {
-      (async () => {
-        // TODO: try/catch here for client error
+      try {
         const { error, resUser } = await http("/last-watched", {
           email: user.email,
-          _id: selectedVideo?._id,
+          _id,
         });
 
-        if (!!user) {
-          updateCtx({ user: resUser });
-        } else if (!!error) {
+        if (!!error) {
           updateCtx({
             toastData: {
               message: error.message,
               severity: "error",
             },
           });
+        } else if (!!user) {
+          updateCtx({ user: resUser });
         }
-      })();
+      } catch (e) {
+        updateCtx({
+          toastData: {
+            message: DEFAULT_ERROR_MESSAGE,
+            severity: "error",
+          },
+        });
+      }
     }
+  };
+
+  // TODO: useEffect not running
+  // TODO: make this another util, test
+  useEffect(() => {
+    updateLastWatched();
   }, []);
 
   const isMedium = useMediaQuery("(max-width:1200px)");
