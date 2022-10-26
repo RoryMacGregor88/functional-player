@@ -65,7 +65,7 @@ const RegisterForm = ({
         <Button
           type="submit"
           disabled={disableSubmitButton}
-          loading={isLoading}
+          isLoading={isLoading}
         >
           Submit
         </Button>

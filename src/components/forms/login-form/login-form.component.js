@@ -37,7 +37,7 @@ const LoginForm = ({ onSubmit, isLoading }) => {
         label="Password"
         name="password"
       />
-      <Button type="submit" loading={isLoading}>
+      <Button type="submit" isLoading={isLoading}>
         Submit
       </Button>
       <Grid container alignItems="center" justifyContent="center">

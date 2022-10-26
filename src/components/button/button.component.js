@@ -2,18 +2,17 @@ import { forwardRef } from "react";
 import { Button as MuiButton } from "@mui/material";
 import { LoadingSpinner } from "@/src/components";
 
-// TODO: disabled ? <span style={{cursor: 'not-allowed'}}>{component}</span>
-
 /**
  * @param {{
+ *  onClick: function
  *  disabled?: boolean
- *  loading?: boolean
+ *  isLoading?: boolean
  *  children: React.ReactChildren
  *  props: any
  * }} props
  */
 const Button = (
-  { disabled = false, loading = false, children, ...props },
+  { onClick, disabled = false, isLoading = false, children, ...props },
   ref
 ) => (
   <MuiButton
@@ -26,11 +25,13 @@ const Button = (
       backgroundColor: "primary.main",
       color: "background.paper",
     }}
-    disabled={disabled}
+    onClick={onClick}
+    disabled={disabled || isLoading}
     {...props}
   >
-    {loading ? (
+    {isLoading ? (
       <LoadingSpinner
+        data-testid="loading-spinner"
         sx={{
           width: "1.5rem !important",
           height: "1.5rem !important",

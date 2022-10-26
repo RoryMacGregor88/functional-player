@@ -21,7 +21,7 @@ const SubscribeForm = ({ subscribeSubmit, isLoading }) => {
   return stripeIsLoaded ? (
     <FormWrapper onSubmit={() => subscribeSubmit(stripe, elements)}>
       <PaymentElement />
-      <Button type="submit" loading={isLoading}>
+      <Button type="submit" isLoading={isLoading}>
         Submit
       </Button>
     </FormWrapper>

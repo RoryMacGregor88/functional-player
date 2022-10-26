@@ -51,13 +51,13 @@ const UpdateSubscriptionForm = ({
         </Elements>
       ) : subscriptionStatus === "active" ? (
         <FormWrapper onSubmit={handleUnsubscribe}>
-          <Button type="submit" loading={isLoading}>
+          <Button type="submit" isLoading={isLoading}>
             Cancel Subscription
           </Button>
         </FormWrapper>
       ) : (
         <FormWrapper onSubmit={handleStripeCustomer}>
-          <Button type="submit" loading={isLoading}>
+          <Button type="submit" isLoading={isLoading}>
             Re-enable Subscription
           </Button>
         </FormWrapper>

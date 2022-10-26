@@ -23,7 +23,7 @@ import Well from "./well/well.component";
 import Toast from "./toast.component";
 import TextField from "./text-field.component";
 import Attention from "./attention.component";
-import Button from "./button.component";
+import Button from "./button/button.component";
 import Footer from "./footer.component";
 
 export * from "./forms";
