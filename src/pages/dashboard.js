@@ -1,14 +1,11 @@
-import { useRouter } from "next/router";
-
 import { Grid, Typography } from "@mui/material";
 
-import { getAllCourses, getAllSeries } from "lib";
+import { getAllCourses, getAllSeries } from "@/lib";
 
 import {
   HeaderImage,
   PageWrapper,
   CourseDisplay,
-  LoadMask,
   Slider,
 } from "@/src/components";
 
@@ -68,21 +65,13 @@ const ComingSoon = ({ course }) => (
 
 /**
  * @param {{
- *  user: object|null
  *  courses: object[]
  *  series: object[]
  * }} props
  */
 export default function Dashboard({ user, courses, series }) {
-  const router = useRouter();
-
-  if (!user) {
-    router.push("/login");
-    return <LoadMask />;
-  }
-
   const lastWatched =
-    courses.find((course) => course._id === user.lastWatched) ?? null;
+    courses.find((course) => course._id === user?.lastWatched) ?? null;
 
   const latestCourses = courses
     ?.sort((a, b) => {
@@ -91,7 +80,7 @@ export default function Dashboard({ user, courses, series }) {
     })
     .slice(0, 5);
 
-  const bookmarks = courses.filter(({ _id }) => user.bookmarks.includes(_id));
+  const bookmarks = courses.filter(({ _id }) => user?.bookmarks.includes(_id));
 
   return (
     <Grid container direction="column" sx={{ width: "100%" }}>

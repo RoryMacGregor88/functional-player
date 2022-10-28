@@ -8,9 +8,7 @@ export default async function authenticateToken(callback) {
       null,
       "GET"
     );
-    if (!!resUser) {
-      callback({ user: resUser });
-    } else if (!!error) {
+    if (!!error) {
       callback({
         user: null,
         toastData: {
@@ -18,6 +16,8 @@ export default async function authenticateToken(callback) {
           message: error.message,
         },
       });
+    } else if (!!resUser || resUser === null) {
+      callback({ user: resUser });
     }
   } catch (e) {
     callback({

@@ -5,7 +5,7 @@ import {
   logServerError,
   handleForbidden,
   handleServerError,
-} from "lib";
+} from "@/lib";
 
 import { HTTP_METHOD_ERROR_MESSAGE, TOKEN_ERROR_MESSAGE } from "@/src/utils";
 
@@ -25,5 +25,7 @@ async function logout(req, res) {
     }
   }
 }
+
+export { logout };
 
 export default withIronSessionApiRoute(logout, sessionOptions);

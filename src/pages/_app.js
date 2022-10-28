@@ -42,10 +42,11 @@ function App({ Component, pageProps }) {
     return <LoadMask />;
   }
 
+  // TODO: need one on every page once fleshed out, SEO is vital
+
   return (
     <>
       <Head>
-        {/* // TODO: need one on every page once fleshed out, SEO is vital */}
         <title>Functional Player</title>
         <meta
           name="description"

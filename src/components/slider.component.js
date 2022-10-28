@@ -162,6 +162,7 @@ const Slider = ({ title, courses }) => {
                   border: "8px solid #fff",
                 },
               }}
+              data-testid={course.title}
             >
               <Overlay course={course} />
               <NextImage

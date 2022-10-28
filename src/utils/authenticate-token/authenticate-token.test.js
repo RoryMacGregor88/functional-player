@@ -21,6 +21,18 @@ describe("authenticateToken", () => {
     });
   });
 
+  it("handles user null value", async () => {
+    const resUser = null;
+    fetchMock.mockResponse(JSON.stringify({ resUser }));
+
+    const updateCtx = jest.fn();
+    authenticateToken(updateCtx);
+
+    await waitFor(() => {
+      expect(updateCtx).toHaveBeenCalledWith({ user: resUser });
+    });
+  });
+
   it("handles server error", async () => {
     const message = "test-error-message";
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));

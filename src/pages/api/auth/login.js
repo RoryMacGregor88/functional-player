@@ -8,7 +8,8 @@ import {
   syncStripeAndDb,
   handleForbidden,
   handleServerError,
-} from "lib";
+  logServerError,
+} from "@/lib";
 
 import {
   USERS,
