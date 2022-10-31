@@ -5,15 +5,13 @@ import login from "@/src/pages/api/auth/login";
 let json = null,
   status = null;
 
-let findOne = null,
-  collection = null;
-
 jest.mock("iron-session/next", () => ({
   withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
 }));
 
 jest.mock("@/lib", () => ({
   connectToDatabase: jest.fn().mockImplementation(() => {
+    // mock server error
     throw new Error("test-server-error");
   }),
   logServerError: jest.fn().mockImplementation((str, err) => {}),
@@ -33,12 +31,6 @@ describe("login endpoint", () => {
   beforeEach(() => {
     json = jest.fn();
     status = jest.fn().mockReturnValue({ json });
-
-    // throw database error
-    findOne = jest.fn().mockImplementation(() => {
-      throw new Error();
-    });
-    collection = jest.fn().mockReturnValue({ findOne });
   });
 
   it("handles http method forbidden", async () => {

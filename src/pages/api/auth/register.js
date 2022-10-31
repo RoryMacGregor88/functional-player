@@ -7,7 +7,7 @@ import {
   logServerError,
   handleForbidden,
   handleServerError,
-} from "lib";
+} from "@/lib";
 
 import { USERS, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
 

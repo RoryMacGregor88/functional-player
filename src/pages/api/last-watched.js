@@ -1,11 +1,13 @@
 import { withIronSessionApiRoute } from "iron-session/next";
+
 import {
   connectToDatabase,
   sessionOptions,
   handleForbidden,
   handleServerError,
   logServerError,
-} from "lib";
+} from "@/lib";
+
 import {
   USERS,
   TOKEN_ERROR_MESSAGE,

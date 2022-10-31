@@ -6,7 +6,7 @@ import {
   handleForbidden,
   logServerError,
   handleServerError,
-} from "lib";
+} from "@/lib";
 
 import {
   HTTP_METHOD_ERROR_MESSAGE,

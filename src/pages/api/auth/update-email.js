@@ -6,7 +6,7 @@ import {
   handleServerError,
   handleForbidden,
   logServerError,
-} from "lib";
+} from "@/lib";
 
 import {
   USERS,

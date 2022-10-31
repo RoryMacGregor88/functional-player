@@ -8,7 +8,7 @@ import {
   handleForbidden,
   handleServerError,
   logServerError,
-} from "lib";
+} from "@/lib";
 
 import {
   USERS,

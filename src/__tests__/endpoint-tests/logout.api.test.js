@@ -34,7 +34,7 @@ describe("logout endpoint", () => {
     json = jest.fn();
     status = jest.fn().mockReturnValue({ json });
 
-    // throw database error
+    // mock database error
     destroy = jest.fn().mockImplementation(() => {
       throw new Error("test-server-error");
     });
@@ -69,9 +69,8 @@ describe("logout endpoint", () => {
   });
 
   it("handles error", async () => {
-    const email = "test@email.com";
-
-    const req = {
+    const email = "test@email.com",
+      req = {
         method: "POST",
         session: { user: { email }, destroy },
         body: { email },

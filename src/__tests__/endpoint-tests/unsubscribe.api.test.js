@@ -1,6 +1,10 @@
-import { DEFAULT_ERROR_MESSAGE, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
+import {
+  TOKEN_ERROR_MESSAGE,
+  DEFAULT_ERROR_MESSAGE,
+  HTTP_METHOD_ERROR_MESSAGE,
+} from "@/src/utils";
 
-import resetPassword from "@/src/pages/api/auth/reset-password";
+import unsubscribe from "@/src/pages/api/auth/unsubscribe";
 
 let json = null,
   status = null;
@@ -11,6 +15,7 @@ jest.mock("iron-session/next", () => ({
 
 jest.mock("@/lib", () => ({
   connectToDatabase: jest.fn().mockImplementation(() => {
+    // mock server error
     throw new Error("test-server-error");
   }),
   logServerError: jest.fn().mockImplementation((str, err) => {}),
@@ -26,7 +31,7 @@ jest.mock("@/lib", () => ({
     ),
 }));
 
-describe("resetPassword endpoint", () => {
+describe("unsubscribe endpoint", () => {
   beforeEach(() => {
     json = jest.fn();
     status = jest.fn().mockReturnValue({ json });
@@ -36,7 +41,7 @@ describe("resetPassword endpoint", () => {
     const req = { method: "GET" },
       res = { status };
 
-    await resetPassword(req, res);
+    await unsubscribe(req, res);
 
     expect(status).toHaveBeenCalledWith(403);
     expect(json).toHaveBeenCalledWith({
@@ -44,16 +49,32 @@ describe("resetPassword endpoint", () => {
     });
   });
 
+  it("handles token forbidden", async () => {
+    const req = {
+        method: "POST",
+        body: { email: "test@email.com" },
+        session: { user: {} },
+      },
+      res = { status };
+
+    await unsubscribe(req, res);
+
+    expect(status).toHaveBeenCalledWith(403);
+    expect(json).toHaveBeenCalledWith({
+      error: { message: TOKEN_ERROR_MESSAGE },
+    });
+  });
+
   it("handles error", async () => {
     const email = "test@email.com",
       req = {
         method: "POST",
-        session: { user: { email } },
         body: { email },
+        session: { user: { email } },
       },
       res = { status };
 
-    await resetPassword(req, res);
+    await unsubscribe(req, res);
 
     expect(status).toHaveBeenCalledWith(500);
     expect(json).toHaveBeenCalledWith({
