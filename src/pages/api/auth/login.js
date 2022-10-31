@@ -5,13 +5,13 @@ import { withIronSessionApiRoute } from "iron-session/next";
 import {
   connectToDatabase,
   sessionOptions,
-  syncStripeAndDb,
   handleForbidden,
   handleServerError,
   logServerError,
 } from "@/lib";
 
 import {
+  syncStripeAndDb,
   USERS,
   HTTP_METHOD_ERROR_MESSAGE,
   EMAIL_NOT_FOUND_MESSAGE,

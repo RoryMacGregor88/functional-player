@@ -1,12 +1,16 @@
 import stripeFn from "stripe";
 
-import { connectToDatabase } from "lib";
-import { USERS, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+import { USERS } from "@/src/utils";
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
-// TODO: also, make sure this still works since changes
-
+/**
+ * @param {object} db
+ * @param {string} email
+ * @param {string|null} currentSubscriptionStatus
+ * @param {number} subscriptionId
+ * @returns {{ subscriptionStatus: string|null }|{ error: true }}
+ */
 async function syncStripeAndDb(
   db,
   email,
