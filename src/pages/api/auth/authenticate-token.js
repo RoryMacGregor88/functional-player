@@ -5,7 +5,7 @@ import {
   handleForbidden,
   handleServerError,
   logServerError,
-} from "lib";
+} from "@/lib";
 
 async function authenticateToken(req, res) {
   if (req.method !== "GET") {

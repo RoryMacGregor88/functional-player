@@ -9,9 +9,8 @@ import {
   LoadMask,
 } from "@/src/components";
 
-import { getAllCourses } from "lib";
+import { getAllCourses } from "@/lib";
 
-// TODO: this works, but is a dedicated endpoint better, or just unneeded complication?
 export const getServerSideProps = async (ctx) => ({
   props: { courses: await getAllCourses() },
 });
@@ -31,10 +30,10 @@ export default function List({ user, courses }) {
 
   return (
     <PageWrapper>
-      <SpacedTitle>Your Bookmarks</SpacedTitle>
+      <SpacedTitle>Your List</SpacedTitle>
       {!bookmarks.length ? (
         <Typography sx={{ textAlign: "center" }}>
-          You currently have no bookmarks
+          You currently have no saved courses.
         </Typography>
       ) : (
         <Grid container spacing={4}>

@@ -2,7 +2,10 @@ import { render, screen, waitFor, userEvent } from "@/src/utils";
 
 import Dashboard from "@/src/pages/dashboard";
 
-jest.mock("@/lib");
+jest.mock("@/lib", () => ({
+  getAllCourses: () => {},
+  getAllSeries: () => {},
+}));
 
 const mockUser = {
     bookmarks: [],

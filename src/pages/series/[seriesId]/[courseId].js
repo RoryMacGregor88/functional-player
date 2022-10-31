@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { VideoDisplay } from "@/src/components";
 import { http } from "@/src/utils";
 
-import { getAllCourses, getCourseById } from "lib";
+import { getAllCourses, getCourseById } from "@/lib";
 
 // TODO: strip out styles from copied pages, redo
 
