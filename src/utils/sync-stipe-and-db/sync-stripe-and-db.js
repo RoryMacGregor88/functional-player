@@ -9,7 +9,7 @@ const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
  * @param {string} email
  * @param {string|null} currentSubscriptionStatus
  * @param {number} subscriptionId
- * @returns {{ subscriptionStatus: string|null }|{ error: true }}
+ * @returns {Promise<{ subscriptionStatus: string|null }|{ error: true }>}
  */
 async function syncStripeAndDb(
   db,

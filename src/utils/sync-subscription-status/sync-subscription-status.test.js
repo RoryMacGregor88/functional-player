@@ -1,8 +1,10 @@
 import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
 
-import { waitFor, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
-
-import syncSubscriptionStatus from "./sync-subscription-status";
+import {
+  syncSubscriptionStatus,
+  waitFor,
+  DEFAULT_ERROR_MESSAGE,
+} from "@/src/utils";
 
 enableFetchMocks();
 

@@ -10,21 +10,11 @@ import {
 } from "@/lib";
 
 import {
+  generateTempPassword,
   USERS,
   HTTP_METHOD_ERROR_MESSAGE,
   EMAIL_NOT_FOUND_MESSAGE,
-  CHARS,
 } from "@/src/utils";
-
-// TODO: extract to utils, test
-const generateTempPassword = () => {
-  let str = "";
-  for (let i = 0; i < 6; i++) {
-    const char = CHARS[Math.floor(Math.random() * CHARS.length)];
-    str = str + char;
-  }
-  return str;
-};
 
 export default async function resetPassword(req, res) {
   if (req.method !== "POST") {

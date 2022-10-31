@@ -4,10 +4,13 @@ import updateBookmarks from "./update-bookmarks/update-bookmarks";
 import authenticateToken from "./authenticate-token/authenticate-token";
 import syncSubscriptionStatus from "./sync-subscription-status/sync-subscription-status";
 import syncStripeAndDb from "./sync-stipe-and-db/sync-stripe-and-db";
+import generateTempPassword from "./generate-temp-password/generate-temp-password";
 
 export * from "./context";
 export * from "./constants";
 export * from "./validation";
+
+// TODO: undo this, too messy and confusing
 export * from "./test-utils";
 
 export {
@@ -17,4 +20,5 @@ export {
   authenticateToken,
   syncSubscriptionStatus,
   syncStripeAndDb,
+  generateTempPassword,
 };

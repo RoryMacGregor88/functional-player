@@ -2,10 +2,7 @@ import { render as rtlRender } from "@testing-library/react";
 import { Context } from "@/src/utils";
 import { RouterContext } from "next/dist/shared/lib/router-context";
 
-const render = (
-  ui,
-  { ctx = {}, updateCtx = () => {}, push = () => {}, ...options } = {}
-) => {
+const render = (ui, { ctx = {}, updateCtx, push, ...options } = {}) => {
   const router = {
     push,
     prefetch: () => ({ catch: () => {} }),

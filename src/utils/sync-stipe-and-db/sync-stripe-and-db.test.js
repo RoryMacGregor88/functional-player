@@ -24,6 +24,7 @@ describe("syncStripeAndDb", () => {
     collection = jest.fn().mockReturnValue({ findOneAndUpdate });
     db = { collection };
   });
+
   it("returns original value if current status is null", async () => {
     const result = await syncStripeAndDb(db, email, null, "active");
     expect(result).toEqual({ subscriptionStatus: null });
