@@ -9,14 +9,24 @@ let json = null,
 
 let destroy = null;
 
-import { logout } from "@/src/pages/api/auth/logout";
+import logout from "@/src/pages/api/auth/logout";
+
+jest.mock("iron-session/next", () => ({
+  withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
+}));
 
 jest.mock("@/lib", () => ({
-  logServerError: () => {},
-  handleForbidden: (res, message) =>
-    res.status(403).json({ error: { message } }),
-  handleServerError: (res) =>
-    res.status(500).json({ error: { message: DEFAULT_ERROR_MESSAGE } }),
+  logServerError: jest.fn().mockImplementation((str, err) => {}),
+  handleForbidden: jest
+    .fn()
+    .mockImplementation((res, message) =>
+      res.status(403).json({ error: { message } })
+    ),
+  handleServerError: jest
+    .fn()
+    .mockImplementation((res) =>
+      res.status(500).json({ error: { message: DEFAULT_ERROR_MESSAGE } })
+    ),
 }));
 
 describe("logout endpoint", () => {
@@ -26,7 +36,7 @@ describe("logout endpoint", () => {
 
     // throw database error
     destroy = jest.fn().mockImplementation(() => {
-      throw new Error();
+      throw new Error("test-server-error");
     });
   });
 
@@ -43,11 +53,9 @@ describe("logout endpoint", () => {
   });
 
   it("handles token forbidden", async () => {
-    const email = "test@email.com";
-
     const req = {
         method: "POST",
-        body: { email },
+        body: { email: "test@email.com" },
         session: {},
       },
       res = { status };

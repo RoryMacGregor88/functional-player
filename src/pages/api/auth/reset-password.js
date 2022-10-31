@@ -7,7 +7,7 @@ import {
   handleServerError,
   handleForbidden,
   logServerError,
-} from "lib";
+} from "@/lib";
 
 import {
   USERS,
@@ -16,6 +16,7 @@ import {
   CHARS,
 } from "@/src/utils";
 
+// TODO: extract to utils, test
 const generateTempPassword = () => {
   let str = "";
   for (let i = 0; i < 6; i++) {
@@ -72,7 +73,6 @@ export default async function resetPassword(req, res) {
 
       await transporter.sendMail(data);
 
-      // TODO: Do this like others? Get rid of OK? Remember update-password
       return res.status(200).json({ ok: true });
     } catch (error) {
       await logServerError("resetEmail", error);

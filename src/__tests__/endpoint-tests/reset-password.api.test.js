@@ -1,12 +1,13 @@
-import { DEFAULT_ERROR_MESSAGE, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
+import {
+  DEFAULT_ERROR_MESSAGE,
+  HTTP_METHOD_ERROR_MESSAGE,
+  TOKEN_ERROR_MESSAGE,
+} from "@/src/utils";
 
-import login from "@/src/pages/api/auth/login";
+import resetPassword from "@/src/pages/api/auth/reset-password";
 
 let json = null,
   status = null;
-
-let findOne = null,
-  collection = null;
 
 jest.mock("iron-session/next", () => ({
   withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
@@ -29,23 +30,17 @@ jest.mock("@/lib", () => ({
     ),
 }));
 
-describe("login endpoint", () => {
+describe("resetPassword endpoint", () => {
   beforeEach(() => {
     json = jest.fn();
     status = jest.fn().mockReturnValue({ json });
-
-    // throw database error
-    findOne = jest.fn().mockImplementation(() => {
-      throw new Error();
-    });
-    collection = jest.fn().mockReturnValue({ findOne });
   });
 
   it("handles http method forbidden", async () => {
     const req = { method: "GET" },
       res = { status };
 
-    await login(req, res);
+    await resetPassword(req, res);
 
     expect(status).toHaveBeenCalledWith(403);
     expect(json).toHaveBeenCalledWith({
@@ -54,13 +49,16 @@ describe("login endpoint", () => {
   });
 
   it("handles error", async () => {
+    const email = "test@email.com";
+
     const req = {
         method: "POST",
-        body: { email: "test@email.com", password: "123" },
+        session: { user: { email } },
+        body: { email },
       },
       res = { status };
 
-    await login(req, res);
+    await resetPassword(req, res);
 
     expect(status).toHaveBeenCalledWith(500);
     expect(json).toHaveBeenCalledWith({
