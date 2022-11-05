@@ -1,0 +1,34 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+import { withIronSessionApiRoute } from 'iron-session/next';
+
+import {
+  sessionOptions,
+  handleForbidden,
+  handleServerError,
+  logServerError,
+} from '@/lib';
+
+import { User } from '@/src/utils/interfaces';
+
+declare module 'iron-session' {
+  interface IronSessionData {
+    user?: User;
+  }
+}
+
+function authenticateToken(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'GET') {
+    return handleForbidden(res, 'Invalid method, only GET requests permitted.');
+  } else {
+    try {
+      // if no session user found, user is logged out, return null value
+      const resUser: User = req.session.user ?? null;
+      return res.status(200).json({ resUser });
+    } catch (error) {
+      logServerError('authenticateToken', error);
+      return handleServerError(res);
+    }
+  }
+}
+
+export default withIronSessionApiRoute(authenticateToken, sessionOptions);
