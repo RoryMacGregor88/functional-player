@@ -1,16 +1,20 @@
-import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
 
-import { waitFor, authenticateToken, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+import { waitFor } from '@/src/utils/test-utils';
+
+import { authenticateToken } from '@/src/utils';
+
+import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
 enableFetchMocks();
 
-describe("authenticateToken", () => {
+describe('authenticateToken', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
 
-  it("authenticates token", async () => {
-    const resUser = { username: "John Smith" };
+  it('authenticates token', async () => {
+    const resUser = { username: 'John Smith' };
     fetchMock.mockResponse(JSON.stringify({ resUser }));
 
     const updateCtx = jest.fn();
@@ -21,7 +25,7 @@ describe("authenticateToken", () => {
     });
   });
 
-  it("handles user null value", async () => {
+  it('handles user null value', async () => {
     const resUser = null;
     fetchMock.mockResponse(JSON.stringify({ resUser }));
 
@@ -33,8 +37,8 @@ describe("authenticateToken", () => {
     });
   });
 
-  it("handles server error", async () => {
-    const message = "test-error-message";
+  it('handles server error', async () => {
+    const message = 'test-error-message';
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
     const updateCtx = jest.fn();
@@ -43,7 +47,7 @@ describe("authenticateToken", () => {
     const expected = {
       user: null,
       toastData: {
-        severity: "error",
+        severity: 'error',
         message,
       },
     };
@@ -53,7 +57,7 @@ describe("authenticateToken", () => {
     });
   });
 
-  it("handler client error", async () => {
+  it('handler client error', async () => {
     fetchMock.mockResponse(() => {
       throw new Error();
     });
@@ -64,7 +68,7 @@ describe("authenticateToken", () => {
     const expected = {
       user: null,
       toastData: {
-        severity: "error",
+        severity: 'error',
         message: DEFAULT_ERROR_MESSAGE,
       },
     };

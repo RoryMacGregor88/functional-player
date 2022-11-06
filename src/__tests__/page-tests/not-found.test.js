@@ -1,16 +1,17 @@
-import NotFound from "@/src/pages/[...not-found]";
-import { render } from "@/src/utils";
+import { render } from '@/src/utils/test-utils';
 
-describe("notFound", () => {
-  it("redirects to home if no user found", () => {
+import NotFound from '@/src/pages/[...not-found]';
+
+describe('notFound', () => {
+  it('redirects to home if no user found', () => {
     const { router } = render(<NotFound user={null} />, { push: jest.fn() });
-    expect(router.push).toHaveBeenCalledWith("/");
+    expect(router.push).toHaveBeenCalledWith('/');
   });
 
-  it("redirects to dashboard if user found", () => {
-    const { router } = render(<NotFound user={{ username: "John Smith" }} />, {
+  it('redirects to dashboard if user found', () => {
+    const { router } = render(<NotFound user={{ username: 'John Smith' }} />, {
       push: jest.fn(),
     });
-    expect(router.push).toHaveBeenCalledWith("/dashboard");
+    expect(router.push).toHaveBeenCalledWith('/dashboard');
   });
 });

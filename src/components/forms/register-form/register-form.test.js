@@ -1,15 +1,13 @@
-import RegisterForm from "./register-form.component";
+import RegisterForm from './register-form.component';
+
+import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
 import {
   USERNAME_REQUIRED_MESSAGE,
   PASSWORD_REQUIRED_MESSAGE,
   PASSWORD_MIN_LENGTH_MESSAGE,
   NO_PASSWORD_MATCH_MESSAGE,
-  render,
-  screen,
-  userEvent,
-  waitFor,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
 const renderComponent = ({
   disableSubmitButton = false,
@@ -34,34 +32,34 @@ const renderComponent = ({
   };
 };
 
-describe("Register Form", () => {
-  it("renders", () => {
+describe('Register Form', () => {
+  it('renders', () => {
     renderComponent();
 
-    expect(screen.getByRole("textbox", { name: /email/i })).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /email/i })).toBeInTheDocument();
     expect(
-      screen.getByRole("textbox", { name: /username/i })
+      screen.getByRole('textbox', { name: /username/i })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("textbox", { name: /^password/i })
+      screen.getByRole('textbox', { name: /^password/i })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("textbox", { name: /^confirm password/i })
+      screen.getByRole('textbox', { name: /^confirm password/i })
     ).toBeInTheDocument();
 
-    expect(screen.getByRole("button", { name: /submit/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /next/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /next/i })).toBeInTheDocument();
   });
 
-  it("does not submit if form is invalid", async () => {
+  it('does not submit if form is invalid', async () => {
     const { onSubmit } = renderComponent();
 
     await userEvent.type(
-      screen.getByRole("textbox", { name: /^email/i }),
-      "test@email.com"
+      screen.getByRole('textbox', { name: /^email/i }),
+      'test@email.com'
     );
 
-    const submitButton = screen.getByRole("button", { name: /submit/i });
+    const submitButton = screen.getByRole('button', { name: /submit/i });
     userEvent.click(submitButton);
 
     await waitFor(() => {
@@ -74,15 +72,15 @@ describe("Register Form", () => {
     });
   });
 
-  it("only allows passwords greater than minimum password length", async () => {
+  it('only allows passwords greater than minimum password length', async () => {
     const { onSubmit } = renderComponent();
 
     await userEvent.type(
-      screen.getByRole("textbox", { name: /^password/i }),
-      "test"
+      screen.getByRole('textbox', { name: /^password/i }),
+      'test'
     );
 
-    const submitButton = screen.getByRole("button", { name: /submit/i });
+    const submitButton = screen.getByRole('button', { name: /submit/i });
     userEvent.click(submitButton);
 
     await waitFor(() => {
@@ -91,20 +89,20 @@ describe("Register Form", () => {
     });
   });
 
-  it("only allows matching passwords", async () => {
+  it('only allows matching passwords', async () => {
     const { onSubmit } = renderComponent();
 
     await userEvent.type(
-      screen.getByRole("textbox", { name: /^password/i }),
-      "testpass"
+      screen.getByRole('textbox', { name: /^password/i }),
+      'testpass'
     );
 
     await userEvent.type(
-      screen.getByRole("textbox", { name: /^confirm password/i }),
-      "restpass2"
+      screen.getByRole('textbox', { name: /^confirm password/i }),
+      'restpass2'
     );
 
-    const submitButton = screen.getByRole("button", { name: /submit/i });
+    const submitButton = screen.getByRole('button', { name: /submit/i });
     userEvent.click(submitButton);
 
     await waitFor(() => {
@@ -113,48 +111,48 @@ describe("Register Form", () => {
     });
   });
 
-  it("disables `Submit` button if disabled prop is passed", () => {
+  it('disables `Submit` button if disabled prop is passed', () => {
     renderComponent({ disableSubmitButton: true });
-    expect(screen.getByRole("button", { name: /submit/i })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled();
   });
 
-  it("disables `Next` button if disabled prop is passed", () => {
+  it('disables `Next` button if disabled prop is passed', () => {
     renderComponent({ disableNextButton: true });
-    expect(screen.getByRole("button", { name: /next/i })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /next/i })).toBeDisabled();
   });
 
-  it("calls submit handler if form is valid and button is clicked", async () => {
+  it('calls submit handler if form is valid and button is clicked', async () => {
     const { onSubmit } = renderComponent();
 
     await userEvent.type(
-      screen.getByRole("textbox", { name: /email/i }),
-      "test@email.com"
+      screen.getByRole('textbox', { name: /email/i }),
+      'test@email.com'
     );
 
     await userEvent.type(
-      screen.getByRole("textbox", { name: /username/i }),
-      "test-username"
+      screen.getByRole('textbox', { name: /username/i }),
+      'test-username'
     );
 
     await userEvent.type(
-      screen.getByRole("textbox", { name: /^password/i }),
-      "pass123"
+      screen.getByRole('textbox', { name: /^password/i }),
+      'pass123'
     );
 
     await userEvent.type(
-      screen.getByRole("textbox", { name: /^confirm password/i }),
-      "pass123"
+      screen.getByRole('textbox', { name: /^confirm password/i }),
+      'pass123'
     );
 
     const expected = {
-      email: "test@email.com",
-      username: "test-username",
-      password: "pass123",
-      confirmPassword: "pass123",
+      email: 'test@email.com',
+      username: 'test-username',
+      password: 'pass123',
+      confirmPassword: 'pass123',
     };
 
     await waitFor(() => {
-      const submitButton = screen.getByRole("button", { name: /submit/i });
+      const submitButton = screen.getByRole('button', { name: /submit/i });
 
       expect(submitButton).toBeEnabled();
       userEvent.click(submitButton);

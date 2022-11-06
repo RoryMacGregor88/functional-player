@@ -1,49 +1,45 @@
-import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
 
-import {
-  render,
-  screen,
-  userEvent,
-  waitFor,
-  DEFAULT_ERROR_MESSAGE,
-} from "@/src/utils";
+import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
-import ResetPassword from "@/src/pages/reset-password";
+import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
+
+import ResetPassword from '@/src/pages/reset-password';
 
 enableFetchMocks();
 
-describe("ResetPassword", () => {
+describe('ResetPassword', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
 
-  it("renders", () => {
+  it('renders', () => {
     render(<ResetPassword user={null} />);
 
-    expect(screen.getByRole("button", { name: /submit/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
   });
 
-  it("redirects to dashboard if user is found", () => {
+  it('redirects to dashboard if user is found', () => {
     const { router } = render(
-      <ResetPassword user={{ username: "John Smith" }} />,
+      <ResetPassword user={{ username: 'John Smith' }} />,
       { push: jest.fn() }
     );
 
-    expect(router.push).toHaveBeenCalledWith("/dashboard");
+    expect(router.push).toHaveBeenCalledWith('/dashboard');
   });
 
-  it("shows success well and disabled button if successful", async () => {
-    const testEmail = "test@email.com";
+  it('shows success well and disabled button if successful', async () => {
+    const testEmail = 'test@email.com';
     fetchMock.mockResponse(JSON.stringify({ ok: true }));
 
     render(<ResetPassword user={null} />);
 
     await userEvent.type(
-      screen.getByRole("textbox", { name: /email/i }),
+      screen.getByRole('textbox', { name: /email/i }),
       testEmail
     );
 
-    const submitButton = screen.getByRole("button", { name: /submit/i });
+    const submitButton = screen.getByRole('button', { name: /submit/i });
     userEvent.click(submitButton);
 
     await waitFor(() => {
@@ -56,25 +52,25 @@ describe("ResetPassword", () => {
     });
   });
 
-  it("handles server error", async () => {
-    const message = "test-error-message";
+  it('handles server error', async () => {
+    const message = 'test-error-message';
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
     render(<ResetPassword user={null} />);
 
     await userEvent.type(
-      screen.getByRole("textbox", { name: /email/i }),
-      "test@email.com"
+      screen.getByRole('textbox', { name: /email/i }),
+      'test@email.com'
     );
 
-    userEvent.click(screen.getByRole("button", { name: /submit/i }));
+    userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
     await waitFor(() => {
       expect(screen.getByText(message)).toBeInTheDocument();
     });
   });
 
-  it("handles client error", async () => {
+  it('handles client error', async () => {
     fetchMock.mockResponse(() => {
       throw new Error();
     });
@@ -82,11 +78,11 @@ describe("ResetPassword", () => {
     render(<ResetPassword user={null} />);
 
     await userEvent.type(
-      screen.getByRole("textbox", { name: /email/i }),
-      "test@email.com"
+      screen.getByRole('textbox', { name: /email/i }),
+      'test@email.com'
     );
 
-    userEvent.click(screen.getByRole("button", { name: /submit/i }));
+    userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
     await waitFor(() => {
       expect(screen.getByText(DEFAULT_ERROR_MESSAGE)).toBeInTheDocument();

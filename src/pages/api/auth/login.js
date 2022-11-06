@@ -1,6 +1,6 @@
-import { compare } from "bcryptjs";
+import { compare } from 'bcryptjs';
 
-import { withIronSessionApiRoute } from "iron-session/next";
+import { withIronSessionApiRoute } from 'iron-session/next';
 
 import {
   connectToDatabase,
@@ -8,17 +8,18 @@ import {
   handleForbidden,
   handleServerError,
   logServerError,
-} from "@/lib";
+} from '@/lib';
+
+import { syncStripeAndDb } from '@/src/utils';
 
 import {
-  syncStripeAndDb,
   USERS,
   HTTP_METHOD_ERROR_MESSAGE,
   EMAIL_NOT_FOUND_MESSAGE,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
 async function login(req, res) {
-  if (req.method !== "POST") {
+  if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else {
     try {
@@ -47,7 +48,7 @@ async function login(req, res) {
       if (!checkPassword) {
         return res
           .status(400)
-          .json({ error: { message: "Incorrect password." } });
+          .json({ error: { message: 'Incorrect password.' } });
       }
 
       // fresh sync of stripe subscription status upon every login. If
@@ -73,7 +74,7 @@ async function login(req, res) {
 
       return res.status(200).json({ resUser });
     } catch (error) {
-      await logServerError("login", error);
+      await logServerError('login', error);
       return handleServerError(res);
     }
   }

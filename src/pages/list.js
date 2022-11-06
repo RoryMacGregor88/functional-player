@@ -1,15 +1,15 @@
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router';
 
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography } from '@mui/material';
 
 import {
   PageWrapper,
   SpacedTitle,
   CourseDisplay,
   LoadMask,
-} from "@/src/components";
+} from '@/src/components';
 
-import { getAllCourses } from "@/lib";
+import { getAllCourses } from '@/lib';
 
 export const getServerSideProps = async (ctx) => ({
   props: { courses: await getAllCourses() },
@@ -20,7 +20,7 @@ export default function List({ user, courses }) {
   const router = useRouter();
 
   if (!user) {
-    router.push("/login");
+    router.push('/login');
     return <LoadMask />;
   }
 
@@ -32,7 +32,7 @@ export default function List({ user, courses }) {
     <PageWrapper>
       <SpacedTitle>Your List</SpacedTitle>
       {!bookmarks.length ? (
-        <Typography sx={{ textAlign: "center" }}>
+        <Typography sx={{ textAlign: 'center' }}>
           You currently have no saved courses.
         </Typography>
       ) : (
@@ -40,7 +40,7 @@ export default function List({ user, courses }) {
           {bookmarks.map((course) => (
             <CourseDisplay
               key={course._id}
-              course={{ ...course, src: "/stratocaster-small.jpg" }}
+              course={{ ...course, src: '/stratocaster-small.jpg' }}
             />
           ))}
         </Grid>

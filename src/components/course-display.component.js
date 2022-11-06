@@ -1,26 +1,26 @@
-import { useContext } from "react";
+import { useContext } from 'react';
 
-import NextImage from "next/image";
+import NextImage from 'next/image';
 
-import { Grid, Box, Typography } from "@mui/material";
+import { Grid, Box, Typography } from '@mui/material';
 
-import { Context } from "@/src/utils";
+import { Context } from '@/src/utils';
 
 const Overlay = ({ course }) => {
   const { title, description } = course;
   return (
     <Grid
       container
-      direction="column"
-      justifyContent="center"
+      direction='column'
+      justifyContent='center'
       style={{
-        position: "absolute",
-        padding: "1rem",
-        zIndex: "100",
+        position: 'absolute',
+        padding: '1rem',
+        zIndex: '100',
       }}
     >
-      <Typography variant="h5">{title}</Typography>
-      <Typography variant="body1">{description}</Typography>
+      <Typography variant='h5'>{title}</Typography>
+      <Typography variant='body1'>{description}</Typography>
     </Grid>
   );
 };
@@ -47,29 +47,29 @@ const CourseDisplay = ({ course }) => {
     <Grid
       item
       container
-      direction="column"
+      direction='column'
       xs={12}
       md={6}
       onClick={handleClick}
     >
       <Box
         sx={{
-          position: "relative",
-          height: "25rem",
-          width: "30rem",
-          margin: "0",
-          cursor: "pointer",
+          position: 'relative',
+          height: '25rem',
+          width: '30rem',
+          margin: '0',
+          cursor: 'pointer',
           borderRadius: 1,
-          overflow: "hidden",
-          border: "5px solid transparent",
-          "&:hover": {
-            border: "5px solid",
-            borderColor: "palette.main",
+          overflow: 'hidden',
+          border: '5px solid transparent',
+          '&:hover': {
+            border: '5px solid',
+            borderColor: 'palette.main',
           },
         }}
       >
         <Overlay course={course} />
-        <NextImage layout="fill" objectFit="cover" src={src} alt={alt} />
+        <NextImage layout='fill' objectFit='cover' src={src} alt={alt} />
       </Box>
     </Grid>
   );

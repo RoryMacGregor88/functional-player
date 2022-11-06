@@ -1,4 +1,4 @@
-import { withIronSessionApiRoute } from "iron-session/next";
+import { withIronSessionApiRoute } from 'iron-session/next';
 
 import {
   connectToDatabase,
@@ -6,16 +6,16 @@ import {
   handleServerError,
   handleForbidden,
   logServerError,
-} from "@/lib";
+} from '@/lib';
 
 import {
   USERS,
   TOKEN_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
 async function updateEmail(req, res) {
-  if (req.method !== "POST") {
+  if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
@@ -35,7 +35,7 @@ async function updateEmail(req, res) {
 
       return res.status(200).json({ resUser });
     } catch (error) {
-      await logServerError("updateEmail", error);
+      await logServerError('updateEmail', error);
       return handleServerError(res);
     }
   }

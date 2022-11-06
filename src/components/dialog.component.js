@@ -3,9 +3,9 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-} from "@mui/material";
+} from '@mui/material';
 
-import { Button, CloseIcon } from "@/src/components";
+import { Button, CloseIcon } from '@/src/components';
 
 /**
  * @param {{
@@ -24,27 +24,27 @@ const Dialog = ({ open = false, onClose, title, message, actions }) => (
     aria-describedby={title}
     sx={{
       zIndex: 4000,
-      ".MuiDialog-paper": {
-        justifyContent: "space-evenly",
-        alignItems: "center",
+      '.MuiDialog-paper': {
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
       },
     }}
   >
     <CloseIcon
       onClick={onClose}
-      sx={{ margin: "0.5rem 0.5rem 0 auto", cursor: "pointer" }}
+      sx={{ margin: '0.5rem 0.5rem 0 auto', cursor: 'pointer' }}
     />
     {!!title ? (
-      <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+      <DialogTitle id='alert-dialog-title'>{title}</DialogTitle>
     ) : null}
     <DialogContent>{message}</DialogContent>
     {!!actions ? (
       <DialogActions
         disableSpacing
         sx={{
-          width: "100%",
-          padding: "0.5rem 1rem",
-          gap: "1rem",
+          width: '100%',
+          padding: '0.5rem 1rem',
+          gap: '1rem',
         }}
       >
         {actions.map(({ label, onClick, closeOnClick }) => (

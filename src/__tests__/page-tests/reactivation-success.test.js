@@ -1,24 +1,20 @@
-import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
 
-import {
-  render,
-  screen,
-  userEvent,
-  waitFor,
-  REACTIVATION_SUCCESS_MESSAGE,
-} from "@/src/utils";
+import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
-import ReactivationSuccess from "@/src/pages/reactivation-success";
+import { REACTIVATION_SUCCESS_MESSAGE } from '@/src/utils/constants';
+
+import ReactivationSuccess from '@/src/pages/reactivation-success';
 
 enableFetchMocks();
 
-describe("Reactivation success page", () => {
+describe('Reactivation success page', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
 
-  it("shows success message, sets state, redirects on button click", async () => {
-    const user = { username: "John Smith" },
+  it('shows success message, sets state, redirects on button click', async () => {
+    const user = { username: 'John Smith' },
       updateCtx = jest.fn();
 
     fetchMock.mockResponse(JSON.stringify({ resUser: user }));
@@ -37,19 +33,19 @@ describe("Reactivation success page", () => {
     });
 
     userEvent.click(
-      screen.getByRole("button", { name: /return to dashboard/i })
+      screen.getByRole('button', { name: /return to dashboard/i })
     );
 
     await waitFor(() => {
-      expect(router.push).toHaveBeenCalledWith("/dashboard");
+      expect(router.push).toHaveBeenCalledWith('/dashboard');
     });
   });
 
-  it("redirects to login if user is not found", () => {
+  it('redirects to login if user is not found', () => {
     const { router } = render(<ReactivationSuccess user={null} />, {
       push: jest.fn(),
     });
 
-    expect(router.push).toHaveBeenCalledWith("/login");
+    expect(router.push).toHaveBeenCalledWith('/login');
   });
 });

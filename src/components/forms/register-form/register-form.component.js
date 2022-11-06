@@ -1,7 +1,8 @@
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from 'react-hook-form';
 
-import { Box } from "@mui/material";
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import { Box } from '@mui/material';
 
 import {
   FormWrapper,
@@ -9,9 +10,9 @@ import {
   EmailField,
   PasswordField,
   Button,
-} from "@/src/components";
+} from '@/src/components';
 
-import { registerFormSchema } from "@/src/utils";
+import { registerFormSchema } from '@/src/utils';
 
 /**
  * @param {{
@@ -34,36 +35,36 @@ const RegisterForm = ({
     handleSubmit,
     formState: { errors },
   } = useForm({
-    mode: "all",
+    mode: 'all',
     resolver: yupResolver(registerFormSchema),
     defaultValues: {
-      email: "",
-      username: "",
-      password: "",
-      confirmPassword: "",
+      email: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
   return (
-    <Box sx={{ width: "100%" }} justifyContent="center" alignItems="center">
+    <Box sx={{ width: '100%' }} justifyContent='center' alignItems='center'>
       <FormWrapper onSubmit={handleSubmit((values) => onSubmit(values))}>
         <EmailField errors={errors} register={register} />
         <UsernameField errors={errors} register={register} />
         <PasswordField
           errors={errors}
           register={register}
-          label="Password"
-          name="password"
+          label='Password'
+          name='password'
           validate
         />
         <PasswordField
           errors={errors}
           register={register}
-          label="Confirm password"
-          name="confirmPassword"
+          label='Confirm password'
+          name='confirmPassword'
         />
         <Button
-          type="submit"
+          type='submit'
           disabled={disableSubmitButton}
           isLoading={isLoading}
         >
@@ -73,7 +74,7 @@ const RegisterForm = ({
       <Button
         onClick={onNextClick}
         disabled={disableNextButton}
-        sx={{ width: "100%" }}
+        sx={{ width: '100%' }}
       >
         Next
       </Button>

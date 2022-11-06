@@ -1,18 +1,21 @@
-import { DEFAULT_ERROR_MESSAGE, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
+import {
+  DEFAULT_ERROR_MESSAGE,
+  HTTP_METHOD_ERROR_MESSAGE,
+} from '@/src/utils/constants';
 
-import register from "@/src/pages/api/auth/register";
+import register from '@/src/pages/api/auth/register';
 
 let json = null,
   status = null;
 
-jest.mock("iron-session/next", () => ({
+jest.mock('iron-session/next', () => ({
   withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
 }));
 
-jest.mock("@/lib", () => ({
+jest.mock('@/lib', () => ({
   connectToDatabase: jest.fn().mockImplementation(() => {
     // mock server error
-    throw new Error("test-server-error");
+    throw new Error('test-server-error');
   }),
   logServerError: jest.fn().mockImplementation((str, err) => {}),
   handleForbidden: jest
@@ -27,14 +30,14 @@ jest.mock("@/lib", () => ({
     ),
 }));
 
-describe("register endpoint", () => {
+describe('register endpoint', () => {
   beforeEach(() => {
     json = jest.fn();
     status = jest.fn().mockReturnValue({ json });
   });
 
-  it("handles http method forbidden", async () => {
-    const req = { method: "GET" },
+  it('handles http method forbidden', async () => {
+    const req = { method: 'GET' },
       res = { status };
 
     await register(req, res);
@@ -45,10 +48,10 @@ describe("register endpoint", () => {
     });
   });
 
-  it("handles error", async () => {
-    const email = "test@email.com",
+  it('handles error', async () => {
+    const email = 'test@email.com',
       req = {
-        method: "POST",
+        method: 'POST',
         body: { email },
         session: { user: { email } },
       },

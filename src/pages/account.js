@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
-import { Tabs, Tab, Box } from "@mui/material";
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { Tabs, Tab, Box } from '@mui/material';
 
 import {
   SpacedTitle,
@@ -11,14 +11,15 @@ import {
   Well,
   LoadMask,
   PageWrapper,
-} from "@/src/components";
+} from '@/src/components';
 
 import {
-  http,
   DEFAULT_ERROR_MESSAGE,
   PASSWORD_UPDATE_SUCCESS_MESSAGE,
   ACCOUNT_DELETE_SUCCESS_MESSAGE,
-} from "@/src/utils";
+} from '@/src/utils/constants';
+
+import { http } from '@/src/utils';
 
 /**
  * @param {{
@@ -30,7 +31,7 @@ import {
  */
 const TabPanel = ({ name, value, index, children }) => (
   <Box
-    role="tabpanel"
+    role='tabpanel'
     hidden={value !== index}
     id={`${name}-tab`}
     aria-labelledby={`${name}-tab`}
@@ -54,7 +55,7 @@ export default function Account({ user, updateCtx }) {
   const [isLoading, setIsLoading] = useState(false);
 
   if (!user) {
-    router.push("/login");
+    router.push('/login');
     return <LoadMask />;
   }
 
@@ -63,7 +64,7 @@ export default function Account({ user, updateCtx }) {
   const handleSuccess = (message) => {
     setIsLoading(false);
     setWellData({
-      severity: "success",
+      severity: 'success',
       message,
     });
   };
@@ -83,7 +84,7 @@ export default function Account({ user, updateCtx }) {
   const handleUpdateEmail = async (values) => {
     setIsLoading(true);
 
-    const { error, resUser } = await http("/auth/update-email", {
+    const { error, resUser } = await http('/auth/update-email', {
       email,
       newEmail: values.email.toLowerCase(),
     });
@@ -92,7 +93,7 @@ export default function Account({ user, updateCtx }) {
       handleError(error);
     } else if (!!resUser) {
       // TODO: must updateCtx with resUser here, like others
-      handleSuccess("Your email has been successfully updated.");
+      handleSuccess('Your email has been successfully updated.');
     }
   };
 
@@ -104,13 +105,13 @@ export default function Account({ user, updateCtx }) {
         ...values,
       };
 
-      const { error, ok } = await http("/auth/update-password", formData);
+      const { error, ok } = await http('/auth/update-password', formData);
 
       if (!!error) {
         setWellData({ message: error.message });
       } else if (ok) {
         setWellData({
-          severity: "success",
+          severity: 'success',
           message: PASSWORD_UPDATE_SUCCESS_MESSAGE,
         });
       }
@@ -123,7 +124,7 @@ export default function Account({ user, updateCtx }) {
   const handleUnsubscribe = async (e) => {
     setIsLoading(true);
 
-    const { error, resUser } = await http("/auth/unsubscribe", {
+    const { error, resUser } = await http('/auth/unsubscribe', {
       email,
       customerId,
     });
@@ -134,7 +135,7 @@ export default function Account({ user, updateCtx }) {
       // TODO: do Well better, how to have Attention passed as 'message'?
       updateCtx({ user: resUser });
       handleSuccess(
-        "Your subscription has been successfully cancelled. You can re-activate your subscription any time by clicking the 'RE-ENABLE SUBSCRIPTION' button below."
+        'Your subscription has been successfully cancelled. You can re-activate your subscription any time by clicking the "RE-ENABLE SUBSCRIPTION" button below.'
       );
     }
   };
@@ -143,7 +144,7 @@ export default function Account({ user, updateCtx }) {
     setIsLoading(true);
 
     // TODO: updatedUser returned here?
-    const { error, clientSecret } = await http("/auth/resubscribe", {
+    const { error, clientSecret } = await http('/auth/resubscribe', {
       username,
       email,
     });
@@ -174,7 +175,7 @@ export default function Account({ user, updateCtx }) {
   const handleDelete = async () => {
     try {
       const { email, customerId } = user;
-      const { error, resUser } = await http("/auth/delete", {
+      const { error, resUser } = await http('/auth/delete', {
         email,
         customerId,
       });
@@ -186,10 +187,10 @@ export default function Account({ user, updateCtx }) {
       } else if (resUser === null) {
         updateCtx({ user: resUser });
         setWellData({
-          severity: "success",
+          severity: 'success',
           message: ACCOUNT_DELETE_SUCCESS_MESSAGE,
         });
-        router.push("/");
+        router.push('/');
       }
     } catch (e) {
       setWellData({
@@ -207,21 +208,21 @@ export default function Account({ user, updateCtx }) {
       <Tabs
         value={value}
         onChange={handleTabChange}
-        aria-label="account and subscription tabs"
-        indicatorColor="primary"
+        aria-label='account and subscription tabs'
+        indicatorColor='primary'
         centered
-        sx={{ marginBottom: "2rem" }}
+        sx={{ marginBottom: '2rem' }}
       >
-        <Tab label="Account Settings" />
-        <Tab label="My Subscription" />
-        <Tab label="Update Password" />
-        <Tab label="Delete Account" />
+        <Tab label='Account Settings' />
+        <Tab label='My Subscription' />
+        <Tab label='Update Password' />
+        <Tab label='Delete Account' />
       </Tabs>
 
-      <TabPanel name="update-user" value={value} index={0}>
+      <TabPanel name='update-user' value={value} index={0}>
         <UpdateEmailForm handleUpdateEmail={handleUpdateEmail} />
       </TabPanel>
-      <TabPanel name="update-subscription" value={value} index={1}>
+      <TabPanel name='update-subscription' value={value} index={1}>
         <UpdateSubscriptionForm
           subscriptionStatus={subscriptionStatus}
           handleUnsubscribe={handleUnsubscribe}
@@ -231,10 +232,10 @@ export default function Account({ user, updateCtx }) {
           isLoading={isLoading}
         />
       </TabPanel>
-      <TabPanel name="update-user" value={value} index={2}>
+      <TabPanel name='update-user' value={value} index={2}>
         <UpdatePasswordForm handleUpdatePassword={handleUpdatePassword} />
       </TabPanel>
-      <TabPanel name="delete-account" value={value} index={3}>
+      <TabPanel name='delete-account' value={value} index={3}>
         <DeleteAccountForm handleDelete={handleDelete} />
       </TabPanel>
     </PageWrapper>

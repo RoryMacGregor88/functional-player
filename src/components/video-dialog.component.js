@@ -1,22 +1,24 @@
-import { useEffect } from "react";
-import { useRouter } from "next/router";
-import NextImage from "next/image";
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import NextImage from 'next/image';
 import {
   Dialog,
   IconButton,
   Grid,
   Typography,
   useMediaQuery,
-} from "@mui/material";
+} from '@mui/material';
 
 import {
   ArrowBackIcon,
   VideoPlayer,
   Button,
   BookmarkIconButton,
-} from "@/src/components";
+} from '@/src/components';
 
-import { updateBookmarks, http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+import { updateBookmarks, http } from '@/src/utils';
+
+import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
 /**
  * @param {
@@ -39,31 +41,31 @@ const Overlay = ({
     <Grid
       item
       container
-      wrap="nowrap"
+      wrap='nowrap'
       gap={4}
-      direction="column"
-      justifyContent="center"
-      alignItems="flex-start"
+      direction='column'
+      justifyContent='center'
+      alignItems='flex-start'
       sx={{
-        position: "relative",
-        width: "50%",
-        height: "100%",
+        position: 'relative',
+        width: '50%',
+        height: '100%',
       }}
     >
       <Grid
         item
         container
-        direction="column"
-        justifyContent="space-between"
-        alignItems="flex-start"
-        sx={{ width: "100%" }}
+        direction='column'
+        justifyContent='space-between'
+        alignItems='flex-start'
+        sx={{ width: '100%' }}
       >
-        <Grid item container justifyContent="space-between" alignItems="center">
+        <Grid item container justifyContent='space-between' alignItems='center'>
           <IconButton
             onClick={onClose}
-            sx={{ width: "fit-content", padding: "0" }}
+            sx={{ width: 'fit-content', padding: '0' }}
           >
-            <ArrowBackIcon sx={{ height: "2.5rem", width: "2.5rem" }} />
+            <ArrowBackIcon sx={{ height: '2.5rem', width: '2.5rem' }} />
           </IconButton>
           <BookmarkIconButton
             isBookmarked={isBookmarked}
@@ -71,20 +73,20 @@ const Overlay = ({
           />
         </Grid>
         <>
-          <Typography variant="h2">{title}</Typography>
-          <Typography variant="body1">{description}</Typography>
+          <Typography variant='h2'>{title}</Typography>
+          <Typography variant='body1'>{description}</Typography>
         </>
       </Grid>
       <Grid
         item
         container
-        direction="column"
-        alignItems="center"
-        sx={{ width: "100%", height: "50%", position: "relative" }}
+        direction='column'
+        alignItems='center'
+        sx={{ width: '100%', height: '50%', position: 'relative' }}
       >
         <VideoPlayer videoId={videoId} />
       </Grid>
-      <Grid item container alignItems="center" gap="1rem" wrap="nowrap">
+      <Grid item container alignItems='center' gap='1rem' wrap='nowrap'>
         <Button>More</Button>
         <Button>Feedback</Button>
       </Grid>
@@ -106,7 +108,7 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
   const updateLastWatched = async (user, _id) => {
     if (!!user) {
       try {
-        const { error, resUser } = await http("/last-watched", {
+        const { error, resUser } = await http('/last-watched', {
           email: user.email,
           _id,
         });
@@ -115,7 +117,7 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
           updateCtx({
             toastData: {
               message: error.message,
-              severity: "error",
+              severity: 'error',
             },
           });
         } else if (!!user) {
@@ -125,7 +127,7 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
         updateCtx({
           toastData: {
             message: DEFAULT_ERROR_MESSAGE,
-            severity: "error",
+            severity: 'error',
           },
         });
       }
@@ -138,8 +140,8 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
     updateLastWatched();
   }, []);
 
-  const isMedium = useMediaQuery("(max-width:1200px)");
-  const isSmall = useMediaQuery("(max-width:600px)");
+  const isMedium = useMediaQuery('(max-width:1200px)');
+  const isSmall = useMediaQuery('(max-width:600px)');
 
   if (!selectedVideo) {
     return null;
@@ -150,7 +152,7 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
   // TODO: add trailerId to all videos in db
   const trailerId = videoId;
 
-  const deviceSize = isSmall ? "small" : isMedium ? "medium" : "large";
+  const deviceSize = isSmall ? 'small' : isMedium ? 'medium' : 'large';
   const isBookmarked = !!user?.bookmarks.includes(_id);
 
   const onActionClick = (path) => {
@@ -163,18 +165,18 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
       ? updateBookmarks(_id, user, updateCtx)
       : updateCtx({
           dialogData: {
-            title: "Welcome to Functional Player",
+            title: 'Welcome to Functional Player',
             message:
-              "You must have a user account to save courses to your list. Please either login or register with us using the buttons below.",
+              'You must have a user account to save courses to your list. Please either login or register with us using the buttons below.',
             actions: [
               {
-                label: "Login",
-                onClick: () => onActionClick("/login"),
+                label: 'Login',
+                onClick: () => onActionClick('/login'),
                 closeOnClick: true,
               },
               {
-                label: "Register",
-                onClick: () => onActionClick("/register"),
+                label: 'Register',
+                onClick: () => onActionClick('/register'),
                 closeOnClick: true,
               },
             ],
@@ -191,35 +193,35 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
       <Grid
         container
         sx={{
-          height: "100%",
-          width: "100%",
-          position: "relative",
+          height: '100%',
+          width: '100%',
+          position: 'relative',
         }}
       >
         <NextImage
           src={`/telecaster-${deviceSize}.jpg`}
-          objectFit="cover"
-          layout="fill"
+          objectFit='cover'
+          layout='fill'
           quality={100}
         />
         <Grid
           item
           container
-          justifyContent="center"
-          alignItems="center"
+          justifyContent='center'
+          alignItems='center'
           sx={{
-            position: "absolute",
+            position: 'absolute',
             top: 0,
             left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            padding: "0 2rem",
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            padding: '0 2rem',
           }}
         >
           <Overlay
             videoId={
-              user?.subscriptionStatus === "active" ? videoId : trailerId
+              user?.subscriptionStatus === 'active' ? videoId : trailerId
             }
             selectedVideo={selectedVideo}
             isBookmarked={isBookmarked}

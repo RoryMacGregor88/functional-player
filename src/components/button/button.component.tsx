@@ -1,18 +1,14 @@
-import {
-  ReactElement,
-  forwardRef,
-  ReactNode,
-  MouseEventHandler,
-  RefObject,
-} from 'react';
+import { ReactElement, forwardRef, RefObject } from 'react';
+
 import { Button as MuiButton } from '@mui/material';
+
 import { LoadingSpinner } from '@/src/components';
 
 interface Props {
-  onClick: MouseEventHandler<HTMLAnchorElement>;
+  onClick: Function;
   disabled?: boolean;
   isLoading?: boolean;
-  children: ReactNode | ReactNode[];
+  children: string | ReactElement;
   props?: any;
 }
 

@@ -1,21 +1,21 @@
-import { render, screen, waitFor, userEvent } from "@/src/utils";
+import { render, screen } from '@/src/utils/test-utils';
 
-import List from "@/src/pages/list";
+import List from '@/src/pages/list';
 
-jest.mock("@/lib", () => ({
+jest.mock('@/lib', () => ({
   getAllCourses: () => {},
 }));
 
-describe("list", () => {
-  it("renders", () => {
+describe('list', () => {
+  it('renders', () => {
     render(<List user={{ bookmarks: [] }} courses={[]} />);
 
     expect(screen.getByText(/your list/i)).toBeInTheDocument();
   });
 
-  it("redirects to login if no user found", () => {
+  it('redirects to login if no user found', () => {
     const { router } = render(<List />, { push: jest.fn() });
 
-    expect(router.push).toHaveBeenCalledWith("/login");
+    expect(router.push).toHaveBeenCalledWith('/login');
   });
 });

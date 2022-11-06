@@ -1,9 +1,9 @@
-import Head from "next/head";
+import Head from 'next/head';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
-import { CssBaseline } from "@mui/material";
-import { ThemeProvider } from "@mui/material/styles";
+import { CssBaseline } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 
 import {
   Layout,
@@ -12,9 +12,9 @@ import {
   Dialog,
   VideoDialog,
   theme,
-} from "@/src/components";
+} from '@/src/components';
 
-import { Context, authenticateToken } from "@/src/utils";
+import { Context, authenticateToken } from '@/src/utils';
 
 /**
  * @param {{
@@ -50,11 +50,11 @@ function App({ Component, pageProps }) {
       <Head>
         <title>Functional Player</title>
         <meta
-          name="description"
-          content="Functional Player"
-          key="functional-player"
+          name='description'
+          content='Functional Player'
+          key='functional-player'
         />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel='icon' href='/favicon.ico' />
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />

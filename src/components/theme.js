@@ -1,8 +1,8 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme } from '@mui/material/styles';
 
 // TODO: black colors are mixed up in header, main, footer
 
-import { THEME_COLORS } from "@/src/utils";
+import { THEME_COLORS } from '@/src/utils/constants';
 
 const { white, black, yellow, green, red } = THEME_COLORS;
 
@@ -11,7 +11,7 @@ const theme = {
     borderRadius: 5,
   },
   palette: {
-    mode: "dark",
+    mode: 'dark',
     // This is maybe not necessary when using all Mui components
     text: {
       primary: white,
@@ -34,8 +34,8 @@ const theme = {
       main: green,
     },
     common: {
-      black: "#000",
-      white: "#fff",
+      black: '#000',
+      white: '#fff',
     },
   },
 };

@@ -2,9 +2,9 @@ import {
   PaymentElement,
   useStripe,
   useElements,
-} from "@stripe/react-stripe-js";
+} from '@stripe/react-stripe-js';
 
-import { Button, FormWrapper } from "@/src/components";
+import { Button, FormWrapper } from '@/src/components';
 
 /**
  * @param {{
@@ -21,7 +21,7 @@ const SubscribeForm = ({ subscribeSubmit, isLoading }) => {
   return stripeIsLoaded ? (
     <FormWrapper onSubmit={() => subscribeSubmit(stripe, elements)}>
       <PaymentElement />
-      <Button type="submit" isLoading={isLoading}>
+      <Button type='submit' isLoading={isLoading}>
         Submit
       </Button>
     </FormWrapper>

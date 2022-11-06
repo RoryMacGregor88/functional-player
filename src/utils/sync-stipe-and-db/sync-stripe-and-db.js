@@ -1,6 +1,6 @@
-import stripeFn from "stripe";
+import stripeFn from 'stripe';
 
-import { USERS } from "@/src/utils";
+import { USERS } from '@/src/utils/constants';
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 

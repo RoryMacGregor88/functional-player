@@ -1,11 +1,20 @@
-//TODO: check type of customerId
+//TODO: check type of customerId and _id
+//TODO: should password be included?
+
+export type id = string | number;
 
 export interface User {
+  _id: id;
   email: string;
   username: string;
-  password: string;
-  subscriptionId: string;
-  customerId: string | number;
+  subscriptionId: id;
+  customerId: id;
   subscriptionStatus: string;
-  bookmarks: string[];
+  bookmarks: id[];
 }
+
+export interface Course {}
+
+export interface Series {}
+
+export interface Video {}

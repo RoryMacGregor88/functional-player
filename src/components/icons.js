@@ -18,7 +18,7 @@ import {
   Twitter as TwitterIcon,
   Reddit as RedditIcon,
   YouTube as YouTubeIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 
 export {
   MenuIcon,

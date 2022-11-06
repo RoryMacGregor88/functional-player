@@ -1,9 +1,10 @@
+import { http } from '@/src/utils';
+
 import {
-  http,
   DEFAULT_ERROR_MESSAGE,
   BOOKMARK_SUCCESS_REMOVE_MESSAGE,
   BOOKMARK_SUCCESS_ADD_MESSAGE,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
 // TODO: something wrong with bookmarking. Staying in bookmarks when not bookmarked, in bookmarks when white etc. Needs tightened!
 
@@ -16,7 +17,7 @@ export default async function updateBookmarks(_id, user = {}, callback) {
       ? currentBookmarks.filter((b) => b !== _id)
       : [...currentBookmarks, _id];
 
-    const { error, resBookmarks } = await http("/update-bookmarks", {
+    const { error, resBookmarks } = await http('/update-bookmarks', {
       email,
       bookmarks,
     });
@@ -25,7 +26,7 @@ export default async function updateBookmarks(_id, user = {}, callback) {
       callback({
         toastData: {
           message: error.message,
-          severity: "error",
+          severity: 'error',
         },
       });
     } else if (!!resBookmarks) {
@@ -42,7 +43,7 @@ export default async function updateBookmarks(_id, user = {}, callback) {
     callback({
       toastData: {
         message: DEFAULT_ERROR_MESSAGE,
-        severity: "error",
+        severity: 'error',
       },
     });
   }

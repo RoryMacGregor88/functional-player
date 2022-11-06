@@ -1,4 +1,4 @@
-import { screen, render, userEvent, waitFor } from '@/src/utils';
+import { screen, render, userEvent, waitFor } from '@/src/utils/test-utils';
 
 import BookmarkIconButton from './bookmark-icon-button.component';
 

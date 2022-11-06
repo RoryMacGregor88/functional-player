@@ -1,6 +1,6 @@
-import stripeFn from "stripe";
+import stripeFn from 'stripe';
 
-import { withIronSessionApiRoute } from "iron-session/next";
+import { withIronSessionApiRoute } from 'iron-session/next';
 
 import {
   sessionOptions,
@@ -8,18 +8,18 @@ import {
   handleForbidden,
   handleServerError,
   logServerError,
-} from "@/lib";
+} from '@/lib';
 
 import {
   USERS,
   TOKEN_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
 async function deleteAccount(req, res) {
-  if (req.method !== "POST") {
+  if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
@@ -35,7 +35,7 @@ async function deleteAccount(req, res) {
 
       return res.status(200).json({ resUser: null });
     } catch (error) {
-      await logServerError("deleteAccount: ", error);
+      await logServerError('deleteAccount: ', error);
       return handleServerError(res);
     }
   }

@@ -1,8 +1,12 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from 'react';
+
+import { useRouter } from 'next/router';
+
+import { useForm } from 'react-hook-form';
+
+import * as Yup from 'yup';
+
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import {
   LoadMask,
@@ -12,14 +16,15 @@ import {
   SpacedTitle,
   EmailField,
   Button,
-} from "@/src/components";
+} from '@/src/components';
+
+import { http } from '@/src/utils';
 
 import {
-  http,
   DEFAULT_ERROR_MESSAGE,
   EMAIL_INVALID_MESSAGE,
   EMAIL_REQUIRED_MESSAGE,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
 const resetPasswordFormSchema = Yup.object().shape({
   email: Yup.string()
@@ -37,15 +42,15 @@ export default function ResetPassword({ user }) {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    mode: "all",
+    mode: 'all',
     resolver: yupResolver(resetPasswordFormSchema),
     defaultValues: {
-      email: "",
+      email: '',
     },
   });
 
   if (!!user) {
-    router.push("/dashboard");
+    router.push('/dashboard');
     return <LoadMask />;
   }
 
@@ -53,7 +58,7 @@ export default function ResetPassword({ user }) {
     try {
       const { email } = values;
 
-      const { error, ok } = await http("/auth/reset-password", {
+      const { error, ok } = await http('/auth/reset-password', {
         email: email.toLowerCase(),
       });
 
@@ -62,7 +67,7 @@ export default function ResetPassword({ user }) {
       } else if (ok) {
         setIsSubmitDisabled(true);
         setWellData({
-          severity: "success",
+          severity: 'success',
           message: `An email has been sent to ${email}. Please follow the steps to reset your password. Don't forget to check your junk folder.`,
         });
       }
@@ -77,7 +82,7 @@ export default function ResetPassword({ user }) {
       <FormWrapper onSubmit={handleSubmit((values) => onSubmit(values))}>
         {!!wellData ? <Well {...wellData} /> : null}
         <EmailField errors={errors} register={register} />
-        <Button type="submit" disabled={isSubmitDisabled}>
+        <Button type='submit' disabled={isSubmitDisabled}>
           Submit
         </Button>
       </FormWrapper>

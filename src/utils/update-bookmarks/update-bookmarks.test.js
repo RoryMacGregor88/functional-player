@@ -1,25 +1,29 @@
-import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
 
-import { updateBookmarks, waitFor, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+import { waitFor } from '@/src/utils/test-utils';
+
+import { updateBookmarks } from '@/src/utils';
+
+import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
 enableFetchMocks();
 
-describe("updateBookmarks", () => {
+describe('updateBookmarks', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
 
-  it("adds bookmark", async () => {
-    fetchMock.mockResponse(JSON.stringify({ resBookmarks: ["123"] }));
+  it('adds bookmark', async () => {
+    fetchMock.mockResponse(JSON.stringify({ resBookmarks: ['123'] }));
 
-    const _id = "123",
-      user = { email: "email@test.com", bookmarks: [] },
+    const _id = '123',
+      user = { email: 'email@test.com', bookmarks: [] },
       callback = jest.fn();
 
     const expected = {
-      user: { ...user, bookmarks: ["123"] },
+      user: { ...user, bookmarks: ['123'] },
       toastData: {
-        message: "Added to your list",
+        message: 'Added to your list',
       },
     };
 
@@ -30,17 +34,17 @@ describe("updateBookmarks", () => {
     });
   });
 
-  it("removes bookmark", async () => {
-    fetchMock.mockResponse(JSON.stringify({ resBookmarks: ["456"] }));
+  it('removes bookmark', async () => {
+    fetchMock.mockResponse(JSON.stringify({ resBookmarks: ['456'] }));
 
-    const _id = "123",
-      user = { email: "email@test.com", bookmarks: [_id, "456"] },
+    const _id = '123',
+      user = { email: 'email@test.com', bookmarks: [_id, '456'] },
       callback = jest.fn();
 
     const expected = {
-      user: { ...user, bookmarks: ["456"] },
+      user: { ...user, bookmarks: ['456'] },
       toastData: {
-        message: "Removed from your list",
+        message: 'Removed from your list',
       },
     };
 
@@ -51,19 +55,19 @@ describe("updateBookmarks", () => {
     });
   });
 
-  it("handles server error", async () => {
-    const message = "test-error-message";
+  it('handles server error', async () => {
+    const message = 'test-error-message';
 
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
-    const _id = "123",
-      user = { email: "email@test.com", bookmarks: [_id] },
+    const _id = '123',
+      user = { email: 'email@test.com', bookmarks: [_id] },
       callback = jest.fn();
 
     const expected = {
       toastData: {
         message,
-        severity: "error",
+        severity: 'error',
       },
     };
 
@@ -74,19 +78,19 @@ describe("updateBookmarks", () => {
     });
   });
 
-  it("handles client error", async () => {
+  it('handles client error', async () => {
     fetchMock.mockResponse(() => {
       throw new Error();
     });
 
-    const _id = "123",
-      user = { email: "email@test.com", bookmarks: [] },
+    const _id = '123',
+      user = { email: 'email@test.com', bookmarks: [] },
       callback = jest.fn();
 
     const expected = {
       toastData: {
         message: DEFAULT_ERROR_MESSAGE,
-        severity: "error",
+        severity: 'error',
       },
     };
 

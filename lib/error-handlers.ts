@@ -1,5 +1,5 @@
 import { NextApiResponse } from 'next';
-import { DEFAULT_ERROR_MESSAGE } from '@/src/utils';
+import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
 function handleForbidden(res: NextApiResponse, message: string) {
   return res.status(403).json({ error: { message } });

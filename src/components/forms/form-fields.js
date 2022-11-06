@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { InputAdornment } from "@mui/material";
+import { InputAdornment } from '@mui/material';
 
 import {
   TextField,
   IconButton,
   VisibilityIcon,
   VisibilityOffIcon,
-} from "@/src/components";
+} from '@/src/components';
 
 /**
  * @param {{
@@ -17,15 +17,15 @@ import {
  */
 const EmailField = ({ errors, register }) => (
   <TextField
-    variant="outlined"
-    label="Email"
-    id="email"
-    name="email"
-    type="email"
-    aria-describedby="email"
+    variant='outlined'
+    label='Email'
+    id='email'
+    name='email'
+    type='email'
+    aria-describedby='email'
     error={!!errors.email}
     helperText={errors.email?.message}
-    {...register("email")}
+    {...register('email')}
     autoFocus
   />
 );
@@ -38,15 +38,15 @@ const EmailField = ({ errors, register }) => (
  */
 const ConfirmEmailField = ({ errors, register }) => (
   <TextField
-    variant="outlined"
-    label="Confirm email"
-    id="confirmEmail"
-    name="confirmEmail"
-    type="email"
-    aria-describedby="confirmEmail"
+    variant='outlined'
+    label='Confirm email'
+    id='confirmEmail'
+    name='confirmEmail'
+    type='email'
+    aria-describedby='confirmEmail'
     error={!!errors.confirmEmail}
     helperText={errors.confirmEmail?.message}
-    {...register("confirmEmail")}
+    {...register('confirmEmail')}
   />
 );
 
@@ -58,16 +58,16 @@ const ConfirmEmailField = ({ errors, register }) => (
  */
 const UsernameField = ({ errors, register }) => (
   <TextField
-    variant="outlined"
-    label="Username"
-    id="username"
-    name="username"
+    variant='outlined'
+    label='Username'
+    id='username'
+    name='username'
     // TODO: check type is right
-    type="input"
-    aria-describedby="username"
+    type='input'
+    aria-describedby='username'
     error={!!errors.username}
     helperText={errors.username?.message}
-    {...register("username")}
+    {...register('username')}
   />
 );
 
@@ -84,26 +84,26 @@ const PasswordField = ({ errors, register, label, name }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   // TODO: this is broke, negative margin -12px being implemented somewhere
-  const iconStyles = { marginRight: "1rem", color: "palette.primary.main" };
+  const iconStyles = { marginRight: '1rem', color: 'palette.primary.main' };
 
   return (
     <TextField
-      variant="outlined"
+      variant='outlined'
       label={label}
       id={name}
-      type={showPassword ? "input" : "password"}
+      type={showPassword ? 'input' : 'password'}
       aria-describedby={name}
       error={!!errors[name]}
       helperText={errors[name]?.message}
       InputProps={{
-        role: "textbox",
-        "aria-label": label,
+        role: 'textbox',
+        'aria-label': label,
         endAdornment: (
-          <InputAdornment position="end">
+          <InputAdornment position='end'>
             <IconButton
-              aria-label="toggle password visibility"
+              aria-label='toggle password visibility'
               onClick={() => setShowPassword(!showPassword)}
-              edge="end"
+              edge='end'
             >
               {showPassword ? (
                 // TODO: which way around?

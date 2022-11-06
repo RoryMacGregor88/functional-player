@@ -1,7 +1,8 @@
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from 'react-hook-form';
 
-import { Typography, Grid } from "@mui/material";
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import { Typography, Grid } from '@mui/material';
 
 import {
   Button,
@@ -9,9 +10,9 @@ import {
   EmailField,
   PasswordField,
   Link,
-} from "@/src/components";
+} from '@/src/components';
 
-import { loginFormSchema } from "@/src/utils";
+import { loginFormSchema } from '@/src/utils';
 
 /** @param {{ onSubmit: function, isLoading: boolean }} props */
 const LoginForm = ({ onSubmit, isLoading }) => {
@@ -20,11 +21,11 @@ const LoginForm = ({ onSubmit, isLoading }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    mode: "all",
+    mode: 'all',
     resolver: yupResolver(loginFormSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
@@ -34,22 +35,22 @@ const LoginForm = ({ onSubmit, isLoading }) => {
       <PasswordField
         errors={errors}
         register={register}
-        label="Password"
-        name="password"
+        label='Password'
+        name='password'
       />
-      <Button type="submit" isLoading={isLoading}>
+      <Button type='submit' isLoading={isLoading}>
         Submit
       </Button>
-      <Grid container alignItems="center" justifyContent="center">
+      <Grid container alignItems='center' justifyContent='center'>
         {/* // TODO: fix this (span should be link, theme styles, hover styles) */}
-        <Typography variant="body1">Forgot password?</Typography>
-        <Link href={"/reset-password"} passHref>
+        <Typography variant='body1'>Forgot password?</Typography>
+        <Link href={'/reset-password'} passHref>
           <span
             style={{
-              cursor: "pointer",
-              borderBottom: "2px solid orange",
-              width: "fit-content",
-              marginLeft: "0.5rem",
+              cursor: 'pointer',
+              borderBottom: '2px solid orange',
+              width: 'fit-content',
+              marginLeft: '0.5rem',
             }}
           >
             Click here

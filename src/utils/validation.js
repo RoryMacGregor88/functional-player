@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+import * as Yup from 'yup';
 
 import {
   EMAIL_REQUIRED_MESSAGE,
@@ -8,7 +8,7 @@ import {
   NO_PASSWORD_MATCH_MESSAGE,
   PASSWORD_MIN_LENGTH_MESSAGE,
   PASSWORD_CONFIRM_REQUIRED_MESSAGE,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
 // TODO: move this shit into each form, this is stupid
 
@@ -28,7 +28,7 @@ const registerFormSchema = Yup.object().shape({
     .required(PASSWORD_REQUIRED_MESSAGE)
     .min(5, PASSWORD_MIN_LENGTH_MESSAGE),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], NO_PASSWORD_MATCH_MESSAGE)
+    .oneOf([Yup.ref('password'), null], NO_PASSWORD_MATCH_MESSAGE)
     .required(PASSWORD_CONFIRM_REQUIRED_MESSAGE),
 });
 

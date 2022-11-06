@@ -1,4 +1,6 @@
-import { http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+import { http } from '@/src/utils';
+
+import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
 /**
  * @param {object|null} user
@@ -12,17 +14,17 @@ export default async function syncSubscriptionStatus(
 ) {
   try {
     const { email, subscriptionStatus, subscriptionId } = user;
-    const { error, resUser } = await http("/auth/sync-subscription-status", {
+    const { error, resUser } = await http('/auth/sync-subscription-status', {
       email,
       subscriptionStatus,
       subscriptionId,
     });
     if (!!error) {
-      await http("/auth/logout");
+      await http('/auth/logout');
       callback({
         user: null,
         toastData: {
-          severity: "error",
+          severity: 'error',
           message: error.message,
         },
       });
@@ -34,7 +36,7 @@ export default async function syncSubscriptionStatus(
     callback({
       user: null,
       toastData: {
-        severity: "error",
+        severity: 'error',
         message: DEFAULT_ERROR_MESSAGE,
       },
     });

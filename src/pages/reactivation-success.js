@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
-import { Grid, Button, Typography } from "@mui/material";
+import { Grid, Button, Typography } from '@mui/material';
 
-import { LoadMask, PageWrapper, SpacedTitle } from "@/src/components";
-import {
-  REACTIVATION_SUCCESS_MESSAGE,
-  syncSubscriptionStatus,
-} from "@/src/utils";
+import { LoadMask, PageWrapper, SpacedTitle } from '@/src/components';
+
+import { syncSubscriptionStatus } from '@/src/utils';
+
+import { REACTIVATION_SUCCESS_MESSAGE } from '@/src/utils/constants';
 
 /**
  * @param {{
@@ -29,7 +29,7 @@ export default function ReactivationSuccess({ user, updateCtx }) {
   }, [user, updateCtx]);
 
   if (!user) {
-    router.push("/login");
+    router.push('/login');
     return <LoadMask />;
   }
 
@@ -40,16 +40,16 @@ export default function ReactivationSuccess({ user, updateCtx }) {
       <SpacedTitle>Success</SpacedTitle>
       <Grid
         container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
+        direction='column'
+        justifyContent='center'
+        alignItems='center'
         gap={4}
       >
-        <Typography variant="h4">{REACTIVATION_SUCCESS_MESSAGE}</Typography>
-        <Typography variant="body1">
+        <Typography variant='h4'>{REACTIVATION_SUCCESS_MESSAGE}</Typography>
+        <Typography variant='body1'>
           Click the button below to return to your dashboard.
         </Typography>
-        <Button onClick={() => router.push("/dashboard")}>
+        <Button onClick={() => router.push('/dashboard')}>
           Return to dashboard
         </Button>
       </Grid>

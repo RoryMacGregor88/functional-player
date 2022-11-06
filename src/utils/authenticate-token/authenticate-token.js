@@ -1,18 +1,20 @@
-import { http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+import { http } from '@/src/utils';
+
+import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
 /** @param {function} callback */
 export default async function authenticateToken(callback) {
   try {
     const { error, resUser } = await http(
-      "/auth/authenticate-token",
+      '/auth/authenticate-token',
       null,
-      "GET"
+      'GET'
     );
     if (!!error) {
       callback({
         user: null,
         toastData: {
-          severity: "error",
+          severity: 'error',
           message: error.message,
         },
       });
@@ -23,7 +25,7 @@ export default async function authenticateToken(callback) {
     callback({
       user: null,
       toastData: {
-        severity: "error",
+        severity: 'error',
         message: DEFAULT_ERROR_MESSAGE,
       },
     });

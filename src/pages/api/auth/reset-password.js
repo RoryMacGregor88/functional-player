@@ -1,23 +1,24 @@
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer';
 
-import { hash } from "bcryptjs";
+import { hash } from 'bcryptjs';
 
 import {
   connectToDatabase,
   handleServerError,
   handleForbidden,
   logServerError,
-} from "@/lib";
+} from '@/lib';
+
+import { generateTempPassword } from '@/src/utils';
 
 import {
-  generateTempPassword,
   USERS,
   HTTP_METHOD_ERROR_MESSAGE,
   EMAIL_NOT_FOUND_MESSAGE,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
 export default async function resetPassword(req, res) {
-  if (req.method !== "POST") {
+  if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else {
     try {
@@ -47,7 +48,7 @@ export default async function resetPassword(req, res) {
       const hostEmail = process.env.HOST_EMAIL;
 
       const transporter = nodemailer.createTransport({
-        host: "smtp.outlook.com",
+        host: 'smtp.outlook.com',
         auth: {
           user: hostEmail,
           pass: process.env.HOST_EMAIL_PASSWORD,
@@ -57,7 +58,7 @@ export default async function resetPassword(req, res) {
       const data = {
         from: hostEmail,
         to: email,
-        subject: "Password Reset",
+        subject: 'Password Reset',
         html,
       };
 
@@ -65,7 +66,7 @@ export default async function resetPassword(req, res) {
 
       return res.status(200).json({ ok: true });
     } catch (error) {
-      await logServerError("resetEmail", error);
+      await logServerError('resetEmail', error);
       return handleServerError(res);
     }
   }

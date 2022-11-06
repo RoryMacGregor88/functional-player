@@ -1,4 +1,4 @@
-import { withIronSessionApiRoute } from "iron-session/next";
+import { withIronSessionApiRoute } from 'iron-session/next';
 
 import {
   connectToDatabase,
@@ -6,16 +6,17 @@ import {
   logServerError,
   handleForbidden,
   handleServerError,
-} from "@/lib";
+} from '@/lib';
+
+import { syncStripeAndDb } from '@/src/utils';
 
 import {
-  syncStripeAndDb,
   HTTP_METHOD_ERROR_MESSAGE,
   TOKEN_ERROR_MESSAGE,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
 async function syncSubscriptionStatus(req, res) {
-  if (req.method !== "POST") {
+  if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
@@ -50,7 +51,7 @@ async function syncSubscriptionStatus(req, res) {
 
       return res.status(200).json({ resUser });
     } catch (error) {
-      await logServerError("syncSubscriptionStatus", error);
+      await logServerError('syncSubscriptionStatus', error);
       return handleServerError(res);
     }
   }

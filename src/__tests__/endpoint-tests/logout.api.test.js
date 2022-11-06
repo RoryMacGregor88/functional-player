@@ -2,20 +2,20 @@ import {
   DEFAULT_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
   TOKEN_ERROR_MESSAGE,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
 let json = null,
   status = null;
 
 let destroy = null;
 
-import logout from "@/src/pages/api/auth/logout";
+import logout from '@/src/pages/api/auth/logout';
 
-jest.mock("iron-session/next", () => ({
+jest.mock('iron-session/next', () => ({
   withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
 }));
 
-jest.mock("@/lib", () => ({
+jest.mock('@/lib', () => ({
   logServerError: jest.fn().mockImplementation((str, err) => {}),
   handleForbidden: jest
     .fn()
@@ -29,19 +29,19 @@ jest.mock("@/lib", () => ({
     ),
 }));
 
-describe("logout endpoint", () => {
+describe('logout endpoint', () => {
   beforeEach(() => {
     json = jest.fn();
     status = jest.fn().mockReturnValue({ json });
 
     // mock database error
     destroy = jest.fn().mockImplementation(() => {
-      throw new Error("test-server-error");
+      throw new Error('test-server-error');
     });
   });
 
-  it("handles http method forbidden", async () => {
-    const req = { method: "GET" },
+  it('handles http method forbidden', async () => {
+    const req = { method: 'GET' },
       res = { status };
 
     await logout(req, res);
@@ -52,10 +52,10 @@ describe("logout endpoint", () => {
     });
   });
 
-  it("handles token forbidden", async () => {
+  it('handles token forbidden', async () => {
     const req = {
-        method: "POST",
-        body: { email: "test@email.com" },
+        method: 'POST',
+        body: { email: 'test@email.com' },
         session: {},
       },
       res = { status };
@@ -68,10 +68,10 @@ describe("logout endpoint", () => {
     });
   });
 
-  it("handles error", async () => {
-    const email = "test@email.com",
+  it('handles error', async () => {
+    const email = 'test@email.com',
       req = {
-        method: "POST",
+        method: 'POST',
         session: { user: { email }, destroy },
         body: { email },
       },

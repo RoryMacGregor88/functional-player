@@ -1,21 +1,21 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography } from '@mui/material';
 
-import { getAllCourses, getAllSeries } from "@/lib";
+import { getAllCourses, getAllSeries } from '@/lib';
 
 import {
   HeaderImage,
   PageWrapper,
   CourseDisplay,
   Slider,
-} from "@/src/components";
+} from '@/src/components';
 
 // TODO: make real, not fake data, also all videos need alts and aria labels
 const comingSoonCourse = {
-  _id: "e522a8af-d60a-456e-986b-332afdd485e0",
-  title: "Pride and Joy",
-  description: "this is a description of Pride and Joy",
-  coursePath: "pride-and-joy",
-  seriesPath: "stevie-ray-vaughan",
+  _id: 'e522a8af-d60a-456e-986b-332afdd485e0',
+  title: 'Pride and Joy',
+  description: 'this is a description of Pride and Joy',
+  coursePath: 'pride-and-joy',
+  seriesPath: 'stevie-ray-vaughan',
 };
 
 export const getServerSideProps = async (ctx) => {
@@ -35,15 +35,15 @@ export const getServerSideProps = async (ctx) => {
 const CategoryWrapper = ({ category, children }) => (
   <Grid
     container
-    direction="column"
+    direction='column'
     gap={1}
     sx={{
-      padding: "2rem 0",
-      maxWidth: "90vw",
+      padding: '2rem 0',
+      maxWidth: '90vw',
     }}
   >
-    <Typography variant="h4">{category}</Typography>
-    <Grid item container justifyContent="flex-start" gap={2} wrap="nowrap">
+    <Typography variant='h4'>{category}</Typography>
+    <Grid item container justifyContent='flex-start' gap={2} wrap='nowrap'>
       {children}
     </Grid>
   </Grid>
@@ -51,15 +51,15 @@ const CategoryWrapper = ({ category, children }) => (
 
 /** @param {{ course: object }} props */
 const ContinueWatching = ({ course }) => (
-  <CategoryWrapper category="Continue Watching">
-    <CourseDisplay course={{ ...course, src: "/stratocaster-small.jpg" }} />
+  <CategoryWrapper category='Continue Watching'>
+    <CourseDisplay course={{ ...course, src: '/stratocaster-small.jpg' }} />
   </CategoryWrapper>
 );
 
 /** @param {{ course: object }} props */
 const ComingSoon = ({ course }) => (
-  <CategoryWrapper category="Coming Soon">
-    <CourseDisplay course={{ ...course, src: "/stratocaster-small.jpg" }} />
+  <CategoryWrapper category='Coming Soon'>
+    <CourseDisplay course={{ ...course, src: '/stratocaster-small.jpg' }} />
   </CategoryWrapper>
 );
 
@@ -83,20 +83,20 @@ export default function Dashboard({ user, courses, series }) {
   const bookmarks = courses.filter(({ _id }) => user?.bookmarks.includes(_id));
 
   return (
-    <Grid container direction="column" sx={{ width: "100%" }}>
+    <Grid container direction='column' sx={{ width: '100%' }}>
       <HeaderImage
-        src="/stratocaster"
-        alt="stratocaster"
-        title="Stratocaster Image"
+        src='/stratocaster'
+        alt='stratocaster'
+        title='Stratocaster Image'
       />
       <PageWrapper>
         {!!lastWatched ? (
-          <Slider title="Continue Watching" courses={[lastWatched]} />
+          <Slider title='Continue Watching' courses={[lastWatched]} />
         ) : null}
         {!!bookmarks.length ? (
-          <Slider title="Your List" courses={bookmarks} />
+          <Slider title='Your List' courses={bookmarks} />
         ) : null}
-        <Slider title="Latest Releases" courses={latestCourses} />
+        <Slider title='Latest Releases' courses={latestCourses} />
         {/* <ComingSoon course={comingSoonCourse} /> */}
         {series.map(({ _id, title, courses }) => (
           <Slider key={_id} title={`${title} Series`} courses={courses} />

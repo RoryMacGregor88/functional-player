@@ -1,20 +1,20 @@
-import stripeFn from "stripe";
+import stripeFn from 'stripe';
 
-import { hash } from "bcryptjs";
+import { hash } from 'bcryptjs';
 
 import {
   connectToDatabase,
   logServerError,
   handleForbidden,
   handleServerError,
-} from "@/lib";
+} from '@/lib';
 
-import { USERS, HTTP_METHOD_ERROR_MESSAGE } from "@/src/utils";
+import { USERS, HTTP_METHOD_ERROR_MESSAGE } from '@/src/utils/constants';
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
 export default async function register(req, res) {
-  if (req.method !== "POST") {
+  if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else {
     try {
@@ -26,7 +26,7 @@ export default async function register(req, res) {
       if (!!checkExistingEmail) {
         return res
           .status(400)
-          .json({ error: { message: "Email already exists." } });
+          .json({ error: { message: 'Email already exists.' } });
       }
 
       const checkExistingUsername = await db
@@ -36,7 +36,7 @@ export default async function register(req, res) {
       if (!!checkExistingUsername) {
         return res
           .status(400)
-          .json({ error: { message: "Username is taken." } });
+          .json({ error: { message: 'Username is taken.' } });
       }
 
       // if credentials are valid, create customer on stripe servers
@@ -53,8 +53,8 @@ export default async function register(req, res) {
       } = await stripe.subscriptions.create({
         customer: customerId,
         items: [{ price: process.env.TEST_SUBSCRIPTION_PRICE_ID }],
-        payment_behavior: "default_incomplete",
-        expand: ["latest_invoice.payment_intent"],
+        payment_behavior: 'default_incomplete',
+        expand: ['latest_invoice.payment_intent'],
       });
 
       await db.collection(USERS).insertOne({
@@ -71,7 +71,7 @@ export default async function register(req, res) {
         .status(201)
         .json({ clientSecret: latest_invoice.payment_intent.client_secret });
     } catch (error) {
-      await logServerError("register", error);
+      await logServerError('register', error);
       return handleServerError(res);
     }
   }

@@ -2,21 +2,21 @@ import {
   TOKEN_ERROR_MESSAGE,
   DEFAULT_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
-import deleteAccount from "@/src/pages/api/auth/delete";
+import deleteAccount from '@/src/pages/api/auth/delete';
 
 let json = null,
   status = null;
 
-jest.mock("iron-session/next", () => ({
+jest.mock('iron-session/next', () => ({
   withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
 }));
 
-jest.mock("@/lib", () => ({
+jest.mock('@/lib', () => ({
   connectToDatabase: jest.fn().mockImplementation(() => {
     // mock server error
-    throw new Error("test-server-error");
+    throw new Error('test-server-error');
   }),
   logServerError: jest.fn().mockImplementation((str, err) => {}),
   handleForbidden: jest
@@ -31,14 +31,14 @@ jest.mock("@/lib", () => ({
     ),
 }));
 
-describe("delete endpoint", () => {
+describe('delete endpoint', () => {
   beforeEach(() => {
     json = jest.fn();
     status = jest.fn().mockReturnValue({ json });
   });
 
-  it("handles http method forbidden", async () => {
-    const req = { method: "GET" },
+  it('handles http method forbidden', async () => {
+    const req = { method: 'GET' },
       res = { status };
 
     await deleteAccount(req, res);
@@ -49,10 +49,10 @@ describe("delete endpoint", () => {
     });
   });
 
-  it("handles token forbidden", async () => {
+  it('handles token forbidden', async () => {
     const req = {
-        method: "POST",
-        body: { email: "test@email.com" },
+        method: 'POST',
+        body: { email: 'test@email.com' },
         session: { user: {} },
       },
       res = { status };
@@ -65,10 +65,10 @@ describe("delete endpoint", () => {
     });
   });
 
-  it("handles error", async () => {
-    const email = "test@email.com",
+  it('handles error', async () => {
+    const email = 'test@email.com',
       req = {
-        method: "POST",
+        method: 'POST',
         body: { email },
         session: { user: { email } },
       },

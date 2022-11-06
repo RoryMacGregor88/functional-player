@@ -1,8 +1,10 @@
-import { Elements } from "@stripe/react-stripe-js";
+import React, { useState } from 'react';
 
-import { useRouter } from "next/router";
-import React, { useState } from "react";
-import { Grid } from "@mui/material";
+import { Elements } from '@stripe/react-stripe-js';
+
+import { useRouter } from 'next/router';
+
+import { Grid } from '@mui/material';
 
 import {
   Stepper,
@@ -11,14 +13,14 @@ import {
   SpacedTitle,
   Well,
   LoadMask,
-} from "@/src/components";
+} from '@/src/components';
+
+import { getStripe, http } from '@/src/utils';
 
 import {
-  getStripe,
-  http,
   DEFAULT_ERROR_MESSAGE,
   REGISTRATION_SUCCESS_MESSAGE,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
 /** @param {{user: object|null}} props */
 export default function Register({ user }) {
@@ -30,7 +32,7 @@ export default function Register({ user }) {
   const [isLoading, setIsLoading] = useState(false);
 
   if (!!user) {
-    router.push("/dashboard");
+    router.push('/dashboard');
     return <LoadMask />;
   }
 
@@ -46,7 +48,7 @@ export default function Register({ user }) {
     try {
       const { username, email, password } = event;
 
-      const { error, clientSecret } = await http("/auth/register", {
+      const { error, clientSecret } = await http('/auth/register', {
         username,
         email: email.toLowerCase(),
         password,
@@ -57,7 +59,7 @@ export default function Register({ user }) {
       } else if (!!clientSecret) {
         setClientSecret(clientSecret);
         setWellData({
-          severity: "success",
+          severity: 'success',
           message: REGISTRATION_SUCCESS_MESSAGE,
         });
       }
@@ -89,9 +91,9 @@ export default function Register({ user }) {
   return (
     <Grid
       container
-      direction="column"
-      alignItems="center"
-      sx={{ maxWidth: "50rem" }}
+      direction='column'
+      alignItems='center'
+      sx={{ maxWidth: '50rem' }}
     >
       <SpacedTitle>Register</SpacedTitle>
       {!!wellData ? <Well {...wellData} /> : null}
@@ -108,7 +110,7 @@ export default function Register({ user }) {
       {activeStep === 2 && !!clientSecret ? (
         <Elements stripe={getStripe()} options={{ clientSecret }}>
           {/* // TODO: Replace P with details about cost/recurrence */}
-          <p style={{ textAlign: "center" }}>Subscribe</p>
+          <p style={{ textAlign: 'center' }}>Subscribe</p>
           <SubscribeForm
             subscribeSubmit={subscribeSubmit}
             isLoading={isLoading}

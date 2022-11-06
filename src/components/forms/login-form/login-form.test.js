@@ -1,49 +1,47 @@
-import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
+
+import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
 import {
-  render,
-  screen,
-  userEvent,
-  waitFor,
   EMAIL_REQUIRED_MESSAGE,
   EMAIL_INVALID_MESSAGE,
   PASSWORD_REQUIRED_MESSAGE,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
-import LoginForm from "./login-form.component";
+import LoginForm from './login-form.component';
 
 enableFetchMocks();
 
-describe("Login Form", () => {
+describe('Login Form', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
 
-  it("renders", () => {
+  it('renders', () => {
     render(<LoginForm />);
 
-    expect(screen.getByRole("textbox", { name: /email/i })).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /email/i })).toBeInTheDocument();
     expect(
-      screen.getByRole("textbox", { name: /password/i })
+      screen.getByRole('textbox', { name: /password/i })
     ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /submit/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
   });
 
-  it("blocks non-emails in email field", async () => {
+  it('blocks non-emails in email field', async () => {
     const onSubmit = jest.fn();
     render(<LoginForm onSubmit={onSubmit} />);
 
     await userEvent.type(
-      screen.getByRole("textbox", { name: /email/i }),
-      "not-a-valid-email"
+      screen.getByRole('textbox', { name: /email/i }),
+      'not-a-valid-email'
     );
 
     await userEvent.type(
-      screen.getByRole("textbox", { name: /password/i }),
-      "test-password123"
+      screen.getByRole('textbox', { name: /password/i }),
+      'test-password123'
     );
 
-    userEvent.click(screen.getByRole("button", { name: /submit/i }));
+    userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
     await waitFor(() => {
       expect(onSubmit).not.toHaveBeenCalled();
@@ -52,11 +50,11 @@ describe("Login Form", () => {
   });
 
   // TODO: might now be broken. Update all forms' submit buttons
-  it("disables submit button if form is invalid", async () => {
+  it('disables submit button if form is invalid', async () => {
     const onSubmit = jest.fn();
     render(<LoginForm onSubmit={onSubmit} />);
 
-    const submitButton = screen.getByRole("button", { name: /submit/i });
+    const submitButton = screen.getByRole('button', { name: /submit/i });
     expect(submitButton).toBeDisabled();
     userEvent.click(submitButton);
 
@@ -67,26 +65,26 @@ describe("Login Form", () => {
     });
   });
 
-  it("calls onSubmit when form is valid and button is clicked", async () => {
+  it('calls onSubmit when form is valid and button is clicked', async () => {
     fetchMock.mockResponse(JSON.stringify({}));
 
     const onSubmit = jest.fn();
     render(<LoginForm onSubmit={onSubmit} />);
 
-    const TEST_EMAIL = "test@email.com";
-    const TEST_PASSWORD = "testpassword123";
+    const TEST_EMAIL = 'test@email.com';
+    const TEST_PASSWORD = 'testpassword123';
 
     await userEvent.type(
-      screen.getByRole("textbox", { name: /email/i }),
+      screen.getByRole('textbox', { name: /email/i }),
       TEST_EMAIL
     );
 
     await userEvent.type(
-      screen.getByRole("textbox", { name: /password/i }),
+      screen.getByRole('textbox', { name: /password/i }),
       TEST_PASSWORD
     );
 
-    userEvent.click(screen.getByRole("button", { name: /submit/i }));
+    userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
     await waitFor(() => {
       expect(onSubmit).toHaveBeenCalledWith({

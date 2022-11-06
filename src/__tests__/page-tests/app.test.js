@@ -1,12 +1,12 @@
-import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
 
-import { render, screen, userEvent, waitFor } from "@/src/utils";
+import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
-import App from "@/src/pages/_app";
+import App from '@/src/pages/_app';
 
-const toastMessage = "Toast message.";
-const generalDialogMessage = "General dialog message.";
-const videoDialogTitle = "Video Dialog Title.";
+const toastMessage = 'Toast message.';
+const generalDialogMessage = 'General dialog message.';
+const videoDialogTitle = 'Video Dialog Title.';
 
 const TestComponent = ({ updateCtx }) => {
   const toastData = { message: toastMessage },
@@ -30,14 +30,14 @@ const TestComponent = ({ updateCtx }) => {
 
 enableFetchMocks();
 
-describe("App", () => {
+describe('App', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
 
-  it("renders", async () => {
+  it('renders', async () => {
     fetchMock.mockResponse(
-      JSON.stringify({ resUser: { username: "John Smith" } })
+      JSON.stringify({ resUser: { username: 'John Smith' } })
     );
     render(<App Component={TestComponent} />);
 
@@ -46,25 +46,25 @@ describe("App", () => {
     });
   });
 
-  it("shows loadmask if token request has not resolved", async () => {
+  it('shows loadmask if token request has not resolved', async () => {
     fetchMock.mockResponse(JSON.stringify({}));
     render(<App Component={TestComponent} />);
 
     await waitFor(() => {
-      expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
+      expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
       expect(screen.queryByText(/test component/i)).not.toBeInTheDocument();
     });
   });
 
-  it("renders toast notification", async () => {
+  it('renders toast notification', async () => {
     fetchMock.mockResponse(
-      JSON.stringify({ resUser: { username: "John Smith" } })
+      JSON.stringify({ resUser: { username: 'John Smith' } })
     );
 
     render(<App Component={TestComponent} />);
 
     await waitFor(() => {
-      const button = screen.getByRole("button", {
+      const button = screen.getByRole('button', {
         name: /open toast notification/i,
       });
       expect(button).toBeInTheDocument();
@@ -76,15 +76,15 @@ describe("App", () => {
     });
   });
 
-  it("renders general-purpose dialog", async () => {
+  it('renders general-purpose dialog', async () => {
     fetchMock.mockResponse(
-      JSON.stringify({ resUser: { username: "John Smith" } })
+      JSON.stringify({ resUser: { username: 'John Smith' } })
     );
 
     render(<App Component={TestComponent} />);
 
     await waitFor(() => {
-      const button = screen.getByRole("button", {
+      const button = screen.getByRole('button', {
         name: /open general dialog/i,
       });
       expect(button).toBeInTheDocument();
@@ -96,15 +96,15 @@ describe("App", () => {
     });
   });
 
-  it("renders video dialog", async () => {
+  it('renders video dialog', async () => {
     fetchMock.mockResponse(
-      JSON.stringify({ resUser: { username: "John Smith", bookmarks: [] } })
+      JSON.stringify({ resUser: { username: 'John Smith', bookmarks: [] } })
     );
 
     render(<App Component={TestComponent} />);
 
     await waitFor(() => {
-      const button = screen.getByRole("button", {
+      const button = screen.getByRole('button', {
         name: /open video dialog/i,
       });
       expect(button).toBeInTheDocument();

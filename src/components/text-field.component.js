@@ -1,5 +1,5 @@
-import { forwardRef } from "react";
-import { TextField as MuiTextField, GlobalStyles } from "@mui/material";
+import { forwardRef } from 'react';
+import { TextField as MuiTextField, GlobalStyles } from '@mui/material';
 
 // TODO: user agent still makes background white
 
@@ -7,8 +7,8 @@ const globalStyles = (
   <GlobalStyles
     styles={{
       input: {
-        backgroundColor: "background.paper !important",
-        color: "primary.main !important",
+        backgroundColor: 'background.paper !important',
+        color: 'primary.main !important',
       },
     }}
   />
@@ -21,7 +21,7 @@ const TextField = (props, ref) => (
       fullWidth
       inputProps={{
         sx: {
-          WebkitBoxShadow: "none !important",
+          WebkitBoxShadow: 'none !important',
         },
       }}
       {...props}

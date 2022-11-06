@@ -28,9 +28,7 @@ const BookmarkIconButton: FC<Props> = ({
     marginLeft: '0.5rem',
     color,
   };
-
   // TODO: should this be an icon or a button? This currently has no hover
-
   return (
     <IconButton
       onClick={onBookmarkClick}

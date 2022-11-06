@@ -1,6 +1,6 @@
-import { hash, compare } from "bcryptjs";
+import { hash, compare } from 'bcryptjs';
 
-import { withIronSessionApiRoute } from "iron-session/next";
+import { withIronSessionApiRoute } from 'iron-session/next';
 
 import {
   connectToDatabase,
@@ -8,16 +8,16 @@ import {
   handleServerError,
   handleForbidden,
   logServerError,
-} from "@/lib";
+} from '@/lib';
 
 import {
   USERS,
   TOKEN_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
 async function updatePassword(req, res) {
-  if (req.method !== "POST") {
+  if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
@@ -35,7 +35,7 @@ async function updatePassword(req, res) {
       if (!checkPassword) {
         return res
           .status(400)
-          .json({ error: { message: "Incorrect password." } });
+          .json({ error: { message: 'Incorrect password.' } });
       }
 
       await db
@@ -48,7 +48,7 @@ async function updatePassword(req, res) {
       // TODO: Do this like others? Get rid of OK? Remember reset-password
       return res.status(200).json({ ok: true });
     } catch (error) {
-      await logServerError("updatePassword", error);
+      await logServerError('updatePassword', error);
       return handleServerError(res);
     }
   }

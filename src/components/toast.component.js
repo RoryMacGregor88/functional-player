@@ -1,12 +1,12 @@
-import { Snackbar, Fade, Alert, useMediaQuery } from "@mui/material";
+import { Snackbar, Fade, Alert, useMediaQuery } from '@mui/material';
 
-import { IconButton, CloseIcon } from "@/src/components";
+import { IconButton, CloseIcon } from '@/src/components';
 
 /** @param {{ onClick: function }} props */
 const Action = ({ onClick }) => {
   return (
     <IconButton onClick={onClick}>
-      <CloseIcon sx={{ height: "1rem", width: "1rem" }} />
+      <CloseIcon sx={{ height: '1rem', width: '1rem' }} />
     </IconButton>
   );
 };
@@ -19,15 +19,15 @@ const Action = ({ onClick }) => {
  *  severity?: string
  * }} props
  */
-const Toast = ({ open, message, onClose, severity = "success" }) => {
-  const isMedium = useMediaQuery("(max-width:1000px)");
+const Toast = ({ open, message, onClose, severity = 'success' }) => {
+  const isMedium = useMediaQuery('(max-width:1000px)');
 
   // TODO: Fade not working
   // TODO: Action not working
 
   const anchorOrigin = {
-    vertical: isMedium ? "bottom" : "top",
-    horizontal: isMedium ? "center" : "right",
+    vertical: isMedium ? 'bottom' : 'top',
+    horizontal: isMedium ? 'center' : 'right',
   };
 
   return (

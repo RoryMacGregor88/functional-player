@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-import { VideoDisplay } from "@/src/components";
-import { http } from "@/src/utils";
+import { VideoDisplay } from '@/src/components';
 
-import { getAllCourses, getCourseById } from "@/lib";
+import { http } from '@/src/utils';
+
+import { getAllCourses, getCourseById } from '@/lib';
 
 // TODO: strip out styles from copied pages, redo
 
@@ -34,7 +35,7 @@ export default function Series({ user, course }) {
   useEffect(() => {
     if (!!user) {
       // TODO: updatedUser returned here?
-      http("/last-watched", { email, _id });
+      http('/last-watched', { email, _id });
     }
   }, []);
 
@@ -44,12 +45,12 @@ export default function Series({ user, course }) {
   return (
     <div
       style={{
-        position: "absolute",
-        height: "100%",
-        width: "100%",
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
       }}
     >
-      {subscriptionStatus === "active" ? (
+      {subscriptionStatus === 'active' ? (
         <VideoDisplay
           title={title}
           description={description}

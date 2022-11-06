@@ -8,16 +8,16 @@ const VideoPlayer = ({ videoId, alt }) => (
   <iframe
     src={`https://player.vimeo.com/video/${videoId}`}
     alt={alt}
-    frameBorder="0"
-    webkitallowfullscreen="true"
-    mozallowfullscreen="true"
+    frameBorder='0'
+    webkitallowfullscreen='true'
+    mozallowfullscreen='true'
     allowFullScreen
     style={{
-      position: "absolute",
+      position: 'absolute',
       top: 0,
       left: 0,
-      width: "100%",
-      height: "100%",
+      width: '100%',
+      height: '100%',
       border: 0,
     }}
   />

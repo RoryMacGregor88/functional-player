@@ -1,93 +1,91 @@
-import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
+import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
+
+import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
 import {
-  render,
-  screen,
-  userEvent,
-  waitFor,
   DEFAULT_ERROR_MESSAGE,
   PASSWORD_UPDATE_SUCCESS_MESSAGE,
   ACCOUNT_DELETE_SUCCESS_MESSAGE,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
-import Account from "@/src/pages/account";
+import Account from '@/src/pages/account';
 
 enableFetchMocks();
 
-describe("Account Page", () => {
+describe('Account Page', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
 
-  describe("tabs", () => {
-    it("renders", () => {
-      render(<Account user={{ username: "test-username" }} />);
+  describe('tabs', () => {
+    it('renders', () => {
+      render(<Account user={{ username: 'test-username' }} />);
 
       expect(
-        screen.getByRole("button", { name: /submit/i })
+        screen.getByRole('button', { name: /submit/i })
       ).toBeInTheDocument();
     });
 
-    it("redirects to login if no user found", () => {
+    it('redirects to login if no user found', () => {
       const { router } = render(<Account user={null} />, { push: jest.fn() });
 
-      expect(router.push).toHaveBeenCalledWith("/login");
+      expect(router.push).toHaveBeenCalledWith('/login');
     });
 
-    it("switches tabs", async () => {
-      render(<Account user={{ subscriptionStatus: "active" }} />);
+    it('switches tabs', async () => {
+      render(<Account user={{ subscriptionStatus: 'active' }} />);
 
       expect(
-        screen.getByRole("button", { name: /submit/i })
+        screen.getByRole('button', { name: /submit/i })
       ).toBeInTheDocument();
 
-      userEvent.click(screen.getByRole("tab", { name: /my subscription/i }));
+      userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
 
       await waitFor(() => {
         expect(
-          screen.getByRole("button", { name: /cancel subscription/i })
+          screen.getByRole('button', { name: /cancel subscription/i })
         ).toBeInTheDocument();
       });
     });
 
-    it("closes well when tab switched", async () => {
+    it('closes well when tab switched', async () => {
       fetchMock.mockResponse(() => {
         throw new Error();
       });
 
-      render(<Account user={{ subscriptionStatus: "active" }} />);
+      render(<Account user={{ subscriptionStatus: 'active' }} />);
 
-      userEvent.click(screen.getByRole("tab", { name: /update password/i }));
+      userEvent.click(screen.getByRole('tab', { name: /update password/i }));
 
       await waitFor(() => {
         expect(
-          screen.getByRole("textbox", { name: /current password/i })
+          screen.getByRole('textbox', { name: /current password/i })
         ).toBeInTheDocument();
       });
       await userEvent.type(
-        screen.getByRole("textbox", { name: /current password/i }),
-        "oldpassword"
+        screen.getByRole('textbox', { name: /current password/i }),
+        'oldpassword'
       );
       await userEvent.type(
-        screen.getByRole("textbox", { name: /^new password/i }),
-        "newpassword"
+        screen.getByRole('textbox', { name: /^new password/i }),
+        'newpassword'
       );
       await userEvent.type(
-        screen.getByRole("textbox", { name: /confirm new password/i }),
-        "newpassword"
+        screen.getByRole('textbox', { name: /confirm new password/i }),
+        'newpassword'
       );
 
-      userEvent.click(screen.getByRole("button", { name: /submit/i }));
+      userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
       await waitFor(() => {
         expect(screen.getByText(DEFAULT_ERROR_MESSAGE)).toBeInTheDocument();
       });
 
-      userEvent.click(screen.getByRole("tab", { name: /my subscription/i }));
+      userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
 
       await waitFor(() => {
         expect(
-          screen.getByRole("button", { name: /cancel subscription/i })
+          screen.getByRole('button', { name: /cancel subscription/i })
         ).toBeInTheDocument();
         expect(
           screen.queryByText(DEFAULT_ERROR_MESSAGE)
@@ -97,39 +95,39 @@ describe("Account Page", () => {
   });
 
   //TODO: remove update email? It's maybe too much hassle to allow (stripe)
-  describe("updateEmail", () => {
-    it("email success", () => {});
-    it("email server error", () => {});
-    it("email client error", () => {});
+  describe('updateEmail', () => {
+    it('email success', () => {});
+    it('email server error', () => {});
+    it('email client error', () => {});
   });
 
-  describe("updatePassword", () => {
-    it("renders success well", async () => {
+  describe('updatePassword', () => {
+    it('renders success well', async () => {
       fetchMock.mockResponse(JSON.stringify({ ok: true }));
 
-      render(<Account user={{ username: "John Smith" }} />);
+      render(<Account user={{ username: 'John Smith' }} />);
 
-      userEvent.click(screen.getByRole("tab", { name: /update password/i }));
+      userEvent.click(screen.getByRole('tab', { name: /update password/i }));
 
       await waitFor(() => {
         expect(
-          screen.getByRole("textbox", { name: /current password/i })
+          screen.getByRole('textbox', { name: /current password/i })
         ).toBeInTheDocument();
       });
       await userEvent.type(
-        screen.getByRole("textbox", { name: /current password/i }),
-        "oldpassword"
+        screen.getByRole('textbox', { name: /current password/i }),
+        'oldpassword'
       );
       await userEvent.type(
-        screen.getByRole("textbox", { name: /^new password/i }),
-        "newpassword"
+        screen.getByRole('textbox', { name: /^new password/i }),
+        'newpassword'
       );
       await userEvent.type(
-        screen.getByRole("textbox", { name: /confirm new password/i }),
-        "newpassword"
+        screen.getByRole('textbox', { name: /confirm new password/i }),
+        'newpassword'
       );
 
-      userEvent.click(screen.getByRole("button", { name: /submit/i }));
+      userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
       await waitFor(() => {
         expect(
@@ -138,67 +136,67 @@ describe("Account Page", () => {
       });
     });
 
-    it("handles server error", async () => {
-      const message = "test-error-message";
+    it('handles server error', async () => {
+      const message = 'test-error-message';
       fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
-      render(<Account user={{ username: "John Smith" }} />);
+      render(<Account user={{ username: 'John Smith' }} />);
 
-      userEvent.click(screen.getByRole("tab", { name: /update password/i }));
+      userEvent.click(screen.getByRole('tab', { name: /update password/i }));
 
       await waitFor(() => {
         expect(
-          screen.getByRole("textbox", { name: /current password/i })
+          screen.getByRole('textbox', { name: /current password/i })
         ).toBeInTheDocument();
       });
       await userEvent.type(
-        screen.getByRole("textbox", { name: /current password/i }),
-        "oldpassword"
+        screen.getByRole('textbox', { name: /current password/i }),
+        'oldpassword'
       );
       await userEvent.type(
-        screen.getByRole("textbox", { name: /^new password/i }),
-        "newpassword"
+        screen.getByRole('textbox', { name: /^new password/i }),
+        'newpassword'
       );
       await userEvent.type(
-        screen.getByRole("textbox", { name: /confirm new password/i }),
-        "newpassword"
+        screen.getByRole('textbox', { name: /confirm new password/i }),
+        'newpassword'
       );
 
-      userEvent.click(screen.getByRole("button", { name: /submit/i }));
+      userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
       await waitFor(() => {
         expect(screen.getByText(message)).toBeInTheDocument();
       });
     });
 
-    it("handles client error", async () => {
+    it('handles client error', async () => {
       fetchMock.mockResponse(() => {
         throw new Error();
       });
 
-      render(<Account user={{ username: "John Smith" }} />);
+      render(<Account user={{ username: 'John Smith' }} />);
 
-      userEvent.click(screen.getByRole("tab", { name: /update password/i }));
+      userEvent.click(screen.getByRole('tab', { name: /update password/i }));
 
       await waitFor(() => {
         expect(
-          screen.getByRole("textbox", { name: /current password/i })
+          screen.getByRole('textbox', { name: /current password/i })
         ).toBeInTheDocument();
       });
       await userEvent.type(
-        screen.getByRole("textbox", { name: /current password/i }),
-        "oldpassword"
+        screen.getByRole('textbox', { name: /current password/i }),
+        'oldpassword'
       );
       await userEvent.type(
-        screen.getByRole("textbox", { name: /^new password/i }),
-        "newpassword"
+        screen.getByRole('textbox', { name: /^new password/i }),
+        'newpassword'
       );
       await userEvent.type(
-        screen.getByRole("textbox", { name: /confirm new password/i }),
-        "newpassword"
+        screen.getByRole('textbox', { name: /confirm new password/i }),
+        'newpassword'
       );
 
-      userEvent.click(screen.getByRole("button", { name: /submit/i }));
+      userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
       await waitFor(() => {
         expect(screen.getByText(DEFAULT_ERROR_MESSAGE)).toBeInTheDocument();
@@ -208,27 +206,27 @@ describe("Account Page", () => {
 
   // TODO: bother with stripe testing?
 
-  describe("deleteAccount", () => {
-    it("delete success", async () => {
+  describe('deleteAccount', () => {
+    it('delete success', async () => {
       fetchMock.mockResponse(JSON.stringify({ resUser: {} }));
 
       const updateCtx = jest.fn();
 
       const { router } = render(
-        <Account user={{ username: "John Smith" }} updateCtx={updateCtx} />,
+        <Account user={{ username: 'John Smith' }} updateCtx={updateCtx} />,
         { push: jest.fn() }
       );
 
-      userEvent.click(screen.getByRole("tab", { name: /delete account/i }));
+      userEvent.click(screen.getByRole('tab', { name: /delete account/i }));
 
       await waitFor(() => {
-        const proceedButton = screen.getByRole("button", { name: /proceed/i });
+        const proceedButton = screen.getByRole('button', { name: /proceed/i });
         expect(proceedButton).toBeInTheDocument();
         userEvent.click(proceedButton);
       });
 
       await waitFor(() => {
-        const deleteButton = screen.getByRole("button", {
+        const deleteButton = screen.getByRole('button', {
           name: /permanently delete my account/i,
         });
         expect(deleteButton).toBeInTheDocument();
@@ -240,28 +238,28 @@ describe("Account Page", () => {
           screen.getByText(ACCOUNT_DELETE_SUCCESS_MESSAGE)
         ).toBeInTheDocument();
         expect(updateCtx).toHaveBeenCalledWith({ user: null });
-        expect(router.push).toHaveBeenCalledWith("/");
+        expect(router.push).toHaveBeenCalledWith('/');
       });
     });
 
-    it("handles server error", async () => {
-      const message = "test-error-message";
+    it('handles server error', async () => {
+      const message = 'test-error-message';
       fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
-      const { router } = render(<Account user={{ username: "John Smith" }} />, {
+      const { router } = render(<Account user={{ username: 'John Smith' }} />, {
         push: jest.fn(),
       });
 
-      userEvent.click(screen.getByRole("tab", { name: /delete account/i }));
+      userEvent.click(screen.getByRole('tab', { name: /delete account/i }));
 
       await waitFor(() => {
-        const proceedButton = screen.getByRole("button", { name: /proceed/i });
+        const proceedButton = screen.getByRole('button', { name: /proceed/i });
         expect(proceedButton).toBeInTheDocument();
         userEvent.click(proceedButton);
       });
 
       await waitFor(() => {
-        const deleteButton = screen.getByRole("button", {
+        const deleteButton = screen.getByRole('button', {
           name: /permanently delete my account/i,
         });
         expect(deleteButton).toBeInTheDocument();
@@ -274,25 +272,25 @@ describe("Account Page", () => {
       });
     });
 
-    it("handler client error", async () => {
+    it('handler client error', async () => {
       fetchMock.mockResponse(() => {
         throw new Error();
       });
 
-      const { router } = render(<Account user={{ username: "John Smith" }} />, {
+      const { router } = render(<Account user={{ username: 'John Smith' }} />, {
         push: jest.fn(),
       });
 
-      userEvent.click(screen.getByRole("tab", { name: /delete account/i }));
+      userEvent.click(screen.getByRole('tab', { name: /delete account/i }));
 
       await waitFor(() => {
-        const proceedButton = screen.getByRole("button", { name: /proceed/i });
+        const proceedButton = screen.getByRole('button', { name: /proceed/i });
         expect(proceedButton).toBeInTheDocument();
         userEvent.click(proceedButton);
       });
 
       await waitFor(() => {
-        const deleteButton = screen.getByRole("button", {
+        const deleteButton = screen.getByRole('button', {
           name: /permanently delete my account/i,
         });
         expect(deleteButton).toBeInTheDocument();

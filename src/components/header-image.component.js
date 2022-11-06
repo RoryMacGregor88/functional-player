@@ -1,5 +1,5 @@
-import NextImage from "next/image";
-import { Grid, Typography, useMediaQuery } from "@mui/material";
+import NextImage from 'next/image';
+import { Grid, Typography, useMediaQuery } from '@mui/material';
 
 /**
  * @param {{
@@ -13,62 +13,62 @@ import { Grid, Typography, useMediaQuery } from "@mui/material";
 const Device = ({ src, alt, title, imageProps = {}, deviceSize }) => (
   <Grid
     container
-    alignItems="flex-start"
+    alignItems='flex-start'
     sx={{
-      position: "relative",
-      height: "75vh",
-      width: "100%",
-      marginBottom: "2rem",
+      position: 'relative',
+      height: '75vh',
+      width: '100%',
+      marginBottom: '2rem',
     }}
   >
     <Grid
       item
       container
-      alignItems="flex-end"
-      justifyContent="center"
+      alignItems='flex-end'
+      justifyContent='center'
       sx={{
-        position: "absolute",
+        position: 'absolute',
         bottom: 0,
         left: 0,
-        height: "50vh",
-        width: "100vw",
+        height: '50vh',
+        width: '100vw',
         zIndex: 1000,
         backgroundImage:
-          "linear-gradient(to top, rgb(8, 8, 8) 50%, rgba(8, 8, 8, 0.75) 75%, rgba(8, 8, 8, 0) 100%)",
+          'linear-gradient(to top, rgb(8, 8, 8) 50%, rgba(8, 8, 8, 0.75) 75%, rgba(8, 8, 8, 0) 100%)',
       }}
     >
       <Grid
         item
         container
-        direction="column"
-        justifyContent="space-evenly"
-        wrap="nowrap"
+        direction='column'
+        justifyContent='space-evenly'
+        wrap='nowrap'
         sx={{
-          height: "50%",
-          padding: "2rem",
-          marginBottom: "1rem",
+          height: '50%',
+          padding: '2rem',
+          marginBottom: '1rem',
         }}
       >
-        <Typography variant="h3">{title}</Typography>
-        <Typography variant="h5">
+        <Typography variant='h3'>{title}</Typography>
+        <Typography variant='h5'>
           This is some description information.
         </Typography>
-        <Typography variant="body1">Some extra information.</Typography>
+        <Typography variant='body1'>Some extra information.</Typography>
       </Grid>
     </Grid>
     <Grid
       item
       sx={{
-        height: "75vh",
-        width: "100vw",
-        position: "relative",
+        height: '75vh',
+        width: '100vw',
+        position: 'relative',
       }}
     >
       <NextImage
         src={`${src}-${deviceSize}.jpg`}
         alt={alt}
-        objectFit="cover"
-        layout="fill"
+        objectFit='cover'
+        layout='fill'
         quality={100}
         {...imageProps}
       />
@@ -87,60 +87,60 @@ const Device = ({ src, alt, title, imageProps = {}, deviceSize }) => (
 const Desktop = ({ src, alt, title, imageProps = {} }) => (
   <Grid
     container
-    justifyContent="flex-end"
+    justifyContent='flex-end'
     sx={{
-      position: "relative",
-      height: "75vh",
-      width: "100%",
-      marginBottom: "2rem",
+      position: 'relative',
+      height: '75vh',
+      width: '100%',
+      marginBottom: '2rem',
     }}
   >
     <Grid
       item
       container
-      alignItems="center"
-      justifyContent="center"
+      alignItems='center'
+      justifyContent='center'
       sx={{
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: 0,
-        height: "75vh",
-        width: "50vw",
+        height: '75vh',
+        width: '50vw',
         zIndex: 1000,
         backgroundImage:
-          "linear-gradient(to right, rgb(8, 8, 8) 50%, rgba(8, 8, 8, 0.75) 75%, rgba(8, 8, 8, 0) 100%)",
+          'linear-gradient(to right, rgb(8, 8, 8) 50%, rgba(8, 8, 8, 0.75) 75%, rgba(8, 8, 8, 0) 100%)',
       }}
     >
       <Grid
         item
         container
-        direction="column"
-        justifyContent="space-evenly"
+        direction='column'
+        justifyContent='space-evenly'
         sx={{
-          height: "50%",
-          width: "75%",
+          height: '50%',
+          width: '75%',
         }}
       >
-        <Typography variant="h2">{title}</Typography>
-        <Typography variant="h4">
+        <Typography variant='h2'>{title}</Typography>
+        <Typography variant='h4'>
           This is some description information.
         </Typography>
-        <Typography variant="h6">Some extra information.</Typography>
+        <Typography variant='h6'>Some extra information.</Typography>
       </Grid>
     </Grid>
     <Grid
       item
       sx={{
-        width: "75vw",
-        height: "75vh",
-        position: "relative",
+        width: '75vw',
+        height: '75vh',
+        position: 'relative',
       }}
     >
       <NextImage
         src={`${src}-large.jpg`}
         alt={alt}
-        objectFit="cover"
-        layout="fill"
+        objectFit='cover'
+        layout='fill'
         quality={100}
         {...imageProps}
       />
@@ -150,10 +150,10 @@ const Desktop = ({ src, alt, title, imageProps = {} }) => (
 
 /** @param {object} props */
 const HeaderImage = (props) => {
-  const isMedium = useMediaQuery("(max-width:1000px)");
-  const isSmall = useMediaQuery("(max-width:600px)");
+  const isMedium = useMediaQuery('(max-width:1000px)');
+  const isSmall = useMediaQuery('(max-width:600px)');
 
-  const deviceSize = isSmall ? "small" : isMedium ? "medium" : "large";
+  const deviceSize = isSmall ? 'small' : isMedium ? 'medium' : 'large';
 
   // TODO: make this re-usable across all pages but with different images and text
 

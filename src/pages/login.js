@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router';
 
-import { Grid } from "@mui/material";
+import { Grid } from '@mui/material';
 
-import { http, DEFAULT_ERROR_MESSAGE } from "@/src/utils";
-import { LoginForm, SpacedTitle, Well, LoadMask } from "@/src/components";
+import { LoginForm, SpacedTitle, Well, LoadMask } from '@/src/components';
+
+import { http } from '@/src/utils';
+
+import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
 /**
  * @param {{
@@ -20,7 +23,7 @@ export default function Login({ user, updateCtx }) {
   const [isLoading, setIsLoading] = useState(false);
 
   if (!!user) {
-    router.push("/dashboard");
+    router.push('/dashboard');
     return <LoadMask />;
   }
 
@@ -28,7 +31,7 @@ export default function Login({ user, updateCtx }) {
     setIsLoading(true);
     try {
       const { email, password } = event;
-      const { error, resUser } = await http("/auth/login", {
+      const { error, resUser } = await http('/auth/login', {
         email: email.toLowerCase(),
         password,
       });
@@ -37,7 +40,7 @@ export default function Login({ user, updateCtx }) {
         setWellData({ message: error.message });
       } else if (!!resUser) {
         updateCtx({ user: resUser });
-        router.push("/dashboard");
+        router.push('/dashboard');
       }
     } catch (e) {
       setWellData({ message: DEFAULT_ERROR_MESSAGE });
@@ -49,9 +52,9 @@ export default function Login({ user, updateCtx }) {
   return (
     <Grid
       container
-      direction="column"
-      alignItems="center"
-      sx={{ maxWidth: "50rem" }}
+      direction='column'
+      alignItems='center'
+      sx={{ maxWidth: '50rem' }}
     >
       <SpacedTitle>Login</SpacedTitle>
       {!!wellData ? <Well {...wellData} /> : null}

@@ -1,6 +1,6 @@
-import stripeFn from "stripe";
+import stripeFn from 'stripe';
 
-import { withIronSessionApiRoute } from "iron-session/next";
+import { withIronSessionApiRoute } from 'iron-session/next';
 
 import {
   connectToDatabase,
@@ -8,18 +8,18 @@ import {
   handleServerError,
   handleForbidden,
   logServerError,
-} from "@/lib";
+} from '@/lib';
 
 import {
   USERS,
   HTTP_METHOD_ERROR_MESSAGE,
   TOKEN_ERROR_MESSAGE,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
 async function unsubscribe(req, res) {
-  if (req.method !== "POST") {
+  if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
@@ -51,7 +51,7 @@ async function unsubscribe(req, res) {
 
       return res.status(200).json({ resUser });
     } catch (error) {
-      await logServerError("unsubscribe", error);
+      await logServerError('unsubscribe', error);
       return handleServerError(res);
     }
   }

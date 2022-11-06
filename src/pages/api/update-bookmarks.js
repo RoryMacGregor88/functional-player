@@ -1,4 +1,4 @@
-import { withIronSessionApiRoute } from "iron-session/next";
+import { withIronSessionApiRoute } from 'iron-session/next';
 
 import {
   sessionOptions,
@@ -6,16 +6,16 @@ import {
   handleForbidden,
   logServerError,
   handleServerError,
-} from "@/lib";
+} from '@/lib';
 
 import {
   HTTP_METHOD_ERROR_MESSAGE,
   TOKEN_ERROR_MESSAGE,
   USERS,
-} from "@/src/utils";
+} from '@/src/utils/constants';
 
 async function updateBookmarks(req, res) {
-  if (req.method !== "POST") {
+  if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
@@ -33,7 +33,7 @@ async function updateBookmarks(req, res) {
 
       return res.status(200).json({ resBookmarks: bookmarks });
     } catch (error) {
-      await logServerError("updateBookmarks", error);
+      await logServerError('updateBookmarks', error);
       return handleServerError(res);
     }
   }

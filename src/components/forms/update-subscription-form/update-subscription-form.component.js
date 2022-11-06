@@ -1,15 +1,17 @@
-import { Typography } from "@mui/material";
+import { Typography } from '@mui/material';
 
-import { Elements } from "@stripe/react-stripe-js";
+import { Elements } from '@stripe/react-stripe-js';
 
-import { getStripe, STATUS_LABELS } from "@/src/utils";
+import { getStripe } from '@/src/utils';
+
+import { STATUS_LABELS } from '@/src/utils/constants';
 
 import {
   FormWrapper,
   Button,
   Attention,
   SubscribeForm,
-} from "@/src/components";
+} from '@/src/components';
 
 /**
  * @param {{
@@ -32,14 +34,14 @@ const UpdateSubscriptionForm = ({
   return (
     <>
       <Typography
-        variant="h4"
-        sx={{ textAlign: "center", marginBottom: "1rem" }}
+        variant='h4'
+        sx={{ textAlign: 'center', marginBottom: '1rem' }}
       >
-        Your subscription status:{" "}
+        Your subscription status:{' '}
         <Attention>
           {!!subscriptionStatus
             ? STATUS_LABELS[subscriptionStatus]
-            : "Subscription not found"}
+            : 'Subscription not found'}
         </Attention>
       </Typography>
       {!!clientSecret ? (
@@ -49,15 +51,15 @@ const UpdateSubscriptionForm = ({
             isLoading={isLoading}
           />
         </Elements>
-      ) : subscriptionStatus === "active" ? (
+      ) : subscriptionStatus === 'active' ? (
         <FormWrapper onSubmit={handleUnsubscribe}>
-          <Button type="submit" isLoading={isLoading}>
+          <Button type='submit' isLoading={isLoading}>
             Cancel Subscription
           </Button>
         </FormWrapper>
       ) : (
         <FormWrapper onSubmit={handleStripeCustomer}>
-          <Button type="submit" isLoading={isLoading}>
+          <Button type='submit' isLoading={isLoading}>
             Re-enable Subscription
           </Button>
         </FormWrapper>

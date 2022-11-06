@@ -1,8 +1,8 @@
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 
-import { Button } from "@mui/material";
+import { Button } from '@mui/material';
 
-import { FormWrapper, EmailField, ConfirmEmailField } from "@/src/components";
+import { FormWrapper, EmailField, ConfirmEmailField } from '@/src/components';
 
 /** @param {{handleUpdateEmail: function}} props */
 const UpdateEmailForm = ({ handleUpdateEmail }) => {
@@ -13,8 +13,8 @@ const UpdateEmailForm = ({ handleUpdateEmail }) => {
     formState: { errors, isDirty },
   } = useForm({
     defaultValues: {
-      email: "",
-      confirmEmail: "",
+      email: '',
+      confirmEmail: '',
     },
   });
 
@@ -27,7 +27,7 @@ const UpdateEmailForm = ({ handleUpdateEmail }) => {
     <FormWrapper onSubmit={handleSubmit((values) => onSubmit(values))}>
       <EmailField errors={errors} register={register} />
       <ConfirmEmailField errors={errors} register={register} />
-      <Button type="submit" disabled={!isDirty}>
+      <Button type='submit' disabled={!isDirty}>
         Submit
       </Button>
     </FormWrapper>

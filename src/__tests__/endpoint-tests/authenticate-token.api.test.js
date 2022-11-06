@@ -1,18 +1,18 @@
-import { DEFAULT_ERROR_MESSAGE } from "@/src/utils";
+import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
-import authenticateToken from "@/src/pages/api/auth/authenticate-token";
+import authenticateToken from '@/src/pages/api/auth/authenticate-token';
 
 let json = null,
   status = null;
 
-jest.mock("iron-session/next", () => ({
+jest.mock('iron-session/next', () => ({
   withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
 }));
 
-jest.mock("@/lib", () => ({
+jest.mock('@/lib', () => ({
   connectToDatabase: jest.fn().mockImplementation(() => {
     // mock server error
-    throw new Error("test-server-error");
+    throw new Error('test-server-error');
   }),
   logServerError: jest.fn().mockImplementation((str, err) => {}),
   handleForbidden: jest
@@ -27,16 +27,16 @@ jest.mock("@/lib", () => ({
     ),
 }));
 
-describe("authenticateToken endpoint", () => {
+describe('authenticateToken endpoint', () => {
   beforeEach(() => {
     json = jest.fn();
     status = jest.fn().mockReturnValue({ json });
   });
 
-  it("returns user if found in token", async () => {
-    const email = "test@email.com",
+  it('returns user if found in token', async () => {
+    const email = 'test@email.com',
       req = {
-        method: "GET",
+        method: 'GET',
         body: { email },
         session: { user: { email } },
       },
@@ -48,10 +48,10 @@ describe("authenticateToken endpoint", () => {
     expect(json).toHaveBeenCalledWith({ resUser: { email } });
   });
 
-  it("returns null user if token not found", async () => {
-    const email = "test@email.com",
+  it('returns null user if token not found', async () => {
+    const email = 'test@email.com',
       req = {
-        method: "GET",
+        method: 'GET',
         body: { email },
         session: {},
       },
@@ -63,10 +63,10 @@ describe("authenticateToken endpoint", () => {
     expect(json).toHaveBeenCalledWith({ resUser: null });
   });
 
-  it("handles error", async () => {
-    const email = "test@email.com",
+  it('handles error', async () => {
+    const email = 'test@email.com',
       req = {
-        method: "GET",
+        method: 'GET',
         body: { email },
         // no session object, throw error
       },
