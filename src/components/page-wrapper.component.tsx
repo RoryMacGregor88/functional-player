@@ -1,7 +1,12 @@
+import { FC, ReactElement, ReactNode } from 'react';
+
 import { Box } from '@mui/material';
 
-/** @param {{ children: React.ReactChildren }} props */
-const PageWrapper = ({ children }) => (
+interface Props {
+  children: ReactNode;
+}
+
+const PageWrapper: FC<Props> = ({ children }): ReactElement => (
   <Box
     sx={{
       // maxWidth: '80rem',

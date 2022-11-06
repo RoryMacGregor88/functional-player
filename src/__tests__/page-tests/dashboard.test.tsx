@@ -13,7 +13,7 @@ const mockUser = {
   mockCourses = [
     {
       _id: '123',
-      CreationDate: 1,
+      creationDate: 1,
       title: 'course-title-1',
       description: 'course-desc-1',
     },

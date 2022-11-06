@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { FC, useState, useContext, ReactNode, ReactElement } from 'react';
 
 import NextImage from 'next/image';
 
@@ -12,11 +12,18 @@ import {
 
 import { Context } from '@/src/utils';
 
+import { Course } from '@/src/utils/interfaces';
+
 const ITEM_WIDTH_REM = 40;
 const ITEM_HEIGHT_REM = 25;
 
-/** @param {{ course: object }} props */
-const Overlay = ({ course }) => {
+type Orientation = 'left' | 'right';
+
+interface OverlayProps {
+  course: Course;
+}
+
+const Overlay: FC<OverlayProps> = ({ course }): ReactElement => {
   const { title, description } = course;
   return (
     <Grid
@@ -37,45 +44,50 @@ const Overlay = ({ course }) => {
   );
 };
 
-/**
- * @param {{
- *  onClick: function
- *  orientation: string
- *  children: React.ReactChildren
- * }} props
- */
-const ChevronWrapper = ({ onClick, orientation = 'left', children }) => (
-  <Grid
-    item
-    container
-    direction='column'
-    justifyContent='center'
-    alignItems='center'
-    onClick={onClick}
-    sx={{
-      position: 'absolute',
-      top: 0,
-      [orientation]: 0,
-      zIndex: '2',
-      width: '5rem',
-      height: '100%',
-      cursor: 'pointer',
-      '&:hover': {
-        backgroundColor: 'rgb(8, 8, 8, 0.5)',
-      },
-    }}
-  >
-    <IconButton>{children}</IconButton>
-  </Grid>
-);
+interface ChevronWrapperProps {
+  handleChevronClick: (direction: Orientation) => void;
+  orientation: Orientation;
+  children: ReactNode;
+}
 
-/**
- * @param {{
- *  title: string
- *  courses: object[]
- * }} props
- */
-const Slider = ({ title, courses }) => {
+const ChevronWrapper: FC<ChevronWrapperProps> = ({
+  handleChevronClick,
+  orientation,
+  children,
+}): ReactElement => {
+  const onClick = () => handleChevronClick(orientation);
+  return (
+    <Grid
+      item
+      container
+      direction='column'
+      justifyContent='center'
+      alignItems='center'
+      onClick={onClick}
+      sx={{
+        position: 'absolute',
+        top: 0,
+        [orientation]: 0,
+        zIndex: '2',
+        width: '5rem',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': {
+          backgroundColor: 'rgb(8, 8, 8, 0.5)',
+        },
+      }}
+    >
+      <IconButton onClick={onClick}>{children}</IconButton>
+    </Grid>
+  );
+};
+
+interface SliderProps {
+  title: string;
+  courses: Course[];
+}
+
+const Slider: FC<SliderProps> = ({ title, courses }): ReactElement => {
   const { updateCtx } = useContext(Context);
   const [position, setPosition] = useState(0);
 
@@ -83,11 +95,10 @@ const Slider = ({ title, courses }) => {
     return null;
   }
 
-  const handleClick = (course) => {
+  const handleClick = (course: Course): void =>
     updateCtx({ selectedVideo: course });
-  };
 
-  const handleChevronClick = (direction) => {
+  const handleChevronClick = (direction: Orientation): void => {
     if (direction === 'right' && position !== courses.length - 1) {
       setPosition((prev) => prev + 1);
     } else if (direction === 'left' && position !== 0) {
@@ -111,7 +122,10 @@ const Slider = ({ title, courses }) => {
       >
         {courses.length > 1 ? (
           <>
-            <ChevronWrapper onClick={() => handleChevronClick('left')}>
+            <ChevronWrapper
+              handleChevronClick={handleChevronClick}
+              orientation='left'
+            >
               <ChevronLeftIcon
                 sx={{
                   width: '5rem',
@@ -122,7 +136,7 @@ const Slider = ({ title, courses }) => {
               />
             </ChevronWrapper>
             <ChevronWrapper
-              onClick={() => handleChevronClick('right')}
+              handleChevronClick={handleChevronClick}
               orientation='right'
             >
               <ChevronRightIcon

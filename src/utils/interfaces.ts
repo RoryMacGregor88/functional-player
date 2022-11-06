@@ -11,10 +11,26 @@ export interface User {
   customerId: id;
   subscriptionStatus: string;
   bookmarks: id[];
+  lastWatched: id;
 }
 
-export interface Course {}
+export interface Course {
+  _id: id;
+  videoId: id;
+  title: string;
+  description: string;
+  coursePath: string;
+  seriesPath: string;
+  creationDate: Date;
+}
 
-export interface Series {}
+export interface Series {
+  _id: id;
+  title: string;
+  description: string;
+  seriesPath: string;
+  courses: Course[];
+  creationDate: Date;
+}
 
 export interface Video {}
