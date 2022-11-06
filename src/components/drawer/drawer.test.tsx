@@ -9,13 +9,14 @@ import { User } from '@/src/utils/interfaces';
 enableFetchMocks();
 
 const mockUser: User = {
-  _id: 1,
+  _id: '1',
   email: 'test@email.com',
   username: 'John Smith',
-  subscriptionId: 2,
-  customerId: 3,
+  subscriptionId: '2',
+  customerId: '3',
   subscriptionStatus: 'active',
-  bookmarks: [1, 2, 3],
+  bookmarks: ['1', '2', '3'],
+  lastWatched: '1',
 };
 
 let setIsDrawerOpen = null;

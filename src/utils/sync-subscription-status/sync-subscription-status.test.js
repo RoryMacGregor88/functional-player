@@ -46,7 +46,7 @@ describe('Reactivation success page', () => {
   });
 
   //TODO: need to learn how to mock 2 concurrent requests
-  xit('handles server error', async () => {
+  it('handles server error', async () => {
     const message = 'test-error-message';
 
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
@@ -61,7 +61,6 @@ describe('Reactivation success page', () => {
           message,
         },
       });
-      expect(stateSetter).toHaveBeenCalledWith(true);
     });
   });
 

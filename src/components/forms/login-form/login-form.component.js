@@ -1,5 +1,7 @@
 import { useForm } from 'react-hook-form';
 
+import * as Yup from 'yup';
+
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Typography, Grid } from '@mui/material';
@@ -12,14 +14,27 @@ import {
   Link,
 } from '@/src/components';
 
-import { loginFormSchema } from '@/src/utils';
+import {
+  EMAIL_REQUIRED_MESSAGE,
+  EMAIL_INVALID_MESSAGE,
+  PASSWORD_REQUIRED_MESSAGE,
+} from '@/src/utils/constants';
+
+// TODO: move this shit into each form, this is stupid
+
+const loginFormSchema = Yup.object().shape({
+  email: Yup.string()
+    .email(EMAIL_INVALID_MESSAGE)
+    .required(EMAIL_REQUIRED_MESSAGE),
+  password: Yup.string().required(PASSWORD_REQUIRED_MESSAGE),
+});
 
 /** @param {{ onSubmit: function, isLoading: boolean }} props */
 const LoginForm = ({ onSubmit, isLoading }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm({
     mode: 'all',
     resolver: yupResolver(loginFormSchema),
@@ -28,6 +43,8 @@ const LoginForm = ({ onSubmit, isLoading }) => {
       password: '',
     },
   });
+
+  const isDisabled = !isDirty || !!Object.keys(errors).length;
 
   return (
     <FormWrapper onSubmit={handleSubmit((values) => onSubmit(values))}>
@@ -38,7 +55,7 @@ const LoginForm = ({ onSubmit, isLoading }) => {
         label='Password'
         name='password'
       />
-      <Button type='submit' isLoading={isLoading}>
+      <Button type='submit' isLoading={isLoading} disabled={isDisabled}>
         Submit
       </Button>
       <Grid container alignItems='center' justifyContent='center'>

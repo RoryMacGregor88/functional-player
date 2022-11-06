@@ -7,7 +7,6 @@ import syncStripeAndDb from './sync-stipe-and-db/sync-stripe-and-db';
 import generateTempPassword from './generate-temp-password/generate-temp-password';
 
 export * from './context';
-export * from './validation';
 
 export {
   getStripe,

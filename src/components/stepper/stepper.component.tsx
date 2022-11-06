@@ -1,3 +1,5 @@
+import { FC, ReactElement } from 'react';
+
 import { Stepper as MuiStepper, Step, StepLabel } from '@mui/material';
 
 const STEPS = [
@@ -6,7 +8,11 @@ const STEPS = [
   { step: 3, label: 'Finish' },
 ];
 
-const Stepper = ({ activeStep }) => (
+interface Props {
+  activeStep: number;
+}
+
+const Stepper: FC<Props> = ({ activeStep }): ReactElement => (
   <MuiStepper
     activeStep={activeStep}
     sx={{

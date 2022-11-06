@@ -204,11 +204,11 @@ describe('Account Page', () => {
     });
   });
 
-  // TODO: bother with stripe testing?
+  // TODO: bother with stripe testing? Mock modules?
 
   describe('deleteAccount', () => {
     it('delete success', async () => {
-      fetchMock.mockResponse(JSON.stringify({ resUser: {} }));
+      fetchMock.mockResponse(JSON.stringify({ resUser: null }));
 
       const updateCtx = jest.fn();
 

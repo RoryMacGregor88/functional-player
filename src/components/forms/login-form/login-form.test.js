@@ -41,26 +41,29 @@ describe('Login Form', () => {
       'test-password123'
     );
 
-    userEvent.click(screen.getByRole('button', { name: /submit/i }));
+    expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled();
 
     await waitFor(() => {
-      expect(onSubmit).not.toHaveBeenCalled();
       expect(screen.getByText(EMAIL_INVALID_MESSAGE)).toBeInTheDocument();
     });
   });
 
-  // TODO: might now be broken. Update all forms' submit buttons
   it('disables submit button if form is invalid', async () => {
     const onSubmit = jest.fn();
     render(<LoginForm onSubmit={onSubmit} />);
 
     const submitButton = screen.getByRole('button', { name: /submit/i });
+
     expect(submitButton).toBeDisabled();
+
+    await userEvent.type(
+      screen.getByRole('textbox', { name: /email/i }),
+      'test@email.com'
+    );
+
     userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(onSubmit).not.toHaveBeenCalled();
-      expect(screen.getByText(EMAIL_REQUIRED_MESSAGE)).toBeInTheDocument();
       expect(screen.getByText(PASSWORD_REQUIRED_MESSAGE)).toBeInTheDocument();
     });
   });
@@ -91,6 +94,22 @@ describe('Login Form', () => {
         email: TEST_EMAIL,
         password: TEST_PASSWORD,
       });
+    });
+  });
+
+  it('redirects if forgot password link clicked', async () => {
+    const { router } = render(<LoginForm onSubmit={() => {}} />, {
+      push: jest.fn(),
+    });
+
+    userEvent.click(screen.getByText(/click here/i));
+
+    await waitFor(() => {
+      expect(router.push).toHaveBeenCalledWith(
+        '/reset-password',
+        '/reset-password',
+        { locale: undefined, scroll: undefined, shallow: undefined }
+      );
     });
   });
 });
