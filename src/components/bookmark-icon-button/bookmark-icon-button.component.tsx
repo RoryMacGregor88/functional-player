@@ -10,6 +10,7 @@ import {
 
 interface Props {
   isBookmarked: boolean;
+  // TODO: refactor this, no anon callbacks
   onBookmarkClick: () => void;
   sx?: SxProps<Theme>;
 }

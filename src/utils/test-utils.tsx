@@ -10,7 +10,7 @@ import { Context } from '@/src/utils';
 
 interface Options {
   ctx?: object;
-  updateCtx?: Function;
+  updateCtx?: (newData: object) => void;
   push?: () => void;
   options?: any;
 }

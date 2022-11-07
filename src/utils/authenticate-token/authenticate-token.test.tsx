@@ -8,6 +8,10 @@ import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
 enableFetchMocks();
 
+// TODO:NOT YET TYPED
+
+// TODO: refactor this to return ctx values, update tests
+
 describe('authenticateToken', () => {
   beforeEach(() => {
     fetchMock.resetMocks();

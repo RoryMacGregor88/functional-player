@@ -8,6 +8,8 @@ const toastMessage = 'Toast message.';
 const generalDialogMessage = 'General dialog message.';
 const videoDialogTitle = 'Video Dialog Title.';
 
+// TODO:NOT YET TYPED
+
 const TestComponent = ({ updateCtx }) => {
   const toastData = { message: toastMessage },
     generalDialogData = { message: generalDialogMessage },

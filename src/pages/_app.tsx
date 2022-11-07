@@ -1,8 +1,11 @@
+import { ReactElement, useState, useEffect } from 'react';
+
 import Head from 'next/head';
 
-import { useState, useEffect } from 'react';
+import { AppProps } from 'next/app';
 
 import { CssBaseline } from '@mui/material';
+
 import { ThemeProvider } from '@mui/material/styles';
 
 import {
@@ -16,30 +19,28 @@ import {
 
 import { Context, authenticateToken } from '@/src/utils';
 
-/**
- * @param {{
- *  Component: React.ReactNode
- *  pageProps: object
- * }} props
- */
-function App({ Component, pageProps }) {
-  const [ctx, setCtx] = useState({
-    selectedVideo: null,
-    dialogData: null,
-    toastData: null,
+import { Ctx, UpdateCtx } from '@/src/utils/interfaces';
+
+function App({ Component, pageProps }: AppProps): ReactElement {
+  const [ctx, setCtx] = useState<Ctx>({
+    selectedVideo: undefined,
+    dialogData: undefined,
+    toastData: undefined,
+    user: undefined,
   });
 
   const { user, toastData, dialogData, selectedVideo } = ctx;
 
-  /** @param {object} newData */
-  const updateCtx = (newData) => setCtx((prev) => ({ ...prev, ...newData }));
+  const updateCtx: UpdateCtx = (newData) =>
+    setCtx((prev) => ({ ...prev, ...newData }));
 
+  // token is checked upon initial app request (not internal page navigations)
   useEffect(() => {
-    // token is checked upon initial app request (not internal page navigations)
     (async () => await authenticateToken(updateCtx))();
   }, []);
 
-  if (!user && user !== null) {
+  // only a user object or null can be returned from server
+  if (user === undefined) {
     return <LoadMask />;
   }
 
@@ -63,7 +64,7 @@ function App({ Component, pageProps }) {
             open={!!toastData}
             message={toastData?.message}
             severity={toastData?.severity}
-            onClose={() => updateCtx({ toastData: null })}
+            updateCtx={updateCtx}
           />
           <Dialog
             open={!!dialogData}
