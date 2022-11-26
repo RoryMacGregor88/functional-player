@@ -1,14 +1,12 @@
 import { ReactElement, FC } from 'react';
 
-import NextLink from 'next/link';
-
 import { SvgIconTypeMap } from '@mui/material';
 
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 
-import { IconButton } from '@/src/components';
+import { IconButton, Link } from '@/src/components';
 
-// TODO: check this works with NextLink, no ref errors in console
+// TODO: check this works with Link, no ref errors in console
 
 interface Props {
   href?: string;
@@ -25,7 +23,7 @@ const SidebarItem: FC<Props> = ({
   onClick,
   isSelected = false,
 }): ReactElement => (
-  <NextLink href={href} passHref>
+  <Link href={href} passHref>
     <IconButton
       onClick={onClick}
       sx={{
@@ -39,7 +37,7 @@ const SidebarItem: FC<Props> = ({
       <Icon sx={{ height: '1.5rem', width: '1.5rem', marginRight: '1rem' }} />
       {label}
     </IconButton>
-  </NextLink>
+  </Link>
 );
 
 export default SidebarItem;
