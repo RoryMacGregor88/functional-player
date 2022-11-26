@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
+
 import { useRouter } from 'next/router';
+
 import NextImage from 'next/image';
+
 import {
   Dialog,
   IconButton,
@@ -16,7 +19,7 @@ import {
   BookmarkIconButton,
 } from '@/src/components';
 
-import { updateBookmarks, http } from '@/src/utils';
+import { updateBookmarks, updateLastWatched } from '@/src/utils';
 
 import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
@@ -105,39 +108,14 @@ const Overlay = ({
 const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
   const router = useRouter();
 
-  const updateLastWatched = async (user, _id) => {
-    if (!!user) {
-      try {
-        const { error, resUser } = await http('/last-watched', {
-          email: user.email,
-          _id,
-        });
-
-        if (!!error) {
-          updateCtx({
-            toastData: {
-              message: error.message,
-              severity: 'error',
-            },
-          });
-        } else if (!!user) {
-          updateCtx({ user: resUser });
-        }
-      } catch (e) {
-        updateCtx({
-          toastData: {
-            message: DEFAULT_ERROR_MESSAGE,
-            severity: 'error',
-          },
-        });
-      }
-    }
-  };
+  const { _id, videoId } = selectedVideo ?? {};
 
   // TODO: useEffect not running
-  // TODO: make this another util, test
+  // TODO: this needs to fire when Vimeo play button is clicked, not on mount
   useEffect(() => {
-    updateLastWatched();
+    if (!!selectedVideo) {
+      updateLastWatched(user, _id, updateCtx);
+    }
   }, []);
 
   const isMedium = useMediaQuery('(max-width:1200px)');
@@ -147,10 +125,11 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
     return null;
   }
 
-  const { _id, videoId } = selectedVideo;
-
   // TODO: add trailerId to all videos in db
   const trailerId = videoId;
+
+  // TODO: test this
+  const selectedVideoId = videoId && user?.subscriptionStatus === 'active' ? videoId : trailerId
 
   const deviceSize = isSmall ? 'small' : isMedium ? 'medium' : 'large';
   const isBookmarked = !!user?.bookmarks.includes(_id);
@@ -220,9 +199,7 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
           }}
         >
           <Overlay
-            videoId={
-              user?.subscriptionStatus === 'active' ? videoId : trailerId
-            }
+            videoId={selectedVideoId}
             selectedVideo={selectedVideo}
             isBookmarked={isBookmarked}
             onBookmarkClick={onBookmarkClick}

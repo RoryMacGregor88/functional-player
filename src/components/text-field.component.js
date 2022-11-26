@@ -1,23 +1,8 @@
 import { forwardRef } from 'react';
-import { TextField as MuiTextField, GlobalStyles } from '@mui/material';
-
-// TODO: user agent still makes background white
-
-const globalStyles = (
-  <GlobalStyles
-    styles={{
-      input: {
-        backgroundColor: 'background.paper !important',
-        color: 'primary.main !important',
-      },
-    }}
-  />
-);
+import { TextField as MuiTextField } from '@mui/material';
 
 const TextField = (props, ref) => (
-  <>
-    {globalStyles}
-    <MuiTextField
+  <MuiTextField
       fullWidth
       inputProps={{
         sx: {
@@ -27,7 +12,6 @@ const TextField = (props, ref) => (
       {...props}
       ref={ref}
     />
-  </>
 );
 
 export default forwardRef(TextField);

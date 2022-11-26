@@ -112,7 +112,7 @@ export default function Dashboard({
   const latestCourses = courses
       ?.sort((a, b) => (a.creationDate > b.creationDate ? -1 : 1))
       .slice(0, 5),
-    lastWatched = courses.find((c) => c._id === user?.lastWatched) ?? null,
+    lastWatched = courses.find(({ _id }) => _id === user?.lastWatched) ?? null,
     bookmarks = courses.filter(({ _id }) => user?.bookmarks.includes(_id));
   return (
     <Grid container direction='column' sx={{ width: '100%' }}>
@@ -123,13 +123,13 @@ export default function Dashboard({
       />
       <PageWrapper>
         {!!lastWatched ? (
-          <Slider title='Continue Watching' courses={[lastWatched]} />
+          <Slider title='Continue Watching' courses={[lastWatched]} banner={true} />
         ) : null}
         {!!bookmarks.length ? (
           <Slider title='Your List' courses={bookmarks} />
         ) : null}
         <Slider title='Latest Releases' courses={latestCourses} />
-        <ComingSoon course={comingSoonCourse} />
+        <Slider title='Coming Soon' courses={[comingSoonCourse]} banner={true} />
         {series.map(({ _id, title, courses }) => (
           <Slider key={_id} title={`${title} Series`} courses={courses} />
         ))}

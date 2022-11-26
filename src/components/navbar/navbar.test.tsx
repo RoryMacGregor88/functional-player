@@ -1,5 +1,5 @@
 import { render } from '@/src/utils/test-utils';
 
-describe('SidebarItem', () => {
+describe('Navbar', () => {
   it('', () => {});
 });

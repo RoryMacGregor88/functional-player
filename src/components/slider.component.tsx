@@ -85,15 +85,19 @@ const ChevronWrapper: FC<ChevronWrapperProps> = ({
 interface SliderProps {
   title: string;
   courses: Course[];
+  banner?: boolean;
 }
 
-const Slider: FC<SliderProps> = ({ title, courses }): ReactElement => {
+const Slider: FC<SliderProps> = ({ title, courses, banner = false }): ReactElement => {
   const { updateCtx } = useContext(Context);
   const [position, setPosition] = useState(0);
 
   if (!courses?.length) {
     return null;
   }
+
+  const minWidth = banner ? 'calc(100vw - 4rem)' : `${ITEM_WIDTH_REM}rem`,
+    height = banner ? '30rem' : `${ITEM_HEIGHT_REM}rem`;
 
   const handleClick = (course: Course): void =>
     updateCtx({ selectedVideo: course });
@@ -108,7 +112,7 @@ const Slider: FC<SliderProps> = ({ title, courses }): ReactElement => {
 
   return (
     <>
-      <Typography variant='h4' sx={{ paddingLeft: '0.5rem' }}>
+      <Typography variant='h4' sx={{ paddingLeft: '0.5rem', marginBottom: '0.5rem' }}>
         {title}
       </Typography>
       <Grid
@@ -120,7 +124,7 @@ const Slider: FC<SliderProps> = ({ title, courses }): ReactElement => {
           marginBottom: '2rem',
         }}
       >
-        {courses.length > 1 ? (
+        {!banner && courses.length > 1 ? (
           <>
             <ChevronWrapper
               handleChevronClick={handleChevronClick}
@@ -151,16 +155,17 @@ const Slider: FC<SliderProps> = ({ title, courses }): ReactElement => {
             </ChevronWrapper>
           </>
         ) : null}
+
         <Grid
           item
           container
           wrap='nowrap'
-          gap={2}
+          gap={1}
           sx={{
             transform:
               position === 0
                 ? 'none'
-                : `translateX(-${(ITEM_WIDTH_REM + 1) * position}rem)`,
+                : `translateX(-${(ITEM_WIDTH_REM + 0.5) * position}rem)`,
             transitionDuration: '0.25s',
           }}
         >
@@ -170,8 +175,8 @@ const Slider: FC<SliderProps> = ({ title, courses }): ReactElement => {
               onClick={() => handleClick(course)}
               sx={{
                 position: 'relative',
-                minWidth: `${ITEM_WIDTH_REM}rem`,
-                height: `${ITEM_HEIGHT_REM}rem`,
+                minWidth,
+                height,
                 border: '8px solid transparent',
                 borderRadius: '0.5rem',
                 overflow: 'hidden',
