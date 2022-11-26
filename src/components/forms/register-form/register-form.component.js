@@ -70,6 +70,8 @@ const RegisterForm = ({
     },
   });
 
+  // TODO: why NEXT button not yellow?
+
   return (
     <Box sx={{ width: '100%' }} justifyContent='center' alignItems='center'>
       <FormWrapper onSubmit={handleSubmit((values) => onSubmit(values))}>

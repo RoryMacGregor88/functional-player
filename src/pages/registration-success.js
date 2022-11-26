@@ -10,6 +10,8 @@ import {
   Stepper,
 } from '@/src/components';
 
+// TODO: how to stop user linking here manually?
+
 /** @param {{user: object|null}} props */
 export default function RegistrationSuccess({ user }) {
   const router = useRouter();
