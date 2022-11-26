@@ -20,7 +20,7 @@ const comingSoonCourse: Course = {
   _id: '12345678910',
   videoId: '12345678910',
   title: 'The Supernatural',
-  description: 'this is a description of The Supernatural',
+  description: 'This is a description of The Supernatural',
   coursePath: 'the-supernatural',
   seriesPath: 'peter-green',
   creationDate: new Date(),
@@ -31,7 +31,15 @@ interface ServerSideProps {
 }
 
 export const getServerSideProps: GetServerSideProps =
-  async (): Promise<ServerSideProps> => {
+  async (ctx): Promise<ServerSideProps> => {
+    // TODO: authenticateUser here, pass to getAllCourses,
+    // need better strategy for this
+    // TODO: need getAllCourses if getAllSeries already here?
+
+    // this actually presents a bit of a problem.
+    // if all the JSON for courses is inside the series,
+    // then it's dupicated in 2 places, meaning that it will need to be
+    // uploaded/edited in 2 places.
     const courses: Course[] = await getAllCourses();
     const series: Series[] = await getAllSeries();
     return {
@@ -81,6 +89,7 @@ interface ComingSoonProps {
   course: Course;
 }
 
+// TODO: same here, make custom component, will never be a slider
 const ComingSoon: FC<ComingSoonProps> = ({ course }): ReactElement => (
   <CategoryWrapper category='Coming Soon'>
     <CourseDisplay

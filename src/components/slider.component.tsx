@@ -7,7 +7,6 @@ import { Grid, Box, Typography } from '@mui/material';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
-  IconButton,
 } from '@/src/components';
 
 import { Context } from '@/src/utils';
@@ -56,6 +55,7 @@ const ChevronWrapper: FC<ChevronWrapperProps> = ({
   children,
 }): ReactElement => {
   const onClick = () => handleChevronClick(orientation);
+  // TODO: should this be some kind of button?
   return (
     <Grid
       item
@@ -77,7 +77,7 @@ const ChevronWrapper: FC<ChevronWrapperProps> = ({
         },
       }}
     >
-      <IconButton onClick={onClick}>{children}</IconButton>
+      {children}
     </Grid>
   );
 };

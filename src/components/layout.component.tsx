@@ -11,6 +11,8 @@ interface Props {
   children: ReactNode;
 }
 
+// TODO: custom font goes here: https://nextjs.org/docs/basic-features/font-optimization#google-fonts
+
 const Layout: FC<Props> = ({ user, children }): ReactElement => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   return (
