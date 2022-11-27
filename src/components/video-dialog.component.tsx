@@ -17,6 +17,7 @@ import {
   VideoPlayer,
   Button,
   BookmarkIconButton,
+  LevelRatingBadge
 } from '@/src/components';
 
 import { updateBookmarks, updateLastWatched } from '@/src/utils';
@@ -38,7 +39,7 @@ const Overlay: FC<OverlayProps> = ({
   onBookmarkClick,
   updateCtx,
 }): ReactElement => {
-  const { title, description } = selectedVideo,
+  const { title, description, level } = selectedVideo,
     close = () => updateCtx({ selectedVideo: null });
   return (
     <Grid
@@ -75,10 +76,13 @@ const Overlay: FC<OverlayProps> = ({
             onBookmarkClick={onBookmarkClick}
           />
         </Grid>
-        <>
-          <Typography variant='h2'>{title}</Typography>
-          <Typography variant='body1'>{description}</Typography>
-        </>
+        <Grid item container wrap='nowrap' justifyContent='space-between' alignItems='center'>
+          <Grid item container direction='column'>
+            <Typography variant='h2'>{title}</Typography>
+            <Typography variant='body1'>{description}</Typography>
+          </Grid>
+          <LevelRatingBadge level={level} includeMessage={true} />
+        </Grid>
       </Grid>
       <Grid
         item
@@ -105,7 +109,7 @@ interface VideoDialogProps {
 }
 
 const VideoDialog: FC<VideoDialogProps> = ({ open, user, selectedVideo, updateCtx }): ReactElement => {
-  const router = useRouter();
+  const { push } = useRouter();
 
   const { _id, videoId } = selectedVideo ?? {};
 
@@ -134,7 +138,7 @@ const VideoDialog: FC<VideoDialogProps> = ({ open, user, selectedVideo, updateCt
   const isBookmarked = !!user?.bookmarks.includes(_id);
 
   const onActionClick = (path) => {
-    router.push(path);
+    push(path);
     updateCtx({ selectedVideo: null });
   };
 

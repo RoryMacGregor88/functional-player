@@ -1,10 +1,12 @@
 import { Dispatch, FC, ReactElement, SetStateAction } from 'react';
 
-import { AppBar, Toolbar, Typography } from '@mui/material';
+import { AppBar, Toolbar, Typography, Grid } from '@mui/material';
 
-import { MenuIcon, IconButton, Link } from '@/src/components';
+import { MenuIcon, IconButton, Link, Select } from '@/src/components';
 
 import { User } from '@/src/utils/interfaces';
+
+import { CATEGORY_SELECT_OPTIONS } from '@/src/utils/constants';
 
 interface Props {
   user: User | null;
@@ -22,14 +24,17 @@ const Navbar: FC<Props> = ({ user, setIsDrawerOpen }): ReactElement => (
       backgroundImage: 'none',
     }}
   >
-    <Toolbar
+    <Grid
+      component={Toolbar}
+      container
+      alignItems='center'
+      justifyContent='space-between'
+      wrap='nowrap'
       disableGutters
       sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        width: '100%',
         padding: '0.5rem',
-        minHeight: 'fit-content !important',
+        minHeight: '4rem !important',
       }}
     >
       <IconButton
@@ -44,12 +49,15 @@ const Navbar: FC<Props> = ({ user, setIsDrawerOpen }): ReactElement => (
         </Typography>
       </Link>
       </IconButton>
-      {!!user ? (
-        <Typography variant='h5' sx={{ fontSize: '1.25rem', paddingRight: '0.5rem' }}>
-        Logged in as: {user.username}
-      </Typography>
-      ) : null}
-    </Toolbar>
+      <Grid item container alignItems='center' gap={2} sx={{ width: 'fit-content' }}>
+        <Select options={CATEGORY_SELECT_OPTIONS} />
+        {!!user ? (
+          <Typography variant='h5' sx={{ fontSize: '1.25rem', paddingRight: '0.5rem' }}>
+          Logged in as: {user.username}
+        </Typography>
+        ) : null}
+      </Grid>
+    </Grid>
   </AppBar>
 )
 

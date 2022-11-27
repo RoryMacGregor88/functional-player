@@ -14,10 +14,10 @@ import {
 
 /** @param {{user: object|null}} props */
 export default function RegistrationSuccess({ user }) {
-  const router = useRouter();
+  const { push } = useRouter();
 
   if (!!user) {
-    router.push('/dashboard');
+    push('/dashboard');
     return <LoadMask />;
   }
 
@@ -42,7 +42,7 @@ export default function RegistrationSuccess({ user }) {
         <Typography variant='body1'>
           Click the button below to login.
         </Typography>
-        <Button onClick={() => router.push('/login')}>Login</Button>
+        <Button onClick={() => push('/login')}>Login</Button>
       </Grid>
     </PageWrapper>
   );

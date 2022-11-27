@@ -24,7 +24,7 @@ import {
 
 /** @param {{user: object|null}} props */
 export default function Register({ user }) {
-  const router = useRouter();
+  const { push } = useRouter();
 
   const [activeStep, setActiveStep] = useState(1);
   const [clientSecret, setClientSecret] = useState(null);
@@ -32,7 +32,7 @@ export default function Register({ user }) {
   const [isLoading, setIsLoading] = useState(false);
 
   if (!!user) {
-    router.push('/dashboard');
+    push('/dashboard');
     return <LoadMask />;
   }
 

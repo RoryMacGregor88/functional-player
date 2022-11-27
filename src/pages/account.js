@@ -47,7 +47,7 @@ const TabPanel = ({ name, value, index, children }) => (
  * }} props
  */
 export default function Account({ user, updateCtx }) {
-  const router = useRouter();
+  const { push } = useRouter();
 
   const [value, setValue] = useState(0);
   const [wellData, setWellData] = useState(null);
@@ -55,7 +55,7 @@ export default function Account({ user, updateCtx }) {
   const [isLoading, setIsLoading] = useState(false);
 
   if (!user) {
-    router.push('/login');
+    push('/login');
     return <LoadMask />;
   }
 
@@ -190,7 +190,7 @@ export default function Account({ user, updateCtx }) {
           severity: 'success',
           message: ACCOUNT_DELETE_SUCCESS_MESSAGE,
         });
-        router.push('/');
+        push('/');
       }
     } catch (e) {
       setWellData({

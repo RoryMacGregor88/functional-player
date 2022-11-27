@@ -1,6 +1,9 @@
 export type Id = string | number;
+export type Token = string;
 
 export type Severity = 'success' | 'error';
+
+export type LevelRating = 'beginner' | 'intermediate' | 'advanced';
 
 export type DialogData = {
   title: string;
@@ -42,8 +45,10 @@ export interface User {
 export interface Course {
   _id: Id;
   videoId: Id;
+  trailerId: Id;
   title: string;
   description: string;
+  level: LevelRating;
   coursePath: string;
   seriesPath: string;
   creationDate: Date;
@@ -56,4 +61,8 @@ export interface Series {
   seriesPath: string;
   courses: Course[];
   creationDate: Date;
+}
+
+export interface CustomError {
+  message: string;
 }

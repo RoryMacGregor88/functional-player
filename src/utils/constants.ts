@@ -71,6 +71,67 @@ export const THEME_COLORS = {
 //   red: '#c31e1e',
 // };
 
+export const COURSE_LEVEL_METADATA = {
+  beginner: {
+    label: 'Beginner',
+    color: 'green',
+    message: 'This course has been rated as suitable for all levels of players.'
+  },
+  intermediate: {
+    label: 'Intermediate',
+    color: 'yellow',
+    message: 'This course has been rated as suitable for intermediate level players.',
+  },
+  advanced: {
+    label: 'Advanced',
+    color: 'red',
+    message: 'This course has been rated as suitable for advanced level players.',
+  },
+};
+
+export const CATEGORY_SELECT_OPTIONS = [
+  {
+    label: 'Artist',
+    value: 'artist',
+  },
+  {
+    label: 'Live Solos',
+    value: 'liveSolos',
+  },
+  {
+    label: 'Blues',
+    value: 'blues',
+  },
+  {
+    label: 'Rock',
+    value: 'rock',
+  },
+  {
+    label: 'Country',
+    value: 'country',
+  },
+  {
+    label: 'Funk',
+    value: 'funk',
+  },
+  {
+    label: 'Hidden Gems',
+    value: 'hiddenGems',
+  },
+  {
+    label:'Beginner',
+    value: 'beginner',
+  },
+  {
+    label: 'Intermediate',
+    value: 'intermediate',
+  },
+  {
+    label: 'Advanced',
+    value: 'advanced',
+  }
+];
+
 export const CHARS = [
   '1',
   '2',

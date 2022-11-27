@@ -23,7 +23,7 @@ const Drawer: FC<Props> = ({
   isDrawerOpen,
   setIsDrawerOpen,
 }): ReactElement => {
-  const router = useRouter();
+  const { push, pathname } = useRouter();
   const { updateCtx } = useContext(Context);
 
   const toggleDrawer = () => setIsDrawerOpen((prev) => !prev);
@@ -43,7 +43,7 @@ const Drawer: FC<Props> = ({
         });
       } else if (resUser === null) {
         updateCtx({ user: resUser });
-        router.push('/login');
+        push('/login');
       }
     } catch (e) {
       updateCtx({
@@ -63,7 +63,7 @@ const Drawer: FC<Props> = ({
       sx={{
         '.MuiDrawer-paper': {
           padding: '1rem',
-          minWidth: '15rem',
+          minWidth: '15.5rem',
           display: 'flex',
           alignItems: 'flex-start',
           backgroundColor: 'background.paper',
@@ -85,14 +85,14 @@ const Drawer: FC<Props> = ({
           Icon={ProfileIcon}
           label='Home'
           href={!user ? '/' : '/dashboard'}
-          isSelected={router.pathname === '/dashboard'}
+          isSelected={pathname === '/dashboard'}
           onClick={toggleDrawer}
         />
         <SidebarItem
           Icon={ProfileIcon}
           label='Browse series'
           href='/series'
-          isSelected={router.pathname === '/series'}
+          isSelected={pathname === '/series'}
           onClick={toggleDrawer}
         />
         {!!user ? (
@@ -101,14 +101,14 @@ const Drawer: FC<Props> = ({
               Icon={ProfileIcon}
               label='My List'
               href='/list'
-              isSelected={router.pathname === '/list'}
+              isSelected={pathname === '/list'}
               onClick={toggleDrawer}
             />
             <SidebarItem
               Icon={ProfileIcon}
               label='My Account'
               href='/account'
-              isSelected={router.pathname === '/account'}
+              isSelected={pathname === '/account'}
               onClick={toggleDrawer}
             />
             <SidebarItem
@@ -126,14 +126,14 @@ const Drawer: FC<Props> = ({
               Icon={ProfileIcon}
               label='Login'
               href='/login'
-              isSelected={router.pathname === '/login'}
+              isSelected={pathname === '/login'}
               onClick={toggleDrawer}
             />
             <SidebarItem
               Icon={ProfileIcon}
               label='Register'
               href='/register'
-              isSelected={router.pathname === '/register'}
+              isSelected={pathname === '/register'}
               onClick={toggleDrawer}
             />
           </>
@@ -142,7 +142,7 @@ const Drawer: FC<Props> = ({
           Icon={ProfileIcon}
           label='FAQ'
           href='/faq'
-          isSelected={router.pathname === '/faq'}
+          isSelected={pathname === '/faq'}
           onClick={toggleDrawer}
         />
       </Grid>

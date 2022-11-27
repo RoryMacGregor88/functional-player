@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function NotFound({ user }: Props): ReactElement {
-  const router = useRouter();
-  router.push(!!user ? '/dashboard' : '/');
+  const { push } = useRouter();
+  push(!!user ? '/dashboard' : '/');
   return <LoadMask />;
 }

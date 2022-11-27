@@ -16,7 +16,7 @@ import { REACTIVATION_SUCCESS_MESSAGE } from '@/src/utils/constants';
  * }} props
  */
 export default function ReactivationSuccess({ user, updateCtx }) {
-  const router = useRouter();
+  const { push } = useRouter();
   const [isUpdated, setIsUpdated] = useState(false);
 
   // TODO: need to stop this from activating if a user just comes here
@@ -29,7 +29,7 @@ export default function ReactivationSuccess({ user, updateCtx }) {
   }, [user, updateCtx]);
 
   if (!user) {
-    router.push('/login');
+    push('/login');
     return <LoadMask />;
   }
 
@@ -49,7 +49,7 @@ export default function ReactivationSuccess({ user, updateCtx }) {
         <Typography variant='body1'>
           Click the button below to return to your dashboard.
         </Typography>
-        <Button onClick={() => router.push('/dashboard')}>
+        <Button onClick={() => push('/dashboard')}>
           Return to dashboard
         </Button>
       </Grid>

@@ -33,7 +33,7 @@ const resetPasswordFormSchema = Yup.object().shape({
 });
 
 export default function ResetPassword({ user }) {
-  const router = useRouter();
+  const { push } = useRouter();
   const [wellData, setWellData] = useState(null);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
 
@@ -50,7 +50,7 @@ export default function ResetPassword({ user }) {
   });
 
   if (!!user) {
-    router.push('/dashboard');
+    push('/dashboard');
     return <LoadMask />;
   }
 

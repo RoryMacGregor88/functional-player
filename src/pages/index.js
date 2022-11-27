@@ -3,10 +3,10 @@ import { useRouter } from 'next/router';
 import { LoadMask } from '@/src/components';
 
 export default function Landing({ user }) {
-  const router = useRouter();
+  const { push } = useRouter();
 
   if (!!user) {
-    router.push('/dashboard');
+    push('/dashboard');
     return <LoadMask />;
   }
 

@@ -7,6 +7,7 @@ import { Grid, Box, Typography, ButtonBase } from '@mui/material';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
+  LevelRatingBadge
 } from '@/src/components';
 
 import { Context } from '@/src/utils';
@@ -24,7 +25,7 @@ interface OverlayProps {
 }
 
 const Overlay: FC<OverlayProps> = ({ course }): ReactElement => {
-  const { title, description } = course;
+  const { title, description, level } = course;
   return (
     <Grid
       container
@@ -38,6 +39,7 @@ const Overlay: FC<OverlayProps> = ({ course }): ReactElement => {
         width: '100%',
       }}
     >
+      <LevelRatingBadge level={level} />
       <Typography variant='h3'>{title}</Typography>
       <Typography variant='h5'>{description}</Typography>
     </Grid>

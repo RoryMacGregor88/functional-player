@@ -17,13 +17,13 @@ import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
  * }} props
  */
 export default function Login({ user, updateCtx }) {
-  const router = useRouter();
+  const { push } = useRouter();
 
   const [wellData, setWellData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   if (!!user) {
-    router.push('/dashboard');
+    push('/dashboard');
     return <LoadMask />;
   }
 
@@ -40,7 +40,7 @@ export default function Login({ user, updateCtx }) {
         setWellData({ message: error.message });
       } else if (!!resUser) {
         updateCtx({ user: resUser });
-        router.push('/dashboard');
+        push('/dashboard');
       }
     } catch (e) {
       setWellData({ message: DEFAULT_ERROR_MESSAGE });

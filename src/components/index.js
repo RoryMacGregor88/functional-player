@@ -14,9 +14,11 @@ import CourseDisplay from './course-display.component';
 import VideoDisplay from './video-display.component';
 import VideoPlayer from './video-player.component';
 import IconButton from './icon-button/icon-button.component';
+import LevelRatingBadge from './level-rating-badge.component';
 import BookmarkIconButton from './bookmark-icon-button/bookmark-icon-button.component';
 import SpacedTitle from './spaced-title.component';
 import Stepper from './stepper.component';
+import Select from './select.component';
 import Dialog from './dialog.component';
 import VideoDialog from './video-dialog.component';
 import Well from './well/well.component';
@@ -46,9 +48,11 @@ export {
   VideoDisplay,
   VideoPlayer,
   IconButton,
+  LevelRatingBadge,
   BookmarkIconButton,
   SpacedTitle,
   Stepper,
+  Select,
   Dialog,
   VideoDialog,
   Well,
