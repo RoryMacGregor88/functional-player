@@ -68,7 +68,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
           />
           <Dialog
             open={!!dialogData}
-            onClose={() => updateCtx({ dialogData: null })}
+            updateCtx={updateCtx}
             title={dialogData?.title}
             message={dialogData?.message}
             actions={dialogData?.actions}
@@ -76,9 +76,8 @@ function App({ Component, pageProps }: AppProps): ReactElement {
           <VideoDialog
             open={!!selectedVideo}
             user={user}
-            updateCtx={updateCtx}
             selectedVideo={selectedVideo}
-            onClose={() => updateCtx({ selectedVideo: null })}
+            updateCtx={updateCtx}
           />
           <Layout user={user}>
             <Component user={user} updateCtx={updateCtx} {...pageProps} />

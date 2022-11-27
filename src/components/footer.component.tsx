@@ -1,3 +1,5 @@
+import { FC, ReactElement } from 'react'
+
 import { IconButton, Grid, Typography, Link } from '@mui/material';
 
 import {
@@ -8,7 +10,7 @@ import {
   YouTubeIcon,
 } from '@/src/components';
 
-const Footer = () => {
+const Footer: FC = (): ReactElement => {
   const icons = [
     { Icon: FacebookIcon, url: 'https://www.facebook.com', label: 'Facebook' },
     {
@@ -20,8 +22,6 @@ const Footer = () => {
     { Icon: RedditIcon, url: 'https://www.reddit.com', label: 'Reddit' },
     { Icon: YouTubeIcon, url: 'https://www.youtube.com', label: 'YouTube' },
   ];
-
-  // TODO: footer colors are broke
 
   return (
     <Grid

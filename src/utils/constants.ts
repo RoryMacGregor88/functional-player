@@ -54,22 +54,22 @@ export const STATUS_LABELS = {
   canceled: 'Cancelled',
 };
 
-// export const THEME_COLORS = {
-//   boneWhite: '#faf9f7',
-//   lightBlack: '#121212',
-//   darkBlack: '#080808',
-//   lightGrey: '#757575',
-//   darkGrey: '#242424',
-//   amazonOrange: '#ff9900',
-// };
-
 export const THEME_COLORS = {
-  white: '#dfe2cc',
-  black: '#140c0b',
-  yellow: '#f2960b',
-  green: '#0ca464',
-  red: '#c31e1e',
+  boneWhite: '#faf9f7',
+  lightBlack: '#121212',
+  darkBlack: '#080808',
+  lightGrey: '#757575',
+  darkGrey: '#242424',
+  amazonOrange: '#ff9900',
 };
+
+// export const THEME_COLORS = {
+//   white: '#dfe2cc',
+//   black: '#140c0b',
+//   yellow: '#f2960b',
+//   green: '#0ca464',
+//   red: '#c31e1e',
+// };
 
 export const CHARS = [
   '1',

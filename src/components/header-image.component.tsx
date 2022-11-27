@@ -1,16 +1,17 @@
+import { FC, ReactElement } from 'react'
+
 import NextImage from 'next/image';
+
 import { Grid, Typography, useMediaQuery } from '@mui/material';
 
-/**
- * @param {{
- *  src: string
- *  alt: string
- *  title: string
- *  imageProps?: object
- *  deviceSize: string
- * }} props
- */
-const Device = ({ src, alt, title, imageProps = {}, deviceSize }) => (
+interface DeviceProps {
+  src: string;
+  alt: string;
+  title: string;
+  deviceSize: string;
+}
+
+const Device: FC<DeviceProps> = ({ src, alt, title, deviceSize }): ReactElement => (
   <Grid
     container
     alignItems='flex-start'
@@ -70,21 +71,18 @@ const Device = ({ src, alt, title, imageProps = {}, deviceSize }) => (
         objectFit='cover'
         layout='fill'
         quality={100}
-        {...imageProps}
       />
     </Grid>
   </Grid>
 );
 
-/**
- * @param {{
- *  src: string
- *  alt: string
- *  title: 'string'
- *  imageProps?: object
- * }} props
- */
-const Desktop = ({ src, alt, title, imageProps = {} }) => (
+interface DesktopProps {
+  src: string;
+  alt: string;
+  title: string;
+}
+
+const Desktop: FC<DesktopProps> = ({ src, alt, title }): ReactElement => (
   <Grid
     container
     justifyContent='flex-end'
@@ -142,14 +140,18 @@ const Desktop = ({ src, alt, title, imageProps = {} }) => (
         objectFit='cover'
         layout='fill'
         quality={100}
-        {...imageProps}
       />
     </Grid>
   </Grid>
 );
 
-/** @param {object} props */
-const HeaderImage = (props) => {
+interface HeaderImageProps {
+  src: string;
+  alt: string;
+  title: string;
+}
+
+const HeaderImage: FC<HeaderImageProps> = ({ src, alt, title }) => {
   const isMedium = useMediaQuery('(max-width:1000px)');
   const isSmall = useMediaQuery('(max-width:600px)');
 
@@ -159,11 +161,11 @@ const HeaderImage = (props) => {
 
   // TODO: make sure this shit working. NextImage better for this? is it SSR?
   if (isSmall) {
-    return <Device {...props} deviceSize={deviceSize} />;
+    return <Device src={src} alt={alt} title={title} deviceSize={deviceSize} />;
   } else if (isMedium) {
-    return <Device {...props} deviceSize={deviceSize} />;
+    return <Device src={src} alt={alt} title={title} deviceSize={deviceSize} />;
   } else {
-    return <Desktop {...props} />;
+    return <Desktop src={src} alt={alt} title={title} />;
   }
 };
 

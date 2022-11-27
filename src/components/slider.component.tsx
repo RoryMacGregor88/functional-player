@@ -2,7 +2,7 @@ import { FC, useState, useContext, ReactNode, ReactElement } from 'react';
 
 import NextImage from 'next/image';
 
-import { Grid, Box, Typography } from '@mui/material';
+import { Grid, Box, Typography, ButtonBase } from '@mui/material';
 
 import {
   ChevronLeftIcon,
@@ -13,8 +13,9 @@ import { Context } from '@/src/utils';
 
 import { Course } from '@/src/utils/interfaces';
 
-const ITEM_WIDTH_REM = 40;
-const ITEM_HEIGHT_REM = 25;
+const ITEM_WIDTH_REM = 40,
+  ITEM_HEIGHT_REM = 25,
+  BORDER_WIDTH = 8;
 
 type Orientation = 'left' | 'right';
 
@@ -49,38 +50,37 @@ interface ChevronWrapperProps {
   children: ReactNode;
 }
 
+// TODO: hover color shows that chevron wrapper is bigger than container by a few px
 const ChevronWrapper: FC<ChevronWrapperProps> = ({
   handleChevronClick,
   orientation,
   children,
-}): ReactElement => {
-  const onClick = () => handleChevronClick(orientation);
-  // TODO: should this be some kind of button?
-  return (
-    <Grid
-      item
-      container
-      direction='column'
-      justifyContent='center'
-      alignItems='center'
-      onClick={onClick}
-      sx={{
-        position: 'absolute',
-        top: 0,
-        [orientation]: 0,
-        zIndex: '2',
-        width: '5rem',
-        height: '100%',
-        cursor: 'pointer',
-        '&:hover': {
-          backgroundColor: 'rgb(8, 8, 8, 0.5)',
-        },
-      }}
-    >
-      {children}
-    </Grid>
-  );
-};
+}): ReactElement => (
+  <Grid
+    item
+    container
+    direction='column'
+    justifyContent='center'
+    alignItems='center'
+    component={ButtonBase}
+    disableRipple
+    onClick={() => handleChevronClick(orientation)}
+    sx={{
+      position: 'absolute',
+      top: 0,
+      [orientation]: 0,
+      zIndex: '2',
+      width: '5rem',
+      height: '100%',
+      cursor: 'pointer',
+      '&:hover': {
+        backgroundColor: 'rgb(8, 8, 8, 0.5)',
+      },
+    }}
+  >
+    {children}
+  </Grid>
+)
 
 interface SliderProps {
   title: string;
@@ -177,12 +177,12 @@ const Slider: FC<SliderProps> = ({ title, courses, banner = false }): ReactEleme
                 position: 'relative',
                 minWidth,
                 height,
-                border: '8px solid transparent',
+                border: `${BORDER_WIDTH}px solid transparent`,
                 borderRadius: '0.5rem',
                 overflow: 'hidden',
                 cursor: 'pointer',
                 '&:hover': {
-                  border: '8px solid #fff',
+                  border: `${BORDER_WIDTH}px solid #fff`,
                 },
               }}
               data-testid={course.title}

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, FC, ReactElement } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -21,25 +21,25 @@ import {
 
 import { updateBookmarks, updateLastWatched } from '@/src/utils';
 
-import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
+import { Course, User, UpdateCtx, Id } from '@/src/utils/interfaces'
 
-/**
- * @param {
- *  selectedVideo: object
- *  isBookmarked: boolean
- *  onBookmarkClick: function
- *  onClose: function
- *  deviceSize: string
- * } params
- */
-const Overlay = ({
-  videoId,
+interface OverlayProps {
+  selectedVideoId: Id;
+  selectedVideo: Course;
+  isBookmarked: boolean;
+  onBookmarkClick: () => void;
+  updateCtx: UpdateCtx;
+}
+
+const Overlay: FC<OverlayProps> = ({
+  selectedVideoId,
   selectedVideo,
   isBookmarked,
   onBookmarkClick,
-  onClose,
-}) => {
-  const { title, description } = selectedVideo;
+  updateCtx,
+}): ReactElement => {
+  const { title, description } = selectedVideo,
+    close = () => updateCtx({ selectedVideo: null });
   return (
     <Grid
       item
@@ -65,7 +65,7 @@ const Overlay = ({
       >
         <Grid item container justifyContent='space-between' alignItems='center'>
           <IconButton
-            onClick={onClose}
+            onClick={close}
             sx={{ width: 'fit-content', padding: '0' }}
           >
             <ArrowBackIcon sx={{ height: '2.5rem', width: '2.5rem' }} />
@@ -87,25 +87,24 @@ const Overlay = ({
         alignItems='center'
         sx={{ width: '100%', height: '50%', position: 'relative' }}
       >
-        <VideoPlayer videoId={videoId} />
+        <VideoPlayer selectedVideoId={selectedVideoId} title={title} />
       </Grid>
       <Grid item container alignItems='center' gap='1rem' wrap='nowrap'>
-        <Button>More</Button>
-        <Button>Feedback</Button>
+        <Button onClick={() => console.log('More')}>More</Button>
+        <Button onClick={() => console.log('Feedback')}>Feedback</Button>
       </Grid>
     </Grid>
   );
 };
 
-/**
- * @param {
- *  open: boolean
- *  user: object|null
- *  selectedVideo: object
- *  onClose: function
- * } params
- */
-const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
+interface VideoDialogProps {
+  open: boolean;
+  user: User | null;
+  selectedVideo: Course;
+  updateCtx: UpdateCtx;
+}
+
+const VideoDialog: FC<VideoDialogProps> = ({ open, user, selectedVideo, updateCtx }): ReactElement => {
   const router = useRouter();
 
   const { _id, videoId } = selectedVideo ?? {};
@@ -136,7 +135,7 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
 
   const onActionClick = (path) => {
     router.push(path);
-    onClose();
+    updateCtx({ selectedVideo: null });
   };
 
   const onBookmarkClick = () =>
@@ -179,6 +178,7 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
       >
         <NextImage
           src={`/telecaster-${deviceSize}.jpg`}
+          alt='telecaster-image'
           objectFit='cover'
           layout='fill'
           quality={100}
@@ -199,11 +199,11 @@ const VideoDialog = ({ open, user, updateCtx, selectedVideo, onClose }) => {
           }}
         >
           <Overlay
-            videoId={selectedVideoId}
+            selectedVideoId={selectedVideoId}
             selectedVideo={selectedVideo}
             isBookmarked={isBookmarked}
             onBookmarkClick={onBookmarkClick}
-            onClose={onClose}
+            updateCtx={updateCtx}
           />
         </Grid>
       </Grid>
