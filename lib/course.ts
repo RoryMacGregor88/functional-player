@@ -9,9 +9,13 @@ const getAllCourses = async (token: Token) : Promise<{ courses: Course[] | null,
     const { db } = await connectToDatabase();
     const series: Series[] = await db.collection(SERIES).find({}).toArray();
 
+    // TODO: iron-session authentication, not just truthiness
+
     const courses: Course[] = series.reduce((acc, cur) => {
       const courses = cur.courses.map(({ videoId, trailerId,  ...rest }) =>
-       !!token ? { videoId, ...rest } : { trailerId, ...rest });
+       !!token
+         ? { videoId, trailerId: null, ...rest }
+         : { trailerId, videoId: null, ...rest });
       return [...acc, ...courses];
     }, []);
 

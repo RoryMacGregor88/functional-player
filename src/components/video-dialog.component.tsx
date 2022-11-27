@@ -111,7 +111,7 @@ interface VideoDialogProps {
 const VideoDialog: FC<VideoDialogProps> = ({ open, user, selectedVideo, updateCtx }): ReactElement => {
   const { push } = useRouter();
 
-  const { _id, videoId } = selectedVideo ?? {};
+  const { _id, videoId, trailerId } = selectedVideo ?? {};
 
   // TODO: useEffect not running
   // TODO: this needs to fire when Vimeo play button is clicked, not on mount
@@ -127,12 +127,6 @@ const VideoDialog: FC<VideoDialogProps> = ({ open, user, selectedVideo, updateCt
   if (!selectedVideo) {
     return null;
   }
-
-  // TODO: add trailerId to all videos in db
-  const trailerId = videoId;
-
-  // TODO: test this
-  const selectedVideoId = videoId && user?.subscriptionStatus === 'active' ? videoId : trailerId
 
   const deviceSize = isSmall ? 'small' : isMedium ? 'medium' : 'large';
   const isBookmarked = !!user?.bookmarks.includes(_id);
@@ -203,7 +197,7 @@ const VideoDialog: FC<VideoDialogProps> = ({ open, user, selectedVideo, updateCt
           }}
         >
           <Overlay
-            selectedVideoId={selectedVideoId}
+            selectedVideoId={trailerId ?? videoId}
             selectedVideo={selectedVideo}
             isBookmarked={isBookmarked}
             onBookmarkClick={onBookmarkClick}
