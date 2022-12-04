@@ -20,7 +20,7 @@ const Layout: FC<Props> = ({ user, children }): ReactElement => {
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
       />
-      <Navbar user={user} setIsDrawerOpen={setIsDrawerOpen} />
+      <Navbar user={user} isDrawerOpen={isDrawerOpen} setIsDrawerOpen={setIsDrawerOpen} />
       <main
         style={{
           display: 'flex',

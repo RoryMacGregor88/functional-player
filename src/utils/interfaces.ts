@@ -1,5 +1,8 @@
 export type Id = string | number;
 export type Token = string;
+export type Category = string;
+export type Artist = string;
+export type DateString = string;
 
 export type Severity = 'success' | 'error';
 
@@ -45,22 +48,12 @@ export interface User {
 export interface Course {
   _id: Id;
   videoId: Id;
-  trailerId: Id;
   title: string;
   description: string;
+  artist: string;
   level: LevelRating;
-  coursePath: string;
-  seriesPath: string;
-  creationDate: Date;
-}
-
-export interface Series {
-  _id: Id;
-  title: string;
-  description: string;
-  seriesPath: string;
-  courses: Course[];
-  creationDate: Date;
+  creationDate: DateString;
+  categories: Category[]
 }
 
 export interface CustomError {

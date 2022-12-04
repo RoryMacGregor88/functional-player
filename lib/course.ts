@@ -1,23 +1,21 @@
 import { connectToDatabase } from '@/lib';
 
-import { DEFAULT_ERROR_MESSAGE, SERIES } from '@/src/utils/constants';
+import { DEFAULT_ERROR_MESSAGE, COURSES } from '@/src/utils/constants';
 
-import { Series, Course, CustomError, Token } from '@/src/utils/interfaces';
+import { Course, CustomError, Token } from '@/src/utils/interfaces';
 
 const getAllCourses = async (token: Token) : Promise<{ courses: Course[] | null, error: CustomError | null }> => {
   try {
     const { db } = await connectToDatabase();
-    const series: Series[] = await db.collection(SERIES).find({}).toArray();
+    const data = await db.collection(COURSES).find({}).toArray();
 
-    // TODO: iron-session authentication, not just truthiness
+    // TODO: real iron-session authentication, not just truthiness
+    const isAuthorized = !!token;
 
-    const courses: Course[] = series.reduce((acc, cur) => {
-      const courses = cur.courses.map(({ videoId, trailerId,  ...rest }) =>
-       !!token
-         ? { videoId, trailerId: null, ...rest }
-         : { trailerId, videoId: null, ...rest });
-      return [...acc, ...courses];
-    }, []);
+    const courses: Course[] = data.map(({ courseId, trailerId, ...rest }) => ({
+      videoId: isAuthorized ? courseId : trailerId,
+      ...rest
+    }));
 
     return { error: null, courses };
   } catch (e) {
@@ -27,20 +25,4 @@ const getAllCourses = async (token: Token) : Promise<{ courses: Course[] | null,
   }
 };
 
-const getCourseById = async (seriesPath: string, coursePath: string): Promise<{ course: Course[] | null, error: CustomError | null }> => {
-  try {
-    const { db } = await connectToDatabase();
-    const series = await db.collection(SERIES).find({ seriesPath }).toArray();
-
-    const course = series?.[0].courses?.find(
-      (c) => c.coursePath === coursePath
-    );
-    return { error: null, course };
-  } catch (e) {
-    console.log('ERROR in getCourseById: ', e);
-    const error = { message: DEFAULT_ERROR_MESSAGE };
-    return { error, course: null };
-  }
-};
-
-export { getAllCourses, getCourseById };
+export { getAllCourses };

@@ -1,6 +1,7 @@
 // TODO: Move all notification messages to constants
 
 export const SERIES = 'series-2';
+export const COURSES = 'courses';
 export const USERS = 'users-2';
 
 export const PASSWORD_MIN = 5;
@@ -71,25 +72,44 @@ export const THEME_COLORS = {
 //   red: '#c31e1e',
 // };
 
-export const COURSE_LEVEL_METADATA = {
-  beginner: {
+// TODO: this metadata stuff is getting out of hand, do this better!!!
+export const COURSE_LEVEL_METADATA = [
+  {
     label: 'Beginner',
+    value: 'beginner',
     color: 'green',
     message: 'This course has been rated as suitable for all levels of players.'
   },
-  intermediate: {
+  {
     label: 'Intermediate',
+    value: 'intermediate',
     color: 'yellow',
     message: 'This course has been rated as suitable for intermediate level players.',
   },
-  advanced: {
+  {
     label: 'Advanced',
+    value: 'advanced',
     color: 'red',
     message: 'This course has been rated as suitable for advanced level players.',
   },
-};
+];
 
-export const CATEGORY_SELECT_OPTIONS = [
+export const ARTIST_METADATA = [
+  {
+    label: 'Joe Bonamassa',
+    value: 'joe-bonamassa'
+  },
+  {
+    label: 'Gary Moore',
+    value: 'gary-moore'
+  },
+  {
+    label: 'Peter Green',
+    value: 'peter-green'
+  },
+]
+
+export const CATEGORY_METADATA = [
   {
     label: 'Artist',
     value: 'artist',
@@ -118,18 +138,6 @@ export const CATEGORY_SELECT_OPTIONS = [
     label: 'Hidden Gems',
     value: 'hiddenGems',
   },
-  {
-    label:'Beginner',
-    value: 'beginner',
-  },
-  {
-    label: 'Intermediate',
-    value: 'intermediate',
-  },
-  {
-    label: 'Advanced',
-    value: 'advanced',
-  }
 ];
 
 export const CHARS = [

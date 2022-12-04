@@ -25,23 +25,24 @@ interface OverlayProps {
 }
 
 const Overlay: FC<OverlayProps> = ({ course }): ReactElement => {
-  const { title, description, level } = course;
+  const { title, level } = course;
   return (
     <Grid
       container
       direction='column'
       justifyContent='center'
       alignItems='center'
-      style={{
-        position: 'absolute',
+      sx={{
+        position: 'relative',
         zIndex: '1',
         height: '100%',
         width: '100%',
       }}
     >
-      <LevelRatingBadge level={level} />
+      <Grid item sx={{ position: 'absolute', top: '1rem', right: '1rem' }}>
+        <LevelRatingBadge level={level} />
+      </Grid>
       <Typography variant='h3'>{title}</Typography>
-      <Typography variant='h5'>{description}</Typography>
     </Grid>
   );
 };

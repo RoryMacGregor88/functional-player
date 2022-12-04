@@ -22,14 +22,18 @@ import {
 
 import { updateBookmarks, updateLastWatched } from '@/src/utils';
 
-import { Course, User, UpdateCtx, Id } from '@/src/utils/interfaces'
+import { Course, User, UpdateCtx, Id } from '@/src/utils/interfaces';
 
+import { ARTIST_METADATA } from '@/src/utils/constants';
+
+// TODO: fix type for push
 interface OverlayProps {
   selectedVideoId: Id;
   selectedVideo: Course;
   isBookmarked: boolean;
   onBookmarkClick: () => void;
   updateCtx: UpdateCtx;
+  push: (url: string) => void
 }
 
 const Overlay: FC<OverlayProps> = ({
@@ -38,9 +42,15 @@ const Overlay: FC<OverlayProps> = ({
   isBookmarked,
   onBookmarkClick,
   updateCtx,
+  push
 }): ReactElement => {
-  const { title, description, level } = selectedVideo,
-    close = () => updateCtx({ selectedVideo: null });
+  const { title, description, level, artist } = selectedVideo,
+    artistValue = ARTIST_METADATA.find(({ label }) => label === artist)?.value,
+    close = () => updateCtx({ selectedVideo: null }),
+    onArtistClick = () => {
+      updateCtx({ selectedVideo: null });
+      push(`/artists?artist=${artistValue}`);
+    };
   return (
     <Grid
       item
@@ -94,8 +104,8 @@ const Overlay: FC<OverlayProps> = ({
         <VideoPlayer selectedVideoId={selectedVideoId} title={title} />
       </Grid>
       <Grid item container alignItems='center' gap='1rem' wrap='nowrap'>
-        <Button onClick={() => console.log('More')}>More</Button>
-        <Button onClick={() => console.log('Feedback')}>Feedback</Button>
+        <Button onClick={onArtistClick}>More From This Artist</Button>
+        <Button onClick={() => console.log('Feedback')}>See More Like this</Button>
       </Grid>
     </Grid>
   );
@@ -111,7 +121,7 @@ interface VideoDialogProps {
 const VideoDialog: FC<VideoDialogProps> = ({ open, user, selectedVideo, updateCtx }): ReactElement => {
   const { push } = useRouter();
 
-  const { _id, videoId, trailerId } = selectedVideo ?? {};
+  const { _id, videoId } = selectedVideo ?? {};
 
   // TODO: useEffect not running
   // TODO: this needs to fire when Vimeo play button is clicked, not on mount
@@ -143,7 +153,7 @@ const VideoDialog: FC<VideoDialogProps> = ({ open, user, selectedVideo, updateCt
           dialogData: {
             title: 'Welcome to Functional Player',
             message:
-              'You must have a user account to save courses to your list. Please either login or register with us using the buttons below.',
+              'You must be logged in to perform this action. Please either login or register with us using the buttons below.',
             actions: [
               {
                 label: 'Login',
@@ -197,11 +207,12 @@ const VideoDialog: FC<VideoDialogProps> = ({ open, user, selectedVideo, updateCt
           }}
         >
           <Overlay
-            selectedVideoId={trailerId ?? videoId}
+            selectedVideoId={videoId}
             selectedVideo={selectedVideo}
             isBookmarked={isBookmarked}
             onBookmarkClick={onBookmarkClick}
             updateCtx={updateCtx}
+            push={push}
           />
         </Grid>
       </Grid>

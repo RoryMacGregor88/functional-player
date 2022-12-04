@@ -8,9 +8,9 @@ import { getAllCourses } from '@/lib';
 
 import { PageWrapper, Slider, LoadMask } from '@/src/components';
 
-import { User, UpdateCtx, Course, CustomError, Category } from '@/src/utils/interfaces';
+import { User, UpdateCtx, Course, CustomError, Artist } from '@/src/utils/interfaces';
 
-import { CATEGORY_METADATA, COURSE_LEVEL_METADATA } from '@/src/utils/constants';
+import { ARTIST_METADATA } from '@/src/utils/constants';
 
 interface ServerSideProps {
   props: { error: CustomError } | { courses: Course[] };
@@ -39,18 +39,18 @@ interface Props {
 // TODO: bottom margin is disappearing behind footer
 
 export default function Categories({ user, courses }: Props) {
-  const { push, query: { category: categoryParam }} = useRouter();
+  const { push, query: { artist: artistParam }} = useRouter();
 
-  const category: Category = `${categoryParam}`,
-    categoryMetadata = [ ...CATEGORY_METADATA, ...COURSE_LEVEL_METADATA ].find(({ value }) => value === category);
+  const artist: Artist = `${artistParam}`,
+    artistLabel = ARTIST_METADATA.find(({ value }) => value === artist)?.label;
 
-  if (!categoryMetadata) {
+  if (!artistLabel) {
     push('/dashboard');
     return <LoadMask />
   }
 
-  const categorisedCourses = courses.filter(({ categories }) => categories.includes(categoryMetadata.value)),
-    continueWatching = categorisedCourses.find(course => course._id === user?.lastWatched);
+  const categorisedCourses = courses.filter(({ artist }) => artist === artistLabel),
+    continueWatching = categorisedCourses.find(course => course._id === user?.lastWatched)
 
   return (
     <PageWrapper>
@@ -58,7 +58,7 @@ export default function Categories({ user, courses }: Props) {
         {continueWatching ? (
           <Slider title='Continue Watching' courses={[continueWatching]} banner={true} />
         ) : null}
-        <Slider title={categoryMetadata.label} courses={categorisedCourses} />
+        <Slider title={artistLabel} courses={categorisedCourses} />
       </Grid>
     </PageWrapper>
   )
