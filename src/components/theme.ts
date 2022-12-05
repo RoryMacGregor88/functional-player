@@ -1,21 +1,22 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, Theme } from '@mui/material/styles';
 
-import { Open_Sans } from '@next/font/google'
+import { Open_Sans } from '@next/font/google';
 
 // TODO: black colors are mixed up in header, main, footer
+// TODO: Theme types are all fucked
 
 import { THEME_COLORS } from '@/src/utils/constants';
 
 const { boneWhite, lightBlack, amazonOrange } = THEME_COLORS;
 
-const openSans = Open_Sans({ weight: '400', subsets: ['latin'] })
+const openSans = Open_Sans({ weight: '400', subsets: ['latin'] });
 
-const theme = {
+const theme: Theme = {
   shape: {
     borderRadius: 5,
   },
   typography: {
-    fontFamily: openSans.style.fontFamily
+    fontFamily: openSans.style.fontFamily,
   },
   palette: {
     mode: 'dark',

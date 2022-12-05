@@ -1,6 +1,6 @@
 import { CHARS } from '@/src/utils/constants';
 
-function generateTempPassword() {
+function generateTempPassword(): string {
   let str = '';
   for (let i = 0; i < 6; i++) {
     const char = CHARS[Math.floor(Math.random() * CHARS.length)];

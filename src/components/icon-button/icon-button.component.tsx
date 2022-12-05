@@ -1,11 +1,11 @@
-import { forwardRef, ReactElement, RefObject, ReactNode } from 'react';
+import { forwardRef, ReactElement, RefObject } from 'react';
 
 import { IconButton as MuiIconButton, SxProps, Theme } from '@mui/material';
 
 interface Props {
   onClick: Function;
   sx?: SxProps<Theme>;
-  children: ReactNode;
+  children: ReactElement;
   props?: any;
 }
 

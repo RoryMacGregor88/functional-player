@@ -1,9 +1,9 @@
-import { FC, ReactElement, ReactNode } from 'react';
+import { FC, ReactElement } from 'react';
 
 import { Box } from '@mui/material';
 
 interface Props {
-  children: ReactNode;
+  children: ReactElement;
 }
 
 const PageWrapper: FC<Props> = ({ children }): ReactElement => (

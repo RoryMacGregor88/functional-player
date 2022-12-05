@@ -4,6 +4,8 @@ import { USERS } from '@/src/utils/constants';
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
+// TODO: should this be in lib?
+
 /**
  * @param {object} db
  * @param {string} email

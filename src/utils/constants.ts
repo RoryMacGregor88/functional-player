@@ -77,37 +77,34 @@ export const COURSE_LEVEL_METADATA = [
   {
     label: 'Beginner',
     value: 'beginner',
-    color: 'green',
-    message: 'This course has been rated as suitable for all levels of players.'
+    color: '#0ca464',
   },
   {
     label: 'Intermediate',
     value: 'intermediate',
-    color: 'yellow',
-    message: 'This course has been rated as suitable for intermediate level players.',
+    color: '#dfe2cc',
   },
   {
     label: 'Advanced',
     value: 'advanced',
-    color: 'red',
-    message: 'This course has been rated as suitable for advanced level players.',
+    color: '#c31e1e',
   },
 ];
 
 export const ARTIST_METADATA = [
   {
     label: 'Joe Bonamassa',
-    value: 'joe-bonamassa'
+    value: 'joe-bonamassa',
   },
   {
     label: 'Gary Moore',
-    value: 'gary-moore'
+    value: 'gary-moore',
   },
   {
     label: 'Peter Green',
-    value: 'peter-green'
+    value: 'peter-green',
   },
-]
+];
 
 export const CATEGORY_METADATA = [
   {

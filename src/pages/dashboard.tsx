@@ -6,15 +6,11 @@ import { Grid } from '@mui/material';
 
 import { getAllCourses } from '@/lib';
 
-import {
-  HeaderImage,
-  PageWrapper,
-  Slider,
-} from '@/src/components';
+import { HeaderImage, PageWrapper, Slider } from '@/src/components';
 
 import { Course, User, CustomError, Category } from '@/src/utils/interfaces';
 
-import { CATEGORY_METADATA } from '@/src/utils/constants'
+import { CATEGORY_METADATA } from '@/src/utils/constants';
 
 // TODO: make real, not fake data, also all videos need alts and aria labels
 const comingSoonCourse: Course = {
@@ -32,18 +28,17 @@ interface ServerSideProps {
   props: { error: CustomError } | { courses: Course[] };
 }
 
-export const getServerSideProps: GetServerSideProps =
-  async (ctx): Promise<ServerSideProps> => {
-    const token = ctx.req.cookies[process.env.SESSION_TOKEN_NAME];
+export const getServerSideProps: GetServerSideProps = async (
+  ctx
+): Promise<ServerSideProps> => {
+  const token = ctx.req.cookies[process.env.SESSION_TOKEN_NAME];
 
-    const { courses, error } = await getAllCourses(token);
+  const { courses, error } = await getAllCourses(token);
 
-    return {
-      props: !!error
-        ? { error, courses: null }
-        : { error: null, courses },
-    };
+  return {
+    props: !!error ? { error, courses: null } : { error: null, courses },
   };
+};
 interface DashboardProps {
   user: User | null;
   courses: Course[] | null;
@@ -53,9 +48,8 @@ interface DashboardProps {
 export default function Dashboard({
   user,
   courses,
-  error
+  error,
 }: DashboardProps): ReactElement {
-
   if (error) {
     // TODO: use toast
     // TODO: handle getServerSideProps error, test this
@@ -63,7 +57,7 @@ export default function Dashboard({
 
   const getCategoryCourses = (value: Category): Course[] =>
     courses.filter(({ categories }) => {
-      return categories.includes(value)
+      return categories.includes(value);
     });
 
   const latestCourses = courses
@@ -80,15 +74,27 @@ export default function Dashboard({
       />
       <PageWrapper>
         {!!lastWatched ? (
-          <Slider title='Continue Watching' courses={[lastWatched]} banner={true} />
+          <Slider
+            title='Continue Watching'
+            courses={[lastWatched]}
+            banner={true}
+          />
         ) : null}
         {!!bookmarks.length ? (
           <Slider title='Your List' courses={bookmarks} />
         ) : null}
-        <Slider title='Latest Releases' courses={latestCourses} />
-        <Slider title='Coming Soon' courses={[comingSoonCourse]} banner={true} />
+        <Slider title='Recently Added' courses={latestCourses} />
+        <Slider
+          title='Coming Soon'
+          courses={[comingSoonCourse]}
+          banner={true}
+        />
         {CATEGORY_METADATA.map(({ label, value }) => (
-          <Slider key={value} title={label} courses={getCategoryCourses(value)} />
+          <Slider
+            key={value}
+            title={label}
+            courses={getCategoryCourses(value)}
+          />
         ))}
       </PageWrapper>
     </Grid>

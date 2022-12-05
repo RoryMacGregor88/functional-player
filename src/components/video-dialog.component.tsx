@@ -17,7 +17,7 @@ import {
   VideoPlayer,
   Button,
   BookmarkIconButton,
-  LevelRatingBadge
+  LevelRatingBadge,
 } from '@/src/components';
 
 import { updateBookmarks, updateLastWatched } from '@/src/utils';
@@ -33,7 +33,7 @@ interface OverlayProps {
   isBookmarked: boolean;
   onBookmarkClick: () => void;
   updateCtx: UpdateCtx;
-  push: (url: string) => void
+  push: (url: string) => void;
 }
 
 const Overlay: FC<OverlayProps> = ({
@@ -42,14 +42,18 @@ const Overlay: FC<OverlayProps> = ({
   isBookmarked,
   onBookmarkClick,
   updateCtx,
-  push
+  push,
 }): ReactElement => {
   const { title, description, level, artist } = selectedVideo,
     artistValue = ARTIST_METADATA.find(({ label }) => label === artist)?.value,
     close = () => updateCtx({ selectedVideo: null }),
     onArtistClick = () => {
-      updateCtx({ selectedVideo: null });
       push(`/artists?artist=${artistValue}`);
+      updateCtx({ selectedVideo: null });
+    },
+    onMoreLikeThisClick = () => {
+      // TODO: must send all categories as params to route
+      console.log('See More Like This');
     };
   return (
     <Grid
@@ -58,13 +62,9 @@ const Overlay: FC<OverlayProps> = ({
       wrap='nowrap'
       gap={4}
       direction='column'
-      justifyContent='center'
+      justifyContent='space-evenly'
       alignItems='flex-start'
-      sx={{
-        position: 'relative',
-        width: '50%',
-        height: '100%',
-      }}
+      sx={{ width: '45%', height: '100%' }}
     >
       <Grid
         item
@@ -77,35 +77,44 @@ const Overlay: FC<OverlayProps> = ({
         <Grid item container justifyContent='space-between' alignItems='center'>
           <IconButton
             onClick={close}
+            disableRipple
             sx={{ width: 'fit-content', padding: '0' }}
           >
-            <ArrowBackIcon sx={{ height: '2.5rem', width: '2.5rem' }} />
+            <ArrowBackIcon sx={{ height: '3rem', width: '3rem' }} />
           </IconButton>
-          <BookmarkIconButton
-            isBookmarked={isBookmarked}
-            onBookmarkClick={onBookmarkClick}
-          />
+          <Grid
+            item
+            container
+            gap={2}
+            wrap='nowrap'
+            sx={{ width: 'fit-content' }}
+          >
+            <LevelRatingBadge level={level} />
+            <BookmarkIconButton
+              isBookmarked={isBookmarked}
+              onBookmarkClick={onBookmarkClick}
+            />
+          </Grid>
         </Grid>
-        <Grid item container wrap='nowrap' justifyContent='space-between' alignItems='center'>
+        <Grid
+          item
+          container
+          wrap='nowrap'
+          justifyContent='space-between'
+          alignItems='center'
+        >
           <Grid item container direction='column'>
-            <Typography variant='h2'>{title}</Typography>
+            <Typography variant='h3'>{title}</Typography>
             <Typography variant='body1'>{description}</Typography>
           </Grid>
-          <LevelRatingBadge level={level} includeMessage={true} />
         </Grid>
       </Grid>
-      <Grid
-        item
-        container
-        direction='column'
-        alignItems='center'
-        sx={{ width: '100%', height: '50%', position: 'relative' }}
-      >
+      <Grid item container sx={{ width: '100%', height: '50%' }}>
         <VideoPlayer selectedVideoId={selectedVideoId} title={title} />
       </Grid>
       <Grid item container alignItems='center' gap='1rem' wrap='nowrap'>
         <Button onClick={onArtistClick}>More From This Artist</Button>
-        <Button onClick={() => console.log('Feedback')}>See More Like this</Button>
+        <Button onClick={onMoreLikeThisClick}>See More Like this</Button>
       </Grid>
     </Grid>
   );
@@ -118,7 +127,12 @@ interface VideoDialogProps {
   updateCtx: UpdateCtx;
 }
 
-const VideoDialog: FC<VideoDialogProps> = ({ open, user, selectedVideo, updateCtx }): ReactElement => {
+const VideoDialog: FC<VideoDialogProps> = ({
+  open,
+  user,
+  selectedVideo,
+  updateCtx,
+}): ReactElement => {
   const { push } = useRouter();
 
   const { _id, videoId } = selectedVideo ?? {};
@@ -176,14 +190,7 @@ const VideoDialog: FC<VideoDialogProps> = ({ open, user, selectedVideo, updateCt
       transitionDuration={500}
       sx={{ zIndex: 2000 }}
     >
-      <Grid
-        container
-        sx={{
-          height: '100%',
-          width: '100%',
-          position: 'relative',
-        }}
-      >
+      <Grid container sx={{ height: '100%', width: '100%' }}>
         <NextImage
           src={`/telecaster-${deviceSize}.jpg`}
           alt='telecaster-image'

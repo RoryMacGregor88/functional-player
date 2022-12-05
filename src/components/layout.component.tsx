@@ -1,6 +1,4 @@
-import { FC, ReactElement, useState, ReactNode } from 'react';
-
-import Head from 'next/head';
+import { FC, ReactElement, useState } from 'react';
 
 import { Navbar, Footer, Drawer } from '@/src/components';
 
@@ -8,7 +6,7 @@ import { User } from '@/src/utils/interfaces';
 
 interface Props {
   user: User | null;
-  children: ReactNode;
+  children: ReactElement;
 }
 
 const Layout: FC<Props> = ({ user, children }): ReactElement => {
@@ -20,7 +18,11 @@ const Layout: FC<Props> = ({ user, children }): ReactElement => {
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
       />
-      <Navbar user={user} isDrawerOpen={isDrawerOpen} setIsDrawerOpen={setIsDrawerOpen} />
+      <Navbar
+        user={user}
+        isDrawerOpen={isDrawerOpen}
+        setIsDrawerOpen={setIsDrawerOpen}
+      />
       <main
         style={{
           display: 'flex',

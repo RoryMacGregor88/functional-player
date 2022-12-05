@@ -1,5 +1,10 @@
-/** @param {{ children: React.ReactChildren }} props */
-const Attention = ({ children }) => (
+import { FC, ReactElement } from 'react';
+
+interface Props {
+  children: ReactElement;
+}
+
+const Attention: FC<Props> = ({ children }): ReactElement => (
   <span
     style={{
       fontWeight: 'bold',

@@ -19,8 +19,14 @@ interface Props {
   actions: DialogAction[];
 }
 
-const Dialog: FC<Props> = ({ open, updateCtx, title, message, actions }): ReactElement => {
-  const close = () => updateCtx({ dialogData: null })
+const Dialog: FC<Props> = ({
+  open,
+  updateCtx,
+  title,
+  message,
+  actions,
+}): ReactElement => {
+  const close = () => updateCtx({ dialogData: null });
   return (
     <MuiDialog
       open={open}
@@ -66,7 +72,7 @@ const Dialog: FC<Props> = ({ open, updateCtx, title, message, actions }): ReactE
         </DialogActions>
       ) : null}
     </MuiDialog>
-  )
+  );
 };
 
 export default Dialog;

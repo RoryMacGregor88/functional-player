@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react'
+import { FC, ReactElement } from 'react';
 
 import NextImage from 'next/image';
 
@@ -11,7 +11,12 @@ interface DeviceProps {
   deviceSize: string;
 }
 
-const Device: FC<DeviceProps> = ({ src, alt, title, deviceSize }): ReactElement => (
+const Device: FC<DeviceProps> = ({
+  src,
+  alt,
+  title,
+  deviceSize,
+}): ReactElement => (
   <Grid
     container
     alignItems='flex-start'

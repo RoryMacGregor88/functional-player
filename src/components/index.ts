@@ -11,7 +11,6 @@ import PageWrapper from './page-wrapper.component';
 import Slider from './slider.component';
 import SeriesDisplay from './series-display.component';
 import CourseDisplay from './course-display.component';
-import VideoDisplay from './video-display.component';
 import VideoPlayer from './video-player.component';
 import IconButton from './icon-button/icon-button.component';
 import LevelRatingBadge from './level-rating-badge.component';
@@ -45,7 +44,6 @@ export {
   Slider,
   SeriesDisplay,
   CourseDisplay,
-  VideoDisplay,
   VideoPlayer,
   IconButton,
   LevelRatingBadge,

@@ -1,4 +1,4 @@
-import { FC, useState, useContext, ReactNode, ReactElement } from 'react';
+import { FC, useState, useContext, ReactElement } from 'react';
 
 import NextImage from 'next/image';
 
@@ -7,7 +7,7 @@ import { Grid, Box, Typography, ButtonBase } from '@mui/material';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
-  LevelRatingBadge
+  LevelRatingBadge,
 } from '@/src/components';
 
 import { Context } from '@/src/utils';
@@ -50,7 +50,7 @@ const Overlay: FC<OverlayProps> = ({ course }): ReactElement => {
 interface ChevronWrapperProps {
   handleChevronClick: (direction: Orientation) => void;
   orientation: Orientation;
-  children: ReactNode;
+  children: ReactElement;
 }
 
 // TODO: hover color shows that chevron wrapper is bigger than container by a few px
@@ -83,7 +83,7 @@ const ChevronWrapper: FC<ChevronWrapperProps> = ({
   >
     {children}
   </Grid>
-)
+);
 
 interface SliderProps {
   title: string;
@@ -91,7 +91,11 @@ interface SliderProps {
   banner?: boolean;
 }
 
-const Slider: FC<SliderProps> = ({ title, courses, banner = false }): ReactElement => {
+const Slider: FC<SliderProps> = ({
+  title,
+  courses,
+  banner = false,
+}): ReactElement => {
   const { updateCtx } = useContext(Context);
   const [position, setPosition] = useState(0);
 
@@ -115,7 +119,10 @@ const Slider: FC<SliderProps> = ({ title, courses, banner = false }): ReactEleme
 
   return (
     <>
-      <Typography variant='h4' sx={{ paddingLeft: '0.5rem', marginBottom: '0.5rem' }}>
+      <Typography
+        variant='h4'
+        sx={{ paddingLeft: '0.5rem', marginBottom: '0.5rem' }}
+      >
         {title}
       </Typography>
       <Grid

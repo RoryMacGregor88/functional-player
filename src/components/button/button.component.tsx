@@ -1,4 +1,4 @@
-import { ReactElement, forwardRef, RefObject, ReactNode } from 'react';
+import { ReactElement, forwardRef, RefObject } from 'react';
 
 import { Button as MuiButton } from '@mui/material';
 
@@ -8,7 +8,7 @@ interface Props {
   onClick: Function;
   disabled?: boolean;
   isLoading?: boolean;
-  children: ReactNode;
+  children: ReactElement | string;
   props?: any;
 }
 

@@ -1,7 +1,12 @@
+import { FC, ReactElement } from 'react';
+
 import { Grid, Typography } from '@mui/material';
 
-/** @param {{ children: React.ReactChildren }} props */
-const SpacedTitle = ({ children }) => (
+interface Props {
+  children: ReactElement;
+}
+
+const SpacedTitle: FC<Props> = ({ children }): ReactElement => (
   <Grid
     item
     component={Typography}
