@@ -26,7 +26,6 @@ import { Course, User, UpdateCtx, Id } from '@/src/utils/interfaces';
 
 import { ARTIST_METADATA } from '@/src/utils/constants';
 
-// TODO: fix type for push
 interface OverlayProps {
   selectedVideoId: Id;
   selectedVideo: Course;
