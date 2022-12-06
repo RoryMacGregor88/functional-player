@@ -14,7 +14,7 @@ describe('Login Page', () => {
   });
 
   it('renders', () => {
-    render(<Login />);
+    render(<Login user={null} updateCtx={jest.fn()} />);
 
     expect(screen.getByRole('textbox', { name: /email/i })).toBeInTheDocument();
     expect(
@@ -29,7 +29,7 @@ describe('Login Page', () => {
 
     fetchMock.mockResponse(JSON.stringify({ resUser }));
 
-    const { router } = render(<Login updateCtx={updateCtx} />, {
+    const { router } = render(<Login user={null} updateCtx={updateCtx} />, {
       push: jest.fn(),
     });
 
@@ -58,7 +58,7 @@ describe('Login Page', () => {
     const message = 'This is an error';
 
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
-    render(<Login />);
+    render(<Login user={null} updateCtx={jest.fn()} />);
 
     await userEvent.type(
       screen.getByRole('textbox', { name: /email/i }),
@@ -85,7 +85,7 @@ describe('Login Page', () => {
       throw new Error();
     });
 
-    render(<Login />);
+    render(<Login user={null} updateCtx={jest.fn()} />);
 
     await userEvent.type(
       screen.getByRole('textbox', { name: /email/i }),
@@ -109,7 +109,9 @@ describe('Login Page', () => {
 
   it('redirects to dashboard if user found', async () => {
     const testUser = { username: 'John smith' };
-    const { router } = render(<Login user={testUser} />, { push: jest.fn() });
+    const { router } = render(<Login user={testUser} updateCtx={jest.fn()} />, {
+      push: jest.fn(),
+    });
 
     expect(router.push).toHaveBeenCalledWith('/dashboard');
   });

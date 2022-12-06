@@ -28,16 +28,12 @@ describe('drawer', () => {
   });
 
   it('renders when prop is true', () => {
-    render(
-      <Drawer isDrawerOpen={true} setIsDrawerOpen={() => {}} user={mockUser} />
-    );
+    render(<Drawer isDrawerOpen={true} user={mockUser} />);
     expect(screen.getByTestId('drawer')).toBeInTheDocument();
   });
 
   it('does not render when prop is false', () => {
-    render(
-      <Drawer isDrawerOpen={false} setIsDrawerOpen={() => {}} user={mockUser} />
-    );
+    render(<Drawer isDrawerOpen={false} user={mockUser} />);
     expect(screen.queryByTestId('drawer')).not.toBeInTheDocument();
   });
 
@@ -51,15 +47,12 @@ describe('drawer', () => {
       { push: jest.fn() }
     );
 
-    userEvent.click(screen.getByRole('link', { name: /login/i }));
+    userEvent.click(screen.getByRole('button', { name: /login/i }));
 
-    // TODO: this is weird, why 2 hrefs? And what are those options?
     await waitFor(() => {
       expect(setIsDrawerOpen).toHaveBeenCalled();
-      expect(router.push).toHaveBeenCalledWith('/login', '/login', {
-        locale: undefined,
-        scroll: undefined,
-        shallow: undefined,
+      expect(router.push).toHaveBeenCalledWith('/login', {
+        forceOptimisticNavigation: false,
       });
     });
   });
@@ -106,7 +99,7 @@ describe('drawer', () => {
       { updateCtx: jest.fn() }
     );
 
-    userEvent.click(screen.getByRole('link', { name: /logout/i }));
+    userEvent.click(screen.getByRole('button', { name: /logout/i }));
 
     await waitFor(() => {
       expect(updateCtx).toHaveBeenCalledWith({ user: null });
@@ -128,7 +121,7 @@ describe('drawer', () => {
       { updateCtx: jest.fn() }
     );
 
-    userEvent.click(screen.getByRole('link', { name: /logout/i }));
+    userEvent.click(screen.getByRole('button', { name: /logout/i }));
 
     await waitFor(() => {
       expect(updateCtx).toHaveBeenCalledWith({

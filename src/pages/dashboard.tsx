@@ -6,9 +6,15 @@ import { Grid } from '@mui/material';
 
 import { getAllCourses } from '@/lib';
 
-import { HeaderImage, PageWrapper, Slider } from '@/src/components';
+import { HeaderImage, PageWrapper, Slider, LoadMask } from '@/src/components';
 
-import { Course, User, CustomError, Category } from '@/src/utils/interfaces';
+import {
+  Course,
+  User,
+  CustomError,
+  Category,
+  UpdateCtx,
+} from '@/src/utils/interfaces';
 
 import { CATEGORY_METADATA } from '@/src/utils/constants';
 
@@ -32,33 +38,38 @@ export const getServerSideProps: GetServerSideProps = async (
   ctx
 ): Promise<ServerSideProps> => {
   const token = ctx.req.cookies[process.env.SESSION_TOKEN_NAME];
-
   const { courses, error } = await getAllCourses(token);
-
   return {
     props: !!error ? { error, courses: null } : { error: null, courses },
   };
 };
 interface DashboardProps {
   user: User | null;
+  updateCtx: UpdateCtx;
   courses: Course[] | null;
   error: CustomError | null;
 }
 
 export default function Dashboard({
   user,
+  updateCtx,
   courses,
   error,
 }: DashboardProps): ReactElement {
-  if (error) {
-    // TODO: use toast
-    // TODO: handle getServerSideProps error, test this
+  // TODO: need useEffect for this? Or is error always present before rendering because of SSR?
+  if (!!error) {
+    updateCtx({
+      toastData: {
+        message: error.message,
+        severity: 'error',
+      },
+    });
+    // TODO: What do here? Can't just show loadmask. Redirect to index to get redirected here?
+    return <LoadMask />;
   }
 
   const getCategoryCourses = (value: Category): Course[] =>
-    courses.filter(({ categories }) => {
-      return categories.includes(value);
-    });
+    courses.filter(({ categories }) => categories.includes(value));
 
   const latestCourses = courses
       ?.sort((a, b) => (a.creationDate > b.creationDate ? -1 : 1))

@@ -8,7 +8,14 @@ jest.mock('@/lib', () => ({
 }));
 
 const mockUser = {
+    _id: '123',
+    email: 'test@email.com',
+    username: 'test-username',
+    subscriptionId: '12345',
     bookmarks: [],
+    customerId: '12345',
+    subscriptionStatus: 'Active',
+    lastWatched: '',
   },
   mockCourses = [
     {
@@ -16,36 +23,50 @@ const mockUser = {
       creationDate: 1,
       title: 'course-title-1',
       description: 'course-desc-1',
+      videoId: '12345',
+      artist: 'John Smith',
+      level: 'advanced',
+      categories: [],
     },
-  ],
-  mockSeries = [
     {
-      _id: '123',
-      title: 'series-title-1',
-      courses: mockCourses,
+      _id: '456',
+      creationDate: 1,
+      title: 'course-title-2',
+      description: 'course-desc-2',
+      videoId: '12345',
+      artist: 'John Smith',
+      level: 'advanced',
+      categories: [],
     },
   ];
 
 describe('dashboard', () => {
   it('renders', () => {
     render(
-      <Dashboard user={mockUser} courses={mockCourses} series={mockSeries} />
+      <Dashboard
+        updateCtx={jest.fn()}
+        user={mockUser}
+        courses={mockCourses}
+        error={null}
+      />
     );
 
-    const seriesTitle = `${mockSeries[0].title} Series`;
-    expect(screen.getByText(seriesTitle)).toBeInTheDocument();
+    mockCourses.forEach(({ title }) => {
+      expect(screen.getByText(title)).toBeInTheDocument();
+    });
   });
 
   it('renders when no user found', () => {
-    render(<Dashboard user={null} courses={mockCourses} series={mockSeries} />);
+    render(<Dashboard updateCtx={jest.fn()} courses={mockCourses} />);
 
-    const seriesTitle = `${mockSeries[0].title} Series`;
-    expect(screen.getByText(seriesTitle)).toBeInTheDocument();
+    mockCourses.forEach(({ title }) => {
+      expect(screen.getByText(title)).toBeInTheDocument();
+    });
   });
 
   it('does not display bookmarks is user has no bookmarks', () => {
     render(
-      <Dashboard user={mockUser} courses={mockCourses} series={mockSeries} />
+      <Dashboard updateCtx={jest.fn()} user={mockUser} courses={mockCourses} />
     );
 
     expect(screen.queryByText(/your list/i)).not.toBeInTheDocument();
@@ -53,14 +74,16 @@ describe('dashboard', () => {
 
   it('displays bookmarks if user has bookmarks', () => {
     const user = { ...mockUser, bookmarks: ['123'] };
-    render(<Dashboard user={user} courses={mockCourses} series={mockSeries} />);
+    render(
+      <Dashboard updateCtx={jest.fn()} user={user} courses={mockCourses} />
+    );
 
     expect(screen.getByText(/your list/i)).toBeInTheDocument();
   });
 
   it('does not show lastWatched if user has no lastWatched', () => {
     render(
-      <Dashboard user={mockUser} courses={mockCourses} series={mockSeries} />
+      <Dashboard updateCtx={jest.fn()} user={mockUser} courses={mockCourses} />
     );
 
     expect(screen.queryByText(/continue watching/i)).not.toBeInTheDocument();
@@ -68,7 +91,9 @@ describe('dashboard', () => {
 
   it('shows lastWatched if user has lastWatched', () => {
     const user = { ...mockUser, lastWatched: '123' };
-    render(<Dashboard user={user} courses={mockCourses} series={mockSeries} />);
+    render(
+      <Dashboard updateCtx={jest.fn()} user={user} courses={mockCourses} />
+    );
 
     expect(screen.getByText(/continue watching/i)).toBeInTheDocument();
   });
@@ -76,7 +101,7 @@ describe('dashboard', () => {
   it('opens video dialog if video clicked', async () => {
     const updateCtx = jest.fn();
     render(
-      <Dashboard user={mockUser} courses={mockCourses} series={mockSeries} />,
+      <Dashboard updateCtx={jest.fn()} user={mockUser} courses={mockCourses} />,
       { updateCtx }
     );
 
@@ -85,6 +110,24 @@ describe('dashboard', () => {
     await waitFor(() => {
       const expected = { selectedVideo: mockCourses[0] };
       expect(updateCtx).toHaveBeenCalledWith(expected);
+    });
+  });
+
+  it('opens toast if server error', async () => {
+    const updateCtx = jest.fn(),
+      message = 'test-error-message';
+
+    render(
+      <Dashboard updateCtx={updateCtx} user={mockUser} error={{ message }} />
+    );
+
+    await waitFor(() => {
+      expect(updateCtx).toHaveBeenCalledWith({
+        toastData: {
+          severity: 'error',
+          message,
+        },
+      });
     });
   });
 });

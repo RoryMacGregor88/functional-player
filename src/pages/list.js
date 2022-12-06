@@ -11,6 +11,8 @@ import {
 
 import { getAllCourses } from '@/lib';
 
+// TODO DO THIS NEXT, ALREADY CONVERTED TEST
+
 export const getServerSideProps = async (ctx) => ({
   props: { courses: await getAllCourses() },
 });

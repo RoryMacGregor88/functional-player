@@ -4,26 +4,24 @@ import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
 import App from '@/src/pages/_app';
 
-const toastMessage = 'Toast message.';
-const generalDialogMessage = 'General dialog message.';
-const videoDialogTitle = 'Video Dialog Title.';
-
-// TODO:NOT YET TYPED
+const toastMessage = 'Toast message';
+const generalDialogMessage = 'General dialog message';
+const videoDialogTitle = 'Video Dialog Title';
 
 const TestComponent = ({ updateCtx }) => {
   const toastData = { message: toastMessage },
-    generalDialogData = { message: generalDialogMessage },
-    videoDialogData = { title: videoDialogTitle };
+    dialogData = { message: generalDialogMessage },
+    selectedVideo = { title: videoDialogTitle, level: 'advanced' };
   return (
     <div>
       <p>Test Component</p>
       <button onClick={() => updateCtx({ toastData })}>
         Open Toast Notification
       </button>
-      <button onClick={() => updateCtx({ dialogData: generalDialogData })}>
+      <button onClick={() => updateCtx({ dialogData })}>
         Open General Dialog
       </button>
-      <button onClick={() => updateCtx({ selectedVideo: videoDialogData })}>
+      <button onClick={() => updateCtx({ selectedVideo })}>
         Open Video Dialog
       </button>
     </div>

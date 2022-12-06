@@ -1,15 +1,14 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, ReactNode } from 'react';
 
 import { Box } from '@mui/material';
 
 interface Props {
-  children: ReactElement;
+  children: ReactNode;
 }
 
 const PageWrapper: FC<Props> = ({ children }): ReactElement => (
   <Box
     sx={{
-      // maxWidth: '80rem',
       margin: '0 auto',
       padding: '0 2rem',
     }}

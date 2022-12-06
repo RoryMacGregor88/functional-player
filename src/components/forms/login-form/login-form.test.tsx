@@ -3,7 +3,6 @@ import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
 import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
 import {
-  EMAIL_REQUIRED_MESSAGE,
   EMAIL_INVALID_MESSAGE,
   PASSWORD_REQUIRED_MESSAGE,
 } from '@/src/utils/constants';
@@ -105,11 +104,9 @@ describe('Login Form', () => {
     userEvent.click(screen.getByText(/click here/i));
 
     await waitFor(() => {
-      expect(router.push).toHaveBeenCalledWith(
-        '/reset-password',
-        '/reset-password',
-        { locale: undefined, scroll: undefined, shallow: undefined }
-      );
+      expect(router.push).toHaveBeenCalledWith('/reset-password', {
+        forceOptimisticNavigation: false,
+      });
     });
   });
 });

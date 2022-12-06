@@ -6,6 +6,7 @@ export type DateString = string;
 
 export type Severity = 'success' | 'error';
 
+// TODO: this is causing problems with types, string not equal to LevelRating
 export type LevelRating = 'beginner' | 'intermediate' | 'advanced';
 
 export type DialogData = {
@@ -53,7 +54,7 @@ export interface Course {
   artist: string;
   level: LevelRating;
   creationDate: DateString;
-  categories: Category[]
+  categories: Category[];
 }
 
 export interface CustomError {

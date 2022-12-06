@@ -26,34 +26,33 @@ const Drawer: FC<Props> = ({
   const { push, pathname } = useRouter();
   const { updateCtx } = useContext(Context);
 
-  const toggleDrawer = () => setIsDrawerOpen((prev) => !prev);
+  const toggleDrawer = () => setIsDrawerOpen((prev) => !prev),
+    logout = async () => {
+      try {
+        const { error, resUser } = await http('/auth/logout', {
+          email: user.email,
+        });
 
-  const logout = async () => {
-    try {
-      const { error, resUser } = await http('/auth/logout', {
-        email: user.email,
-      });
-
-      if (!!error) {
+        if (!!error) {
+          updateCtx({
+            toastData: {
+              message: error.message,
+              severity: 'error',
+            },
+          });
+        } else if (resUser === null) {
+          updateCtx({ user: resUser });
+          push('/login');
+        }
+      } catch (e) {
         updateCtx({
           toastData: {
-            message: error.message,
+            message: DEFAULT_ERROR_MESSAGE,
             severity: 'error',
           },
         });
-      } else if (resUser === null) {
-        updateCtx({ user: resUser });
-        push('/login');
       }
-    } catch (e) {
-      updateCtx({
-        toastData: {
-          message: DEFAULT_ERROR_MESSAGE,
-          severity: 'error',
-        },
-      });
-    }
-  };
+    };
 
   return (
     <MuiDrawer
