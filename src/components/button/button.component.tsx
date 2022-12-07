@@ -1,23 +1,29 @@
-import { ReactElement, forwardRef, RefObject } from 'react';
+import { ReactElement, forwardRef, RefObject, ReactNode } from 'react';
 
 import { Button as MuiButton } from '@mui/material';
 
 import { LoadingSpinner } from '@/src/components';
 
 interface Props {
-  onClick: Function;
+  onClick?: Function;
   disabled?: boolean;
   isLoading?: boolean;
-  children: ReactElement | string;
+  type?: string;
+  children: ReactNode;
   props?: any;
 }
 
+// TODO: get rid of ...props? Being used anywhere?
+
 const Button = (
-  { onClick, disabled = false, isLoading = false, children, ...props },
+  { onClick, disabled = false, isLoading = false, children, type, ...props },
   ref
 ): ReactElement => (
   <MuiButton
     ref={ref}
+    onClick={onClick}
+    type={type}
+    disabled={disabled || isLoading}
     sx={{
       margin: '0.5rem 0',
       padding: '0.5rem 0',
@@ -26,8 +32,6 @@ const Button = (
       backgroundColor: 'primary.main',
       color: 'background.paper',
     }}
-    onClick={onClick}
-    disabled={disabled || isLoading}
     {...props}
   >
     {isLoading ? (

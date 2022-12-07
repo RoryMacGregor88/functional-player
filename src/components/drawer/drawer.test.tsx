@@ -1,8 +1,8 @@
 import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
 
-import { Drawer } from '@/src/components';
-
 import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
+
+import Drawer from './drawer.component';
 
 import { User } from '@/src/utils/interfaces';
 

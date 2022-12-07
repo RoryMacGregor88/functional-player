@@ -1,7 +1,7 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, ReactNode } from 'react';
 
 interface Props {
-  children: ReactElement;
+  children: ReactNode;
 }
 
 const Attention: FC<Props> = ({ children }): ReactElement => (

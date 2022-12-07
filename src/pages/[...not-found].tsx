@@ -1,17 +1,11 @@
-import { ReactElement } from 'react'
+import { ReactElement } from 'react';
 
 import { useRouter } from 'next/router';
 
 import { LoadMask } from '@/src/components';
 
-import { User } from '@/src/utils/interfaces'
-
-interface Props {
-  user: User;
-}
-
-export default function NotFound({ user }: Props): ReactElement {
+export default function NotFound(): ReactElement {
   const { push } = useRouter();
-  push(!!user ? '/dashboard' : '/');
+  push('/dashboard');
   return <LoadMask />;
 }

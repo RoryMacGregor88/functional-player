@@ -18,7 +18,10 @@ interface ActionProps {
 
 const Action: FC<ActionProps> = ({ updateCtx }): ReactElement => (
   <IconButton onClick={() => updateCtx({ toastData: null })}>
-    <CloseIcon sx={{ height: '1rem', width: '1rem' }} />
+    <CloseIcon
+      data-testid='close-icon'
+      sx={{ height: '1rem', width: '1rem' }}
+    />
   </IconButton>
 );
 

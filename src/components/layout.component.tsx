@@ -1,4 +1,4 @@
-import { FC, ReactElement, useState } from 'react';
+import { FC, ReactElement, useState, ReactNode } from 'react';
 
 import { Navbar, Footer, Drawer } from '@/src/components';
 
@@ -6,7 +6,7 @@ import { User } from '@/src/utils/interfaces';
 
 interface Props {
   user: User | null;
-  children: ReactElement;
+  children: ReactNode;
 }
 
 const Layout: FC<Props> = ({ user, children }): ReactElement => {

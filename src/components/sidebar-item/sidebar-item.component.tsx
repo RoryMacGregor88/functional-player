@@ -34,7 +34,10 @@ const SidebarItem: FC<Props> = ({
         fontSize: '1.25rem',
       }}
     >
-      <Icon sx={{ height: '1.5rem', width: '1.5rem', marginRight: '1rem' }} />
+      <Icon
+        data-testid={`${label}-icon`}
+        sx={{ height: '1.5rem', width: '1.5rem', marginRight: '1rem' }}
+      />
       {label}
     </IconButton>
   </Link>

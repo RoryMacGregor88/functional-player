@@ -1,4 +1,4 @@
-import { FC, useState, useContext, ReactElement } from 'react';
+import { FC, useState, useContext, ReactElement, ReactNode } from 'react';
 
 import NextImage from 'next/image';
 
@@ -50,7 +50,7 @@ const Overlay: FC<OverlayProps> = ({ course }): ReactElement => {
 interface ChevronWrapperProps {
   handleChevronClick: (direction: Orientation) => void;
   orientation: Orientation;
-  children: ReactElement;
+  children: ReactNode;
 }
 
 // TODO: hover color shows that chevron wrapper is bigger than container by a few px

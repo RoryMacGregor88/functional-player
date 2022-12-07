@@ -51,11 +51,12 @@ const Navbar: FC<Props> = ({
           onClick={() => setIsDrawerOpen((prev) => !prev)}
         >
           <MenuIcon
+            data-testid='menu-icon'
             sx={{ height: '2rem', width: '2rem', marginRight: '1rem' }}
           />
         </IconButton>
         <Link
-          href={!!user ? '/dashboard' : '/'}
+          href={'/dashboard'}
           onClick={isDrawerOpen ? () => setIsDrawerOpen(false) : null}
           passHref
         >

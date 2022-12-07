@@ -1,9 +1,9 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, ReactNode } from 'react';
 
 import { Grid, Typography } from '@mui/material';
 
 interface Props {
-  children: ReactElement;
+  children: ReactNode;
 }
 
 const SpacedTitle: FC<Props> = ({ children }): ReactElement => (
