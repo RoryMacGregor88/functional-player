@@ -1,3 +1,5 @@
+import { FC, ReactElement } from 'react';
+
 import { useForm } from 'react-hook-form';
 
 import * as Yup from 'yup';
@@ -20,8 +22,6 @@ import {
   PASSWORD_REQUIRED_MESSAGE,
 } from '@/src/utils/constants';
 
-// TODO: move this shit into each form, this is stupid
-
 const loginFormSchema = Yup.object().shape({
   email: Yup.string()
     .email(EMAIL_INVALID_MESSAGE)
@@ -29,8 +29,12 @@ const loginFormSchema = Yup.object().shape({
   password: Yup.string().required(PASSWORD_REQUIRED_MESSAGE),
 });
 
-/** @param {{ onSubmit: function, isLoading: boolean }} props */
-const LoginForm = ({ onSubmit, isLoading }) => {
+interface Props {
+  onSubmit: (values: { email: string; password: string }) => void;
+  isLoading: boolean;
+}
+
+const LoginForm: FC<Props> = ({ onSubmit, isLoading }): ReactElement => {
   const {
     register,
     handleSubmit,

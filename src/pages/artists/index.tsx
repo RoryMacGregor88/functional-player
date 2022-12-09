@@ -8,7 +8,13 @@ import { getAllCourses } from '@/lib';
 
 import { PageWrapper, Slider, LoadMask } from '@/src/components';
 
-import { User, UpdateCtx, Course, CustomError, Artist } from '@/src/utils/interfaces';
+import {
+  User,
+  UpdateCtx,
+  Course,
+  CustomError,
+  Artist,
+} from '@/src/utils/interfaces';
 
 import { ARTIST_METADATA } from '@/src/utils/constants';
 
@@ -16,20 +22,19 @@ interface ServerSideProps {
   props: { error: CustomError } | { courses: Course[] };
 }
 
-export const getServerSideProps: GetServerSideProps =
-  async (ctx): Promise<ServerSideProps> => {
+export const getServerSideProps: GetServerSideProps = async (
+  ctx
+): Promise<ServerSideProps> => {
   const token = ctx.req.cookies[process.env.SESSION_TOKEN_NAME];
 
   const { error, courses } = await getAllCourses(token);
   return {
-    props: !!error
-      ? { error, courses: null }
-      : { error: null, courses },
+    props: !!error ? { error, courses: null } : { error: null, courses },
   };
 };
 
 interface Props {
-  user: User;
+  user: User | null;
   updateCtx: UpdateCtx;
   courses: Course[];
 }
@@ -39,27 +44,43 @@ interface Props {
 // TODO: bottom margin is disappearing behind footer
 
 export default function Categories({ user, courses }: Props) {
-  const { push, query: { artist: artistParam }} = useRouter();
+  const {
+    push,
+    query: { artist: artistParam },
+  } = useRouter();
 
   const artist: Artist = `${artistParam}`,
     artistLabel = ARTIST_METADATA.find(({ value }) => value === artist)?.label;
 
   if (!artistLabel) {
     push('/dashboard');
-    return <LoadMask />
+    return <LoadMask />;
   }
 
-  const categorisedCourses = courses.filter(({ artist }) => artist === artistLabel),
-    continueWatching = categorisedCourses.find(course => course._id === user?.lastWatched)
+  const categorisedCourses = courses.filter(
+      ({ artist }) => artist === artistLabel
+    ),
+    continueWatching = categorisedCourses.find(
+      (course) => course._id === user?.lastWatched
+    );
 
   return (
     <PageWrapper>
-      <Grid container direction='column' justifyContent='center' sx={{ height: '100%', marginTop: '4.5rem' }}>
+      <Grid
+        container
+        direction='column'
+        justifyContent='center'
+        sx={{ height: '100%', marginTop: '4.5rem' }}
+      >
         {continueWatching ? (
-          <Slider title='Continue Watching' courses={[continueWatching]} banner={true} />
+          <Slider
+            title='Continue Watching'
+            courses={[continueWatching]}
+            banner={true}
+          />
         ) : null}
         <Slider title={artistLabel} courses={categorisedCourses} />
       </Grid>
     </PageWrapper>
-  )
+  );
 }

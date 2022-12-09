@@ -1,3 +1,5 @@
+import { AlertColor } from '@mui/material';
+
 export type Id = string | number;
 export type Token = string;
 export type Category = string;
@@ -18,6 +20,12 @@ export type DialogData = {
 export type ToastData = {
   severity?: Severity;
   message: string;
+};
+
+export type WellData = {
+  title?: string | null;
+  message: string;
+  severity?: AlertColor;
 };
 
 export type Ctx = {

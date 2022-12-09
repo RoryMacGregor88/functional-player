@@ -75,7 +75,7 @@ export default function Register({ user }) {
       const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${process.env.BASE_URL}/registration-success`,
+          return_url: `${process.env.BASE_URL}/registration-success/?redirect=true`,
         },
       });
 

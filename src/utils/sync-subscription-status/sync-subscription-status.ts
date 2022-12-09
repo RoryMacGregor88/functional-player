@@ -2,16 +2,17 @@ import { http } from '@/src/utils';
 
 import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
-/**
- * @param {object|null} user
- * @param {function} callback
- * @param {function|undefined} stateSetter
- */
-export default async function syncSubscriptionStatus(
+import { User, UpdateCtx } from '@/src/utils/interfaces';
+
+interface Params {
+  user: User | null;
+  updateCtx: UpdateCtx;
+}
+
+export default async function syncSubscriptionStatus({
   user,
-  callback,
-  stateSetter
-) {
+  updateCtx,
+}: Params): Promise<{ ok: boolean }> {
   try {
     const { email, subscriptionStatus, subscriptionId } = user;
     const { error, resUser } = await http('/auth/sync-subscription-status', {
@@ -21,24 +22,26 @@ export default async function syncSubscriptionStatus(
     });
     if (!!error) {
       await http('/auth/logout');
-      callback({
+      updateCtx({
         user: null,
         toastData: {
           severity: 'error',
           message: error.message,
         },
       });
+      return { ok: false };
     } else if (resUser) {
-      if (!!stateSetter) stateSetter(true);
-      callback({ user: resUser });
+      updateCtx({ user: resUser });
+      return { ok: true };
     }
   } catch (e) {
-    callback({
+    updateCtx({
       user: null,
       toastData: {
         severity: 'error',
         message: DEFAULT_ERROR_MESSAGE,
       },
     });
+    return { ok: false };
   }
 }

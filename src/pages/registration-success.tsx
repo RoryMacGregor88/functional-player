@@ -1,4 +1,8 @@
+import { ReactElement } from 'react';
+
 import { useRouter } from 'next/router';
+
+import { GetServerSideProps } from 'next';
 
 import { Grid, Button, Typography } from '@mui/material';
 
@@ -10,13 +14,36 @@ import {
   Stepper,
 } from '@/src/components';
 
-// TODO: how to stop user linking here manually?
+import { User } from '@/src/utils/interfaces';
 
-/** @param {{user: object|null}} props */
-export default function RegistrationSuccess({ user }) {
+interface ServerSideProps {
+  props: { redirect: boolean };
+}
+
+export const getServerSideProps: GetServerSideProps = async (
+  ctx
+): Promise<ServerSideProps> => {
+  // Checks if the page was redirected to from the registration page,
+  // preventing manual linking to this page.
+  const redirect = !!ctx.query.redirect;
+  return {
+    props: { redirect },
+  };
+};
+
+interface Props {
+  user: User | null;
+  redirect: boolean;
+}
+
+export default function RegistrationSuccess({
+  user,
+  redirect,
+}: Props): ReactElement {
   const { push } = useRouter();
 
-  if (!!user) {
+  // TODO: need to check if a user? Really only redirect we care about
+  if (!!user || !redirect) {
     push('/dashboard');
     return <LoadMask />;
   }

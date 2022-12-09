@@ -1,18 +1,15 @@
 import { FC, ReactElement } from 'react';
-import { Alert, AlertTitle, AlertColor } from '@mui/material';
 
-interface Props {
-  title?: string | null;
-  message: string;
-  severity?: AlertColor;
-}
+import { Alert, AlertTitle } from '@mui/material';
 
-const Well: FC<Props> = ({
+import { WellData } from '@/src/utils/interfaces';
+
+const Well: FC<WellData> = ({
   title = null,
   message,
   severity = 'error',
 }): ReactElement => {
-  const defaultTitle: string = severity === 'error' ? 'Error!' : 'Success!';
+  const defaultTitle = severity === 'error' ? 'Error!' : 'Success!';
   return (
     <Alert
       severity={severity}

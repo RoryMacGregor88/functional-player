@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, ReactElement } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -20,6 +20,8 @@ import {
 
 import { http } from '@/src/utils';
 
+import { User, WellData } from '@/src/utils/interfaces';
+
 import {
   DEFAULT_ERROR_MESSAGE,
   EMAIL_INVALID_MESSAGE,
@@ -32,9 +34,13 @@ const resetPasswordFormSchema = Yup.object().shape({
     .required(EMAIL_REQUIRED_MESSAGE),
 });
 
-export default function ResetPassword({ user }) {
+interface Props {
+  user: User | null;
+}
+
+export default function ResetPassword({ user }: Props): ReactElement {
   const { push } = useRouter();
-  const [wellData, setWellData] = useState(null);
+  const [wellData, setWellData] = useState<WellData>(null);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
 
   const {
@@ -54,7 +60,7 @@ export default function ResetPassword({ user }) {
     return <LoadMask />;
   }
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: { email: string }): Promise<void> => {
     try {
       const { email } = values;
 

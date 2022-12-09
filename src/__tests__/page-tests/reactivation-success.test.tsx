@@ -8,19 +8,21 @@ import ReactivationSuccess from '@/src/pages/reactivation-success';
 
 enableFetchMocks();
 
+let user = null;
+let updateCtx = null;
+
 describe('Reactivation success page', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
+
+    (user = { username: 'John Smith' }), (updateCtx = jest.fn());
   });
 
   it('shows success message, sets state, redirects on button click', async () => {
-    const user = { username: 'John Smith' },
-      updateCtx = jest.fn();
-
     fetchMock.mockResponse(JSON.stringify({ resUser: user }));
 
     const { router } = render(
-      <ReactivationSuccess user={user} updateCtx={updateCtx} />,
+      <ReactivationSuccess user={user} updateCtx={updateCtx} redirect={true} />,
       { push: jest.fn() }
     );
 
@@ -42,10 +44,13 @@ describe('Reactivation success page', () => {
   });
 
   it('redirects to login if user is not found', () => {
-    const { router } = render(<ReactivationSuccess user={null} />, {
-      push: jest.fn(),
-    });
+    const { router } = render(
+      <ReactivationSuccess user={null} redirect={false} />,
+      {
+        push: jest.fn(),
+      }
+    );
 
-    expect(router.push).toHaveBeenCalledWith('/login');
+    expect(router.push).toHaveBeenCalledWith('/dashboard');
   });
 });

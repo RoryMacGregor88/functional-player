@@ -160,10 +160,12 @@ export default function Account({ user, updateCtx }) {
   const handleResubscribe = async (stripe, elements) => {
     setIsLoading(true);
 
+    // TODO: Make sure this still works with `registration=true`, see registration-success
+
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${process.env.BASE_URL}/reactivation-success`,
+        return_url: `${process.env.BASE_URL}/reactivation-success/?redirect=true`,
       },
     });
 

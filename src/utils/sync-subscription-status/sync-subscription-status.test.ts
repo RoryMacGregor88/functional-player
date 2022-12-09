@@ -9,39 +9,25 @@ import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 enableFetchMocks();
 
 let user = null,
-  callback = null,
-  stateSetter = null;
+  updateCtx = null;
 
 describe('Reactivation success page', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
 
     user = { username: 'John Smith' };
-    callback = jest.fn();
-    stateSetter = jest.fn();
+    updateCtx = jest.fn();
   });
 
-  it('calls callback and state setter if successful', async () => {
+  it('calls updateCtx if successful', async () => {
     const user = { username: 'John Smith' };
     fetchMock.mockResponse(JSON.stringify({ resUser: user }));
 
-    await syncSubscriptionStatus(user, callback, stateSetter);
+    const { ok } = await syncSubscriptionStatus({ user, updateCtx });
 
     await waitFor(() => {
-      expect(callback).toHaveBeenCalledWith({ user });
-      expect(stateSetter).toHaveBeenCalledWith(true);
-    });
-  });
-
-  it('does not call state setter not found', async () => {
-    const user = { username: 'John Smith' };
-    fetchMock.mockResponse(JSON.stringify({ resUser: user }));
-
-    await syncSubscriptionStatus(user, callback);
-
-    await waitFor(() => {
-      expect(callback).toHaveBeenCalledWith({ user });
-      expect(stateSetter).not.toHaveBeenCalled();
+      expect(updateCtx).toHaveBeenCalledWith({ user });
+      expect(ok).toBeTruthy();
     });
   });
 
@@ -51,16 +37,17 @@ describe('Reactivation success page', () => {
 
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
-    await syncSubscriptionStatus(user, callback, stateSetter);
+    const { ok } = await syncSubscriptionStatus({ user, updateCtx });
 
     await waitFor(() => {
-      expect(callback).toHaveBeenCalledWith({
+      expect(updateCtx).toHaveBeenCalledWith({
         user: null,
         toastData: {
           severity: 'error',
           message,
         },
       });
+      expect(ok).toBeFalsy();
     });
   });
 
@@ -69,10 +56,10 @@ describe('Reactivation success page', () => {
       throw new Error();
     });
 
-    await syncSubscriptionStatus(user, callback, stateSetter);
+    const { ok } = await syncSubscriptionStatus({ user, updateCtx });
 
     await waitFor(() => {
-      expect(callback).toHaveBeenCalledWith({
+      expect(updateCtx).toHaveBeenCalledWith({
         user: null,
         toastData: {
           severity: 'error',
@@ -80,5 +67,6 @@ describe('Reactivation success page', () => {
         },
       });
     });
+    expect(ok).toBeFalsy();
   });
 });

@@ -8,18 +8,19 @@ import { LoginForm, SpacedTitle, Well, LoadMask } from '@/src/components';
 
 import { http } from '@/src/utils';
 
+import { User, UpdateCtx, WellData } from '@/src/utils/interfaces';
+
 import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
-/**
- * @param {{
- *  user: object|null
- *  updateCtx: function
- * }} props
- */
-export default function Login({ user, updateCtx }) {
+interface Props {
+  user: User | null;
+  updateCtx: UpdateCtx;
+}
+
+export default function Login({ user, updateCtx }: Props) {
   const { push } = useRouter();
 
-  const [wellData, setWellData] = useState(null);
+  const [wellData, setWellData] = useState<WellData>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   if (!!user) {
@@ -27,10 +28,13 @@ export default function Login({ user, updateCtx }) {
     return <LoadMask />;
   }
 
-  const onSubmit = async (event) => {
+  const onSubmit = async (values: {
+    email: string;
+    password: string;
+  }): Promise<void> => {
     setIsLoading(true);
     try {
-      const { email, password } = event;
+      const { email, password } = values;
       const { error, resUser } = await http('/auth/login', {
         email: email.toLowerCase(),
         password,
