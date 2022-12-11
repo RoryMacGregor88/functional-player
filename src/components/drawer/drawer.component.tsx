@@ -6,14 +6,12 @@ import { Drawer as MuiDrawer, Grid } from '@mui/material';
 
 import { SidebarItem, ProfileIcon } from '@/src/components';
 
-import { http, Context } from '@/src/utils';
+import { http, Context, logout } from '@/src/utils';
 
 import { User } from '@/src/utils/interfaces';
 
-import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
-
 interface Props {
-  user: User | null;
+  user: User;
   isDrawerOpen: boolean;
   setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
 }
@@ -26,33 +24,16 @@ const Drawer: FC<Props> = ({
   const { push, pathname } = useRouter();
   const { updateCtx } = useContext(Context);
 
-  const toggleDrawer = () => setIsDrawerOpen((prev) => !prev),
-    logout = async () => {
-      try {
-        const { error, resUser } = await http('/auth/logout', {
-          email: user.email,
-        });
+  const toggleDrawer = () => setIsDrawerOpen((prev) => !prev);
 
-        if (!!error) {
-          updateCtx({
-            toastData: {
-              message: error.message,
-              severity: 'error',
-            },
-          });
-        } else if (resUser === null) {
-          updateCtx({ user: resUser });
-          push('/login');
-        }
-      } catch (e) {
-        updateCtx({
-          toastData: {
-            message: DEFAULT_ERROR_MESSAGE,
-            severity: 'error',
-          },
-        });
-      }
-    };
+  const handleLogout = async () => {
+    const res: boolean | undefined = await logout({
+      user,
+      updateCtx,
+    });
+    if (!!res) push('/login');
+    toggleDrawer();
+  };
 
   return (
     <MuiDrawer
@@ -113,10 +94,7 @@ const Drawer: FC<Props> = ({
             <SidebarItem
               Icon={ProfileIcon}
               label='Logout'
-              onClick={() => {
-                logout();
-                toggleDrawer();
-              }}
+              onClick={handleLogout}
             />
           </>
         ) : (

@@ -44,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = async (
   };
 };
 interface DashboardProps {
-  user: User | null;
+  user: User;
   updateCtx: UpdateCtx;
   courses: Course[] | null;
   error: CustomError | null;

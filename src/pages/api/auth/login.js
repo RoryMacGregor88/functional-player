@@ -10,7 +10,7 @@ import {
   logServerError,
 } from '@/lib';
 
-import { syncStripeAndDb } from '@/src/utils';
+import { syncStripeAndDb } from '@/lib';
 
 import {
   USERS,
@@ -54,12 +54,12 @@ async function login(req, res) {
       // fresh sync of stripe subscription status upon every login. If
       // subscription status is null (deleted), or is unchanged, original
       // value will be returned
-      const { error, subscriptionStatus } = await syncStripeAndDb(
+      const { error, subscriptionStatus } = await syncStripeAndDb({
         db,
         email,
         currentSubscriptionStatus,
-        subscriptionId
-      );
+        subscriptionId,
+      });
 
       if (!!error) {
         return handleServerError(res);

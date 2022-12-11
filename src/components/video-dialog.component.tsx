@@ -121,7 +121,7 @@ const Overlay: FC<OverlayProps> = ({
 
 interface VideoDialogProps {
   open: boolean;
-  user: User | null;
+  user: User;
   selectedVideo: Course;
   updateCtx: UpdateCtx;
 }
@@ -140,9 +140,9 @@ const VideoDialog: FC<VideoDialogProps> = ({
   // TODO: this needs to fire when Vimeo play button is clicked, not on mount
   useEffect(() => {
     if (!!selectedVideo) {
-      updateLastWatched(user, _id, updateCtx);
+      updateLastWatched({ user, _id, updateCtx });
     }
-  }, []);
+  }, [_id, selectedVideo, updateCtx, user]);
 
   const isMedium = useMediaQuery('(max-width:1200px)');
   const isSmall = useMediaQuery('(max-width:600px)');
@@ -161,7 +161,7 @@ const VideoDialog: FC<VideoDialogProps> = ({
 
   const onBookmarkClick = () =>
     !!user
-      ? updateBookmarks(_id, user, updateCtx)
+      ? updateBookmarks({ _id, user, updateCtx })
       : updateCtx({
           dialogData: {
             title: 'Welcome to Functional Player',

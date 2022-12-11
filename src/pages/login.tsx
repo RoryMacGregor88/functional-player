@@ -8,12 +8,15 @@ import { LoginForm, SpacedTitle, Well, LoadMask } from '@/src/components';
 
 import { http } from '@/src/utils';
 
-import { User, UpdateCtx, WellData } from '@/src/utils/interfaces';
-
-import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
+import {
+  User,
+  UpdateCtx,
+  WellData,
+  DefaultToastData,
+} from '@/src/utils/interfaces';
 
 interface Props {
-  user: User | null;
+  user: User;
   updateCtx: UpdateCtx;
 }
 
@@ -28,27 +31,38 @@ export default function Login({ user, updateCtx }: Props) {
     return <LoadMask />;
   }
 
+  interface ResProps {
+    error: Error | undefined;
+    resUser: User | undefined;
+  }
+
   const onSubmit = async (values: {
     email: string;
     password: string;
   }): Promise<void> => {
     setIsLoading(true);
-    try {
-      const { email, password } = values;
-      const { error, resUser } = await http('/auth/login', {
+
+    const { email, password } = values;
+
+    const { error, resUser }: ResProps = await http({
+      endpoint: '/auth/login',
+      formData: {
         email: email.toLowerCase(),
         password,
-      });
+      },
+      onError: (defaultToastData: DefaultToastData) => {
+        setIsLoading(false);
+        updateCtx(defaultToastData);
+      },
+    });
 
-      if (!!error) {
-        setWellData({ message: error.message });
-      } else if (!!resUser) {
-        updateCtx({ user: resUser });
-        push('/dashboard');
-      }
-    } catch (e) {
-      setWellData({ message: DEFAULT_ERROR_MESSAGE });
+    if (!!error) {
+      setWellData({ message: error.message });
+    } else if (!!resUser) {
+      updateCtx({ user: resUser });
+      push('/dashboard');
     }
+
     setIsLoading(false);
   };
 

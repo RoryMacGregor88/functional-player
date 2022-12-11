@@ -18,7 +18,7 @@ describe('updateBookmarks', () => {
 
     const _id = '123',
       user = { email: 'email@test.com', bookmarks: [] },
-      callback = jest.fn();
+      updateCtx = jest.fn();
 
     const expected = {
       user: { ...user, bookmarks: ['123'] },
@@ -27,10 +27,10 @@ describe('updateBookmarks', () => {
       },
     };
 
-    updateBookmarks(_id, user, callback);
+    updateBookmarks({ _id, user, updateCtx });
 
     await waitFor(() => {
-      expect(callback).toHaveBeenCalledWith(expected);
+      expect(updateCtx).toHaveBeenCalledWith(expected);
     });
   });
 
@@ -39,7 +39,7 @@ describe('updateBookmarks', () => {
 
     const _id = '123',
       user = { email: 'email@test.com', bookmarks: [_id, '456'] },
-      callback = jest.fn();
+      updateCtx = jest.fn();
 
     const expected = {
       user: { ...user, bookmarks: ['456'] },
@@ -48,10 +48,10 @@ describe('updateBookmarks', () => {
       },
     };
 
-    updateBookmarks(_id, user, callback);
+    updateBookmarks({ _id, user, updateCtx });
 
     await waitFor(() => {
-      expect(callback).toHaveBeenCalledWith(expected);
+      expect(updateCtx).toHaveBeenCalledWith(expected);
     });
   });
 
@@ -62,7 +62,7 @@ describe('updateBookmarks', () => {
 
     const _id = '123',
       user = { email: 'email@test.com', bookmarks: [_id] },
-      callback = jest.fn();
+      updateCtx = jest.fn();
 
     const expected = {
       toastData: {
@@ -71,10 +71,10 @@ describe('updateBookmarks', () => {
       },
     };
 
-    updateBookmarks(_id, user, callback);
+    updateBookmarks({ _id, user, updateCtx });
 
     await waitFor(() => {
-      expect(callback).toHaveBeenCalledWith(expected);
+      expect(updateCtx).toHaveBeenCalledWith(expected);
     });
   });
 
@@ -85,7 +85,7 @@ describe('updateBookmarks', () => {
 
     const _id = '123',
       user = { email: 'email@test.com', bookmarks: [] },
-      callback = jest.fn();
+      updateCtx = jest.fn();
 
     const expected = {
       toastData: {
@@ -94,10 +94,10 @@ describe('updateBookmarks', () => {
       },
     };
 
-    updateBookmarks(_id, user, callback);
+    updateBookmarks({ _id, user, updateCtx });
 
     await waitFor(() => {
-      expect(callback).toHaveBeenCalledWith(expected);
+      expect(updateCtx).toHaveBeenCalledWith(expected);
     });
   });
 });

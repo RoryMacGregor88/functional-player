@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async (
 };
 
 interface Props {
-  user: User | null;
+  user: User;
   updateCtx: UpdateCtx;
   courses: Course[];
 }

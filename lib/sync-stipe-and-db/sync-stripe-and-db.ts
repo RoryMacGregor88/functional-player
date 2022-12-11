@@ -2,23 +2,24 @@ import stripeFn from 'stripe';
 
 import { USERS } from '@/src/utils/constants';
 
+import { Id } from '@/src/utils/interfaces';
+
+// TODO: what's up with this?
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
-// TODO: should this be in lib?
+interface Params {
+  db: unknown;
+  email: string;
+  currentSubscriptionStatus: string | null;
+  subscriptionId: Id;
+}
 
-/**
- * @param {object} db
- * @param {string} email
- * @param {string|null} currentSubscriptionStatus
- * @param {number} subscriptionId
- * @returns {Promise<{ subscriptionStatus: string|null }|{ error: true }>}
- */
-async function syncStripeAndDb(
+async function syncStripeAndDb({
   db,
   email,
   currentSubscriptionStatus,
-  subscriptionId
-) {
+  subscriptionId,
+}: Params): Promise<{ subscriptionStatus: Id | null } | { error: true }> {
   try {
     // subscriptionStatus can only be null if subscription
     // is deleted. If so, return null value

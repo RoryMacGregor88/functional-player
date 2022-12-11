@@ -4,13 +4,16 @@ import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
 import {
   DEFAULT_ERROR_MESSAGE,
-  PASSWORD_UPDATE_SUCCESS_MESSAGE,
+  UPDATE_PASSWORD_SUCCESS_MESSAGE,
   ACCOUNT_DELETE_SUCCESS_MESSAGE,
 } from '@/src/utils/constants';
 
 import Account from '@/src/pages/account';
 
 enableFetchMocks();
+
+// TODO: IMPORTANT!!! Must test all handlers are working, export and test individually?
+// TODO: Must make sure `isLoading` is being set true/false as it should
 
 describe('Account Page', () => {
   beforeEach(() => {
@@ -131,7 +134,7 @@ describe('Account Page', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText(PASSWORD_UPDATE_SUCCESS_MESSAGE)
+          screen.getByText(UPDATE_PASSWORD_SUCCESS_MESSAGE)
         ).toBeInTheDocument();
       });
     });

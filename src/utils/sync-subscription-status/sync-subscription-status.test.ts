@@ -23,11 +23,11 @@ describe('Reactivation success page', () => {
     const user = { username: 'John Smith' };
     fetchMock.mockResponse(JSON.stringify({ resUser: user }));
 
-    const { ok } = await syncSubscriptionStatus({ user, updateCtx });
+    const res = await syncSubscriptionStatus({ user, updateCtx });
 
     await waitFor(() => {
       expect(updateCtx).toHaveBeenCalledWith({ user });
-      expect(ok).toBeTruthy();
+      expect(res).toBeTruthy();
     });
   });
 
@@ -37,7 +37,7 @@ describe('Reactivation success page', () => {
 
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
-    const { ok } = await syncSubscriptionStatus({ user, updateCtx });
+    const res = await syncSubscriptionStatus({ user, updateCtx });
 
     await waitFor(() => {
       expect(updateCtx).toHaveBeenCalledWith({
@@ -47,7 +47,7 @@ describe('Reactivation success page', () => {
           message,
         },
       });
-      expect(ok).toBeFalsy();
+      expect(res).toBeFalsy();
     });
   });
 
@@ -56,7 +56,7 @@ describe('Reactivation success page', () => {
       throw new Error();
     });
 
-    const { ok } = await syncSubscriptionStatus({ user, updateCtx });
+    const res = await syncSubscriptionStatus({ user, updateCtx });
 
     await waitFor(() => {
       expect(updateCtx).toHaveBeenCalledWith({
@@ -67,6 +67,6 @@ describe('Reactivation success page', () => {
         },
       });
     });
-    expect(ok).toBeFalsy();
+    expect(res).toBeFalsy();
   });
 });

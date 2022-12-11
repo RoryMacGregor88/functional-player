@@ -8,9 +8,12 @@ import Login from '@/src/pages/login';
 
 enableFetchMocks();
 
+let updateCtx = null;
+
 describe('Login Page', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
+    updateCtx = jest.fn();
   });
 
   it('renders', () => {
@@ -24,7 +27,6 @@ describe('Login Page', () => {
   });
 
   it('updates state and redirects to dashboard', async () => {
-    const updateCtx = jest.fn();
     const resUser = { username: 'John smith' };
 
     fetchMock.mockResponse(JSON.stringify({ resUser }));
@@ -58,7 +60,7 @@ describe('Login Page', () => {
     const message = 'This is an error';
 
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
-    render(<Login user={null} />);
+    render(<Login user={null} updateCtx={updateCtx} />);
 
     await userEvent.type(
       screen.getByRole('textbox', { name: /email/i }),
@@ -85,7 +87,7 @@ describe('Login Page', () => {
       throw new Error();
     });
 
-    render(<Login user={null} />);
+    render(<Login user={null} updateCtx={updateCtx} />);
 
     await userEvent.type(
       screen.getByRole('textbox', { name: /email/i }),
@@ -103,13 +105,18 @@ describe('Login Page', () => {
     userEvent.click(button);
 
     await waitFor(() => {
-      expect(screen.getByText(DEFAULT_ERROR_MESSAGE)).toBeInTheDocument();
+      expect(updateCtx).toHaveBeenCalledWith({
+        toastData: {
+          severity: 'error',
+          message: DEFAULT_ERROR_MESSAGE,
+        },
+      });
     });
   });
 
   it('redirects to dashboard if user found', async () => {
     const testUser = { username: 'John smith' };
-    const { router } = render(<Login user={testUser} />, {
+    const { router } = render(<Login user={testUser} updateCtx={updateCtx} />, {
       push: jest.fn(),
     });
 

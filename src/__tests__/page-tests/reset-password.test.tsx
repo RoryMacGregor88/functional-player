@@ -8,9 +8,12 @@ import ResetPassword from '@/src/pages/reset-password';
 
 enableFetchMocks();
 
+let updateCtx = null;
+
 describe('ResetPassword', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
+    updateCtx = jest.fn();
   });
 
   it('renders', () => {
@@ -75,7 +78,7 @@ describe('ResetPassword', () => {
       throw new Error();
     });
 
-    render(<ResetPassword user={null} />);
+    render(<ResetPassword user={null} updateCtx={updateCtx} />);
 
     await userEvent.type(
       screen.getByRole('textbox', { name: /email/i }),
@@ -85,7 +88,12 @@ describe('ResetPassword', () => {
     userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(DEFAULT_ERROR_MESSAGE)).toBeInTheDocument();
+      expect(updateCtx).toHaveBeenCalledWith({
+        toastData: {
+          severity: 'error',
+          message: DEFAULT_ERROR_MESSAGE,
+        },
+      });
     });
   });
 });

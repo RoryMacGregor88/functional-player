@@ -20,10 +20,14 @@ import {
 
 import { http } from '@/src/utils';
 
-import { User, WellData } from '@/src/utils/interfaces';
+import {
+  User,
+  UpdateCtx,
+  DefaultToastData,
+  WellData,
+} from '@/src/utils/interfaces';
 
 import {
-  DEFAULT_ERROR_MESSAGE,
   EMAIL_INVALID_MESSAGE,
   EMAIL_REQUIRED_MESSAGE,
 } from '@/src/utils/constants';
@@ -34,13 +38,20 @@ const resetPasswordFormSchema = Yup.object().shape({
     .required(EMAIL_REQUIRED_MESSAGE),
 });
 
+// TODO: submit loading spinner not tested!!!
+
 interface Props {
-  user: User | null;
+  user: User;
+  updateCtx: UpdateCtx;
 }
 
-export default function ResetPassword({ user }: Props): ReactElement {
+export default function ResetPassword({
+  user,
+  updateCtx,
+}: Props): ReactElement {
   const { push } = useRouter();
   const [wellData, setWellData] = useState<WellData>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
 
   const {
@@ -60,25 +71,40 @@ export default function ResetPassword({ user }: Props): ReactElement {
     return <LoadMask />;
   }
 
+  const handleResponse = (wellData: WellData) => {
+    setIsLoading(false);
+    setWellData(wellData);
+  };
+
+  interface ResProps {
+    error: Error | undefined;
+    ok: boolean | undefined;
+  }
+
   const onSubmit = async (values: { email: string }): Promise<void> => {
-    try {
-      const { email } = values;
+    setIsLoading(true);
 
-      const { error, ok } = await http('/auth/reset-password', {
+    const { email } = values;
+
+    const { error, ok }: ResProps = await http({
+      endpoint: '/auth/reset-password',
+      formData: {
         email: email.toLowerCase(),
-      });
+      },
+      onError: (defaultToastData: DefaultToastData) => {
+        setIsLoading(false);
+        updateCtx(defaultToastData);
+      },
+    });
 
-      if (!!error) {
-        setWellData({ message: error.message });
-      } else if (ok) {
-        setIsSubmitDisabled(true);
-        setWellData({
-          severity: 'success',
-          message: `An email has been sent to ${email}. Please follow the steps to reset your password. Don't forget to check your junk folder.`,
-        });
-      }
-    } catch (e) {
-      setWellData({ message: DEFAULT_ERROR_MESSAGE });
+    if (!!error) {
+      handleResponse({ message: error.message });
+    } else if (ok) {
+      handleResponse({
+        severity: 'success',
+        message: `An email has been sent to ${email}. Please follow the steps to reset your password. Don't forget to check your junk folder.`,
+      });
+      setIsSubmitDisabled(true);
     }
   };
 
@@ -88,7 +114,7 @@ export default function ResetPassword({ user }: Props): ReactElement {
       <FormWrapper onSubmit={handleSubmit((values) => onSubmit(values))}>
         {!!wellData ? <Well {...wellData} /> : null}
         <EmailField errors={errors} register={register} />
-        <Button type='submit' disabled={isSubmitDisabled}>
+        <Button type='submit' disabled={isSubmitDisabled} isLoading={isLoading}>
           Submit
         </Button>
       </FormWrapper>

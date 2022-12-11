@@ -36,7 +36,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
 
   // token is checked upon initial app request (not internal page navigations)
   useEffect(() => {
-    (async () => await authenticateToken(updateCtx))();
+    (async () => await authenticateToken({ updateCtx }))();
   }, []);
 
   // only a user object or null can be returned from server

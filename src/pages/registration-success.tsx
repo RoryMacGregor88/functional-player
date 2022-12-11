@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (
 };
 
 interface Props {
-  user: User | null;
+  user: User;
   redirect: boolean;
 }
 

@@ -8,10 +8,6 @@ import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
 enableFetchMocks();
 
-// TODO:NOT YET TYPED
-
-// TODO: refactor this to return ctx values, update tests
-
 describe('authenticateToken', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
@@ -22,7 +18,7 @@ describe('authenticateToken', () => {
     fetchMock.mockResponse(JSON.stringify({ resUser }));
 
     const updateCtx = jest.fn();
-    authenticateToken(updateCtx);
+    authenticateToken({ updateCtx });
 
     await waitFor(() => {
       expect(updateCtx).toHaveBeenCalledWith({ user: resUser });
@@ -34,7 +30,7 @@ describe('authenticateToken', () => {
     fetchMock.mockResponse(JSON.stringify({ resUser }));
 
     const updateCtx = jest.fn();
-    authenticateToken(updateCtx);
+    authenticateToken({ updateCtx });
 
     await waitFor(() => {
       expect(updateCtx).toHaveBeenCalledWith({ user: resUser });
@@ -46,7 +42,7 @@ describe('authenticateToken', () => {
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
     const updateCtx = jest.fn();
-    authenticateToken(updateCtx);
+    authenticateToken({ updateCtx });
 
     const expected = {
       user: null,
@@ -67,7 +63,7 @@ describe('authenticateToken', () => {
     });
 
     const updateCtx = jest.fn();
-    authenticateToken(updateCtx);
+    authenticateToken({ updateCtx });
 
     const expected = {
       user: null,

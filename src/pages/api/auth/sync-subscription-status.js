@@ -8,7 +8,7 @@ import {
   handleServerError,
 } from '@/lib';
 
-import { syncStripeAndDb } from '@/src/utils';
+import { syncStripeAndDb } from '@/lib';
 
 import {
   HTTP_METHOD_ERROR_MESSAGE,
@@ -30,12 +30,12 @@ async function syncSubscriptionStatus(req, res) {
 
       const { db } = await connectToDatabase();
 
-      const { error, subscriptionStatus } = await syncStripeAndDb(
+      const { error, subscriptionStatus } = await syncStripeAndDb({
         db,
         email,
         currentSubscriptionStatus,
-        subscriptionId
-      );
+        subscriptionId,
+      });
 
       if (!!error) {
         return handleServerError(res);

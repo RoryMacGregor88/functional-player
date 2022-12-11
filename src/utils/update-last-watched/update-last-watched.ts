@@ -1,34 +1,43 @@
 import { http } from '@/src/utils';
 
-import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
+import { User, Id, UpdateCtx } from '@/src/utils/interfaces';
 
-// TODO: has not been typed, any others .ts files but not typed?
+interface Params {
+  user: User;
+  _id: Id;
+  updateCtx: UpdateCtx;
+}
 
-export default async function updateLastWatched(user, _id, updateCtx) {
+interface ResProps {
+  error: Error | undefined;
+  resUser: User | undefined;
+}
+
+export default async function updateLastWatched({
+  user,
+  _id,
+  updateCtx,
+}: Params): Promise<void> {
   if (!!user) {
-    try {
-      const { error, resUser } = await http('/last-watched', {
+    const { error, resUser }: ResProps = await http({
+      endpoint: '/last-watched',
+      formData: {
         email: user.email,
         _id,
-      });
+      },
+      onError: updateCtx,
+    });
 
-      if (!!error) {
-        updateCtx({
-          toastData: {
-            message: error.message,
-            severity: 'error',
-          },
-        });
-      } else if (!!user) {
-        updateCtx({ user: resUser });
-      }
-    } catch (e) {
+    if (!!error) {
+      // TODO: should we be notifying user of this? More of a background thing.
       updateCtx({
         toastData: {
-          message: DEFAULT_ERROR_MESSAGE,
+          message: error.message,
           severity: 'error',
         },
       });
+    } else if (!!user) {
+      updateCtx({ user: resUser });
     }
   }
 }

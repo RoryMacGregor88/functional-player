@@ -5,11 +5,8 @@ export type Token = string;
 export type Category = string;
 export type Artist = string;
 export type DateString = string;
-
-export type Severity = 'success' | 'error';
-
-// TODO: this is causing problems with types, string not equal to LevelRating
-export type LevelRating = 'beginner' | 'intermediate' | 'advanced';
+export type Severity = string;
+export type LevelRating = string;
 
 export type DialogData = {
   title: string;
@@ -22,28 +19,17 @@ export type ToastData = {
   message: string;
 };
 
+export type DefaultToastData = {
+  toastData: ToastData;
+};
+
 export type WellData = {
   title?: string | null;
   message: string;
   severity?: AlertColor;
 };
 
-export type Ctx = {
-  dialogData: DialogData | null | undefined;
-  toastData: ToastData | null | undefined;
-  selectedVideo: Course | null | undefined;
-  user: User | null | undefined;
-};
-
-export type UpdateCtx = (newData: Partial<Ctx>) => void;
-
-export interface DialogAction {
-  label: string;
-  onClick: () => void;
-  closeOnClick?: boolean;
-}
-
-export interface User {
+export type User = {
   _id: Id;
   email: string;
   username: string;
@@ -52,9 +38,24 @@ export interface User {
   subscriptionStatus: string;
   bookmarks: Id[];
   lastWatched: Id;
-}
+} | null;
 
-export interface Course {
+export type Ctx = {
+  dialogData: DialogData | null | undefined;
+  toastData: ToastData | null | undefined;
+  selectedVideo: Course | null | undefined;
+  user: User | undefined;
+};
+
+export type UpdateCtx = (newData: Partial<Ctx>) => void;
+
+export type DialogAction = {
+  label: string;
+  onClick: () => void;
+  closeOnClick?: boolean;
+};
+
+export type Course = {
   _id: Id;
   videoId: Id;
   title: string;
@@ -63,8 +64,8 @@ export interface Course {
   level: LevelRating;
   creationDate: DateString;
   categories: Category[];
-}
+};
 
-export interface CustomError {
+export type CustomError = {
   message: string;
-}
+};

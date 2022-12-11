@@ -30,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = async (
 };
 
 interface Props {
-  user: User | null;
+  user: User;
   updateCtx: UpdateCtx;
   redirect: boolean;
 }
@@ -43,14 +43,16 @@ export default function ReactivationSuccess({
   const { push } = useRouter();
   const [isUpdated, setIsUpdated] = useState(false);
 
+  type ResProps = boolean | undefined;
+
   useEffect(() => {
     if (!!redirect) {
       (async () => {
-        const { ok } = await syncSubscriptionStatus({
+        const res: ResProps = await syncSubscriptionStatus({
           user,
           updateCtx,
         });
-        if (ok) setIsUpdated(true);
+        if (!!res) setIsUpdated(true);
       })();
     }
   }, [user, updateCtx, redirect]);

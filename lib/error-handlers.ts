@@ -1,4 +1,5 @@
 import { NextApiResponse } from 'next';
+
 import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
 function handleForbidden(res: NextApiResponse, message: string) {

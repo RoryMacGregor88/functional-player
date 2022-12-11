@@ -11,6 +11,9 @@ import Register from '@/src/pages/register';
 
 enableFetchMocks();
 
+// TODO: IMPORTANT!!! Must test all handlers are working, export and test individually?
+// TODO: Must make sure `isLoading` is being set true/false as it should
+
 let push = null;
 
 describe('Register Page', () => {

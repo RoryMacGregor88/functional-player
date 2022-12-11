@@ -29,6 +29,13 @@ export const BOOKMARK_SUCCESS_REMOVE_MESSAGE = 'Removed from your list';
 export const REACTIVATION_SUCCESS_MESSAGE =
   'Your subscription has been successfully reactivated.';
 
+export const UPDATE_PASSWORD_SUCCESS_MESSAGE =
+  'Your password has been successfully updated.';
+export const UPDATE_EMAIL_SUCCESS_MESSAGE =
+  'Your email has been successfully updated.';
+export const CANCEL_SUBSCRITION_SUCCESS_MESSAGE =
+  'Your subscription has been successfully cancelled. You can re-activate your subscription any time by clicking the "RE-ENABLE SUBSCRIPTION" button below.';
+
 // form validation
 export const EMAIL_REQUIRED_MESSAGE = 'Email is required';
 export const USERNAME_REQUIRED_MESSAGE = 'Username is required';
@@ -41,8 +48,6 @@ export const PASSWORD_CONFIRM_REQUIRED_MESSAGE =
 export const NO_PASSWORD_MATCH_MESSAGE = 'Passwords do not match';
 export const PASSWORD_MIN_LENGTH_MESSAGE =
   'Password must be at least 5 characters';
-export const PASSWORD_UPDATE_SUCCESS_MESSAGE =
-  'Your password has been successfully updated.';
 
 // All possible Stripe scenarios. Just for explicitness, not all are used
 export const STATUS_LABELS = {

@@ -5,7 +5,7 @@ import { Navbar, Footer, Drawer } from '@/src/components';
 import { User } from '@/src/utils/interfaces';
 
 interface Props {
-  user: User | null;
+  user: User;
   children: ReactNode;
 }
 

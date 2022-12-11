@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (
 /** @param {{user: object|null, courses: object[]}} props */
 
 interface Props {
-  user: User | null;
+  user: User;
   courses: Course[] | null;
 }
 

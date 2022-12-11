@@ -12,7 +12,7 @@ import {
 } from '@/src/utils/constants';
 
 interface Props {
-  user: User | null;
+  user: User;
   isDrawerOpen: boolean;
   setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
 }

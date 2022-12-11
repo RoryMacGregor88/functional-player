@@ -1,4 +1,4 @@
-import { syncStripeAndDb } from '@/src/utils';
+import syncStripeAndDb from './sync-stripe-and-db';
 
 let db = null,
   findOneAndUpdate = null,
@@ -26,12 +26,22 @@ describe('syncStripeAndDb', () => {
   });
 
   it('returns original value if current status is null', async () => {
-    const result = await syncStripeAndDb(db, email, null, 'active');
+    const result = await syncStripeAndDb({
+      db,
+      email,
+      currentSubscriptionStatus: null,
+      subscriptionId: 'active',
+    });
     expect(result).toEqual({ subscriptionStatus: null });
   });
 
   it('updates db and returns new value if out of sync', async () => {
-    const result = await syncStripeAndDb(db, email, 'active', 'cancelled');
+    const result = await syncStripeAndDb({
+      db,
+      email,
+      currentSubscriptionStatus: 'active',
+      subscriptionId: 'cancelled',
+    });
 
     expect(collection).toHaveBeenCalledWith('users-2');
     expect(findOneAndUpdate).toHaveBeenCalledWith(
@@ -43,12 +53,22 @@ describe('syncStripeAndDb', () => {
   });
 
   it('returns original value if in sync but unchanged', async () => {
-    const result = await syncStripeAndDb(db, email, 'active', 'active');
+    const result = await syncStripeAndDb({
+      db,
+      email,
+      currentSubscriptionStatus: 'active',
+      subscriptionId: 'active',
+    });
     expect(result).toEqual({ subscriptionStatus: 'active' });
   });
 
   it('handles error', async () => {
-    const result = await syncStripeAndDb(db, email, 'active', 'error');
+    const result = await syncStripeAndDb({
+      db,
+      email,
+      currentSubscriptionStatus: 'active',
+      subscriptionId: 'error',
+    });
     expect(result).toEqual({ error: true });
   });
 });
