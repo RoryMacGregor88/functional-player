@@ -1,6 +1,6 @@
 import { ReactElement, forwardRef, RefObject, ReactNode } from 'react';
 
-import { Button as MuiButton } from '@mui/material';
+import { Button as MuiButton, SxProps, Theme } from '@mui/material';
 
 import { LoadingSpinner } from '@/src/components';
 
@@ -9,6 +9,7 @@ interface Props {
   disabled?: boolean;
   isLoading?: boolean;
   type?: string;
+  sx?: SxProps<Theme>;
   children: ReactNode;
   props?: any;
 }
@@ -16,7 +17,15 @@ interface Props {
 // TODO: get rid of ...props? Being used anywhere?
 
 const Button = (
-  { onClick, disabled = false, isLoading = false, children, type, ...props },
+  {
+    onClick,
+    disabled = false,
+    isLoading = false,
+    sx,
+    children,
+    type,
+    ...props
+  },
   ref
 ): ReactElement => (
   <MuiButton
@@ -31,12 +40,12 @@ const Button = (
       textAlign: 'center',
       backgroundColor: 'primary.main',
       color: 'background.paper',
+      ...sx,
     }}
     {...props}
   >
     {isLoading ? (
       <LoadingSpinner
-        data-testid='loading-spinner'
         sx={{
           width: '1.5rem !important',
           height: '1.5rem !important',

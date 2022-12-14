@@ -11,13 +11,22 @@ import LoginForm from './login-form.component';
 
 enableFetchMocks();
 
+const renderComponent = ({ isLoading = false } = {}) => {
+  const handleLogin = jest.fn();
+  const { router } = render(
+    <LoginForm handleLogin={handleLogin} isLoading={isLoading} />,
+    { push: jest.fn() }
+  );
+  return { handleLogin, router };
+};
+
 describe('Login Form', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
 
   it('renders', () => {
-    render(<LoginForm />);
+    renderComponent();
 
     expect(screen.getByRole('textbox', { name: /email/i })).toBeInTheDocument();
     expect(
@@ -26,9 +35,13 @@ describe('Login Form', () => {
     expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
   });
 
+  it('disables submit button if form is not dirty', async () => {
+    renderComponent();
+    expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled();
+  });
+
   it('blocks non-emails in email field', async () => {
-    const onSubmit = jest.fn();
-    render(<LoginForm onSubmit={onSubmit} />);
+    renderComponent();
 
     await userEvent.type(
       screen.getByRole('textbox', { name: /email/i }),
@@ -40,16 +53,14 @@ describe('Login Form', () => {
       'test-password123'
     );
 
-    expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled();
-
     await waitFor(() => {
+      expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled();
       expect(screen.getByText(EMAIL_INVALID_MESSAGE)).toBeInTheDocument();
     });
   });
 
   it('disables submit button if form is invalid', async () => {
-    const onSubmit = jest.fn();
-    render(<LoginForm onSubmit={onSubmit} />);
+    renderComponent();
 
     const submitButton = screen.getByRole('button', { name: /submit/i });
 
@@ -67,11 +78,15 @@ describe('Login Form', () => {
     });
   });
 
-  it('calls onSubmit when form is valid and button is clicked', async () => {
+  it('shows loading spinner if isLoading is true', () => {
+    renderComponent({ isLoading: true });
+    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+  });
+
+  it('calls submit handler when form is valid and button is clicked', async () => {
     fetchMock.mockResponse(JSON.stringify({}));
 
-    const onSubmit = jest.fn();
-    render(<LoginForm onSubmit={onSubmit} />);
+    const { handleLogin } = renderComponent();
 
     const TEST_EMAIL = 'test@email.com';
     const TEST_PASSWORD = 'testpassword123';
@@ -86,10 +101,13 @@ describe('Login Form', () => {
       TEST_PASSWORD
     );
 
-    userEvent.click(screen.getByRole('button', { name: /submit/i }));
+    const submitButton = screen.getByRole('button', { name: /submit/i });
+
+    userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(onSubmit).toHaveBeenCalledWith({
+      expect(submitButton).toBeEnabled();
+      expect(handleLogin).toHaveBeenCalledWith({
         email: TEST_EMAIL,
         password: TEST_PASSWORD,
       });
@@ -97,9 +115,7 @@ describe('Login Form', () => {
   });
 
   it('redirects if forgot password link clicked', async () => {
-    const { router } = render(<LoginForm onSubmit={() => {}} />, {
-      push: jest.fn(),
-    });
+    const { router } = renderComponent();
 
     userEvent.click(screen.getByText(/click here/i));
 

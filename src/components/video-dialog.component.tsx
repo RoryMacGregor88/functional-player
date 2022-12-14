@@ -1,4 +1,4 @@
-import { useEffect, FC, ReactElement } from 'react';
+import { useEffect, FC, ReactElement, useContext } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -20,7 +20,7 @@ import {
   LevelRatingBadge,
 } from '@/src/components';
 
-import { updateBookmarks, updateLastWatched } from '@/src/utils';
+import { updateBookmarks, updateLastWatched, Context } from '@/src/utils';
 
 import { Course, User, UpdateCtx, Id } from '@/src/utils/interfaces';
 
@@ -31,7 +31,6 @@ interface OverlayProps {
   selectedVideo: Course;
   isBookmarked: boolean;
   onBookmarkClick: () => void;
-  updateCtx: UpdateCtx;
   push: (url: string) => void;
 }
 
@@ -40,12 +39,14 @@ const Overlay: FC<OverlayProps> = ({
   selectedVideo,
   isBookmarked,
   onBookmarkClick,
-  updateCtx,
   push,
 }): ReactElement => {
+  const { updateCtx } = useContext(Context);
+
   const { title, description, level, artist } = selectedVideo,
-    artistValue = ARTIST_METADATA.find(({ label }) => label === artist)?.value,
-    close = () => updateCtx({ selectedVideo: null }),
+    artistValue = ARTIST_METADATA.find(({ label }) => label === artist)?.value;
+
+  const close = () => updateCtx({ selectedVideo: null }),
     onArtistClick = () => {
       push(`/artists?artist=${artistValue}`);
       updateCtx({ selectedVideo: null });
@@ -217,7 +218,6 @@ const VideoDialog: FC<VideoDialogProps> = ({
             selectedVideo={selectedVideo}
             isBookmarked={isBookmarked}
             onBookmarkClick={onBookmarkClick}
-            updateCtx={updateCtx}
             push={push}
           />
         </Grid>

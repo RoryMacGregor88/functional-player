@@ -13,6 +13,7 @@ import {
   UpdateCtx,
   WellData,
   DefaultToastData,
+  LoginFormValues,
 } from '@/src/utils/interfaces';
 
 interface Props {
@@ -36,13 +37,10 @@ export default function Login({ user, updateCtx }: Props) {
     resUser: User | undefined;
   }
 
-  const onSubmit = async (values: {
-    email: string;
-    password: string;
-  }): Promise<void> => {
+  const handleLogin = async (formValues: LoginFormValues): Promise<void> => {
     setIsLoading(true);
 
-    const { email, password } = values;
+    const { email, password } = formValues;
 
     const { error, resUser }: ResProps = await http({
       endpoint: '/auth/login',
@@ -76,7 +74,7 @@ export default function Login({ user, updateCtx }: Props) {
     >
       <SpacedTitle>Login</SpacedTitle>
       {!!wellData ? <Well {...wellData} /> : null}
-      <LoginForm onSubmit={onSubmit} isLoading={isLoading} />
+      <LoginForm handleLogin={handleLogin} isLoading={isLoading} />
     </Grid>
   );
 }

@@ -46,6 +46,8 @@ interface Props {
 // TODO: does not reset select when changing categories
 // TODO: bottom margin is disappearing behind footer
 
+// TODO: Why is updateCtx here?
+
 export default function Categories({ user, courses }: Props) {
   const {
     push,

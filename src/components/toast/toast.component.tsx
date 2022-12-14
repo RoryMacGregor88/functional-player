@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useContext } from 'react';
 
 import {
   Snackbar,
@@ -10,20 +10,21 @@ import {
 
 import { IconButton, CloseIcon } from '@/src/components';
 
+import { Context } from '@/src/utils';
+
 import { Severity, UpdateCtx } from '@/src/utils/interfaces';
 
-interface ActionProps {
-  updateCtx: UpdateCtx;
-}
-
-const Action: FC<ActionProps> = ({ updateCtx }): ReactElement => (
-  <IconButton onClick={() => updateCtx({ toastData: null })}>
-    <CloseIcon
-      data-testid='close-icon'
-      sx={{ height: '1rem', width: '1rem' }}
-    />
-  </IconButton>
-);
+const Action: FC = (): ReactElement => {
+  const { updateCtx } = useContext(Context);
+  return (
+    <IconButton onClick={() => updateCtx({ toastData: null })}>
+      <CloseIcon
+        data-testid='close-icon'
+        sx={{ height: '1rem', width: '1rem' }}
+      />
+    </IconButton>
+  );
+};
 
 interface ToastProps {
   open: boolean;
@@ -55,7 +56,7 @@ const Toast: FC<ToastProps> = ({
       onClose={() => updateCtx({ toastData: null })}
       anchorOrigin={anchorOrigin}
       TransitionComponent={Fade}
-      action={<Action updateCtx={updateCtx} />}
+      action={<Action />}
       sx={{ zIndex: 4000 }}
     >
       <Alert severity={severity}>{message}</Alert>

@@ -32,11 +32,13 @@ describe('http', () => {
 
     expect(res).toEqual({});
 
-    expect(onError).toHaveBeenCalledWith({
+    const expected = {
       toastData: {
         severity: 'error',
         message: DEFAULT_ERROR_MESSAGE,
       },
-    });
+    };
+
+    expect(onError).toHaveBeenCalledWith(expected);
   });
 });

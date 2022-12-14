@@ -1,11 +1,20 @@
+import Stripe from 'stripe';
+
+import { StripeElements } from '@stripe/stripe-js';
+
 import { AlertColor } from '@mui/material';
+
+type StripeModules = {
+  stripe: Stripe;
+  elements: StripeElements;
+};
 
 export type Id = string | number;
 export type Token = string;
 export type Category = string;
 export type Artist = string;
 export type DateString = string;
-export type Severity = string;
+export type Severity = AlertColor;
 export type LevelRating = string;
 
 export type DialogData = {
@@ -68,4 +77,30 @@ export type Course = {
 
 export type CustomError = {
   message: string;
+};
+
+// FORM VALUES
+export type LoginFormValues = {
+  email: string;
+  password: string;
+};
+
+export type RegisterFormValues = {
+  email: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+};
+
+export type UpdatePasswordFormValues = {
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+};
+
+export type SubscribeFormValues = StripeModules;
+export type ResubscribeFormValues = StripeModules;
+
+export type DeleteFormValues = {
+  password: string;
 };

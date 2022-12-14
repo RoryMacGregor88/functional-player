@@ -1,13 +1,15 @@
+import { FC, ReactElement, ReactNode } from 'react';
+
 import { Grid } from '@mui/material';
 
-/**
- * @param {
- *  onSubmit: function
- *  children: React.ReactChildren
- * } props
- */
-const FormWrapper = ({ onSubmit, children }) => (
+interface Props {
+  onSubmit: () => void;
+  children: ReactNode;
+}
+
+const FormWrapper: FC<Props> = ({ onSubmit, children }): ReactElement => (
   <Grid
+    item
     container
     component='form'
     direction='column'

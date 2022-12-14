@@ -57,7 +57,7 @@ describe('authenticateToken', () => {
     });
   });
 
-  it('handler client error', async () => {
+  it('handles client error', async () => {
     fetchMock.mockResponse(() => {
       throw new Error();
     });

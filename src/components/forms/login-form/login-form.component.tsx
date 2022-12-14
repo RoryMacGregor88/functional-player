@@ -22,6 +22,8 @@ import {
   PASSWORD_REQUIRED_MESSAGE,
 } from '@/src/utils/constants';
 
+import { LoginFormValues } from '@/src/utils/interfaces';
+
 const loginFormSchema = Yup.object().shape({
   email: Yup.string()
     .email(EMAIL_INVALID_MESSAGE)
@@ -30,11 +32,11 @@ const loginFormSchema = Yup.object().shape({
 });
 
 interface Props {
-  onSubmit: (values: { email: string; password: string }) => void;
+  handleLogin: (formValues: LoginFormValues) => void;
   isLoading: boolean;
 }
 
-const LoginForm: FC<Props> = ({ onSubmit, isLoading }): ReactElement => {
+const LoginForm: FC<Props> = ({ handleLogin, isLoading }): ReactElement => {
   const {
     register,
     handleSubmit,
@@ -51,7 +53,9 @@ const LoginForm: FC<Props> = ({ onSubmit, isLoading }): ReactElement => {
   const isDisabled = !isDirty || !!Object.keys(errors).length;
 
   return (
-    <FormWrapper onSubmit={handleSubmit((values) => onSubmit(values))}>
+    <FormWrapper
+      onSubmit={handleSubmit((formValues) => handleLogin(formValues))}
+    >
       <EmailField errors={errors} register={register} />
       <PasswordField
         errors={errors}

@@ -58,15 +58,17 @@ describe('Reactivation success page', () => {
 
     const res = await syncSubscriptionStatus({ user, updateCtx });
 
+    const expected = {
+      user: null,
+      toastData: {
+        severity: 'error',
+        message: DEFAULT_ERROR_MESSAGE,
+      },
+    };
+
     await waitFor(() => {
-      expect(updateCtx).toHaveBeenCalledWith({
-        user: null,
-        toastData: {
-          severity: 'error',
-          message: DEFAULT_ERROR_MESSAGE,
-        },
-      });
+      expect(updateCtx).toHaveBeenCalledWith(expected);
+      expect(res).toBeFalsy();
     });
-    expect(res).toBeFalsy();
   });
 });

@@ -31,6 +31,7 @@ export default async function syncSubscriptionStatus({
     onError: handleError,
   });
   if (!!error) {
+    // TODO: don't like this, think of something better
     await http({ endpoint: '/auth/logout', onError: handleError });
     updateCtx({
       user: null,

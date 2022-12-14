@@ -25,8 +25,10 @@ async function deleteAccount(req, res) {
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {
     try {
-      const { email, customerId } = req.body;
+      const { email, customerId, password } = req.body;
       const { db } = await connectToDatabase();
+
+      // TODO: password check here
 
       await stripe.customers.del(customerId);
 

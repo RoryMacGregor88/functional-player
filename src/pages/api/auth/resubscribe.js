@@ -63,16 +63,18 @@ async function resubscribe(req, res) {
         }
       );
 
-      req.session.user = {
+      const resUser = {
         ...req.session.user,
         ...updatedProperties,
       };
 
+      req.session.user = resUser;
       await req.session.save();
 
-      return res
-        .status(201)
-        .json({ clientSecret: latest_invoice.payment_intent.client_secret });
+      return res.status(201).json({
+        resUser,
+        clientSecret: latest_invoice.payment_intent.client_secret,
+      });
     } catch (error) {
       await logServerError('resubscribe', error);
       return handleServerError(res);

@@ -1,4 +1,3 @@
-import getStripe from './get-stripe';
 import http from './http/http';
 import logout from './logout/logout';
 import updateBookmarks from './update-bookmarks/update-bookmarks';
@@ -11,7 +10,6 @@ import generateTempPassword from './generate-temp-password/generate-temp-passwor
 export * from './context';
 
 export {
-  getStripe,
   http,
   logout,
   updateBookmarks,

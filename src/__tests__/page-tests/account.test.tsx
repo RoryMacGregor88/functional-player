@@ -6,17 +6,39 @@ import {
   DEFAULT_ERROR_MESSAGE,
   UPDATE_PASSWORD_SUCCESS_MESSAGE,
   ACCOUNT_DELETE_SUCCESS_MESSAGE,
+  CANCEL_SUBSCRITION_SUCCESS_MESSAGE,
 } from '@/src/utils/constants';
 
 import Account from '@/src/pages/account';
 
+jest.mock('@stripe/react-stripe-js', () => ({
+  Elements: ({ children }) => <div>{children}</div>,
+  PaymentElement: () => <div>MOCK PAYMENT ELEMENT</div>,
+  useStripe: () => ({
+    test: 'mock stripe',
+    confirmPayment: () => ({ error: true }),
+  }),
+  useElements: () => ({ test: 'mock elements' }),
+}));
+
+jest.mock('@/src/utils/get-stripe', () =>
+  jest.fn().mockImplementation(() => () => {})
+);
+
 enableFetchMocks();
 
-// TODO: IMPORTANT!!! Must test all handlers are working, export and test individually?
-// TODO: Must make sure `isLoading` is being set true/false as it should
+const toastData = {
+  toastData: {
+    severity: 'error',
+    message: DEFAULT_ERROR_MESSAGE,
+  },
+};
+
+let updateCtx = null;
 
 describe('Account Page', () => {
   beforeEach(() => {
+    updateCtx = jest.fn();
     fetchMock.resetMocks();
   });
 
@@ -52,9 +74,8 @@ describe('Account Page', () => {
     });
 
     it('closes well when tab switched', async () => {
-      fetchMock.mockResponse(() => {
-        throw new Error();
-      });
+      const message = 'test-error-message';
+      fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
       render(<Account user={{ subscriptionStatus: 'active' }} />);
 
@@ -65,6 +86,7 @@ describe('Account Page', () => {
           screen.getByRole('textbox', { name: /current password/i })
         ).toBeInTheDocument();
       });
+
       await userEvent.type(
         screen.getByRole('textbox', { name: /current password/i }),
         'oldpassword'
@@ -81,7 +103,7 @@ describe('Account Page', () => {
       userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
       await waitFor(() => {
-        expect(screen.getByText(DEFAULT_ERROR_MESSAGE)).toBeInTheDocument();
+        expect(screen.getByText(message)).toBeInTheDocument();
       });
 
       userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
@@ -90,18 +112,213 @@ describe('Account Page', () => {
         expect(
           screen.getByRole('button', { name: /cancel subscription/i })
         ).toBeInTheDocument();
-        expect(
-          screen.queryByText(DEFAULT_ERROR_MESSAGE)
-        ).not.toBeInTheDocument();
+
+        expect(screen.queryByText(message)).not.toBeInTheDocument();
       });
     });
   });
 
-  //TODO: remove update email? It's maybe too much hassle to allow (stripe)
-  describe('updateEmail', () => {
-    it('email success', () => {});
-    it('email server error', () => {});
-    it('email client error', () => {});
+  describe('update subscription', () => {
+    describe('unsubscribe', () => {
+      it('unsubscribe success', async () => {
+        const resUser = { subscriptionStatus: null, subscriptionId: null };
+
+        fetchMock.mockResponse(JSON.stringify({ resUser }));
+
+        render(
+          <Account
+            user={{ subscriptionStatus: 'active' }}
+            updateCtx={updateCtx}
+          />
+        );
+
+        userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
+
+        await waitFor(() => {
+          expect(
+            screen.getByRole('button', {
+              name: /cancel subscription/i,
+            })
+          ).toBeInTheDocument();
+        });
+
+        userEvent.click(
+          screen.getByRole('button', {
+            name: /cancel subscription/i,
+          })
+        );
+
+        await waitFor(() => {
+          expect(
+            screen.getByText(CANCEL_SUBSCRITION_SUCCESS_MESSAGE)
+          ).toBeInTheDocument();
+
+          expect(updateCtx).toHaveBeenCalledWith({ user: resUser });
+        });
+      });
+
+      it('handles server error', async () => {
+        const message = 'test-error-message';
+
+        fetchMock.mockResponse(JSON.stringify({ error: { message } }));
+
+        render(<Account user={{ subscriptionStatus: 'active' }} />);
+
+        userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
+
+        await waitFor(() => {
+          expect(
+            screen.getByRole('button', {
+              name: /cancel subscription/i,
+            })
+          ).toBeInTheDocument();
+        });
+
+        userEvent.click(
+          screen.getByRole('button', {
+            name: /cancel subscription/i,
+          })
+        );
+
+        await waitFor(() => {
+          expect(screen.getByText(message)).toBeInTheDocument();
+        });
+      });
+
+      it('handles client error', async () => {
+        fetchMock.mockResponse(() => {
+          throw new Error();
+        });
+
+        render(
+          <Account
+            user={{ subscriptionStatus: 'active' }}
+            updateCtx={updateCtx}
+          />
+        );
+
+        userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
+
+        await waitFor(() => {
+          expect(
+            screen.getByRole('button', {
+              name: /cancel subscription/i,
+            })
+          ).toBeInTheDocument();
+        });
+
+        userEvent.click(
+          screen.getByRole('button', {
+            name: /cancel subscription/i,
+          })
+        );
+
+        await waitFor(() => {
+          expect(updateCtx).toHaveBeenCalledWith(toastData);
+        });
+      });
+    });
+
+    describe('resubscribe', () => {
+      it('resubscribe success', async () => {
+        fetchMock.mockResponse(
+          JSON.stringify({
+            clientSecret: '12345',
+            resUser: {
+              suscriptionId: '12345',
+              subscriptionStatus: 'incomplete',
+            },
+          })
+        );
+
+        render(
+          <Account user={{ subscriptionStatus: null }} updateCtx={updateCtx} />
+        );
+
+        userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
+
+        await waitFor(() => {
+          expect(
+            screen.getByRole('button', {
+              name: /re-enable subscription/i,
+            })
+          ).toBeInTheDocument();
+        });
+
+        userEvent.click(
+          screen.getByRole('button', {
+            name: /re-enable subscription/i,
+          })
+        );
+
+        await waitFor(() => {
+          expect(
+            screen.getByRole('button', {
+              name: /submit/i,
+            })
+          ).toBeInTheDocument();
+        });
+      });
+
+      it('handles server error', async () => {
+        const message = 'test-error-message';
+        fetchMock.mockResponse(JSON.stringify({ error: { message } }));
+
+        render(
+          <Account user={{ subscriptionStatus: null }} updateCtx={updateCtx} />
+        );
+
+        userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
+
+        await waitFor(() => {
+          expect(
+            screen.getByRole('button', {
+              name: /re-enable subscription/i,
+            })
+          ).toBeInTheDocument();
+        });
+
+        userEvent.click(
+          screen.getByRole('button', {
+            name: /re-enable subscription/i,
+          })
+        );
+
+        await waitFor(() => {
+          expect(screen.getByText(message)).toBeInTheDocument();
+        });
+      });
+
+      it('handles client error', async () => {
+        fetchMock.mockResponse(() => {
+          throw new Error();
+        });
+
+        render(
+          <Account user={{ subscriptionStatus: null }} updateCtx={updateCtx} />
+        );
+
+        userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
+
+        await waitFor(() => {
+          expect(
+            screen.getByRole('button', {
+              name: /re-enable subscription/i,
+            })
+          ).toBeInTheDocument();
+        });
+
+        userEvent.click(
+          screen.getByRole('button', {
+            name: /re-enable subscription/i,
+          })
+        );
+
+        await waitFor(() => {
+          expect(updateCtx).toHaveBeenCalledWith(toastData);
+        });
+      });
+    });
   });
 
   describe('updatePassword', () => {
@@ -177,7 +394,9 @@ describe('Account Page', () => {
         throw new Error();
       });
 
-      render(<Account user={{ username: 'John Smith' }} />);
+      render(
+        <Account user={{ username: 'John Smith' }} updateCtx={updateCtx} />
+      );
 
       userEvent.click(screen.getByRole('tab', { name: /update password/i }));
 
@@ -202,12 +421,10 @@ describe('Account Page', () => {
       userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
       await waitFor(() => {
-        expect(screen.getByText(DEFAULT_ERROR_MESSAGE)).toBeInTheDocument();
+        expect(updateCtx).toHaveBeenCalledWith(toastData);
       });
     });
   });
-
-  // TODO: bother with stripe testing? Mock modules?
 
   describe('deleteAccount', () => {
     it('delete success', async () => {
@@ -223,10 +440,17 @@ describe('Account Page', () => {
       userEvent.click(screen.getByRole('tab', { name: /delete account/i }));
 
       await waitFor(() => {
-        const proceedButton = screen.getByRole('button', { name: /proceed/i });
-        expect(proceedButton).toBeInTheDocument();
-        userEvent.click(proceedButton);
+        expect(
+          screen.getByRole('textbox', { name: /password/i })
+        ).toBeInTheDocument();
       });
+
+      await userEvent.type(
+        screen.getByRole('textbox', { name: /password/i }),
+        'password123'
+      );
+
+      userEvent.click(screen.getByRole('button', { name: /proceed/i }));
 
       await waitFor(() => {
         const deleteButton = screen.getByRole('button', {
@@ -241,7 +465,6 @@ describe('Account Page', () => {
           screen.getByText(ACCOUNT_DELETE_SUCCESS_MESSAGE)
         ).toBeInTheDocument();
         expect(updateCtx).toHaveBeenCalledWith({ user: null });
-        expect(router.push).toHaveBeenCalledWith('/');
       });
     });
 
@@ -256,10 +479,17 @@ describe('Account Page', () => {
       userEvent.click(screen.getByRole('tab', { name: /delete account/i }));
 
       await waitFor(() => {
-        const proceedButton = screen.getByRole('button', { name: /proceed/i });
-        expect(proceedButton).toBeInTheDocument();
-        userEvent.click(proceedButton);
+        expect(
+          screen.getByRole('textbox', { name: /password/i })
+        ).toBeInTheDocument();
       });
+
+      await userEvent.type(
+        screen.getByRole('textbox', { name: /password/i }),
+        'password123'
+      );
+
+      userEvent.click(screen.getByRole('button', { name: /proceed/i }));
 
       await waitFor(() => {
         const deleteButton = screen.getByRole('button', {
@@ -275,22 +505,32 @@ describe('Account Page', () => {
       });
     });
 
-    it('handler client error', async () => {
+    it('handles client error', async () => {
       fetchMock.mockResponse(() => {
         throw new Error();
       });
 
-      const { router } = render(<Account user={{ username: 'John Smith' }} />, {
-        push: jest.fn(),
-      });
+      const { router } = render(
+        <Account user={{ username: 'John Smith' }} updateCtx={updateCtx} />,
+        {
+          push: jest.fn(),
+        }
+      );
 
       userEvent.click(screen.getByRole('tab', { name: /delete account/i }));
 
       await waitFor(() => {
-        const proceedButton = screen.getByRole('button', { name: /proceed/i });
-        expect(proceedButton).toBeInTheDocument();
-        userEvent.click(proceedButton);
+        expect(
+          screen.getByRole('textbox', { name: /password/i })
+        ).toBeInTheDocument();
       });
+
+      await userEvent.type(
+        screen.getByRole('textbox', { name: /password/i }),
+        'password123'
+      );
+
+      userEvent.click(screen.getByRole('button', { name: /proceed/i }));
 
       await waitFor(() => {
         const deleteButton = screen.getByRole('button', {
@@ -301,7 +541,7 @@ describe('Account Page', () => {
       });
 
       await waitFor(() => {
-        expect(screen.getByText(DEFAULT_ERROR_MESSAGE)).toBeInTheDocument();
+        expect(updateCtx).toHaveBeenCalledWith(toastData);
         expect(router.push).not.toHaveBeenCalled();
       });
     });

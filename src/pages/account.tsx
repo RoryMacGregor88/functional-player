@@ -28,6 +28,9 @@ import {
   UpdateCtx,
   WellData,
   DefaultToastData,
+  UpdatePasswordFormValues,
+  DeleteFormValues,
+  ResubscribeFormValues,
 } from '@/src/utils/interfaces';
 
 import { http } from '@/src/utils';
@@ -73,9 +76,10 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
     return <LoadMask />;
   }
 
-  const { email, username, subscriptionStatus, customerId } = user;
+  const { subscriptionStatus } = user;
 
   const handleSuccess = (message: string) => {
+    console.log('HIT: ', message);
     setIsLoading(false);
     setWellData({
       severity: 'success',
@@ -108,45 +112,23 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
     resUser: User | undefined;
   }
 
-  const handleUpdateEmail = async (values: UpdateEmailParams) => {
-    setIsLoading(true);
-
-    const { error, resUser }: UpdateEmailResProps = await http({
-      endpoint: '/auth/update-email',
-      formData: {
-        email,
-        newEmail: values.email.toLowerCase(),
-      },
-      onError: handleClientError,
-    });
-
-    if (!!error) {
-      handleServerError(error);
-    } else if (!!resUser) {
-      updateCtx({ user: resUser });
-      handleSuccess(UPDATE_EMAIL_SUCCESS_MESSAGE);
-    }
-  };
-
-  interface UpdatePasswordParams {
-    currentPassword: string;
-    newPassword: string;
-    confirmNewPassword: string;
-  }
-
   interface UpdatePasswordResProps {
     error: Error | undefined;
     ok: boolean | undefined;
   }
 
-  const handleUpdatePassword = async (values: UpdatePasswordParams) => {
+  const handleUpdatePassword = async (formValues: UpdatePasswordFormValues) => {
     setIsLoading(true);
+
+    const { email } = user;
+    const { currentPassword, newPassword } = formValues;
 
     const { error, ok }: UpdatePasswordResProps = await http({
       endpoint: '/auth/update-password',
       formData: {
-        email: user.email,
-        ...values,
+        email,
+        currentPassword,
+        newPassword,
       },
       onError: handleClientError,
     });
@@ -165,6 +147,8 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
 
   const handleUnsubscribe = async () => {
     setIsLoading(true);
+
+    const { email, customerId } = user;
 
     const { error, resUser }: UnsubscribeResProps = await http({
       endpoint: '/auth/unsubscribe',
@@ -186,27 +170,31 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
 
   interface StripeCustomerResProps {
     error: Error | undefined;
+    resUser: User | undefined;
     clientSecret: string | undefined;
   }
 
   const handleStripeCustomer = async () => {
     setIsLoading(true);
 
-    // TODO: updatedUser returned here?
-    const { error, clientSecret }: StripeCustomerResProps = await http({
-      endpoint: '/auth/resubscribe',
-      formData: {
-        username,
-        email,
-      },
-      onError: handleClientError,
-    });
+    const { username, email } = user;
+    const { error, resUser, clientSecret }: StripeCustomerResProps = await http(
+      {
+        endpoint: '/auth/resubscribe',
+        formData: {
+          username,
+          email,
+        },
+        onError: handleClientError,
+      }
+    );
 
     if (!!error) {
       handleServerError(error);
-    } else if (!!clientSecret) {
-      setIsLoading(false);
+    } else if (!!clientSecret && !!resUser) {
       setClientSecret(clientSecret);
+      updateCtx({ user: resUser });
+      setIsLoading(false);
     }
   };
 
@@ -214,9 +202,10 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
     error: Error;
   }
 
-  // TODO: stripe types?
-  const handleResubscribe = async (stripe, elements) => {
+  const handleResubscribe = async (formValues: ResubscribeFormValues) => {
     setIsLoading(true);
+
+    const { stripe, elements } = formValues;
 
     // TODO: Make sure this still works with `registration=true`, see registration-success
     const { error }: ResubscribeResProps = await stripe.confirmPayment({
@@ -226,25 +215,26 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
       },
     });
 
-    if (!!error) {
-      handleServerError();
-    }
+    if (!!error) handleServerError();
   };
 
-  interface deleteResProps {
+  interface DeleteResProps {
     error: Error | undefined;
     resUser: User | undefined;
   }
 
-  const handleDelete = async () => {
-    //TODO: setIsLoading here too?
-    const { email, customerId } = user;
+  const handleDelete = async (formValues: DeleteFormValues) => {
+    setIsLoading(true);
 
-    const { error, resUser }: deleteResProps = await http({
+    const { email, customerId } = user;
+    const { password } = formValues;
+
+    const { error, resUser }: DeleteResProps = await http({
       endpoint: '/auth/delete',
       formData: {
         email,
         customerId,
+        password,
       },
       onError: handleClientError,
     });
@@ -254,12 +244,10 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
     } else if (resUser === null) {
       updateCtx({ user: resUser });
       handleSuccess(ACCOUNT_DELETE_SUCCESS_MESSAGE);
-      //TODO: should this reveal a button instead of auto-redirecting?
-      push('/');
     }
   };
 
-  // TODO: pagewrapper?
+  // TODO: what's the deal with && !clientSecret down there?
 
   return (
     <PageWrapper>
@@ -273,15 +261,10 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
         centered
         sx={{ marginBottom: '2rem' }}
       >
-        <Tab label='Account Settings' />
         <Tab label='My Subscription' />
         <Tab label='Update Password' />
         <Tab label='Delete Account' />
       </Tabs>
-
-      <TabPanel name='update-user' value={value} index={0}>
-        <UpdateEmailForm handleUpdateEmail={handleUpdateEmail} />
-      </TabPanel>
       <TabPanel name='update-subscription' value={value} index={1}>
         <UpdateSubscriptionForm
           subscriptionStatus={subscriptionStatus}
@@ -293,10 +276,13 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
         />
       </TabPanel>
       <TabPanel name='update-user' value={value} index={2}>
-        <UpdatePasswordForm handleUpdatePassword={handleUpdatePassword} />
+        <UpdatePasswordForm
+          handleUpdatePassword={handleUpdatePassword}
+          isLoading={isLoading}
+        />
       </TabPanel>
       <TabPanel name='delete-account' value={value} index={3}>
-        <DeleteAccountForm handleDelete={handleDelete} />
+        <DeleteAccountForm handleDelete={handleDelete} isLoading={isLoading} />
       </TabPanel>
     </PageWrapper>
   );

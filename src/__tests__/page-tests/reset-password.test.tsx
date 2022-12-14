@@ -87,13 +87,15 @@ describe('ResetPassword', () => {
 
     userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
+    const expected = {
+      toastData: {
+        severity: 'error',
+        message: DEFAULT_ERROR_MESSAGE,
+      },
+    };
+
     await waitFor(() => {
-      expect(updateCtx).toHaveBeenCalledWith({
-        toastData: {
-          severity: 'error',
-          message: DEFAULT_ERROR_MESSAGE,
-        },
-      });
+      expect(updateCtx).toHaveBeenCalledWith(expected);
     });
   });
 });

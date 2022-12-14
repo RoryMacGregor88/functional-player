@@ -1,3 +1,5 @@
+import { FC, ReactElement } from 'react';
+
 import { useForm } from 'react-hook-form';
 
 import * as Yup from 'yup';
@@ -14,6 +16,8 @@ import {
   PASSWORD_MIN_LENGTH_MESSAGE,
 } from '@/src/utils/constants';
 
+import { UpdatePasswordFormValues } from '@/src/utils/interfaces';
+
 const updatePasswordSchema = Yup.object().shape({
   currentPassword: Yup.string().required(PASSWORD_REQUIRED_MESSAGE),
   newPassword: Yup.string()
@@ -24,8 +28,15 @@ const updatePasswordSchema = Yup.object().shape({
     .required(PASSWORD_CONFIRM_REQUIRED_MESSAGE),
 });
 
-/** @param {{handleUpdatePassword: function}} props */
-const UpdatePasswordForm = ({ handleUpdatePassword }) => {
+interface Props {
+  handleUpdatePassword: (formValues: UpdatePasswordFormValues) => void;
+  isLoading: boolean;
+}
+
+const UpdatePasswordForm: FC<Props> = ({
+  handleUpdatePassword,
+  isLoading,
+}): ReactElement => {
   const {
     register,
     handleSubmit,
@@ -41,15 +52,12 @@ const UpdatePasswordForm = ({ handleUpdatePassword }) => {
     },
   });
 
-  const isDisabled = !isDirty || Object.keys(errors).length;
-
-  const onSubmit = ({ currentPassword, newPassword }) => {
-    handleUpdatePassword({ currentPassword, newPassword });
-    reset();
-  };
+  const isDisabled = !isDirty || !!Object.keys(errors).length;
 
   return (
-    <FormWrapper onSubmit={handleSubmit(onSubmit)}>
+    <FormWrapper
+      onSubmit={handleSubmit((formValues) => handleUpdatePassword(formValues))}
+    >
       <PasswordField
         errors={errors}
         register={register}
@@ -69,7 +77,7 @@ const UpdatePasswordForm = ({ handleUpdatePassword }) => {
         label='Confirm new password'
         name='confirmNewPassword'
       />
-      <Button type='submit' disabled={isDisabled}>
+      <Button type='submit' disabled={isDisabled} isLoading={isLoading}>
         Submit
       </Button>
     </FormWrapper>

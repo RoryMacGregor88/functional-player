@@ -12,22 +12,24 @@ import {
 const renderComponent = ({
   disableSubmitButton = false,
   disableNextButton = false,
+  isLoading = false,
 } = {}) => {
-  const onSubmit = jest.fn(),
+  const handleRegister = jest.fn(),
     onNextClick = jest.fn();
 
   const utils = render(
     <RegisterForm
-      onSubmit={onSubmit}
+      handleRegister={handleRegister}
       onNextClick={onNextClick}
       disableSubmitButton={disableSubmitButton}
       disableNextButton={disableNextButton}
+      isLoading={isLoading}
     />
   );
 
   return {
     ...utils,
-    onSubmit,
+    handleRegister,
     onNextClick,
   };
 };
@@ -37,30 +39,31 @@ describe('Register Form', () => {
     renderComponent();
 
     expect(screen.getByRole('textbox', { name: /email/i })).toBeInTheDocument();
-    expect(
-      screen.getByRole('textbox', { name: /username/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('textbox', { name: /^password/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('textbox', { name: /^confirm password/i })
-    ).toBeInTheDocument();
 
     expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
+
     expect(screen.getByRole('button', { name: /next/i })).toBeInTheDocument();
   });
 
+  it('disables submit button if form is not dirty', async () => {
+    renderComponent();
+    expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled();
+  });
+
+  it('shows loading spinner if isLoading is true', () => {
+    renderComponent({ isLoading: true });
+    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+  });
+
   it('does not submit if form is invalid', async () => {
-    const { onSubmit } = renderComponent();
+    const { handleRegister } = renderComponent();
 
     await userEvent.type(
       screen.getByRole('textbox', { name: /^email/i }),
       'test@email.com'
     );
 
-    const submitButton = screen.getByRole('button', { name: /submit/i });
-    userEvent.click(submitButton);
+    userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
     await waitFor(() => {
       expect(screen.getByText(USERNAME_REQUIRED_MESSAGE)).toBeInTheDocument();
@@ -68,29 +71,36 @@ describe('Register Form', () => {
       expect(
         screen.getByText(/password confirmation is required/i)
       ).toBeInTheDocument();
-      expect(onSubmit).not.toHaveBeenCalled();
+      expect(handleRegister).not.toHaveBeenCalled();
     });
   });
 
   it('only allows passwords greater than minimum password length', async () => {
-    const { onSubmit } = renderComponent();
+    renderComponent();
 
     await userEvent.type(
       screen.getByRole('textbox', { name: /^password/i }),
       'test'
     );
 
-    const submitButton = screen.getByRole('button', { name: /submit/i });
-    userEvent.click(submitButton);
-
     await waitFor(() => {
       expect(screen.getByText(PASSWORD_MIN_LENGTH_MESSAGE)).toBeInTheDocument();
-      expect(onSubmit).not.toHaveBeenCalled();
+      expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled();
     });
   });
 
   it('only allows matching passwords', async () => {
-    const { onSubmit } = renderComponent();
+    renderComponent();
+
+    await userEvent.type(
+      screen.getByRole('textbox', { name: /^username/i }),
+      'username'
+    );
+
+    await userEvent.type(
+      screen.getByRole('textbox', { name: /^email/i }),
+      'test@email.com'
+    );
 
     await userEvent.type(
       screen.getByRole('textbox', { name: /^password/i }),
@@ -102,12 +112,9 @@ describe('Register Form', () => {
       'restpass2'
     );
 
-    const submitButton = screen.getByRole('button', { name: /submit/i });
-    userEvent.click(submitButton);
-
     await waitFor(() => {
       expect(screen.getByText(NO_PASSWORD_MATCH_MESSAGE)).toBeInTheDocument();
-      expect(onSubmit).not.toHaveBeenCalled();
+      expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled();
     });
   });
 
@@ -121,8 +128,21 @@ describe('Register Form', () => {
     expect(screen.getByRole('button', { name: /next/i })).toBeDisabled();
   });
 
+  it('calls `onNextClick` if disableNextButton is false', async () => {
+    const { onNextClick } = renderComponent();
+
+    const nextButton = screen.getByRole('button', { name: /next/i });
+
+    expect(nextButton).toBeEnabled();
+    userEvent.click(nextButton);
+
+    await waitFor(() => {
+      expect(onNextClick).toHaveBeenCalled();
+    });
+  });
+
   it('calls submit handler if form is valid and button is clicked', async () => {
-    const { onSubmit } = renderComponent();
+    const { handleRegister } = renderComponent();
 
     await userEvent.type(
       screen.getByRole('textbox', { name: /email/i }),
@@ -156,7 +176,7 @@ describe('Register Form', () => {
 
       expect(submitButton).toBeEnabled();
       userEvent.click(submitButton);
-      expect(onSubmit).toHaveBeenCalledWith(expected);
+      expect(handleRegister).toHaveBeenCalledWith(expected);
     });
   });
 });

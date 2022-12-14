@@ -7,18 +7,33 @@ import {
 
 import UpdatePasswordForm from './update-password-form.component';
 
+const renderComponent = ({ isLoading = false } = {}) => {
+  const handleUpdatePassword = jest.fn();
+  render(
+    <UpdatePasswordForm
+      handleUpdatePassword={handleUpdatePassword}
+      isLoading={isLoading}
+    />
+  );
+  return { handleUpdatePassword };
+};
+
 describe('UpdatePasswordForm', () => {
   it('renders', () => {
-    render(<UpdatePasswordForm />);
+    renderComponent();
 
     expect(
       screen.getByRole('textbox', { name: /current password/i })
     ).toBeInTheDocument();
   });
 
+  it('disables submit button if form is not dirty', async () => {
+    renderComponent();
+    expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled();
+  });
+
   it('disables submit button if form is invalid', async () => {
-    const handleUpdatePassword = jest.fn();
-    render(<UpdatePasswordForm handleUpdatePassword={handleUpdatePassword} />);
+    const { handleUpdatePassword } = renderComponent();
 
     await userEvent.type(
       screen.getByRole('textbox', { name: /current password/i }),
@@ -37,7 +52,7 @@ describe('UpdatePasswordForm', () => {
   });
 
   it('disables submit if new password and confirm do not match', async () => {
-    render(<UpdatePasswordForm />);
+    renderComponent();
 
     await userEvent.type(
       screen.getByRole('textbox', { name: /current password/i }),
@@ -60,8 +75,13 @@ describe('UpdatePasswordForm', () => {
     });
   });
 
+  it('shows loading spinner if isLoading is true', () => {
+    renderComponent({ isLoading: true });
+    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+  });
+
   it('enables submit button if form is valid', async () => {
-    render(<UpdatePasswordForm />);
+    renderComponent();
 
     await userEvent.type(
       screen.getByRole('textbox', { name: /current password/i }),
@@ -86,8 +106,9 @@ describe('UpdatePasswordForm', () => {
   it('calls `handleUpdatePassword` if form is valid and submit is clicked', async () => {
     const currentPassword = 'password123',
       newPassword = 'password456',
-      handleUpdatePassword = jest.fn();
-    render(<UpdatePasswordForm handleUpdatePassword={handleUpdatePassword} />);
+      confirmNewPassword = 'password456';
+
+    const { handleUpdatePassword } = renderComponent();
 
     await userEvent.type(
       screen.getByRole('textbox', { name: /current password/i }),
@@ -107,7 +128,7 @@ describe('UpdatePasswordForm', () => {
     userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
     await waitFor(() => {
-      const values = { currentPassword, newPassword };
+      const values = { currentPassword, newPassword, confirmNewPassword };
       expect(handleUpdatePassword).toHaveBeenCalledWith(values);
     });
   });

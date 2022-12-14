@@ -1,10 +1,12 @@
 import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
-import { DefaultToastData } from '@/src/utils/interfaces';
+import { DefaultToastData, Severity } from '@/src/utils/interfaces';
+
+const severity: Severity = 'error';
 
 const defaultErrorProps = {
   toastData: {
-    severity: 'error',
+    severity,
     message: DEFAULT_ERROR_MESSAGE,
   },
 };

@@ -31,7 +31,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
 
   const { user, toastData, dialogData, selectedVideo } = ctx;
 
-  const updateCtx: UpdateCtx = (newData) =>
+  const updateCtx: UpdateCtx = (newData: Partial<Ctx>) =>
     setCtx((prev) => ({ ...prev, ...newData }));
 
   // token is checked upon initial app request (not internal page navigations)

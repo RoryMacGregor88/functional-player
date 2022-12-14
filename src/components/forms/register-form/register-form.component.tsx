@@ -1,3 +1,5 @@
+import { FC, ReactElement } from 'react';
+
 import { useForm } from 'react-hook-form';
 
 import * as Yup from 'yup';
@@ -24,7 +26,10 @@ import {
   PASSWORD_CONFIRM_REQUIRED_MESSAGE,
 } from '@/src/utils/constants';
 
-// TODO: make submit handler like login, error.length, dirty etc. And also add link to login if already have an account
+import { RegisterFormValues } from '@/src/utils/interfaces';
+
+// TODO: Add link to login if already have an account
+// TODO: why NEXT button not yellow?
 
 const registerFormSchema = Yup.object().shape({
   email: Yup.string()
@@ -39,26 +44,25 @@ const registerFormSchema = Yup.object().shape({
     .required(PASSWORD_CONFIRM_REQUIRED_MESSAGE),
 });
 
-/**
- * @param {{
- *  isLoading: boolean
- *  onSubmit: function
- *  onNextClick: function
- *  disableSubmitButton: boolean
- *  disableNextButton: boolean
- * }} props
- */
-const RegisterForm = ({
+interface Props {
+  isLoading: boolean;
+  handleRegister: (formValues: RegisterFormValues) => void;
+  onNextClick: () => void;
+  disableSubmitButton: boolean;
+  disableNextButton: boolean;
+}
+
+const RegisterForm: FC<Props> = ({
   isLoading,
-  onSubmit,
+  handleRegister,
   onNextClick,
   disableSubmitButton,
   disableNextButton,
-}) => {
+}): ReactElement => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm({
     mode: 'all',
     resolver: yupResolver(registerFormSchema),
@@ -70,11 +74,13 @@ const RegisterForm = ({
     },
   });
 
-  // TODO: why NEXT button not yellow?
+  const isDisabled = !isDirty || !!Object.keys(errors).length;
 
   return (
     <Box sx={{ width: '100%' }} justifyContent='center' alignItems='center'>
-      <FormWrapper onSubmit={handleSubmit((values) => onSubmit(values))}>
+      <FormWrapper
+        onSubmit={handleSubmit((formValues) => handleRegister(formValues))}
+      >
         <EmailField errors={errors} register={register} />
         <UsernameField errors={errors} register={register} />
         <PasswordField
@@ -92,7 +98,7 @@ const RegisterForm = ({
         />
         <Button
           type='submit'
-          disabled={disableSubmitButton}
+          disabled={disableSubmitButton || isDisabled}
           isLoading={isLoading}
         >
           Submit

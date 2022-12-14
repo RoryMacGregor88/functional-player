@@ -15,13 +15,17 @@ import {
   LoadMask,
 } from '@/src/components';
 
-import { getStripe, http } from '@/src/utils';
+import { http } from '@/src/utils';
+
+import getStripe from '@/src/utils/get-stripe';
 
 import {
   User,
   WellData,
   UpdateCtx,
   DefaultToastData,
+  RegisterFormValues,
+  SubscribeFormValues,
 } from '@/src/utils/interfaces';
 
 import {
@@ -48,9 +52,7 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
   }
 
   const onNextClick = () => {
-    if (!!wellData) {
-      setWellData(null);
-    }
+    if (!!wellData) setWellData(null);
     setActiveStep(2);
   };
 
@@ -72,22 +74,15 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
     updateCtx(defaultToastData);
   };
 
-  interface RegisterParams {
-    email: string;
-    username: string;
-    password: string;
-    confirmPassword: string;
-  }
-
   interface RegisterResProps {
     error: Error | undefined;
     clientSecret: string | undefined;
   }
 
-  const registerSubmit = async (values: RegisterParams) => {
+  const handleRegister = async (formValues: RegisterFormValues) => {
     setIsLoading(true);
 
-    const { username, email, password } = values;
+    const { username, email, password } = formValues;
 
     const { error, clientSecret }: RegisterResProps = await http({
       endpoint: '/auth/register',
@@ -111,8 +106,7 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
     error: Error;
   }
 
-  // TODO: string types?
-  const subscribeSubmit = async (stripe, elements) => {
+  const subscribeSubmit = async ({ stripe, elements }: SubscribeFormValues) => {
     setIsLoading(true);
 
     const { error }: SubscribeResProps = await stripe.confirmPayment({
@@ -122,9 +116,7 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
       },
     });
 
-    if (!!error) {
-      handleServerError();
-    }
+    if (!!error) handleServerError();
   };
 
   return (
@@ -140,7 +132,7 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
       {activeStep === 1 ? (
         <RegisterForm
           isLoading={isLoading}
-          onSubmit={registerSubmit}
+          handleRegister={handleRegister}
           onNextClick={onNextClick}
           disableSubmitButton={!!wellData?.severity}
           disableNextButton={!clientSecret}
