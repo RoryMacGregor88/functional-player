@@ -44,6 +44,7 @@ const Dialog: FC<Props> = ({
       <CloseIcon
         onClick={close}
         sx={{ margin: '0.5rem 0.5rem 0 auto', cursor: 'pointer' }}
+        data-testid='close-icon'
       />
       {!!title ? (
         <DialogTitle id='alert-dialog-title'>{title}</DialogTitle>

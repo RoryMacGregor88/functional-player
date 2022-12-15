@@ -3,7 +3,7 @@ import { createTheme, Theme } from '@mui/material/styles';
 import { Open_Sans } from '@next/font/google';
 
 // TODO: black colors are mixed up in header, main, footer
-// TODO: Theme types are all fucked
+// also, theme types are all fucked
 
 import { THEME_COLORS } from '@/src/utils/constants';
 

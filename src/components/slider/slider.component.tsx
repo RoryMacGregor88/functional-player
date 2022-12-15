@@ -54,7 +54,7 @@ interface ChevronWrapperProps {
 }
 
 // TODO: hover color shows that chevron wrapper is bigger than container by a few px
-const ChevronWrapper: FC<ChevronWrapperProps> = ({
+export const ChevronWrapper: FC<ChevronWrapperProps> = ({
   handleChevronClick,
   orientation,
   children,
@@ -68,6 +68,7 @@ const ChevronWrapper: FC<ChevronWrapperProps> = ({
     component={ButtonBase}
     disableRipple
     onClick={() => handleChevronClick(orientation)}
+    data-testid={`${orientation}-chevron`}
     sx={{
       position: 'absolute',
       top: 0,
@@ -99,9 +100,7 @@ const Slider: FC<SliderProps> = ({
   const { updateCtx } = useContext(Context);
   const [position, setPosition] = useState(0);
 
-  if (!courses?.length) {
-    return null;
-  }
+  if (!courses?.length) return null;
 
   const minWidth = banner ? 'calc(100vw - 4rem)' : `${ITEM_WIDTH_REM}rem`,
     height = banner ? '30rem' : `${ITEM_HEIGHT_REM}rem`;

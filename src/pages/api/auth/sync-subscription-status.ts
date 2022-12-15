@@ -1,49 +1,53 @@
-import stripeFn from 'stripe';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 import { withIronSessionApiRoute } from 'iron-session/next';
 
 import {
   connectToDatabase,
   sessionOptions,
-  handleServerError,
-  handleForbidden,
+  syncStripeAndDb,
   logServerError,
+  handleForbidden,
+  handleServerError,
 } from '@/lib';
 
 import {
-  USERS,
   HTTP_METHOD_ERROR_MESSAGE,
   TOKEN_ERROR_MESSAGE,
 } from '@/src/utils/constants';
 
-const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
-
-async function unsubscribe(req, res) {
+async function syncSubscriptionStatus(
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> {
   if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {
     try {
-      const { email, customerId } = req.body;
-
-      await stripe.customers.del(customerId);
+      const {
+        email,
+        subscriptionStatus: currentSubscriptionStatus,
+        subscriptionId,
+      } = req.body;
 
       const { db } = await connectToDatabase();
 
-      const updatedProperties = {
-        customerId: null,
-        subscriptionId: null,
-        subscriptionStatus: null,
-      };
+      const { isError, subscriptionStatus } = await syncStripeAndDb({
+        db,
+        email,
+        currentSubscriptionStatus,
+        subscriptionId,
+      });
 
-      await db
-        .collection(USERS)
-        .findOneAndUpdate({ email }, { $set: { ...updatedProperties } });
+      if (isError) {
+        return handleServerError(res);
+      }
 
       const resUser = {
         ...req.session.user,
-        ...updatedProperties,
+        subscriptionStatus,
       };
 
       req.session.user = resUser;
@@ -51,10 +55,10 @@ async function unsubscribe(req, res) {
 
       return res.status(200).json({ resUser });
     } catch (error) {
-      await logServerError('unsubscribe', error);
+      await logServerError('syncSubscriptionStatus', error);
       return handleServerError(res);
     }
   }
 }
 
-export default withIronSessionApiRoute(unsubscribe, sessionOptions);
+export default withIronSessionApiRoute(syncSubscriptionStatus, sessionOptions);

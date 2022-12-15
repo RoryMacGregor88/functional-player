@@ -40,8 +40,8 @@ interface Props {
 }
 
 // TODO: does not reset slider when changing categories
-// TODO: does not reset select when changing categories
-// TODO: bottom margin is disappearing behind footer
+// does not reset select when changing categories
+// bottom margin is disappearing behind footer (pretty sure this is fixed?)
 
 export default function Categories({ user, courses }: Props) {
   const {

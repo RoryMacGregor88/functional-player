@@ -15,13 +15,16 @@ describe('Reactivation success page', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
 
-    (user = { username: 'John Smith' }), (updateCtx = jest.fn());
+    user = { username: 'John Smith' };
+    updateCtx = jest.fn();
   });
 
   it('shows success message, sets state, redirects on button click', async () => {
     fetchMock.mockResponse(JSON.stringify({ resUser: user }));
 
-    const { router } = render(
+    const {
+      router: { push },
+    } = render(
       <ReactivationSuccess user={user} updateCtx={updateCtx} redirect={true} />,
       { push: jest.fn() }
     );
@@ -39,18 +42,17 @@ describe('Reactivation success page', () => {
     );
 
     await waitFor(() => {
-      expect(router.push).toHaveBeenCalledWith('/dashboard');
+      expect(push).toHaveBeenCalledWith('/dashboard');
     });
   });
 
   it('redirects to login if user is not found', () => {
-    const { router } = render(
-      <ReactivationSuccess user={null} redirect={false} />,
-      {
-        push: jest.fn(),
-      }
-    );
+    const {
+      router: { push },
+    } = render(<ReactivationSuccess user={null} redirect={false} />, {
+      push: jest.fn(),
+    });
 
-    expect(router.push).toHaveBeenCalledWith('/dashboard');
+    expect(push).toHaveBeenCalledWith('/dashboard');
   });
 });

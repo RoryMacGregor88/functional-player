@@ -1,42 +1,49 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+
 import { withIronSessionApiRoute } from 'iron-session/next';
 
 import {
-  sessionOptions,
   connectToDatabase,
+  sessionOptions,
   handleForbidden,
-  logServerError,
   handleServerError,
+  logServerError,
 } from '@/lib';
 
 import {
-  HTTP_METHOD_ERROR_MESSAGE,
-  TOKEN_ERROR_MESSAGE,
   USERS,
+  TOKEN_ERROR_MESSAGE,
+  HTTP_METHOD_ERROR_MESSAGE,
 } from '@/src/utils/constants';
 
-async function updateBookmarks(req, res) {
+async function lastWatched(
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> {
   if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {
     try {
-      const { email, bookmarks } = req.body;
+      const { email, _id } = req.body;
       const { db } = await connectToDatabase();
 
       await db
         .collection(USERS)
-        .findOneAndUpdate({ email }, { $set: { bookmarks } });
+        .findOneAndUpdate({ email }, { $set: { lastWatched: _id } });
 
-      req.session.user = { ...req.session.user, bookmarks };
+      const resUser = { ...req.session.user, lastWatched: _id };
+
+      req.session.user = resUser;
       await req.session.save();
 
-      return res.status(200).json({ resBookmarks: bookmarks });
+      return res.status(200).json({ resUser });
     } catch (error) {
-      await logServerError('updateBookmarks', error);
+      await logServerError('lastWatched', error);
       return handleServerError(res);
     }
   }
 }
 
-export default withIronSessionApiRoute(updateBookmarks, sessionOptions);
+export default withIronSessionApiRoute(lastWatched, sessionOptions);

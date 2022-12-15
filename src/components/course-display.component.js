@@ -26,7 +26,7 @@ const Overlay = ({ course }) => {
 };
 
 // TODO: styling of this still broke on any pages?
-// TODO: Is this still needed now that dashboard exists?
+// also, is this still needed now that dashboard exists?
 /** @param {{ course: object }} props */
 const CourseDisplay = ({ course }) => {
   const { updateCtx } = useContext(Context);

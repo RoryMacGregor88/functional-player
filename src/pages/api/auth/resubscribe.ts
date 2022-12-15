@@ -1,3 +1,5 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+
 import stripeFn from 'stripe';
 
 import { withIronSessionApiRoute } from 'iron-session/next';
@@ -18,7 +20,10 @@ import {
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
-async function resubscribe(req, res) {
+async function resubscribe(
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> {
   if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
@@ -28,7 +33,7 @@ async function resubscribe(req, res) {
       const { email, username } = req.body;
       const { db } = await connectToDatabase();
 
-      // TODO: prevent making second subscription with same email
+      // TODO: must prevent making second subscription with same email
 
       // create customer on stripe servers
       const { id: customerId } = await stripe.customers.create({

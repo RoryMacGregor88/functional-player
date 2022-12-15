@@ -25,8 +25,7 @@ describe('SubscriptionForm', () => {
 
   it('shows loading spinner if isLoading is true', () => {
     renderComponent({ isLoading: true });
-
-    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+    expect(screen.getByTestId(/loading-spinner/i)).toBeInTheDocument();
   });
 
   it('calls submit handler with stripe elements', async () => {

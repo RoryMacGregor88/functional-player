@@ -29,7 +29,7 @@ import {
 import { RegisterFormValues } from '@/src/utils/interfaces';
 
 // TODO: Add link to login if already have an account
-// TODO: why NEXT button not yellow?
+// also, why NEXT button not yellow?
 
 const registerFormSchema = Yup.object().shape({
   email: Yup.string()

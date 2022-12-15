@@ -39,9 +39,7 @@ describe('Register Form', () => {
     renderComponent();
 
     expect(screen.getByRole('textbox', { name: /email/i })).toBeInTheDocument();
-
     expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
-
     expect(screen.getByRole('button', { name: /next/i })).toBeInTheDocument();
   });
 
@@ -52,7 +50,7 @@ describe('Register Form', () => {
 
   it('shows loading spinner if isLoading is true', () => {
     renderComponent({ isLoading: true });
-    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+    expect(screen.getByTestId(/loading-spinner/i)).toBeInTheDocument();
   });
 
   it('does not submit if form is invalid', async () => {

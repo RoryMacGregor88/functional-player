@@ -36,7 +36,7 @@ const data = new Array(50).fill(undefined).map((_, i) => {
   const level = getLevel(),
     artist = getArtist();
 
-  //TODO: make artist a label/value object, and any others that require it
+  //TODO: make artist a label/value object, and any others that require it. Needed for url params
 
   return {
     _id: uuidv4(),

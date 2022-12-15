@@ -51,7 +51,7 @@ describe('UpdateSubscriptionForm', () => {
 
     it('shows loading spinner if isLoading is true and client secret is present', () => {
       renderComponent({ isLoading: true, clientSecret: '12345' });
-      expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+      expect(screen.getByTestId(/loading-spinner/i)).toBeInTheDocument();
     });
 
     it('calls submit handler with Stripe modules', async () => {
@@ -80,7 +80,7 @@ describe('UpdateSubscriptionForm', () => {
 
     it('shows loading spinner if isLoading is true and subscription is active', () => {
       renderComponent({ isLoading: true, subscriptionStatus: 'active' });
-      expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+      expect(screen.getByTestId(/loading-spinner/i)).toBeInTheDocument();
     });
 
     it('calls handleUnsubscribe when button clicked', async () => {
@@ -109,7 +109,7 @@ describe('UpdateSubscriptionForm', () => {
 
     it('shows loading spinner if isLoading is true and subscription is not active', () => {
       renderComponent({ isLoading: true });
-      expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+      expect(screen.getByTestId(/loading-spinner/i)).toBeInTheDocument();
     });
 
     it('calls handleStripeCustomer when button clicked', async () => {

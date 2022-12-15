@@ -6,7 +6,7 @@ import { http } from '@/src/utils';
 
 import { getAllCourses, getCourseById } from '@/lib';
 
-// TODO: strip out styles from copied pages, redo
+// strip out styles from copied pages, redo
 
 export const getStaticPaths = async () => {
   const courses = await getAllCourses();
@@ -30,17 +30,14 @@ export const getStaticProps = async ({ params }) => {
 
 export default function Series({ user, course }) {
   const { email, subscriptionStatus } = user ?? {};
-  const { _id, title, description, videoId } = course;
+  const { _id, title, description, videoId, trailerId } = course;
 
   useEffect(() => {
     if (!!user) {
-      // TODO: updatedUser returned here?
+      // return updatedUser here if you ever use this
       http('/last-watched', { email, _id });
     }
   }, []);
-
-  // TODO: add trailerId to all videos in db
-  const trailerId = videoId;
 
   return (
     <div

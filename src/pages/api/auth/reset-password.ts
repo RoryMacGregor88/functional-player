@@ -1,3 +1,5 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+
 import nodemailer from 'nodemailer';
 
 import { hash } from 'bcryptjs';
@@ -17,7 +19,10 @@ import {
   EMAIL_NOT_FOUND_MESSAGE,
 } from '@/src/utils/constants';
 
-export default async function resetPassword(req, res) {
+export default async function resetPassword(
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> {
   if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else {

@@ -1,3 +1,5 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+
 import { withIronSessionApiRoute } from 'iron-session/next';
 
 import {
@@ -12,7 +14,10 @@ import {
   TOKEN_ERROR_MESSAGE,
 } from '@/src/utils/constants';
 
-async function logout(req, res) {
+async function logout(
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> {
   if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
@@ -27,7 +32,5 @@ async function logout(req, res) {
     }
   }
 }
-
-export { logout };
 
 export default withIronSessionApiRoute(logout, sessionOptions);

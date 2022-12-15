@@ -17,6 +17,8 @@ export const TOKEN_ERROR_MESSAGE = 'Not allowed. Authorization token required.';
 export const EMAIL_NOT_FOUND_MESSAGE =
   'No user account associated with that email address.';
 
+export const INCORRECT_PASSWORD_MESSAGE = 'Incorrect password.';
+
 export const REGISTRATION_SUCCESS_MESSAGE =
   'Account successfully created. Click "NEXT" button to continue.';
 
@@ -31,8 +33,6 @@ export const REACTIVATION_SUCCESS_MESSAGE =
 
 export const UPDATE_PASSWORD_SUCCESS_MESSAGE =
   'Your password has been successfully updated.';
-export const UPDATE_EMAIL_SUCCESS_MESSAGE =
-  'Your email has been successfully updated.';
 export const CANCEL_SUBSCRITION_SUCCESS_MESSAGE =
   'Your subscription has been successfully cancelled. You can re-activate your subscription any time by clicking the "RE-ENABLE SUBSCRIPTION" button below.';
 

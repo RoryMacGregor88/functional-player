@@ -9,7 +9,6 @@ import {
   UpdatePasswordForm,
   DeleteAccountForm,
   UpdateSubscriptionForm,
-  UpdateEmailForm,
   Well,
   LoadMask,
   PageWrapper,
@@ -20,7 +19,6 @@ import {
   UPDATE_PASSWORD_SUCCESS_MESSAGE,
   ACCOUNT_DELETE_SUCCESS_MESSAGE,
   CANCEL_SUBSCRITION_SUCCESS_MESSAGE,
-  UPDATE_EMAIL_SUCCESS_MESSAGE,
 } from '@/src/utils/constants';
 
 import {
@@ -79,7 +77,6 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
   const { subscriptionStatus } = user;
 
   const handleSuccess = (message: string) => {
-    console.log('HIT: ', message);
     setIsLoading(false);
     setWellData({
       severity: 'success',
@@ -101,16 +98,6 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
     if (!!wellData) setWellData(null);
     setValue(newValue);
   };
-
-  interface UpdateEmailParams {
-    email: string;
-    confirmEmail: string;
-  }
-
-  interface UpdateEmailResProps {
-    error: Error | undefined;
-    resUser: User | undefined;
-  }
 
   interface UpdatePasswordResProps {
     error: Error | undefined;
@@ -261,10 +248,16 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
         centered
         sx={{ marginBottom: '2rem' }}
       >
-        <Tab label='My Subscription' />
         <Tab label='Update Password' />
+        <Tab label='My Subscription' />
         <Tab label='Delete Account' />
       </Tabs>
+      <TabPanel name='update-user' value={value} index={0}>
+        <UpdatePasswordForm
+          handleUpdatePassword={handleUpdatePassword}
+          isLoading={isLoading}
+        />
+      </TabPanel>
       <TabPanel name='update-subscription' value={value} index={1}>
         <UpdateSubscriptionForm
           subscriptionStatus={subscriptionStatus}
@@ -275,13 +268,7 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
           isLoading={isLoading}
         />
       </TabPanel>
-      <TabPanel name='update-user' value={value} index={2}>
-        <UpdatePasswordForm
-          handleUpdatePassword={handleUpdatePassword}
-          isLoading={isLoading}
-        />
-      </TabPanel>
-      <TabPanel name='delete-account' value={value} index={3}>
+      <TabPanel name='delete-account' value={value} index={2}>
         <DeleteAccountForm handleDelete={handleDelete} isLoading={isLoading} />
       </TabPanel>
     </PageWrapper>

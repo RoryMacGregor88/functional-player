@@ -77,7 +77,7 @@ describe('UpdatePasswordForm', () => {
 
   it('shows loading spinner if isLoading is true', () => {
     renderComponent({ isLoading: true });
-    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+    expect(screen.getByTestId(/loading-spinner/i)).toBeInTheDocument();
   });
 
   it('enables submit button if form is valid', async () => {
@@ -128,8 +128,8 @@ describe('UpdatePasswordForm', () => {
     userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
     await waitFor(() => {
-      const values = { currentPassword, newPassword, confirmNewPassword };
-      expect(handleUpdatePassword).toHaveBeenCalledWith(values);
+      const expected = { currentPassword, newPassword, confirmNewPassword };
+      expect(handleUpdatePassword).toHaveBeenCalledWith(expected);
     });
   });
 });

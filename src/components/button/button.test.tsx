@@ -43,7 +43,7 @@ describe('button', () => {
       </Button>
     );
 
-    const button = screen.getByTestId('loading-spinner').parentElement;
+    const button = screen.getByTestId(/loading-spinner/i).parentElement;
 
     await waitFor(() => {
       expect(button).toBeDisabled();
@@ -57,6 +57,6 @@ describe('button', () => {
       </Button>
     );
 
-    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+    expect(screen.getByTestId(/loading-spinner/i)).toBeInTheDocument();
   });
 });

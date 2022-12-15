@@ -34,7 +34,7 @@ interface OverlayProps {
   push: (url: string) => void;
 }
 
-const Overlay: FC<OverlayProps> = ({
+export const Overlay: FC<OverlayProps> = ({
   selectedVideoId,
   selectedVideo,
   isBookmarked,
@@ -76,6 +76,7 @@ const Overlay: FC<OverlayProps> = ({
       >
         <Grid item container justifyContent='space-between' alignItems='center'>
           <IconButton
+            data-testid='close-icon'
             onClick={close}
             disableRipple
             sx={{ width: 'fit-content', padding: '0' }}
@@ -138,19 +139,18 @@ const VideoDialog: FC<VideoDialogProps> = ({
   const { _id, videoId } = selectedVideo ?? {};
 
   // TODO: useEffect not running
-  // TODO: this needs to fire when Vimeo play button is clicked, not on mount
-  useEffect(() => {
-    if (!!selectedVideo) {
-      updateLastWatched({ user, _id, updateCtx });
-    }
-  }, [_id, selectedVideo, updateCtx, user]);
+  // also, this needs to fire when Vimeo play button is clicked, not on mount
+
+  // useEffect(() => {
+  //   if (!!selectedVideo) {
+  //     updateLastWatched({ user, _id, updateCtx });
+  //   }
+  // }, [_id, selectedVideo, updateCtx, user]);
 
   const isMedium = useMediaQuery('(max-width:1200px)');
   const isSmall = useMediaQuery('(max-width:600px)');
 
-  if (!selectedVideo) {
-    return null;
-  }
+  if (!selectedVideo) return null;
 
   const deviceSize = isSmall ? 'small' : isMedium ? 'medium' : 'large';
   const isBookmarked = !!user?.bookmarks.includes(_id);

@@ -2,20 +2,12 @@ import { useState, ReactElement } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { useForm } from 'react-hook-form';
-
-import * as Yup from 'yup';
-
-import { yupResolver } from '@hookform/resolvers/yup';
-
 import {
   LoadMask,
   Well,
-  FormWrapper,
   PageWrapper,
   SpacedTitle,
-  EmailField,
-  Button,
+  ResetPasswordForm,
 } from '@/src/components';
 
 import { http } from '@/src/utils';
@@ -26,19 +18,6 @@ import {
   DefaultToastData,
   WellData,
 } from '@/src/utils/interfaces';
-
-import {
-  EMAIL_INVALID_MESSAGE,
-  EMAIL_REQUIRED_MESSAGE,
-} from '@/src/utils/constants';
-
-const resetPasswordFormSchema = Yup.object().shape({
-  email: Yup.string()
-    .email(EMAIL_INVALID_MESSAGE)
-    .required(EMAIL_REQUIRED_MESSAGE),
-});
-
-// TODO: submit loading spinner not tested!!!
 
 interface Props {
   user: User;
@@ -53,18 +32,6 @@ export default function ResetPassword({
   const [wellData, setWellData] = useState<WellData>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    mode: 'all',
-    resolver: yupResolver(resetPasswordFormSchema),
-    defaultValues: {
-      email: '',
-    },
-  });
 
   if (!!user) {
     push('/dashboard');
@@ -81,7 +48,9 @@ export default function ResetPassword({
     ok: boolean | undefined;
   }
 
-  const onSubmit = async (values: { email: string }): Promise<void> => {
+  const handleResetPassword = async (values: {
+    email: string;
+  }): Promise<void> => {
     setIsLoading(true);
 
     const { email } = values;
@@ -111,13 +80,12 @@ export default function ResetPassword({
   return (
     <PageWrapper>
       <SpacedTitle>Reset Password</SpacedTitle>
-      <FormWrapper onSubmit={handleSubmit((values) => onSubmit(values))}>
-        {!!wellData ? <Well {...wellData} /> : null}
-        <EmailField errors={errors} register={register} />
-        <Button type='submit' disabled={isSubmitDisabled} isLoading={isLoading}>
-          Submit
-        </Button>
-      </FormWrapper>
+      {!!wellData ? <Well {...wellData} /> : null}
+      <ResetPasswordForm
+        handleResetPassword={handleResetPassword}
+        isSubmitDisabled={isSubmitDisabled}
+        isLoading={isLoading}
+      />
     </PageWrapper>
   );
 }

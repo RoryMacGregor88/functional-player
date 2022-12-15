@@ -1,3 +1,5 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+
 import { compare } from 'bcryptjs';
 
 import { withIronSessionApiRoute } from 'iron-session/next';
@@ -5,20 +7,20 @@ import { withIronSessionApiRoute } from 'iron-session/next';
 import {
   connectToDatabase,
   sessionOptions,
+  syncStripeAndDb,
   handleForbidden,
   handleServerError,
   logServerError,
 } from '@/lib';
 
-import { syncStripeAndDb } from '@/lib';
-
 import {
   USERS,
   HTTP_METHOD_ERROR_MESSAGE,
   EMAIL_NOT_FOUND_MESSAGE,
+  INCORRECT_PASSWORD_MESSAGE,
 } from '@/src/utils/constants';
 
-async function login(req, res) {
+async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else {
@@ -48,20 +50,20 @@ async function login(req, res) {
       if (!checkPassword) {
         return res
           .status(400)
-          .json({ error: { message: 'Incorrect password.' } });
+          .json({ error: { message: INCORRECT_PASSWORD_MESSAGE } });
       }
 
       // fresh sync of stripe subscription status upon every login. If
       // subscription status is null (deleted), or is unchanged, original
       // value will be returned
-      const { error, subscriptionStatus } = await syncStripeAndDb({
+      const { isError, subscriptionStatus } = await syncStripeAndDb({
         db,
         email,
         currentSubscriptionStatus,
         subscriptionId,
       });
 
-      if (!!error) {
+      if (isError) {
         return handleServerError(res);
       }
 
@@ -69,6 +71,7 @@ async function login(req, res) {
         ...restOfUser,
         subscriptionStatus,
       };
+
       req.session.user = resUser;
       await req.session.save();
 

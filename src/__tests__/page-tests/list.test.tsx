@@ -14,8 +14,10 @@ describe('list', () => {
   });
 
   it('redirects to login if no user found', () => {
-    const { router } = render(<List />, { push: jest.fn() });
+    const {
+      router: { push },
+    } = render(<List />, { push: jest.fn() });
 
-    expect(router.push).toHaveBeenCalledWith('/login');
+    expect(push).toHaveBeenCalledWith('/login');
   });
 });

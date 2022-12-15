@@ -54,14 +54,16 @@ describe('Navbar', () => {
   });
 
   it('navigates to dashboard if logo clicked', async () => {
-    const { router } = render(<Navbar isDrawerOpen={false} />, {
+    const {
+      router: { push },
+    } = render(<Navbar isDrawerOpen={false} />, {
       push: jest.fn(),
     });
 
     userEvent.click(screen.getByText(/functional player/i));
 
     await waitFor(() => {
-      expect(router.push).toHaveBeenCalledWith('/dashboard', {
+      expect(push).toHaveBeenCalledWith('/dashboard', {
         forceOptimisticNavigation: false,
       });
     });

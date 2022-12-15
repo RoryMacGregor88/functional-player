@@ -64,7 +64,7 @@ describe('dashboard', () => {
     });
   });
 
-  it('does not display bookmarks is user has no bookmarks', () => {
+  it('does not display bookmarks if user has no bookmarks', () => {
     render(
       <Dashboard updateCtx={jest.fn()} user={mockUser} courses={mockCourses} />
     );
@@ -121,13 +121,15 @@ describe('dashboard', () => {
       <Dashboard updateCtx={updateCtx} user={mockUser} error={{ message }} />
     );
 
+    const expected = {
+      toastData: {
+        severity: 'error',
+        message,
+      },
+    };
+
     await waitFor(() => {
-      expect(updateCtx).toHaveBeenCalledWith({
-        toastData: {
-          severity: 'error',
-          message,
-        },
-      });
+      expect(updateCtx).toHaveBeenCalledWith(expected);
     });
   });
 });

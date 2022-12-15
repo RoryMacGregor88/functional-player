@@ -51,7 +51,7 @@ describe('App', () => {
     render(<App Component={TestComponent} />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+      expect(screen.getByTestId(/loading-spinner/i)).toBeInTheDocument();
       expect(screen.queryByText(/test component/i)).not.toBeInTheDocument();
     });
   });

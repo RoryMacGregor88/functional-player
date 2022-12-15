@@ -29,13 +29,9 @@ export default async function updateLastWatched({
     });
 
     if (!!error) {
-      // TODO: should we be notifying user of this? More of a background thing.
-      updateCtx({
-        toastData: {
-          message: error.message,
-          severity: 'error',
-        },
-      });
+      // this is a background action,
+      // doesn't really matter if it's error-handled
+      return;
     } else if (!!user) {
       updateCtx({ user: resUser });
     }

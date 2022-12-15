@@ -47,21 +47,23 @@ describe('Account Page', () => {
       render(<Account user={{ username: 'test-username' }} />);
 
       expect(
-        screen.getByRole('button', { name: /submit/i })
+        screen.getByRole('textbox', { name: /current password/i })
       ).toBeInTheDocument();
     });
 
     it('redirects to login if no user found', () => {
-      const { router } = render(<Account user={null} />, { push: jest.fn() });
+      const {
+        router: { push },
+      } = render(<Account user={null} />, { push: jest.fn() });
 
-      expect(router.push).toHaveBeenCalledWith('/login');
+      expect(push).toHaveBeenCalledWith('/login');
     });
 
     it('switches tabs', async () => {
       render(<Account user={{ subscriptionStatus: 'active' }} />);
 
       expect(
-        screen.getByRole('button', { name: /submit/i })
+        screen.getByRole('textbox', { name: /current password/i })
       ).toBeInTheDocument();
 
       userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
@@ -78,8 +80,6 @@ describe('Account Page', () => {
       fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
       render(<Account user={{ subscriptionStatus: 'active' }} />);
-
-      userEvent.click(screen.getByRole('tab', { name: /update password/i }));
 
       await waitFor(() => {
         expect(
@@ -432,9 +432,8 @@ describe('Account Page', () => {
 
       const updateCtx = jest.fn();
 
-      const { router } = render(
-        <Account user={{ username: 'John Smith' }} updateCtx={updateCtx} />,
-        { push: jest.fn() }
+      render(
+        <Account user={{ username: 'John Smith' }} updateCtx={updateCtx} />
       );
 
       userEvent.click(screen.getByRole('tab', { name: /delete account/i }));
@@ -472,9 +471,7 @@ describe('Account Page', () => {
       const message = 'test-error-message';
       fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
-      const { router } = render(<Account user={{ username: 'John Smith' }} />, {
-        push: jest.fn(),
-      });
+      render(<Account user={{ username: 'John Smith' }} />);
 
       userEvent.click(screen.getByRole('tab', { name: /delete account/i }));
 
@@ -501,7 +498,6 @@ describe('Account Page', () => {
 
       await waitFor(() => {
         expect(screen.getByText(message)).toBeInTheDocument();
-        expect(router.push).not.toHaveBeenCalled();
       });
     });
 
@@ -510,11 +506,8 @@ describe('Account Page', () => {
         throw new Error();
       });
 
-      const { router } = render(
-        <Account user={{ username: 'John Smith' }} updateCtx={updateCtx} />,
-        {
-          push: jest.fn(),
-        }
+      render(
+        <Account user={{ username: 'John Smith' }} updateCtx={updateCtx} />
       );
 
       userEvent.click(screen.getByRole('tab', { name: /delete account/i }));
@@ -542,7 +535,6 @@ describe('Account Page', () => {
 
       await waitFor(() => {
         expect(updateCtx).toHaveBeenCalledWith(toastData);
-        expect(router.push).not.toHaveBeenCalled();
       });
     });
   });

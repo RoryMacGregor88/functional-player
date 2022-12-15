@@ -29,7 +29,9 @@ describe('SidebarItem', () => {
       href = '/test-href',
       onClick = jest.fn();
 
-    const { router } = render(
+    const {
+      router: { push },
+    } = render(
       <SidebarItem
         label={label}
         Icon={FakeIcon}
@@ -44,7 +46,7 @@ describe('SidebarItem', () => {
     userEvent.click(screen.getByTestId(`${label}-icon`));
 
     await waitFor(() => {
-      expect(router.push).toHaveBeenCalledWith(href, {
+      expect(push).toHaveBeenCalledWith(href, {
         forceOptimisticNavigation: false,
       });
     });

@@ -31,7 +31,9 @@ describe('Login Page', () => {
 
     fetchMock.mockResponse(JSON.stringify({ resUser }));
 
-    const { router } = render(<Login user={null} updateCtx={updateCtx} />, {
+    const {
+      router: { push },
+    } = render(<Login user={null} updateCtx={updateCtx} />, {
       push: jest.fn(),
     });
 
@@ -51,7 +53,7 @@ describe('Login Page', () => {
     userEvent.click(button);
 
     await waitFor(() => {
-      expect(router.push).toHaveBeenCalledWith('/dashboard');
+      expect(push).toHaveBeenCalledWith('/dashboard');
       expect(updateCtx).toHaveBeenCalledWith({ user: resUser });
     });
   });
@@ -118,10 +120,12 @@ describe('Login Page', () => {
 
   it('redirects to dashboard if user found', async () => {
     const testUser = { username: 'John smith' };
-    const { router } = render(<Login user={testUser} updateCtx={updateCtx} />, {
+    const {
+      router: { push },
+    } = render(<Login user={testUser} updateCtx={updateCtx} />, {
       push: jest.fn(),
     });
 
-    expect(router.push).toHaveBeenCalledWith('/dashboard');
+    expect(push).toHaveBeenCalledWith('/dashboard');
   });
 });

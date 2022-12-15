@@ -40,7 +40,6 @@ const UpdatePasswordForm: FC<Props> = ({
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors, isDirty },
   } = useForm({
     mode: 'all',

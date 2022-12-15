@@ -6,7 +6,8 @@ export const getStaticProps = async (ctx) => ({
   props: { series: await getAllSeries() },
 });
 
-// TODO: styling of this doesn't match ones on landing. Should these even be different?
+// styling of this doesn't match ones on landing. Should these even be different?
+// possibly deprecated
 
 export default function Series({ series }) {
   return (

@@ -13,11 +13,12 @@ enableFetchMocks();
 
 const renderComponent = ({ isLoading = false } = {}) => {
   const handleLogin = jest.fn();
-  const { router } = render(
-    <LoginForm handleLogin={handleLogin} isLoading={isLoading} />,
-    { push: jest.fn() }
-  );
-  return { handleLogin, router };
+  const {
+    router: { push },
+  } = render(<LoginForm handleLogin={handleLogin} isLoading={isLoading} />, {
+    push: jest.fn(),
+  });
+  return { handleLogin, push };
 };
 
 describe('Login Form', () => {
@@ -38,6 +39,11 @@ describe('Login Form', () => {
   it('disables submit button if form is not dirty', async () => {
     renderComponent();
     expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled();
+  });
+
+  it('shows loading spinner if isLoading is true', () => {
+    renderComponent({ isLoading: true });
+    expect(screen.getByTestId(/loading-spinner/i)).toBeInTheDocument();
   });
 
   it('blocks non-emails in email field', async () => {
@@ -80,7 +86,7 @@ describe('Login Form', () => {
 
   it('shows loading spinner if isLoading is true', () => {
     renderComponent({ isLoading: true });
-    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+    expect(screen.getByTestId(/loading-spinner/i)).toBeInTheDocument();
   });
 
   it('calls submit handler when form is valid and button is clicked', async () => {
@@ -115,12 +121,12 @@ describe('Login Form', () => {
   });
 
   it('redirects if forgot password link clicked', async () => {
-    const { router } = renderComponent();
+    const { push } = renderComponent();
 
     userEvent.click(screen.getByText(/click here/i));
 
     await waitFor(() => {
-      expect(router.push).toHaveBeenCalledWith('/reset-password', {
+      expect(push).toHaveBeenCalledWith('/reset-password', {
         forceOptimisticNavigation: false,
       });
     });

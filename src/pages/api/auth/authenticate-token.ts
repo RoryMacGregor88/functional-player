@@ -17,7 +17,10 @@ declare module 'iron-session' {
   }
 }
 
-function authenticateToken(req: NextApiRequest, res: NextApiResponse) {
+async function authenticateToken(
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> {
   if (req.method !== 'GET') {
     return handleForbidden(res, 'Invalid method, only GET requests permitted.');
   } else {
@@ -26,7 +29,7 @@ function authenticateToken(req: NextApiRequest, res: NextApiResponse) {
       const resUser: User = req.session.user ?? null;
       return res.status(200).json({ resUser });
     } catch (error) {
-      logServerError('authenticateToken', error);
+      await logServerError('authenticateToken', error);
       return handleServerError(res);
     }
   }

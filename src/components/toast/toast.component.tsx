@@ -42,7 +42,7 @@ const Toast: FC<ToastProps> = ({
   const isMedium = useMediaQuery('(max-width:1000px)');
 
   // TODO: Fade not working
-  // TODO: Action not working
+  // also Action not working
 
   const anchorOrigin: SnackbarOrigin = {
     vertical: isMedium ? 'bottom' : 'top',

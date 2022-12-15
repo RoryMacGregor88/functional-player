@@ -163,8 +163,7 @@ const HeaderImage: FC<HeaderImageProps> = ({ src, alt, title }) => {
   const deviceSize = isSmall ? 'small' : isMedium ? 'medium' : 'large';
 
   // TODO: make this re-usable across all pages but with different images and text
-
-  // TODO: make sure this shit working. NextImage better for this? is it SSR?
+  // also, replace this with Next suggested method
   if (isSmall) {
     return <Device src={src} alt={alt} title={title} deviceSize={deviceSize} />;
   } else if (isMedium) {

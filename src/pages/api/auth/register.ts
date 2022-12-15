@@ -1,3 +1,5 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+
 import stripeFn from 'stripe';
 
 import { hash } from 'bcryptjs';
@@ -13,7 +15,10 @@ import { USERS, HTTP_METHOD_ERROR_MESSAGE } from '@/src/utils/constants';
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
-export default async function register(req, res) {
+export default async function register(
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> {
   if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else {

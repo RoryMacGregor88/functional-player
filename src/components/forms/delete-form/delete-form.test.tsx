@@ -23,6 +23,21 @@ describe('Delete Form', () => {
     expect(screen.getByRole('button', { name: /proceed/i })).toBeDisabled();
   });
 
+  it('shows loading spinner if isLoading is true', async () => {
+    renderComponent({ isLoading: true });
+
+    await userEvent.type(
+      screen.getByRole('textbox', { name: /password/i }),
+      'password123'
+    );
+
+    userEvent.click(screen.getByRole('button', { name: /proceed/i }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId(/loading-spinner/i)).toBeInTheDocument();
+    });
+  });
+
   it('Shows delete verification button', async () => {
     renderComponent();
 
@@ -37,21 +52,6 @@ describe('Delete Form', () => {
       expect(
         screen.getByRole('button', { name: /permanently delete my account/i })
       ).toBeInTheDocument();
-    });
-  });
-
-  it('shows loading spinner if isLoading is true', async () => {
-    renderComponent({ isLoading: true });
-
-    await userEvent.type(
-      screen.getByRole('textbox', { name: /password/i }),
-      'password123'
-    );
-
-    userEvent.click(screen.getByRole('button', { name: /proceed/i }));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
     });
   });
 

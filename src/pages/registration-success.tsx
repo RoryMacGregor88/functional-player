@@ -32,18 +32,13 @@ export const getServerSideProps: GetServerSideProps = async (
 };
 
 interface Props {
-  user: User;
   redirect: boolean;
 }
 
-export default function RegistrationSuccess({
-  user,
-  redirect,
-}: Props): ReactElement {
+export default function RegistrationSuccess({ redirect }: Props): ReactElement {
   const { push } = useRouter();
 
-  // TODO: need to check if a user? Really only redirect we care about
-  if (!!user || !redirect) {
+  if (!redirect) {
     push('/dashboard');
     return <LoadMask />;
   }

@@ -1,3 +1,5 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+
 import { hash, compare } from 'bcryptjs';
 
 import { withIronSessionApiRoute } from 'iron-session/next';
@@ -14,9 +16,13 @@ import {
   USERS,
   TOKEN_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
+  INCORRECT_PASSWORD_MESSAGE,
 } from '@/src/utils/constants';
 
-async function updatePassword(req, res) {
+async function updatePassword(
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> {
   if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
@@ -35,7 +41,7 @@ async function updatePassword(req, res) {
       if (!checkPassword) {
         return res
           .status(400)
-          .json({ error: { message: 'Incorrect password.' } });
+          .json({ error: { message: INCORRECT_PASSWORD_MESSAGE } });
       }
 
       await db
@@ -45,7 +51,6 @@ async function updatePassword(req, res) {
           { $set: { password: await hash(newPassword, 12) } }
         );
 
-      // TODO: Do this like others? Get rid of OK? Remember reset-password
       return res.status(200).json({ ok: true });
     } catch (error) {
       await logServerError('updatePassword', error);

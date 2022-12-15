@@ -31,7 +31,7 @@ describe('Reactivation success page', () => {
     });
   });
 
-  //TODO: need to learn how to mock 2 concurrent requests
+  //TODO: need to learn how to mock 2 concurrent requests, maybe not (see TODO in component)
   it('handles server error', async () => {
     const message = 'test-error-message';
 

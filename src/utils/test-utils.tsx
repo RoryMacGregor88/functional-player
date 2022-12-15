@@ -8,10 +8,12 @@ import { RouterContext } from 'next/dist/shared/lib/router-context';
 
 import { Context } from '@/src/utils';
 
+import { Ctx } from '@/src/utils/interfaces';
+
 interface Options {
-  ctx?: object;
-  updateCtx?: (newData: object) => void;
-  push?: () => void;
+  ctx?: Partial<Ctx>;
+  updateCtx?: (newData: Partial<Ctx>) => void;
+  push?: (href: string) => void;
   options?: any;
 }
 

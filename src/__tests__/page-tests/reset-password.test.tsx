@@ -23,15 +23,16 @@ describe('ResetPassword', () => {
   });
 
   it('redirects to dashboard if user is found', () => {
-    const { router } = render(
-      <ResetPassword user={{ username: 'John Smith' }} />,
-      { push: jest.fn() }
-    );
+    const {
+      router: { push },
+    } = render(<ResetPassword user={{ username: 'John Smith' }} />, {
+      push: jest.fn(),
+    });
 
-    expect(router.push).toHaveBeenCalledWith('/dashboard');
+    expect(push).toHaveBeenCalledWith('/dashboard');
   });
 
-  it('shows success well and disabled button if successful', async () => {
+  it('shows success well and disables button if successful', async () => {
     const testEmail = 'test@email.com';
     fetchMock.mockResponse(JSON.stringify({ ok: true }));
 

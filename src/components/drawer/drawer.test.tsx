@@ -38,7 +38,9 @@ describe('drawer', () => {
   });
 
   it('routes to links and closes drawer', async () => {
-    const { router } = render(
+    const {
+      router: { push },
+    } = render(
       <Drawer
         isDrawerOpen={true}
         setIsDrawerOpen={setIsDrawerOpen}
@@ -51,7 +53,7 @@ describe('drawer', () => {
 
     await waitFor(() => {
       expect(setIsDrawerOpen).toHaveBeenCalled();
-      expect(router.push).toHaveBeenCalledWith('/login', {
+      expect(push).toHaveBeenCalledWith('/login', {
         forceOptimisticNavigation: false,
       });
     });

@@ -40,11 +40,13 @@ describe('Register Page', () => {
 
   it('redirects to dashboard if user found', () => {
     const testUser = { username: 'John smith' };
-    const { router } = render(<Register user={testUser} />, {
+    const {
+      router: { push },
+    } = render(<Register user={testUser} />, {
       push: jest.fn(),
     });
 
-    expect(router.push).toHaveBeenCalledWith('/dashboard');
+    expect(push).toHaveBeenCalledWith('/dashboard');
   });
 
   describe('registration view', () => {

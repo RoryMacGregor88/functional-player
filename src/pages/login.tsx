@@ -65,6 +65,7 @@ export default function Login({ user, updateCtx }: Props) {
   };
 
   // TODO: no PageWrapper. Make consistent, check others
+  // if needs to be narrower, styles should be in form wrapper
   return (
     <Grid
       container

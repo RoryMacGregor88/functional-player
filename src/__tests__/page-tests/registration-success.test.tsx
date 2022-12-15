@@ -1,4 +1,4 @@
-import { render, screen } from '@/src/utils/test-utils';
+import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
 import RegistrationSuccess from '@/src/pages/registration-success';
 
@@ -11,28 +11,27 @@ describe('registrationSuccess', () => {
     ).toBeInTheDocument();
   });
 
-  it('redirects to dashboard if user is found', () => {
-    const { router } = render(
-      <RegistrationSuccess user={{ username: 'John Smith' }} redirect={true} />,
-      {
-        push: jest.fn(),
-      }
-    );
+  it('redirects to dashboard if manually linked to (redirect is false)', () => {
+    const {
+      router: { push },
+    } = render(<RegistrationSuccess redirect={false} />, {
+      push: jest.fn(),
+    });
 
-    expect(router.push).toHaveBeenCalledWith('/dashboard');
+    expect(push).toHaveBeenCalledWith('/dashboard');
   });
 
-  it('redirects to dashboard if manually linked to (no redirect param)', () => {
-    const { router } = render(
-      <RegistrationSuccess
-        user={{ username: 'John Smith' }}
-        redirect={false}
-      />,
-      {
-        push: jest.fn(),
-      }
-    );
+  it('navigates to login', async () => {
+    const {
+      router: { push },
+    } = render(<RegistrationSuccess redirect={true} />, {
+      push: jest.fn(),
+    });
 
-    expect(router.push).toHaveBeenCalledWith('/dashboard');
+    userEvent.click(screen.getByRole('button', { name: /login/i }));
+
+    await waitFor(() => {
+      expect(push).toHaveBeenCalledWith('/login');
+    });
   });
 });

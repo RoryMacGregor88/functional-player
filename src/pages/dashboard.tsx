@@ -56,7 +56,7 @@ export default function Dashboard({
   courses,
   error,
 }: DashboardProps): ReactElement {
-  // TODO: need useEffect for this? Or is error always present before rendering because of SSR?
+  // TODO: need useEffect for this? Or is error always present pre-load because of SSR?
   if (!!error) {
     updateCtx({
       toastData: {
