@@ -1,6 +1,9 @@
-import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
-
 import authenticateToken from '@/src/pages/api/auth/authenticate-token';
+
+import {
+  DEFAULT_ERROR_MESSAGE,
+  HTTP_METHOD_ERROR_MESSAGE,
+} from '@/src/utils/constants';
 
 let json = null,
   status = null;
@@ -61,6 +64,18 @@ describe('authenticateToken endpoint', () => {
 
     expect(status).toHaveBeenCalledWith(200);
     expect(json).toHaveBeenCalledWith({ resUser: null });
+  });
+
+  it('handles http method forbidden', async () => {
+    const req = { method: 'DELETE' },
+      res = { status };
+
+    await authenticateToken(req, res);
+
+    expect(status).toHaveBeenCalledWith(403);
+    expect(json).toHaveBeenCalledWith({
+      error: { message: 'Invalid method, only GET requests permitted.' },
+    });
   });
 
   it('handles error', async () => {
