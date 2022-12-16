@@ -11,7 +11,12 @@ import {
   handleServerError,
 } from '@/lib';
 
-import { USERS, HTTP_METHOD_ERROR_MESSAGE } from '@/src/utils/constants';
+import {
+  USERS,
+  HTTP_METHOD_ERROR_MESSAGE,
+  EMAIL_ALREADY_EXISTS_MESSAGE,
+  USERNAME_TAKEN_MESSAGE,
+} from '@/src/utils/constants';
 
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
@@ -31,7 +36,7 @@ export default async function register(
       if (!!checkExistingEmail) {
         return res
           .status(400)
-          .json({ error: { message: 'Email already exists.' } });
+          .json({ error: { message: EMAIL_ALREADY_EXISTS_MESSAGE } });
       }
 
       const checkExistingUsername = await db
@@ -41,7 +46,7 @@ export default async function register(
       if (!!checkExistingUsername) {
         return res
           .status(400)
-          .json({ error: { message: 'Username is taken.' } });
+          .json({ error: { message: USERNAME_TAKEN_MESSAGE } });
       }
 
       // if credentials are valid, create customer on stripe servers

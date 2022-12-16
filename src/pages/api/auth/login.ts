@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { compare } from 'bcryptjs';
-
 import { withIronSessionApiRoute } from 'iron-session/next';
+
+import { compare } from 'bcryptjs';
 
 import {
   connectToDatabase,
@@ -37,6 +37,8 @@ async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
           },
         });
       }
+
+      // TODO: subscriptionStatus id not included on token, check this.
 
       const {
         password: dbPassword,

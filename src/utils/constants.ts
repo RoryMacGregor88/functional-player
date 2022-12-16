@@ -17,6 +17,10 @@ export const TOKEN_ERROR_MESSAGE = 'Not allowed. Authorization token required.';
 export const EMAIL_NOT_FOUND_MESSAGE =
   'No user account associated with that email address.';
 
+export const EMAIL_ALREADY_EXISTS_MESSAGE = 'Email already exists.';
+
+export const USERNAME_TAKEN_MESSAGE = 'Username is taken.';
+
 export const INCORRECT_PASSWORD_MESSAGE = 'Incorrect password.';
 
 export const REGISTRATION_SUCCESS_MESSAGE =

@@ -10,7 +10,7 @@ jest.mock('stripe', () =>
   jest.fn().mockImplementation(() => ({
     subscriptions: {
       retrieve: jest.fn().mockImplementation((id) => {
-        if (id === 'error') throw new Error('test-server-error');
+        if (id === 'error') throw new Error();
         if (id === 'active') return { isError: null, status: 'active' };
         if (id === 'cancelled') return { isError: null, status: 'cancelled' };
       }),

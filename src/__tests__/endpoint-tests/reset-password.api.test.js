@@ -8,13 +8,9 @@ import resetPassword from '@/src/pages/api/auth/reset-password';
 let json = null,
   status = null;
 
-jest.mock('iron-session/next', () => ({
-  withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
-}));
-
 jest.mock('@/lib', () => ({
   connectToDatabase: jest.fn().mockImplementation(() => {
-    throw new Error('test-server-error');
+    throw new Error();
   }),
   logServerError: jest.fn().mockImplementation((str, err) => {}),
   handleForbidden: jest

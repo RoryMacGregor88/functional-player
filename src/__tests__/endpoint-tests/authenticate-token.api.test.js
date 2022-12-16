@@ -12,9 +12,9 @@ jest.mock('iron-session/next', () => ({
 jest.mock('@/lib', () => ({
   connectToDatabase: jest.fn().mockImplementation(() => {
     // mock server error
-    throw new Error('test-server-error');
+    throw new Error();
   }),
-  logServerError: jest.fn().mockImplementation((str, err) => {}),
+  logServerError: jest.fn().mockImplementation(() => {}),
   handleForbidden: jest
     .fn()
     .mockImplementation((res, message) =>
