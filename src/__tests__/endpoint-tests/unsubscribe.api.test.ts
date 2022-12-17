@@ -4,7 +4,7 @@ import {
   HTTP_METHOD_ERROR_MESSAGE,
 } from '@/src/utils/constants';
 
-import resubscribe from '@/src/pages/api/auth/resubscribe';
+import unsubscribe from '@/src/pages/api/auth/unsubscribe';
 
 let json = null,
   status = null;
@@ -13,12 +13,25 @@ jest.mock('iron-session/next', () => ({
   withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
 }));
 
+jest.mock('stripe', () => () => ({
+  customers: { del: () => {} },
+}));
+
 jest.mock('@/lib', () => ({
-  connectToDatabase: jest.fn().mockImplementation(() => {
-    // mock server error
-    throw new Error();
-  }),
-  logServerError: jest.fn().mockImplementation((str, err) => {}),
+  connectToDatabase: jest.fn().mockImplementation(() => ({
+    db: {
+      collection: () => ({
+        findOneAndUpdate: ({ email }) => {
+          if (email === 'error@test.com') {
+            throw new Error();
+          } else if (email === 'success@test.com') {
+            return true;
+          }
+        },
+      }),
+    },
+  })),
+  logServerError: () => {},
   handleForbidden: jest
     .fn()
     .mockImplementation((res, message) =>
@@ -31,17 +44,41 @@ jest.mock('@/lib', () => ({
     ),
 }));
 
-describe('resubscribe endpoint', () => {
+describe('unsubscribe endpoint', () => {
   beforeEach(() => {
     json = jest.fn();
     status = jest.fn().mockReturnValue({ json });
+  });
+
+  it('unsubscribes', async () => {
+    const save = jest.fn(),
+      email = 'success@test.com',
+      req = {
+        method: 'POST',
+        body: { email },
+        session: { user: { email }, save },
+      },
+      res = { status };
+
+    await unsubscribe(req, res);
+
+    expect(save).toHaveBeenCalled();
+    expect(status).toHaveBeenCalledWith(200);
+    expect(json).toHaveBeenCalledWith({
+      resUser: {
+        email: 'success@test.com',
+        customerId: null,
+        subscriptionId: null,
+        subscriptionStatus: null,
+      },
+    });
   });
 
   it('handles http method forbidden', async () => {
     const req = { method: 'GET' },
       res = { status };
 
-    await resubscribe(req, res);
+    await unsubscribe(req, res);
 
     expect(status).toHaveBeenCalledWith(403);
     expect(json).toHaveBeenCalledWith({
@@ -52,12 +89,12 @@ describe('resubscribe endpoint', () => {
   it('handles token forbidden', async () => {
     const req = {
         method: 'POST',
-        body: { email: 'test@email.com' },
+        body: { email: 'success@test.com' },
         session: { user: {} },
       },
       res = { status };
 
-    await resubscribe(req, res);
+    await unsubscribe(req, res);
 
     expect(status).toHaveBeenCalledWith(403);
     expect(json).toHaveBeenCalledWith({
@@ -66,7 +103,7 @@ describe('resubscribe endpoint', () => {
   });
 
   it('handles error', async () => {
-    const email = 'test@email.com',
+    const email = 'error@test.com',
       req = {
         method: 'POST',
         body: { email },
@@ -74,7 +111,7 @@ describe('resubscribe endpoint', () => {
       },
       res = { status };
 
-    await resubscribe(req, res);
+    await unsubscribe(req, res);
 
     expect(status).toHaveBeenCalledWith(500);
     expect(json).toHaveBeenCalledWith({

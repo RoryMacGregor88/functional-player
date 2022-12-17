@@ -52,7 +52,7 @@ jest.mock('@/lib', () => ({
       }),
     },
   })),
-  logServerError: jest.fn().mockImplementation(() => {}),
+  logServerError: () => {},
   handleForbidden: jest
     .fn()
     .mockImplementation((res, message) =>

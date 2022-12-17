@@ -1,24 +1,22 @@
 import {
-  TOKEN_ERROR_MESSAGE,
   DEFAULT_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
   EMAIL_NOT_FOUND_MESSAGE,
-  INCORRECT_PASSWORD_MESSAGE,
 } from '@/src/utils/constants';
 
-import deleteAccount from '@/src/pages/api/auth/delete';
+import resetPassword from '@/src/pages/api/auth/reset-password';
 
 let json = null,
   status = null;
 
-jest.mock('stripe', () => () => ({ customers: { del: () => {} } }));
-
-jest.mock('iron-session/next', () => ({
-  withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
+jest.mock('bcryptjs', () => ({
+  hash: () => {},
 }));
 
-jest.mock('bcryptjs', () => ({
-  compare: (p1, p2) => p1 === p2,
+jest.mock('nodemailer', () => ({
+  createTransport: jest.fn().mockImplementation(() => ({
+    sendMail: () => {},
+  })),
 }));
 
 jest.mock('@/lib', () => ({
@@ -35,7 +33,9 @@ jest.mock('@/lib', () => ({
             return null;
           }
         },
-        deleteOne: () => {},
+        findOneAndUpdate: () => {
+          true;
+        },
       }),
     },
   })),
@@ -52,60 +52,41 @@ jest.mock('@/lib', () => ({
     ),
 }));
 
-describe('delete endpoint', () => {
+describe('resetPassword endpoint', () => {
   beforeEach(() => {
     json = jest.fn();
     status = jest.fn().mockReturnValue({ json });
   });
 
-  it('deletes user', async () => {
+  it('resets password', async () => {
     const email = 'success@test.com',
       req = {
         method: 'POST',
-        body: { email, password: '12345' },
-        session: { user: { email }, destroy: () => {} },
+        session: { user: { email } },
+        body: { email },
       },
       res = { status };
 
-    await deleteAccount(req, res);
+    await resetPassword(req, res);
 
     expect(status).toHaveBeenCalledWith(200);
-    expect(json).toHaveBeenCalledWith({ resUser: null });
+    expect(json).toHaveBeenCalledWith({ ok: true });
   });
 
   it('handles no user found', async () => {
     const email = 'nouser@test.com',
       req = {
         method: 'POST',
+        session: { user: { email } },
         body: { email },
-        session: { user: { email } },
       },
       res = { status };
 
-    await deleteAccount(req, res);
+    await resetPassword(req, res);
 
     expect(status).toHaveBeenCalledWith(400);
     expect(json).toHaveBeenCalledWith({
-      error: {
-        message: EMAIL_NOT_FOUND_MESSAGE,
-      },
-    });
-  });
-
-  it('handles incorrect password', async () => {
-    const email = 'success@test.com',
-      req = {
-        method: 'POST',
-        body: { email, password: '678910' },
-        session: { user: { email } },
-      },
-      res = { status };
-
-    await deleteAccount(req, res);
-
-    expect(status).toHaveBeenCalledWith(400);
-    expect(json).toHaveBeenCalledWith({
-      error: { message: INCORRECT_PASSWORD_MESSAGE },
+      error: { message: EMAIL_NOT_FOUND_MESSAGE },
     });
   });
 
@@ -113,7 +94,7 @@ describe('delete endpoint', () => {
     const req = { method: 'GET' },
       res = { status };
 
-    await deleteAccount(req, res);
+    await resetPassword(req, res);
 
     expect(status).toHaveBeenCalledWith(403);
     expect(json).toHaveBeenCalledWith({
@@ -121,32 +102,16 @@ describe('delete endpoint', () => {
     });
   });
 
-  it('handles token forbidden', async () => {
-    const req = {
-        method: 'POST',
-        body: { email: 'email@test.com' },
-        session: { user: {} },
-      },
-      res = { status };
-
-    await deleteAccount(req, res);
-
-    expect(status).toHaveBeenCalledWith(403);
-    expect(json).toHaveBeenCalledWith({
-      error: { message: TOKEN_ERROR_MESSAGE },
-    });
-  });
-
   it('handles error', async () => {
     const email = 'error@test.com',
       req = {
         method: 'POST',
-        body: { email },
         session: { user: { email } },
+        body: { email },
       },
       res = { status };
 
-    await deleteAccount(req, res);
+    await resetPassword(req, res);
 
     expect(status).toHaveBeenCalledWith(500);
     expect(json).toHaveBeenCalledWith({

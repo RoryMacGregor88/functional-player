@@ -34,7 +34,9 @@ export default async function resetPassword(
 
       if (!result) {
         return res.status(400).json({
-          message: EMAIL_NOT_FOUND_MESSAGE,
+          error: {
+            message: EMAIL_NOT_FOUND_MESSAGE,
+          },
         });
       }
 

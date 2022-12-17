@@ -17,7 +17,7 @@ jest.mock('@/lib', () => ({
     // mock server error
     throw new Error();
   }),
-  logServerError: jest.fn().mockImplementation(() => {}),
+  logServerError: () => {},
   handleForbidden: jest
     .fn()
     .mockImplementation((res, message) =>

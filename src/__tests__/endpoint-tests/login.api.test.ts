@@ -48,11 +48,10 @@ jest.mock('@/lib', () => ({
             return null;
           }
         },
-        deleteOne: () => {},
       }),
     },
   })),
-  logServerError: jest.fn().mockImplementation(() => {}),
+  logServerError: () => {},
   handleForbidden: jest
     .fn()
     .mockImplementation((res, message) =>

@@ -50,6 +50,7 @@ async function syncSubscriptionStatus(
         subscriptionStatus,
       };
 
+      // TODO: why this erroring?
       req.session.user = resUser;
       await req.session.save();
 

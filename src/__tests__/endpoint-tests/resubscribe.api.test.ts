@@ -2,23 +2,28 @@ import {
   TOKEN_ERROR_MESSAGE,
   DEFAULT_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
-  EMAIL_NOT_FOUND_MESSAGE,
-  INCORRECT_PASSWORD_MESSAGE,
 } from '@/src/utils/constants';
 
-import deleteAccount from '@/src/pages/api/auth/delete';
+import resubscribe from '@/src/pages/api/auth/resubscribe';
 
 let json = null,
   status = null;
-
-jest.mock('stripe', () => () => ({ customers: { del: () => {} } }));
 
 jest.mock('iron-session/next', () => ({
   withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
 }));
 
-jest.mock('bcryptjs', () => ({
-  compare: (p1, p2) => p1 === p2,
+jest.mock('stripe', () => () => ({
+  customers: { create: () => ({ id: '12345' }) },
+  subscriptions: {
+    create: () => ({
+      id: '678910',
+      status: 'incomplete',
+      latest_invoice: {
+        payment_intent: { client_secret: 'test-client-secret' },
+      },
+    }),
+  },
 }));
 
 jest.mock('@/lib', () => ({
@@ -31,11 +36,9 @@ jest.mock('@/lib', () => ({
           } else if (email === 'success@test.com') {
             const testUser = { password: '12345' };
             return testUser;
-          } else if (email === 'nouser@test.com') {
-            return null;
           }
         },
-        deleteOne: () => {},
+        findOneAndUpdate: () => {},
       }),
     },
   })),
@@ -52,60 +55,34 @@ jest.mock('@/lib', () => ({
     ),
 }));
 
-describe('delete endpoint', () => {
+describe('resubscribe endpoint', () => {
   beforeEach(() => {
     json = jest.fn();
     status = jest.fn().mockReturnValue({ json });
   });
 
-  it('deletes user', async () => {
-    const email = 'success@test.com',
-      req = {
-        method: 'POST',
-        body: { email, password: '12345' },
-        session: { user: { email }, destroy: () => {} },
-      },
-      res = { status };
-
-    await deleteAccount(req, res);
-
-    expect(status).toHaveBeenCalledWith(200);
-    expect(json).toHaveBeenCalledWith({ resUser: null });
-  });
-
-  it('handles no user found', async () => {
-    const email = 'nouser@test.com',
+  it('resubscribes', async () => {
+    const save = jest.fn(),
+      email = 'error@test.com',
       req = {
         method: 'POST',
         body: { email },
-        session: { user: { email } },
+        session: { user: { email }, save },
       },
       res = { status };
 
-    await deleteAccount(req, res);
+    await resubscribe(req, res);
 
-    expect(status).toHaveBeenCalledWith(400);
+    expect(save).toHaveBeenCalled();
+    expect(status).toHaveBeenCalledWith(201);
     expect(json).toHaveBeenCalledWith({
-      error: {
-        message: EMAIL_NOT_FOUND_MESSAGE,
+      clientSecret: 'test-client-secret',
+      resUser: {
+        customerId: '12345',
+        email: 'error@test.com',
+        subscriptionId: '678910',
+        subscriptionStatus: 'incomplete',
       },
-    });
-  });
-
-  it('handles incorrect password', async () => {
-    const email = 'success@test.com',
-      req = {
-        method: 'POST',
-        body: { email, password: '678910' },
-        session: { user: { email } },
-      },
-      res = { status };
-
-    await deleteAccount(req, res);
-
-    expect(status).toHaveBeenCalledWith(400);
-    expect(json).toHaveBeenCalledWith({
-      error: { message: INCORRECT_PASSWORD_MESSAGE },
     });
   });
 
@@ -113,7 +90,7 @@ describe('delete endpoint', () => {
     const req = { method: 'GET' },
       res = { status };
 
-    await deleteAccount(req, res);
+    await resubscribe(req, res);
 
     expect(status).toHaveBeenCalledWith(403);
     expect(json).toHaveBeenCalledWith({
@@ -124,12 +101,12 @@ describe('delete endpoint', () => {
   it('handles token forbidden', async () => {
     const req = {
         method: 'POST',
-        body: { email: 'email@test.com' },
+        body: { email: 'success@test.com' },
         session: { user: {} },
       },
       res = { status };
 
-    await deleteAccount(req, res);
+    await resubscribe(req, res);
 
     expect(status).toHaveBeenCalledWith(403);
     expect(json).toHaveBeenCalledWith({
@@ -146,7 +123,7 @@ describe('delete endpoint', () => {
       },
       res = { status };
 
-    await deleteAccount(req, res);
+    await resubscribe(req, res);
 
     expect(status).toHaveBeenCalledWith(500);
     expect(json).toHaveBeenCalledWith({

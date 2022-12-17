@@ -14,7 +14,7 @@ jest.mock('iron-session/next', () => ({
 }));
 
 jest.mock('@/lib', () => ({
-  logServerError: jest.fn().mockImplementation((str, err) => {}),
+  logServerError: () => {},
   handleForbidden: jest
     .fn()
     .mockImplementation((res, message) =>

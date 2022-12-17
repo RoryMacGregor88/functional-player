@@ -2,6 +2,7 @@ import {
   TOKEN_ERROR_MESSAGE,
   DEFAULT_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
+  INCORRECT_PASSWORD_MESSAGE,
 } from '@/src/utils/constants';
 
 import updatePassword from '@/src/pages/api/auth/update-password';
@@ -13,12 +14,28 @@ jest.mock('iron-session/next', () => ({
   withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
 }));
 
+jest.mock('bcryptjs', () => ({
+  compare: (p1, p2) => p1 === p2,
+  hash: () => {},
+}));
+
 jest.mock('@/lib', () => ({
-  connectToDatabase: jest.fn().mockImplementation(() => {
-    // mock server error
-    throw new Error();
-  }),
-  logServerError: jest.fn().mockImplementation((str, err) => {}),
+  connectToDatabase: jest.fn().mockImplementation(() => ({
+    db: {
+      collection: () => ({
+        findOne: ({ email }) => {
+          if (email === 'error@test.com') {
+            throw new Error();
+          } else if (email === 'success@test.com') {
+            const testUser = { password: '12345' };
+            return testUser;
+          }
+        },
+        findOneAndUpdate: () => {},
+      }),
+    },
+  })),
+  logServerError: () => {},
   handleForbidden: jest
     .fn()
     .mockImplementation((res, message) =>
@@ -37,6 +54,40 @@ describe('updatePassword endpoint', () => {
     status = jest.fn().mockReturnValue({ json });
   });
 
+  it('updates password', async () => {
+    const email = 'success@test.com',
+      req = {
+        method: 'POST',
+        body: { email, currentPassword: '12345', newPassword: '678910' },
+        session: { user: { email } },
+      },
+      res = { status };
+
+    await updatePassword(req, res);
+
+    expect(status).toHaveBeenCalledWith(200);
+    expect(json).toHaveBeenCalledWith({
+      ok: true,
+    });
+  });
+
+  it('handles incorrect password', async () => {
+    const email = 'success@test.com',
+      req = {
+        method: 'POST',
+        body: { email, currentPassword: '678910', newPassword: '12345' },
+        session: { user: { email } },
+      },
+      res = { status };
+
+    await updatePassword(req, res);
+
+    expect(status).toHaveBeenCalledWith(400);
+    expect(json).toHaveBeenCalledWith({
+      error: { message: INCORRECT_PASSWORD_MESSAGE },
+    });
+  });
+
   it('handles http method forbidden', async () => {
     const req = { method: 'GET' },
       res = { status };
@@ -52,7 +103,7 @@ describe('updatePassword endpoint', () => {
   it('handles token forbidden', async () => {
     const req = {
         method: 'POST',
-        body: { email: 'test@email.com' },
+        body: { email: 'success@test.com' },
         session: { user: {} },
       },
       res = { status };
@@ -66,7 +117,7 @@ describe('updatePassword endpoint', () => {
   });
 
   it('handles error', async () => {
-    const email = 'test@email.com',
+    const email = 'error@test.com',
       req = {
         method: 'POST',
         body: { email },
