@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Box } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 
 import {
   FormWrapper,
@@ -14,6 +14,8 @@ import {
   EmailField,
   PasswordField,
   Button,
+  Link,
+  LinkButton,
 } from '@/src/components';
 
 import {
@@ -27,9 +29,6 @@ import {
 } from '@/src/utils/constants';
 
 import { RegisterFormValues } from '@/src/utils/interfaces';
-
-// TODO: Add link to login if already have an account
-// also, why NEXT button not yellow?
 
 const registerFormSchema = Yup.object().shape({
   email: Yup.string()
@@ -77,7 +76,12 @@ const RegisterForm: FC<Props> = ({
   const isDisabled = !isDirty || !!Object.keys(errors).length;
 
   return (
-    <Box sx={{ width: '100%' }} justifyContent='center' alignItems='center'>
+    <Grid
+      container
+      justifyContent='center'
+      alignItems='center'
+      sx={{ width: '100%' }}
+    >
       <FormWrapper
         onSubmit={handleSubmit((formValues) => handleRegister(formValues))}
       >
@@ -111,7 +115,14 @@ const RegisterForm: FC<Props> = ({
       >
         Next
       </Button>
-    </Box>
+      <Grid container alignItems='center' justifyContent='center'>
+        {/* // TODO: fix this (span should be link, theme styles, hover styles) */}
+        <Typography variant='body1'>Already registered?</Typography>
+        <Link href={'/login'} passHref>
+          <LinkButton>Sign in</LinkButton>
+        </Link>
+      </Grid>
+    </Grid>
   );
 };
 

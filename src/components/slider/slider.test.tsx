@@ -44,19 +44,6 @@ describe('slider', () => {
     expect(screen.queryByTestId(/right-chevron/i)).not.toBeInTheDocument();
   });
 
-  // TODO: bother fixing this?
-  xit('slides', async () => {
-    render(<Slider title='test-title' courses={courses} />);
-
-    expect(screen.getByText(/test-video-title-1/i)).toBeVisible();
-
-    userEvent.click(screen.getByTestId(/right-chevron/i));
-
-    await waitFor(() => {
-      expect(screen.queryByText(/test-video-title-1/i)).not.toBeVisible();
-    });
-  });
-
   it('calls updateCtx if video clicked', async () => {
     const { updateCtx } = render(
       <Slider title='test-title' courses={courses} />,

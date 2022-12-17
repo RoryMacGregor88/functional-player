@@ -1,10 +1,12 @@
 import { ReactElement } from 'react';
 
+import { withIronSessionSsr } from 'iron-session/next';
+
 import { GetServerSideProps } from 'next';
 
 import { Grid } from '@mui/material';
 
-import { getAllCourses } from '@/lib';
+import { getCourses, sessionOptions } from '@/lib';
 
 import { HeaderImage, PageWrapper, Slider, LoadMask } from '@/src/components';
 
@@ -34,15 +36,16 @@ interface ServerSideProps {
   props: { error: CustomError } | { courses: Course[] };
 }
 
-export const getServerSideProps: GetServerSideProps = async (
-  ctx
-): Promise<ServerSideProps> => {
-  const token = ctx.req.cookies[process.env.SESSION_TOKEN_NAME];
-  const { courses, error } = await getAllCourses(token);
-  return {
-    props: !!error ? { error, courses: null } : { error: null, courses },
-  };
-};
+export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
+  async ({ req }): Promise<ServerSideProps> => {
+    const user = req.session.user;
+    const { courses, error } = await getCourses(user);
+    return {
+      props: !!error ? { error, courses: null } : { error: null, courses },
+    };
+  },
+  sessionOptions
+);
 interface DashboardProps {
   user: User;
   updateCtx: UpdateCtx;

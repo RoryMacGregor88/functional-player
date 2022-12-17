@@ -2,19 +2,15 @@ import { GetServerSideProps } from 'next';
 
 import { useRouter } from 'next/router';
 
+import { withIronSessionSsr } from 'iron-session/next';
+
 import { Grid } from '@mui/material';
 
-import { getAllCourses } from '@/lib';
+import { getCourses, sessionOptions } from '@/lib';
 
 import { PageWrapper, Slider, LoadMask } from '@/src/components';
 
-import {
-  User,
-  UpdateCtx,
-  Course,
-  CustomError,
-  Category,
-} from '@/src/utils/interfaces';
+import { User, Course, CustomError, Category } from '@/src/utils/interfaces';
 
 import {
   CATEGORY_METADATA,
@@ -25,20 +21,19 @@ interface ServerSideProps {
   props: { error: CustomError } | { courses: Course[] };
 }
 
-export const getServerSideProps: GetServerSideProps = async (
-  ctx
-): Promise<ServerSideProps> => {
-  const token = ctx.req.cookies[process.env.SESSION_TOKEN_NAME];
-
-  const { error, courses } = await getAllCourses(token);
-  return {
-    props: !!error ? { error, courses: null } : { error: null, courses },
-  };
-};
+export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
+  async ({ req }): Promise<ServerSideProps> => {
+    const user = req.session.user;
+    const { error, courses } = await getCourses(user);
+    return {
+      props: !!error ? { error, courses: null } : { error: null, courses },
+    };
+  },
+  sessionOptions
+);
 
 interface Props {
   user: User;
-  updateCtx: UpdateCtx;
   courses: Course[];
 }
 
@@ -46,7 +41,9 @@ interface Props {
 // does not reset select when changing categories
 // bottom margin is disappearing behind footer (pretty sure this is fixed?)
 
-// Why is updateCtx here?
+// Why was updateCtx here? Is it needed
+
+// needs tests
 
 export default function Categories({ user, courses }: Props) {
   const {

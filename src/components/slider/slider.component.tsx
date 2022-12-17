@@ -1,4 +1,11 @@
-import { FC, useState, useContext, ReactElement, ReactNode } from 'react';
+import {
+  FC,
+  useState,
+  useContext,
+  ReactElement,
+  ReactNode,
+  useEffect,
+} from 'react';
 
 import NextImage from 'next/image';
 
@@ -53,7 +60,8 @@ interface ChevronWrapperProps {
   children: ReactNode;
 }
 
-// TODO: hover color shows that chevron wrapper is bigger than container by a few px
+// TODO: chevron is better but right is still a bit broke
+// would have to calsulte size of cards so they fit perfectly
 export const ChevronWrapper: FC<ChevronWrapperProps> = ({
   handleChevronClick,
   orientation,
@@ -75,7 +83,8 @@ export const ChevronWrapper: FC<ChevronWrapperProps> = ({
       [orientation]: 0,
       zIndex: '2',
       width: '5rem',
-      height: '100%',
+      margin: `${BORDER_WIDTH}px`,
+      height: `calc(100% - ${BORDER_WIDTH * 2}px)`,
       cursor: 'pointer',
       '&:hover': {
         backgroundColor: 'rgb(8, 8, 8, 0.5)',
@@ -97,8 +106,16 @@ const Slider: FC<SliderProps> = ({
   courses,
   banner = false,
 }): ReactElement => {
-  const { updateCtx } = useContext(Context);
+  const {
+    updateCtx,
+    ctx: { selectedCategory },
+  } = useContext(Context);
   const [position, setPosition] = useState(0);
+
+  useEffect(() => {
+    if (position > 0) setPosition(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCategory]);
 
   if (!courses?.length) return null;
 
@@ -200,8 +217,8 @@ const Slider: FC<SliderProps> = ({
               <NextImage
                 src='/stratocaster-medium.jpg'
                 alt='stratocaster'
-                layout='fill'
-                objectFit='cover'
+                fill
+                style={{ objectFit: 'cover' }}
               />
             </Box>
           ))}

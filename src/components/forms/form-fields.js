@@ -106,10 +106,9 @@ const PasswordField = ({ errors, register, label, name }) => {
               edge='end'
             >
               {showPassword ? (
-                // TODO: which way around?
-                <VisibilityIcon sx={iconStyles} />
-              ) : (
                 <VisibilityOffIcon sx={iconStyles} />
+              ) : (
+                <VisibilityIcon sx={iconStyles} />
               )}
             </IconButton>
           </InputAdornment>

@@ -6,9 +6,11 @@ import { Drawer as MuiDrawer, Grid } from '@mui/material';
 
 import { SidebarItem, ProfileIcon } from '@/src/components';
 
-import { http, Context, logout } from '@/src/utils';
+import { Context, logout } from '@/src/utils';
 
 import { User } from '@/src/utils/interfaces';
+
+import { DEFAULT_SELECT_OPTION } from '@/src/utils/constants';
 
 interface Props {
   user: User;
@@ -25,6 +27,11 @@ const Drawer: FC<Props> = ({
   const { updateCtx } = useContext(Context);
 
   const toggleDrawer = () => setIsDrawerOpen((prev) => !prev);
+
+  const handleIconClick = () => {
+    toggleDrawer();
+    updateCtx({ selectedCategory: DEFAULT_SELECT_OPTION });
+  };
 
   const handleLogout = async () => {
     const res: boolean | undefined = await logout({
@@ -66,14 +73,14 @@ const Drawer: FC<Props> = ({
           label='Home'
           href={!user ? '/' : '/dashboard'}
           isSelected={pathname === '/dashboard'}
-          onClick={toggleDrawer}
+          onClick={handleIconClick}
         />
         <SidebarItem
           Icon={ProfileIcon}
           label='Browse series'
           href='/series'
           isSelected={pathname === '/series'}
-          onClick={toggleDrawer}
+          onClick={handleIconClick}
         />
         {!!user ? (
           <>
@@ -82,14 +89,14 @@ const Drawer: FC<Props> = ({
               label='My List'
               href='/list'
               isSelected={pathname === '/list'}
-              onClick={toggleDrawer}
+              onClick={handleIconClick}
             />
             <SidebarItem
               Icon={ProfileIcon}
               label='My Account'
               href='/account'
               isSelected={pathname === '/account'}
-              onClick={toggleDrawer}
+              onClick={handleIconClick}
             />
             <SidebarItem
               Icon={ProfileIcon}
@@ -104,14 +111,14 @@ const Drawer: FC<Props> = ({
               label='Login'
               href='/login'
               isSelected={pathname === '/login'}
-              onClick={toggleDrawer}
+              onClick={handleIconClick}
             />
             <SidebarItem
               Icon={ProfileIcon}
               label='Register'
               href='/register'
               isSelected={pathname === '/register'}
-              onClick={toggleDrawer}
+              onClick={handleIconClick}
             />
           </>
         )}
@@ -120,7 +127,7 @@ const Drawer: FC<Props> = ({
           label='FAQ'
           href='/faq'
           isSelected={pathname === '/faq'}
-          onClick={toggleDrawer}
+          onClick={handleIconClick}
         />
       </Grid>
     </MuiDrawer>

@@ -19,11 +19,14 @@ import {
 
 import { Context, authenticateToken } from '@/src/utils';
 
+import { DEFAULT_SELECT_OPTION } from '@/src/utils/constants';
+
 import { Ctx, UpdateCtx } from '@/src/utils/interfaces';
 
 function App({ Component, pageProps }: AppProps): ReactElement {
   const [ctx, setCtx] = useState<Ctx>({
     selectedVideo: undefined,
+    selectedCategory: DEFAULT_SELECT_OPTION,
     dialogData: undefined,
     toastData: undefined,
     user: undefined,

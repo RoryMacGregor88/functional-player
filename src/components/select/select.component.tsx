@@ -1,4 +1,4 @@
-import { FC, ReactElement, useState } from 'react';
+import { FC, ReactElement, useContext } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -8,30 +8,39 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 
-const DEFAULT_OPTION = 'Explore by category';
+import { Context } from '@/src/utils';
+
+import { Category } from '@/src/utils/interfaces';
+
+import { DEFAULT_SELECT_OPTION } from '@/src/utils/constants';
 
 interface Props {
   options: { label: string; value: string }[];
 }
 
-// TODO: select does not reset when navigating away
-
 const Select: FC<Props> = ({ options }): ReactElement => {
   const { push } = useRouter();
-  const [category, setCategory] = useState(DEFAULT_OPTION);
+  const {
+    updateCtx,
+    ctx: { selectedCategory },
+  } = useContext(Context);
 
   const handleChange = (e: SelectChangeEvent<string>) => {
-    const category = e.target.value;
-    setCategory(category);
-    if (category !== DEFAULT_OPTION) {
-      push(`/categories/?category=${category}`);
+    const selectedCategory: Category = e.target.value;
+    updateCtx({ selectedCategory });
+    if (selectedCategory !== DEFAULT_SELECT_OPTION) {
+      push(`/categories/?category=${selectedCategory}`);
     }
   };
 
   return (
-    <MuiSelect value={category} onChange={handleChange} sx={{ width: '15rem' }}>
-      <MenuItem disabled value={DEFAULT_OPTION}>
-        {DEFAULT_OPTION}
+    <MuiSelect
+      value={selectedCategory}
+      onChange={handleChange}
+      sx={{ width: '15rem' }}
+    >
+      <MenuItem disabled value={DEFAULT_SELECT_OPTION}>
+        {DEFAULT_SELECT_OPTION}
       </MenuItem>
       {options.map(({ label, value }) => (
         <MenuItem key={value} value={value}>

@@ -22,13 +22,13 @@ const BookmarkIconButton: FC<Props> = ({
   const text: string = isBookmarked ? 'In your list' : 'Add to list';
   const color: string = isBookmarked ? 'green' : 'white';
 
-  const iconSx: object = {
+  const iconSx: SxProps<Theme> = {
     height: '2rem',
     width: '2rem',
     marginLeft: '0.5rem',
     color,
   };
-  // TODO: should this be an icon or a button? This currently has no hover
+
   return (
     <IconButton
       onClick={onBookmarkClick}

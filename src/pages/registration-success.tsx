@@ -14,8 +14,6 @@ import {
   Stepper,
 } from '@/src/components';
 
-import { User } from '@/src/utils/interfaces';
-
 interface ServerSideProps {
   props: { redirect: boolean };
 }

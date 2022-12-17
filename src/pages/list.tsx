@@ -2,6 +2,8 @@ import { ReactElement } from 'react';
 
 import { useRouter } from 'next/router';
 
+import { withIronSessionSsr } from 'iron-session/next';
+
 import { GetServerSideProps } from 'next';
 
 import { Grid, Typography } from '@mui/material';
@@ -15,24 +17,22 @@ import {
 
 import { Course, User, CustomError } from '@/src/utils/interfaces';
 
-import { getAllCourses } from '@/lib';
+import { getCourses, sessionOptions } from '@/lib';
 
 interface ServerSideProps {
   props: { error: CustomError } | { courses: Course[] };
 }
 
-export const getServerSideProps: GetServerSideProps = async (
-  ctx
-): Promise<ServerSideProps> => {
-  // TODO: make sure this still works since adding token
-  const token = ctx.req.cookies[process.env.SESSION_TOKEN_NAME];
-  const { courses, error } = await getAllCourses(token);
-  return {
-    props: !!error ? { error, courses: null } : { error: null, courses },
-  };
-};
-
-/** @param {{user: object|null, courses: object[]}} props */
+export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
+  async function getServerSideProps({ req }): Promise<ServerSideProps> {
+    const user = req.session.user;
+    const { courses, error } = await getCourses(user);
+    return {
+      props: !!error ? { error, courses: null } : { error: null, courses },
+    };
+  },
+  sessionOptions
+);
 
 interface Props {
   user: User;

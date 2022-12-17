@@ -53,6 +53,7 @@ export type Ctx = {
   dialogData: DialogData | null | undefined;
   toastData: ToastData | null | undefined;
   selectedVideo: Course | null | undefined;
+  selectedCategory: Category;
   user: User | undefined;
 };
 

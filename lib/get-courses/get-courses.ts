@@ -2,20 +2,24 @@ import { connectToDatabase } from '@/lib';
 
 import { DEFAULT_ERROR_MESSAGE, COURSES } from '@/src/utils/constants';
 
-import { Course, CustomError, Token } from '@/src/utils/interfaces';
+import { Course, CustomError, User } from '@/src/utils/interfaces';
 
-const getAllCourses = async (token: Token) : Promise<{ courses: Course[] | null, error: CustomError | null }> => {
+export default async function getCourses(
+  user: User,
+  find: object = {}
+): Promise<{ courses: Course[] | null; error: CustomError | null }> {
   try {
     const { db } = await connectToDatabase();
-    const data = await db.collection(COURSES).find({}).toArray();
+    // find property is only used in test to force error state
+    const data = await db.collection(COURSES).find(find).toArray();
 
-    // TODO: real iron-session authentication, not just truthiness
-    const isAuthorized = !!token;
-
+    const isAuthorized = user?.subscriptionStatus === 'active';
     const courses: Course[] = data.map(({ courseId, trailerId, ...rest }) => ({
       videoId: isAuthorized ? courseId : trailerId,
-      ...rest
+      ...rest,
     }));
+
+    console.log(isAuthorized ? 'AUTHORIZED' : 'RESTRICTED');
 
     return { error: null, courses };
   } catch (e) {
@@ -23,6 +27,4 @@ const getAllCourses = async (token: Token) : Promise<{ courses: Course[] | null,
     const error = { message: DEFAULT_ERROR_MESSAGE };
     return { error, courses: null };
   }
-};
-
-export { getAllCourses };
+}

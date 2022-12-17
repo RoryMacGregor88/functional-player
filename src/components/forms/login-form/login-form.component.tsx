@@ -14,6 +14,7 @@ import {
   EmailField,
   PasswordField,
   Link,
+  LinkButton,
 } from '@/src/components';
 
 import {
@@ -66,21 +67,24 @@ const LoginForm: FC<Props> = ({ handleLogin, isLoading }): ReactElement => {
       <Button type='submit' isLoading={isLoading} disabled={isDisabled}>
         Submit
       </Button>
-      <Grid container alignItems='center' justifyContent='center'>
-        {/* // TODO: fix this (span should be link, theme styles, hover styles) */}
-        <Typography variant='body1'>Forgot password?</Typography>
-        <Link href={'/reset-password'} passHref>
-          <span
-            style={{
-              cursor: 'pointer',
-              borderBottom: '2px solid orange',
-              width: 'fit-content',
-              marginLeft: '0.5rem',
-            }}
-          >
-            Click here
-          </span>
-        </Link>
+      <Grid
+        container
+        direction='column'
+        alignItems='center'
+        justifyContent='center'
+      >
+        <Grid item container alignItems='center' justifyContent='center'>
+          <Typography variant='body1'>Don&apos;t have an account?</Typography>
+          <Link href={'/register'} passHref>
+            <LinkButton>Sign up</LinkButton>
+          </Link>
+        </Grid>
+        <Grid item container alignItems='center' justifyContent='center'>
+          <Typography variant='body1'>Forgot password?</Typography>
+          <Link href={'/reset-password'} passHref>
+            <LinkButton>Reset</LinkButton>
+          </Link>
+        </Grid>
       </Grid>
     </FormWrapper>
   );

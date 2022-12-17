@@ -1,10 +1,12 @@
 import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
 
-import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
-
 import Drawer from './drawer.component';
 
+import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
+
 import { User } from '@/src/utils/interfaces';
+
+import { DEFAULT_SELECT_OPTION } from '@/src/utils/constants';
 
 enableFetchMocks();
 
@@ -27,18 +29,19 @@ describe('drawer', () => {
     setIsDrawerOpen = jest.fn();
   });
 
-  it('renders when prop is true', () => {
+  it('renders when isDrawerOpen is true', () => {
     render(<Drawer isDrawerOpen={true} user={mockUser} />);
     expect(screen.getByTestId('drawer')).toBeInTheDocument();
   });
 
-  it('does not render when prop is false', () => {
+  it('does not render when isDrawerOpen is false', () => {
     render(<Drawer isDrawerOpen={false} user={mockUser} />);
     expect(screen.queryByTestId('drawer')).not.toBeInTheDocument();
   });
 
-  it('routes to links and closes drawer', async () => {
+  it('routes to links and closes drawer and resets selected category', async () => {
     const {
+      updateCtx,
       router: { push },
     } = render(
       <Drawer
@@ -46,12 +49,17 @@ describe('drawer', () => {
         setIsDrawerOpen={setIsDrawerOpen}
         user={null}
       />,
-      { push: jest.fn() }
+      { push: jest.fn(), updateCtx: jest.fn() }
     );
 
     userEvent.click(screen.getByRole('button', { name: /login/i }));
 
+    const expected = {
+      selectedCategory: DEFAULT_SELECT_OPTION,
+    };
+
     await waitFor(() => {
+      expect(updateCtx).toHaveBeenCalledWith(expected);
       expect(setIsDrawerOpen).toHaveBeenCalled();
       expect(push).toHaveBeenCalledWith('/login', {
         forceOptimisticNavigation: false,

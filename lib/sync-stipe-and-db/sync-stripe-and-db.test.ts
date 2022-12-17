@@ -32,6 +32,7 @@ describe('syncStripeAndDb', () => {
       currentSubscriptionStatus: null,
       subscriptionId: 'active',
     });
+
     expect(result).toEqual({ isError: null, subscriptionStatus: null });
   });
 
@@ -48,7 +49,6 @@ describe('syncStripeAndDb', () => {
       { email },
       { $set: { subscriptionStatus: 'cancelled' } }
     );
-
     expect(result).toEqual({ isError: null, subscriptionStatus: 'cancelled' });
   });
 
@@ -59,6 +59,7 @@ describe('syncStripeAndDb', () => {
       currentSubscriptionStatus: 'active',
       subscriptionId: 'active',
     });
+
     expect(result).toEqual({ isError: null, subscriptionStatus: 'active' });
   });
 
@@ -69,6 +70,7 @@ describe('syncStripeAndDb', () => {
       currentSubscriptionStatus: 'active',
       subscriptionId: 'error',
     });
+
     expect(result).toEqual({ isError: true, subscriptionStatus: null });
   });
 });

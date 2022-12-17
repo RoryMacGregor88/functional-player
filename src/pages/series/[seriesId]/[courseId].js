@@ -4,12 +4,12 @@ import { VideoDisplay } from '@/src/components';
 
 import { http } from '@/src/utils';
 
-import { getAllCourses, getCourseById } from '@/lib';
+import { getCourses, getCourseById } from '@/lib';
 
 // strip out styles from copied pages, redo
 
 export const getStaticPaths = async () => {
-  const courses = await getAllCourses();
+  const courses = await getCourses();
 
   const paths = courses.map((course) => ({
     params: { seriesId: course.seriesPath, courseId: course.coursePath },

@@ -1,6 +1,8 @@
-import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
-
 import Navbar from './navbar.component';
+
+import { DEFAULT_SELECT_OPTION } from '@/src/utils/constants';
+
+import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
 describe('Navbar', () => {
   it('renders', () => {
@@ -31,13 +33,21 @@ describe('Navbar', () => {
     });
   });
 
-  it('calls drawer close fn if drawer is open and logo clicked', async () => {
+  it('resets category and closes drawer (if open) if logo clicked', async () => {
     const setIsDrawerOpen = jest.fn();
-    render(<Navbar setIsDrawerOpen={setIsDrawerOpen} isDrawerOpen={true} />);
+    const { updateCtx } = render(
+      <Navbar setIsDrawerOpen={setIsDrawerOpen} isDrawerOpen={true} />,
+      { updateCtx: jest.fn() }
+    );
 
     userEvent.click(screen.getByText(/functional player/i));
 
+    const expected = {
+      selectedCategory: DEFAULT_SELECT_OPTION,
+    };
+
     await waitFor(() => {
+      expect(updateCtx).toHaveBeenCalledWith(expected);
       expect(setIsDrawerOpen).toHaveBeenCalled();
     });
   });
