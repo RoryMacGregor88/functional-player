@@ -85,17 +85,16 @@ const RegisterForm: FC<Props> = ({
       <FormWrapper
         onSubmit={handleSubmit((formValues) => handleRegister(formValues))}
       >
-        <EmailField errors={errors} register={register} />
-        <UsernameField errors={errors} register={register} />
+        <EmailField error={errors.email} register={register} />
+        <UsernameField error={errors.username} register={register} />
         <PasswordField
-          errors={errors}
+          error={errors.password}
           register={register}
           label='Password'
           name='password'
-          validate
         />
         <PasswordField
-          errors={errors}
+          error={errors.confirmPassword}
           register={register}
           label='Confirm password'
           name='confirmPassword'

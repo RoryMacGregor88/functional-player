@@ -1,7 +1,9 @@
+import { IronSessionOptions } from 'iron-session';
+
 // this object is defaults to be used in both API
 // routes and `getServerSideProps` functions
 
-const sessionOptions = {
+const sessionOptions: IronSessionOptions = {
   password: process.env.SECRET_COOKIE_PASSWORD,
   cookieName: 'functional-player-session',
   cookieOptions: {

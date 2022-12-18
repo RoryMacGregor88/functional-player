@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, FC, ReactElement } from 'react';
 
 import { InputAdornment } from '@mui/material';
+
+import { FieldError, UseFormRegister } from 'react-hook-form';
 
 import {
   TextField,
@@ -9,13 +11,12 @@ import {
   VisibilityOffIcon,
 } from '@/src/components';
 
-/**
- * @param {{
- *  errors: object
- *  register: function
- * }} props
- */
-const EmailField = ({ errors, register }) => (
+interface EmailProps {
+  error: FieldError;
+  register: UseFormRegister<any>;
+}
+
+const EmailField: FC<EmailProps> = ({ error, register }): ReactElement => (
   <TextField
     variant='outlined'
     label='Email'
@@ -23,20 +24,23 @@ const EmailField = ({ errors, register }) => (
     name='email'
     type='email'
     aria-describedby='email'
-    error={!!errors.email}
-    helperText={errors.email?.message}
+    error={!!error}
+    helperText={error?.message}
     {...register('email')}
     autoFocus
   />
 );
 
-/**
- * @param {{
- *  errors: object
- *  register: function
- * }} props
- */
-const ConfirmEmailField = ({ errors, register }) => (
+interface ConfirmEmailProps {
+  error: FieldError;
+  register: UseFormRegister<any>;
+}
+
+// TODO: not being used anywhere, delete or use?
+const ConfirmEmailField: FC<ConfirmEmailProps> = ({
+  error,
+  register,
+}): ReactElement => (
   <TextField
     variant='outlined'
     label='Confirm email'
@@ -44,46 +48,50 @@ const ConfirmEmailField = ({ errors, register }) => (
     name='confirmEmail'
     type='email'
     aria-describedby='confirmEmail'
-    error={!!errors.confirmEmail}
-    helperText={errors.confirmEmail?.message}
+    error={!!error}
+    helperText={error?.message}
     {...register('confirmEmail')}
   />
 );
 
-/**
- * @param {{
- *  errors: object
- *  register: function
- * }} props
- */
-const UsernameField = ({ errors, register }) => (
+interface UsernameProps {
+  error: FieldError;
+  register: UseFormRegister<any>;
+}
+
+const UsernameField: FC<UsernameProps> = ({
+  error,
+  register,
+}): ReactElement => (
   <TextField
     variant='outlined'
     label='Username'
     id='username'
     name='username'
-    // TODO: check type is right
-    type='input'
     aria-describedby='username'
-    error={!!errors.username}
-    helperText={errors.username?.message}
+    error={!!error}
+    helperText={error?.message}
     {...register('username')}
   />
 );
 
-/**
- * @param {{
- *  errors: object
- *  register: function
- *  label: string
- *  name: string
- *  validate?: boolean
- * }} props
- */
-const PasswordField = ({ errors, register, label, name }) => {
+interface PasswordProps {
+  error: FieldError;
+  register: UseFormRegister<any>;
+  label: string;
+  name: string;
+}
+
+const PasswordField: FC<PasswordProps> = ({
+  error,
+  register,
+  label,
+  name,
+}): ReactElement => {
   const [showPassword, setShowPassword] = useState(false);
 
   // TODO: this is broke, negative margin -12px being implemented somewhere
+  // is this fixed now that that prop was removed?
   const iconStyles = { marginRight: '1rem', color: 'palette.primary.main' };
 
   return (
@@ -93,8 +101,8 @@ const PasswordField = ({ errors, register, label, name }) => {
       id={name}
       type={showPassword ? 'input' : 'password'}
       aria-describedby={name}
-      error={!!errors[name]}
-      helperText={errors[name]?.message}
+      error={!!error}
+      helperText={error?.message}
       InputProps={{
         role: 'textbox',
         'aria-label': label,
@@ -103,7 +111,6 @@ const PasswordField = ({ errors, register, label, name }) => {
             <IconButton
               aria-label='toggle password visibility'
               onClick={() => setShowPassword(!showPassword)}
-              edge='end'
             >
               {showPassword ? (
                 <VisibilityOffIcon sx={iconStyles} />

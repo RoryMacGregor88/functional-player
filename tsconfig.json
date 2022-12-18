@@ -25,7 +25,7 @@
     "**/*.ts",
     "**/*.tsx",
     "src/components/navbar",
-    "lib/mongodb.js"
+    "lib/mongodb.ts"
   ],
   "exclude": ["node_modules"]
 }

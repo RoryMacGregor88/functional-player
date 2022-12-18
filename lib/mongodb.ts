@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { Db, MongoClient } from 'mongodb';
 
 const MONGODB_URI = process.env.MONGODB_URI;
 const MONGODB_DB = process.env.MONGODB_DB;
@@ -15,15 +15,19 @@ if (!MONGODB_DB) {
   );
 }
 
-const getClient = function () {
-  return MongoClient.connect(MONGODB_URI, {
+interface MongoClientAndDb {
+  client: MongoClient;
+  db: Db;
+}
+
+const getClient = (): Promise<MongoClientAndDb> =>
+  MongoClient.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   }).then((client) => ({
     client,
     db: client.db(MONGODB_DB),
   }));
-};
 
 /**
  * Global is used here to maintain a cached connection across hot reloads
@@ -36,7 +40,7 @@ if (!cached) {
   cached = global.mongo = { conn: null, promise: null };
 }
 
-export default async function connectToDatabase() {
+export default async function connectToDatabase(): Promise<MongoClientAndDb> {
   if (process.env.NODE_ENV === 'development') {
     if (!!cached.conn) {
       return cached.conn;
@@ -50,7 +54,7 @@ export default async function connectToDatabase() {
     console.log('SUCCESSFULLY CONNECTED TO DB...');
     return cached.conn;
   } else {
-    // In production mode, it's best to not use a global variable.
+    // don't use global variable in production
     return getClient();
   }
 }

@@ -51,11 +51,10 @@ const DeleteAccountForm: FC<Props> = ({
         Enter password to proceed
       </Typography>
       <PasswordField
-        errors={errors}
+        error={errors.password}
         register={register}
         label='Password'
         name='password'
-        validate
       />
       <Button onClick={() => setShowConfirmButton(true)} disabled={isDisabled}>
         Proceed

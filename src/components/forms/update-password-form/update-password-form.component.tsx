@@ -58,20 +58,19 @@ const UpdatePasswordForm: FC<Props> = ({
       onSubmit={handleSubmit((formValues) => handleUpdatePassword(formValues))}
     >
       <PasswordField
-        errors={errors}
+        error={errors.currentPassword}
         register={register}
         label='Current password'
         name='currentPassword'
       />
       <PasswordField
-        errors={errors}
+        error={errors.newPassword}
         register={register}
         label='New password'
         name='newPassword'
-        validate
       />
       <PasswordField
-        errors={errors}
+        error={errors.confirmNewPassword}
         register={register}
         label='Confirm new password'
         name='confirmNewPassword'

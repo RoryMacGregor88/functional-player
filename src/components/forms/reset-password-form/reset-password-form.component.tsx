@@ -50,7 +50,7 @@ const ResetPasswordForm: FC<Props> = ({
     <FormWrapper
       onSubmit={handleSubmit((values) => handleResetPassword(values))}
     >
-      <EmailField errors={errors} register={register} />
+      <EmailField error={errors.email} register={register} />
       <Button
         type='submit'
         disabled={isSubmitDisabled || isDisabled}

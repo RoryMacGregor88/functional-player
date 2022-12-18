@@ -57,9 +57,9 @@ const LoginForm: FC<Props> = ({ handleLogin, isLoading }): ReactElement => {
     <FormWrapper
       onSubmit={handleSubmit((formValues) => handleLogin(formValues))}
     >
-      <EmailField errors={errors} register={register} />
+      <EmailField error={errors.email} register={register} />
       <PasswordField
-        errors={errors}
+        error={errors.password}
         register={register}
         label='Password'
         name='password'

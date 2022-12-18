@@ -1,5 +1,7 @@
 import stripeFn from 'stripe';
 
+import { Db } from 'mongodb';
+
 import { USERS } from '@/src/utils/constants';
 
 import { Id } from '@/src/utils/interfaces';
@@ -8,7 +10,7 @@ import { Id } from '@/src/utils/interfaces';
 const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
 
 interface Params {
-  db: unknown;
+  db: Db;
   email: string;
   currentSubscriptionStatus: string | null;
   subscriptionId: Id;
@@ -25,7 +27,7 @@ async function syncStripeAndDb({
 }> {
   try {
     // subscriptionStatus can only be null if subscription
-    // is deleted. If so, return null value
+    // has been deleted. If so, return null value
     // TODO: is this right? Can status be null and still out of sync?
     if (currentSubscriptionStatus === null) {
       return { isError: null, subscriptionStatus: currentSubscriptionStatus };
