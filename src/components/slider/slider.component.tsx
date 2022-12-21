@@ -60,8 +60,6 @@ interface ChevronWrapperProps {
   children: ReactNode;
 }
 
-// TODO: chevron is better but right is still a bit broke
-// would have to calsulte size of cards so they fit perfectly
 export const ChevronWrapper: FC<ChevronWrapperProps> = ({
   handleChevronClick,
   orientation,
@@ -83,8 +81,7 @@ export const ChevronWrapper: FC<ChevronWrapperProps> = ({
       [orientation]: 0,
       zIndex: '2',
       width: '5rem',
-      margin: `${BORDER_WIDTH}px`,
-      height: `calc(100% - ${BORDER_WIDTH * 2}px)`,
+      height: '100%',
       cursor: 'pointer',
       '&:hover': {
         backgroundColor: 'rgb(8, 8, 8, 0.5)',
@@ -204,7 +201,7 @@ const Slider: FC<SliderProps> = ({
                 minWidth,
                 height,
                 border: `${BORDER_WIDTH}px solid transparent`,
-                borderRadius: '0.5rem',
+                borderRadius: '0.75rem',
                 overflow: 'hidden',
                 cursor: 'pointer',
                 '&:hover': {

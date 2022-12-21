@@ -1,12 +1,14 @@
+import { FC, ReactElement } from 'react';
+
 import NextLink from 'next/link';
 
-import {styled} from '@mui/material'
+import { styled } from '@mui/material';
 
-const StyledLink = styled(NextLink)(({theme}) => ({
-    textDecoration: 'none',
-    color: theme.palette.text.primary
-}))
+const StyledLink = styled(NextLink)(({ theme }) => ({
+  textDecoration: 'none',
+  color: theme.palette.text.primary,
+}));
 
-const Link = (props: any) => <StyledLink {...props} />;
+const Link: FC = (props: any): ReactElement => <StyledLink {...props} />;
 
 export default Link;

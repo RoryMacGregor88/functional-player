@@ -115,7 +115,6 @@ const RegisterForm: FC<Props> = ({
         Next
       </Button>
       <Grid container alignItems='center' justifyContent='center'>
-        {/* // TODO: fix this (span should be link, theme styles, hover styles) */}
         <Typography variant='body1'>Already registered?</Typography>
         <Link href={'/login'} passHref>
           <LinkButton>Sign in</LinkButton>
