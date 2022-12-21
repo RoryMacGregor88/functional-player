@@ -26,6 +26,6 @@
     "**/*.tsx",
     "src/components/navbar",
     "lib/mongodb.ts"
-  ],
+, "jest.config.js"  ],
   "exclude": ["node_modules"]
 }

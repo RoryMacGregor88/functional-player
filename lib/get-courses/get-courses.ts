@@ -23,7 +23,7 @@ export default async function getCourses(
 
     return { error: null, courses };
   } catch (e) {
-    console.log('ERROR in getAllCourses: ', e);
+    console.log('ERROR in getCourses: ', e);
     const error = { message: DEFAULT_ERROR_MESSAGE };
     return { error, courses: null };
   }

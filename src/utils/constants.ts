@@ -1,6 +1,4 @@
 // TODO: Move all notification messages to constants
-
-export const SERIES = 'series-2';
 export const COURSES = 'courses';
 export const USERS = 'users-2';
 

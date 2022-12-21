@@ -9,8 +9,6 @@ import HeaderImage from './header-image.component';
 import SidebarItem from './sidebar-item/sidebar-item.component';
 import PageWrapper from './page-wrapper.component';
 import Slider from './slider/slider.component';
-import SeriesDisplay from './series-display.component';
-import CourseDisplay from './course-display.component';
 import VideoPlayer from './video-player.component';
 import IconButton from './icon-button/icon-button.component';
 import LevelRatingBadge from './level-rating-badge.component';
@@ -43,8 +41,6 @@ export {
   SidebarItem,
   PageWrapper,
   Slider,
-  SeriesDisplay,
-  CourseDisplay,
   VideoPlayer,
   IconButton,
   LevelRatingBadge,
