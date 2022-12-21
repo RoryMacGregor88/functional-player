@@ -3,7 +3,7 @@ import { render, screen } from '@/src/utils/test-utils';
 import List from '@/src/pages/list';
 
 jest.mock('@/lib', () => ({
-  getAllCourses: () => {},
+  getCourses: () => {},
 }));
 
 describe('list', () => {

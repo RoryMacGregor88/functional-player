@@ -4,13 +4,7 @@ import { useRouter } from 'next/router';
 
 import NextImage from 'next/image';
 
-import {
-  Dialog,
-  IconButton,
-  Grid,
-  Typography,
-  useMediaQuery,
-} from '@mui/material';
+import { Dialog, Grid, Typography, useMediaQuery } from '@mui/material';
 
 import {
   ArrowBackIcon,
@@ -18,6 +12,7 @@ import {
   Button,
   BookmarkIconButton,
   LevelRatingBadge,
+  IconButton,
 } from '@/src/components';
 
 import { updateBookmarks, updateLastWatched, Context } from '@/src/utils';
@@ -78,7 +73,6 @@ export const Overlay: FC<OverlayProps> = ({
           <IconButton
             data-testid='close-icon'
             onClick={close}
-            disableRipple
             sx={{ width: 'fit-content', padding: '0' }}
           >
             <ArrowBackIcon sx={{ height: '3rem', width: '3rem' }} />

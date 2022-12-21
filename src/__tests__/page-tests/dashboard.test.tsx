@@ -3,8 +3,7 @@ import { render, screen, waitFor, userEvent } from '@/src/utils/test-utils';
 import Dashboard from '@/src/pages/dashboard';
 
 jest.mock('@/lib', () => ({
-  getAllCourses: () => {},
-  getAllSeries: () => {},
+  getCourses: () => {},
 }));
 
 const mockUser = {

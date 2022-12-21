@@ -2,9 +2,19 @@ import { FC, useContext, ReactElement, Dispatch, SetStateAction } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { Drawer as MuiDrawer, Grid } from '@mui/material';
+import { Drawer as MuiDrawer, Grid, Typography } from '@mui/material';
 
-import { SidebarItem, ProfileIcon } from '@/src/components';
+import {
+  SidebarItem,
+  ProfileIcon,
+  Link,
+  FacebookIcon,
+  InstagramIcon,
+  TwitterIcon,
+  RedditIcon,
+  YouTubeIcon,
+  IconButton,
+} from '@/src/components';
 
 import { Context, logout } from '@/src/utils';
 
@@ -25,6 +35,18 @@ const Drawer: FC<Props> = ({
 }): ReactElement => {
   const { push, pathname } = useRouter();
   const { updateCtx } = useContext(Context);
+
+  const icons = [
+    { Icon: FacebookIcon, url: 'https://www.facebook.com', label: 'Facebook' },
+    {
+      Icon: InstagramIcon,
+      url: 'https://www.instagram.com',
+      label: 'Instagram',
+    },
+    { Icon: TwitterIcon, url: 'https://www.twitter.com', label: 'Twitter' },
+    { Icon: RedditIcon, url: 'https://www.reddit.com', label: 'Reddit' },
+    { Icon: YouTubeIcon, url: 'https://www.youtube.com', label: 'YouTube' },
+  ];
 
   const toggleDrawer = () => setIsDrawerOpen((prev) => !prev);
 
@@ -49,9 +71,10 @@ const Drawer: FC<Props> = ({
       onClose={toggleDrawer}
       sx={{
         '.MuiDrawer-paper': {
-          padding: '1rem',
+          padding: '1rem 1rem 1rem 2rem',
           minWidth: '15.5rem',
           display: 'flex',
+          justifyContent: 'center',
           alignItems: 'flex-start',
           backgroundColor: 'background.paper',
           backgroundImage: 'none',
@@ -66,20 +89,12 @@ const Drawer: FC<Props> = ({
         justifyContent='center'
         alignItems='flex-start'
         gap={4}
-        sx={{ height: '100%' }}
       >
         <SidebarItem
           Icon={ProfileIcon}
           label='Home'
           href={!user ? '/' : '/dashboard'}
           isSelected={pathname === '/dashboard'}
-          onClick={handleIconClick}
-        />
-        <SidebarItem
-          Icon={ProfileIcon}
-          label='Browse series'
-          href='/series'
-          isSelected={pathname === '/series'}
           onClick={handleIconClick}
         />
         {!!user ? (
@@ -129,6 +144,24 @@ const Drawer: FC<Props> = ({
           isSelected={pathname === '/faq'}
           onClick={handleIconClick}
         />
+      </Grid>
+      <div style={{ margin: '2rem 0' }}>----------</div>
+      <Grid
+        container
+        direction='column'
+        justifyContent='center'
+        alignItems='flex-start'
+        gap={4}
+      >
+        {icons.map(({ Icon, url, label }) => (
+          <SidebarItem
+            key={label}
+            Icon={Icon}
+            label={label}
+            href={url}
+            onClick={handleIconClick}
+          />
+        ))}
       </Grid>
     </MuiDrawer>
   );
