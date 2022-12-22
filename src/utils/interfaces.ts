@@ -1,5 +1,7 @@
 import Stripe from 'stripe';
 
+import { ObjectId } from 'mongodb';
+
 import { StripeElements } from '@stripe/stripe-js';
 
 import { AlertColor } from '@mui/material';
@@ -9,7 +11,7 @@ type StripeModules = {
   elements: StripeElements;
 };
 
-export type Id = string | number;
+export type Id = string | number | ObjectId;
 export type Token = string;
 export type Category = string;
 export type Artist = string;
