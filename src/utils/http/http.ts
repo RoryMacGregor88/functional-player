@@ -36,7 +36,7 @@ export default async function http({
       })
     ).json();
   } catch (e) {
-    console.log('ERROR: ', e);
+    console.log('ERROR 1: ', e);
     onError(defaultErrorProps);
     return {};
   }

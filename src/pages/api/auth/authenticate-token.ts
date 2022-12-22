@@ -30,7 +30,10 @@ async function authenticateToken(
       return res.status(200).json({ resUser });
     } catch (error) {
       await logServerError('authenticateToken', error);
-      return handleServerError(res);
+      return res
+        .status(500)
+        .json({ resError: error, test: 'THIS IS THE ERROR' });
+      // return handleServerError(res);
     }
   }
 }

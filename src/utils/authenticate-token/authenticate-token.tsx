@@ -21,7 +21,7 @@ export default async function authenticateToken({
       updateCtx({ ...defaultToastData, user: null }),
   });
   if (!!error) {
-    console.log('ERROR: ', error);
+    console.log('ERROR 2: ', error);
     updateCtx({
       user: null,
       toastData: {
