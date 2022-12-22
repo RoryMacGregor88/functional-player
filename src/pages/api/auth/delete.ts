@@ -23,6 +23,8 @@ import {
   INCORRECT_PASSWORD_MESSAGE,
 } from '@/src/utils/constants';
 
+import { DbUser } from '@/src/utils/interfaces';
+
 const stripe = new stripeFn(process.env.STRIPE_TEST_SECRET_KEY, {
   apiVersion: STRIPE_API_VERSION,
 });
@@ -40,7 +42,7 @@ async function deleteAccount(
       const { email, customerId, password: formPassword } = req.body;
 
       const { db } = await connectToDatabase();
-      const result = await db.collection(USERS).findOne({ email });
+      const result = await db.collection<DbUser>(USERS).findOne({ email });
 
       if (!result) {
         return res.status(400).json({
@@ -61,7 +63,7 @@ async function deleteAccount(
 
       await stripe.customers.del(customerId);
 
-      await db.collection(USERS).deleteOne({ email });
+      await db.collection<DbUser>(USERS).deleteOne({ email });
       req.session.destroy();
 
       return res.status(200).json({ resUser: null });

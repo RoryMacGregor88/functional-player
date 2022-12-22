@@ -16,6 +16,8 @@ import {
   USERS,
 } from '@/src/utils/constants';
 
+import { User } from '@/src/utils/interfaces';
+
 async function updateBookmarks(
   req: NextApiRequest,
   res: NextApiResponse
@@ -33,10 +35,12 @@ async function updateBookmarks(
         .collection(USERS)
         .findOneAndUpdate({ email }, { $set: { bookmarks } });
 
-      req.session.user = { ...req.session.user, bookmarks };
+      const resUser: User = { ...req.session.user, bookmarks };
+
+      req.session.user = resUser;
       await req.session.save();
 
-      return res.status(200).json({ resBookmarks: bookmarks });
+      return res.status(200).json({ resUser });
     } catch (error) {
       await logServerError('updateBookmarks', error);
       return handleServerError(res);

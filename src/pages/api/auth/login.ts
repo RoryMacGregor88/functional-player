@@ -20,6 +20,8 @@ import {
   INCORRECT_PASSWORD_MESSAGE,
 } from '@/src/utils/constants';
 
+import { DbUser, User } from '@/src/utils/interfaces';
+
 async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
@@ -28,7 +30,7 @@ async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
       const { email, password: formPassword } = req.body;
       const { db } = await connectToDatabase();
 
-      const result = await db.collection(USERS).findOne({ email });
+      const result = await db.collection<DbUser>(USERS).findOne({ email });
 
       if (!result) {
         return res.status(400).json({
@@ -69,8 +71,9 @@ async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
         return handleServerError(res);
       }
 
-      const resUser = {
+      const resUser: User = {
         ...restOfUser,
+        subscriptionId,
         subscriptionStatus,
       };
 

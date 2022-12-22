@@ -19,6 +19,8 @@ import {
   TOKEN_ERROR_MESSAGE,
 } from '@/src/utils/constants';
 
+import { User, DbUser } from '@/src/utils/interfaces';
+
 const stripe = new stripeFn(process.env.STRIPE_TEST_SECRET_KEY, {
   apiVersion: STRIPE_API_VERSION,
 });
@@ -62,7 +64,7 @@ async function resubscribe(
         subscriptionStatus,
       };
 
-      await db.collection(USERS).findOneAndUpdate(
+      await db.collection<DbUser>(USERS).findOneAndUpdate(
         { email },
         {
           $set: {
@@ -71,7 +73,7 @@ async function resubscribe(
         }
       );
 
-      const resUser = {
+      const resUser: User = {
         ...req.session.user,
         ...updatedProperties,
       };

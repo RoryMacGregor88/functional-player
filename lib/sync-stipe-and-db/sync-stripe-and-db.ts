@@ -23,7 +23,7 @@ async function syncStripeAndDb({
   currentSubscriptionStatus,
   subscriptionId,
 }: Params): Promise<{
-  subscriptionStatus: Id | null;
+  subscriptionStatus: string | null;
   isError: boolean | null;
 }> {
   try {

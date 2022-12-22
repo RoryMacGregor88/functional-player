@@ -44,12 +44,24 @@ export type User = {
   _id: Id;
   email: string;
   username: string;
-  subscriptionId: Id;
   customerId: Id;
+  subscriptionId: string;
   subscriptionStatus: string;
   bookmarks: Id[];
   lastWatched: Id;
 } | null;
+
+export type DbUser = {
+  _id?: Id;
+  email: string;
+  username: string;
+  password: string;
+  customerId: Id;
+  subscriptionId: string;
+  subscriptionStatus: string;
+  bookmarks: Id[];
+  lastWatched: Id;
+};
 
 export type Ctx = {
   dialogData: DialogData | null | undefined;
@@ -70,6 +82,18 @@ export type DialogAction = {
 export type Course = {
   _id: Id;
   videoId: Id;
+  title: string;
+  description: string;
+  artist: string;
+  level: LevelRating;
+  creationDate: DateString;
+  categories: Category[];
+};
+
+export type DbCourse = {
+  _id: Id;
+  trailerId: string;
+  courseId: string;
   title: string;
   description: string;
   artist: string;

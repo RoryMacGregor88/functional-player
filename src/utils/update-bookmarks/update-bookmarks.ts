@@ -17,7 +17,7 @@ interface Params {
 
 interface ResProps {
   error: Error | undefined;
-  resBookmarks: Id[] | undefined;
+  resUser: User;
 }
 
 export default async function updateBookmarks({
@@ -32,7 +32,7 @@ export default async function updateBookmarks({
     ? currentBookmarks.filter((b) => b !== _id)
     : [...currentBookmarks, _id];
 
-  const { error, resBookmarks }: ResProps = await http({
+  const { error, resUser }: ResProps = await http({
     endpoint: '/update-bookmarks',
     formData: {
       email,
@@ -48,9 +48,9 @@ export default async function updateBookmarks({
         severity: 'error',
       },
     });
-  } else if (!!resBookmarks) {
+  } else if (!!resUser) {
     updateCtx({
-      user: { ...user, bookmarks: resBookmarks },
+      user: resUser,
       toastData: {
         message: isBookmarked
           ? BOOKMARK_SUCCESS_REMOVE_MESSAGE

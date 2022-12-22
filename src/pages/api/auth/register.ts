@@ -19,6 +19,8 @@ import {
   USERNAME_TAKEN_MESSAGE,
 } from '@/src/utils/constants';
 
+import { DbUser } from '@/src/utils/interfaces';
+
 const stripe = new stripeFn(process.env.STRIPE_TEST_SECRET_KEY, {
   apiVersion: STRIPE_API_VERSION,
 });
@@ -34,7 +36,9 @@ export default async function register(
       const { email, username, password } = req.body;
       const { db } = await connectToDatabase();
 
-      const checkExistingEmail = await db.collection(USERS).findOne({ email });
+      const checkExistingEmail = await db
+        .collection<DbUser>(USERS)
+        .findOne({ email });
 
       if (!!checkExistingEmail) {
         return res
@@ -70,13 +74,14 @@ export default async function register(
         expand: ['latest_invoice.payment_intent'],
       });
 
-      await db.collection(USERS).insertOne({
+      await db.collection<DbUser>(USERS).insertOne({
         email,
         username,
         password: await hash(password, 12),
         subscriptionId,
         customerId,
         subscriptionStatus,
+        lastWatched: '',
         bookmarks: [],
       });
 

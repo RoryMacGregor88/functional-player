@@ -16,6 +16,8 @@ import {
   TOKEN_ERROR_MESSAGE,
 } from '@/src/utils/constants';
 
+import { User } from '@/src/utils/interfaces';
+
 async function syncSubscriptionStatus(
   req: NextApiRequest,
   res: NextApiResponse
@@ -45,7 +47,7 @@ async function syncSubscriptionStatus(
         return handleServerError(res);
       }
 
-      const resUser = {
+      const resUser: User = {
         ...req.session.user,
         subscriptionStatus,
       };

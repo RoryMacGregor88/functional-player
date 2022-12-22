@@ -19,6 +19,8 @@ import {
   EMAIL_NOT_FOUND_MESSAGE,
 } from '@/src/utils/constants';
 
+import { DbUser } from '@/src/utils/interfaces';
+
 export default async function resetPassword(
   req: NextApiRequest,
   res: NextApiResponse
@@ -30,7 +32,7 @@ export default async function resetPassword(
       const { email } = req.body;
       const { db } = await connectToDatabase();
 
-      const result = await db.collection(USERS).findOne({ email });
+      const result = await db.collection<DbUser>(USERS).findOne({ email });
 
       if (!result) {
         return res.status(400).json({

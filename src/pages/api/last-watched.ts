@@ -16,6 +16,8 @@ import {
   HTTP_METHOD_ERROR_MESSAGE,
 } from '@/src/utils/constants';
 
+import { User } from '@/src/utils/interfaces';
+
 async function lastWatched(
   req: NextApiRequest,
   res: NextApiResponse
@@ -33,7 +35,7 @@ async function lastWatched(
         .collection(USERS)
         .findOneAndUpdate({ email }, { $set: { lastWatched: _id } });
 
-      const resUser = { ...req.session.user, lastWatched: _id };
+      const resUser: User = { ...req.session.user, lastWatched: _id };
 
       req.session.user = resUser;
       await req.session.save();
