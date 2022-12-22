@@ -1,7 +1,5 @@
 import { ReactElement } from 'react';
 
-import { NextRouter } from 'next/router';
-
 import { render as rtlRender } from '@testing-library/react';
 
 import { RouterContext } from 'next/dist/shared/lib/router-context';
@@ -21,7 +19,8 @@ const render = (
   ui: ReactElement,
   { ctx = {}, updateCtx = () => {}, push = () => {}, ...options }: Options = {}
 ) => {
-  const router: NextRouter = {
+  // for testing only, don't care about type enforcement
+  const router: any = {
     push,
     prefetch: () => ({ catch: () => {} }),
   };
