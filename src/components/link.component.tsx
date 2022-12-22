@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, ReactNode } from 'react';
 
 import NextLink from 'next/link';
 
@@ -9,6 +9,13 @@ const StyledLink = styled(NextLink)(({ theme }) => ({
   color: theme.palette.text.primary,
 }));
 
-const Link: FC = (props: any): ReactElement => <StyledLink {...props} />;
+interface Props {
+  href: string;
+  children: ReactNode;
+}
+
+const Link: FC<Props> = ({ href, children }): ReactElement => (
+  <StyledLink href={href}>{children}</StyledLink>
+);
 
 export default Link;

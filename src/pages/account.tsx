@@ -197,14 +197,18 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
     const { stripe, elements } = formValues;
 
     // TODO: Make sure this still works with `registration=true`, see registration-success
-    const { error }: ResubscribeResProps = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: `${process.env.BASE_URL}/reactivation-success/?redirect=true&`,
-      },
-    });
+    const { error: stripeError }: ResubscribeResProps =
+      await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${process.env.BASE_URL}/reactivation-success/?redirect=true&`,
+        },
+      });
 
-    if (!!error) handleServerError();
+    if (!!stripeError) {
+      const error = { message: stripeError.message };
+      handleServerError(error);
+    }
   };
 
   interface DeleteResProps {

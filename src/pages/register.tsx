@@ -111,14 +111,18 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
   const subscribeSubmit = async ({ stripe, elements }: SubscribeFormValues) => {
     setIsLoading(true);
 
-    const { error }: SubscribeResProps = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: `${process.env.BASE_URL}/registration-success/?redirect=true&`,
-      },
-    });
+    const { error: stripeError }: SubscribeResProps =
+      await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${process.env.BASE_URL}/registration-success/?redirect=true&`,
+        },
+      });
 
-    if (!!error) handleServerError();
+    if (!!stripeError) {
+      const error = { message: stripeError.message };
+      handleServerError(error);
+    }
   };
 
   return (
