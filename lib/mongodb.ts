@@ -21,10 +21,7 @@ interface MongoClientAndDb {
 }
 
 const getClient = (): Promise<MongoClientAndDb> =>
-  MongoClient.connect(MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }).then((client) => ({
+  MongoClient.connect(MONGODB_URI).then((client) => ({
     client,
     db: client.db(MONGODB_DB),
   }));
