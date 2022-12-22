@@ -20,11 +20,14 @@ interface MongoClientAndDb {
   db: Db;
 }
 
-const getClient = (): Promise<MongoClientAndDb> =>
-  MongoClient.connect(MONGODB_URI).then((client) => ({
+const getClient = (): Promise<MongoClientAndDb> => {
+  const mongo = MongoClient.connect(MONGODB_URI).then((client) => ({
     client,
     db: client.db(MONGODB_DB),
   }));
+  console.log('MONGO: ', mongo);
+  return mongo;
+};
 
 /**
  * Global is used here to maintain a cached connection across hot reloads
@@ -39,6 +42,7 @@ if (!cached) {
 
 export default async function connectToDatabase(): Promise<MongoClientAndDb> {
   if (process.env.NODE_ENV === 'development') {
+    console.log('DEVELOPMENT');
     if (!!cached.conn) {
       return cached.conn;
     }
@@ -51,6 +55,7 @@ export default async function connectToDatabase(): Promise<MongoClientAndDb> {
     console.log('SUCCESSFULLY CONNECTED TO DB...');
     return cached.conn;
   } else {
+    console.log('PRODUCTION');
     // don't use global variable in production
     return getClient();
   }

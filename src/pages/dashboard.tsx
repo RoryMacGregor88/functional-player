@@ -38,6 +38,7 @@ interface ServerSideProps {
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
   async ({ req }): Promise<ServerSideProps> => {
+    console.log('GET SERVER SIDE PROPS');
     const user = req.session.user;
     const { courses, error } = await getCourses(user);
     return {
