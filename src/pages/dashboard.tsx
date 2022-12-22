@@ -62,6 +62,7 @@ export default function Dashboard({
 }: DashboardProps): ReactElement {
   // TODO: need useEffect for this? Or is error always present pre-load because of SSR?
   if (!!error) {
+    console.log('ERROR in DASHBOARD!!!');
     updateCtx({
       toastData: {
         message: error.message,

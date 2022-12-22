@@ -14,14 +14,12 @@ interface ResProps {
 export default async function authenticateToken({
   updateCtx,
 }: Params): Promise<void> {
-  console.log('MADE IT AUTH TOKEN');
   const { error, resUser }: ResProps = await http({
     endpoint: '/auth/authenticate-token',
     method: 'GET',
     onError: (defaultToastData: DefaultToastData) =>
       updateCtx({ ...defaultToastData, user: null }),
   });
-  console.log('MADE IT PAST AUTH TOKEN');
   if (!!error) {
     console.log('ERROR: ', error);
     updateCtx({
