@@ -1,4 +1,4 @@
-import { createTheme, Theme } from '@mui/material/styles';
+import { createTheme, ThemeOptions } from '@mui/material/styles';
 
 import { Open_Sans } from '@next/font/google';
 
@@ -11,7 +11,7 @@ const { boneWhite, lightBlack, amazonOrange } = THEME_COLORS;
 
 const openSans = Open_Sans({ weight: '400', subsets: ['latin'] });
 
-const theme: Theme = {
+const theme: ThemeOptions = {
   shape: {
     borderRadius: 5,
   },
