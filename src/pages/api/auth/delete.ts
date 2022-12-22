@@ -16,13 +16,16 @@ import {
 
 import {
   USERS,
+  STRIPE_API_VERSION,
   TOKEN_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
   EMAIL_NOT_FOUND_MESSAGE,
   INCORRECT_PASSWORD_MESSAGE,
 } from '@/src/utils/constants';
 
-const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
+const stripe = new stripeFn(process.env.STRIPE_TEST_SECRET_KEY, {
+  apiVersion: STRIPE_API_VERSION,
+});
 
 async function deleteAccount(
   req: NextApiRequest,

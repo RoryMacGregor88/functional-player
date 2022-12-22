@@ -2,12 +2,13 @@ import stripeFn from 'stripe';
 
 import { Db } from 'mongodb';
 
-import { USERS } from '@/src/utils/constants';
+import { USERS, STRIPE_API_VERSION } from '@/src/utils/constants';
 
 import { Id } from '@/src/utils/interfaces';
 
-// TODO: what's up with this?
-const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
+const stripe = new stripeFn(process.env.STRIPE_TEST_SECRET_KEY, {
+  apiVersion: STRIPE_API_VERSION,
+});
 
 interface Params {
   db: Db;

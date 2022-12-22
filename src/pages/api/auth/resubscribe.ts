@@ -14,11 +14,14 @@ import {
 
 import {
   USERS,
+  STRIPE_API_VERSION,
   HTTP_METHOD_ERROR_MESSAGE,
   TOKEN_ERROR_MESSAGE,
 } from '@/src/utils/constants';
 
-const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
+const stripe = new stripeFn(process.env.STRIPE_TEST_SECRET_KEY, {
+  apiVersion: STRIPE_API_VERSION,
+});
 
 async function resubscribe(
   req: NextApiRequest,

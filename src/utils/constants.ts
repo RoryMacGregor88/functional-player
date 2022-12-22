@@ -1,3 +1,6 @@
+// must keep on top of this
+export const STRIPE_API_VERSION = '2022-11-15';
+
 // TODO: Move all notification messages to constants
 export const COURSES = 'courses';
 export const USERS = 'users-2';

@@ -13,12 +13,15 @@ import {
 
 import {
   USERS,
+  STRIPE_API_VERSION,
   HTTP_METHOD_ERROR_MESSAGE,
   EMAIL_ALREADY_EXISTS_MESSAGE,
   USERNAME_TAKEN_MESSAGE,
 } from '@/src/utils/constants';
 
-const stripe = stripeFn(process.env.STRIPE_TEST_SECRET_KEY);
+const stripe = new stripeFn(process.env.STRIPE_TEST_SECRET_KEY, {
+  apiVersion: STRIPE_API_VERSION,
+});
 
 export default async function register(
   req: NextApiRequest,
