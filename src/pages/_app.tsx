@@ -29,7 +29,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
     selectedCategory: DEFAULT_SELECT_OPTION,
     dialogData: undefined,
     toastData: undefined,
-    user: undefined,
+    user: null,
   });
 
   const { user, toastData, dialogData, selectedVideo } = ctx;
@@ -40,9 +40,9 @@ function App({ Component, pageProps }: AppProps): ReactElement {
   console.log('USER: ', user);
 
   // token is checked upon initial app request (not internal page navigations)
-  useEffect(() => {
-    (async () => await authenticateToken({ updateCtx }))();
-  }, []);
+  // useEffect(() => {
+  //   (async () => await authenticateToken({ updateCtx }))();
+  // }, []);
 
   // only a user object or null can be returned from server
   if (user === undefined) {
