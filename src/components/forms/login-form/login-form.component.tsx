@@ -32,6 +32,8 @@ const loginFormSchema = Yup.object().shape({
   password: Yup.string().required(PASSWORD_REQUIRED_MESSAGE),
 });
 
+console.log('BASE_URL: ', process.env.BASE_URL);
+
 interface Props {
   handleLogin: (formValues: LoginFormValues) => void;
   isLoading: boolean;

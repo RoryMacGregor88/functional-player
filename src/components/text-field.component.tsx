@@ -13,6 +13,8 @@ interface Props {
   autoFocus?: boolean;
 }
 
+// TODO: input props being used anywhere?
+
 const TextField = (
   { id, label, error, type = 'input', InputProps, autoFocus = false },
   ref
@@ -29,11 +31,6 @@ const TextField = (
     helperText={error?.message}
     autoFocus={autoFocus}
     InputProps={InputProps}
-    inputProps={{
-      sx: {
-        WebkitBoxShadow: 'none !important',
-      },
-    }}
     ref={ref}
   />
 );
