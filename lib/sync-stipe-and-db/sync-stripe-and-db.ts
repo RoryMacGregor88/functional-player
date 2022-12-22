@@ -34,9 +34,10 @@ async function syncStripeAndDb({
       return { isError: null, subscriptionStatus: currentSubscriptionStatus };
     }
 
-    const { status: stripeStatus } = await stripe.subscriptions.retrieve(
-      subscriptionId
-    );
+    // TODO: fix this, get rid of ID interface
+    const id = `${subscriptionId}`;
+
+    const { status: stripeStatus } = await stripe.subscriptions.retrieve(id);
 
     // if stripe's status does not match db, update status in db
     if (currentSubscriptionStatus !== stripeStatus) {

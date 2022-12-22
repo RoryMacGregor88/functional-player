@@ -2,6 +2,8 @@ import { useState, ReactElement, FC, ReactNode } from 'react';
 
 import { useRouter } from 'next/router';
 
+import { StripeError } from '@stripe/stripe-js';
+
 import { Tabs, Tab, Box } from '@mui/material';
 
 import {
@@ -186,7 +188,7 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
   };
 
   interface ResubscribeResProps {
-    error: Error;
+    error: StripeError;
   }
 
   const handleResubscribe = async (formValues: ResubscribeFormValues) => {

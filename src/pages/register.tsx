@@ -2,6 +2,8 @@ import React, { useState, ReactElement } from 'react';
 
 import { Elements } from '@stripe/react-stripe-js';
 
+import { StripeError } from '@stripe/stripe-js';
+
 import { useRouter } from 'next/router';
 
 import { Grid } from '@mui/material';
@@ -103,7 +105,7 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
   };
 
   interface SubscribeResProps {
-    error: Error;
+    error: StripeError;
   }
 
   const subscribeSubmit = async ({ stripe, elements }: SubscribeFormValues) => {

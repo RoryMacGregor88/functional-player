@@ -1,4 +1,4 @@
-import Stripe from 'stripe';
+import { Stripe } from '@stripe/stripe-js';
 
 import { ObjectId } from 'mongodb';
 
