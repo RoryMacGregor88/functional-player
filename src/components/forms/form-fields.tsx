@@ -18,14 +18,10 @@ interface EmailProps {
 
 const EmailField: FC<EmailProps> = ({ error, register }): ReactElement => (
   <TextField
-    variant='outlined'
     label='Email'
     id='email'
-    name='email'
     type='email'
-    aria-describedby='email'
-    error={!!error}
-    helperText={error?.message}
+    error={error}
     {...register('email')}
     autoFocus
   />
@@ -42,14 +38,10 @@ const ConfirmEmailField: FC<ConfirmEmailProps> = ({
   register,
 }): ReactElement => (
   <TextField
-    variant='outlined'
     label='Confirm email'
     id='confirmEmail'
-    name='confirmEmail'
     type='email'
-    aria-describedby='confirmEmail'
-    error={!!error}
-    helperText={error?.message}
+    error={error}
     {...register('confirmEmail')}
   />
 );
@@ -64,13 +56,9 @@ const UsernameField: FC<UsernameProps> = ({
   register,
 }): ReactElement => (
   <TextField
-    variant='outlined'
-    label='Username'
+    label='username'
     id='username'
-    name='username'
-    aria-describedby='username'
-    error={!!error}
-    helperText={error?.message}
+    error={error}
     {...register('username')}
   />
 );
@@ -93,16 +81,12 @@ const PasswordField: FC<PasswordProps> = ({
   // TODO: this is broke, negative margin -12px being implemented somewhere
   // is this fixed now that that prop was removed?
   const iconStyles = { marginRight: '1rem', color: 'palette.primary.main' };
-
   return (
     <TextField
-      variant='outlined'
       label={label}
       id={name}
       type={showPassword ? 'input' : 'password'}
-      aria-describedby={name}
-      error={!!error}
-      helperText={error?.message}
+      error={error}
       InputProps={{
         role: 'textbox',
         'aria-label': label,
