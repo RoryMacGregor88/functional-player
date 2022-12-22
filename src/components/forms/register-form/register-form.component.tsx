@@ -116,7 +116,7 @@ const RegisterForm: FC<Props> = ({
       </Button>
       <Grid container alignItems='center' justifyContent='center'>
         <Typography variant='body1'>Already registered?</Typography>
-        <Link href={'/login'} passHref>
+        <Link href={'/login'}>
           <LinkButton>Sign in</LinkButton>
         </Link>
       </Grid>

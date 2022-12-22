@@ -9,7 +9,7 @@ interface Props {
   label: string;
   error: FieldError;
   type?: string;
-  InputProps?: Partial<InputProps> | undefined;
+  InputProps?: Partial<InputProps>;
   autoFocus?: boolean;
 }
 

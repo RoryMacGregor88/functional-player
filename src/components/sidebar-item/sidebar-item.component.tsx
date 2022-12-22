@@ -22,7 +22,7 @@ const SidebarItem: FC<Props> = ({
   onClick,
   isSelected = false,
 }): ReactElement => (
-  <Link href={href} passHref>
+  <Link href={href}>
     <IconButton
       onClick={onClick}
       sx={{

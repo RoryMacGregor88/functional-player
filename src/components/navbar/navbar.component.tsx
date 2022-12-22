@@ -66,7 +66,7 @@ const Navbar: FC<Props> = ({
               sx={{ height: '2rem', width: '2rem', marginRight: '1rem' }}
             />
           </IconButton>
-          <Link href={'/dashboard'} onClick={handleLogoClick} passHref>
+          <Link href={'/dashboard'} onClick={handleLogoClick}>
             <Typography variant='h5' sx={{ cursor: 'pointer', height: '2rem' }}>
               Functional Player
             </Typography>

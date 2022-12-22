@@ -11,11 +11,14 @@ const StyledLink = styled(NextLink)(({ theme }) => ({
 
 interface Props {
   href: string;
+  onClick?: () => void;
   children: ReactNode;
 }
 
-const Link: FC<Props> = ({ href, children }): ReactElement => (
-  <StyledLink href={href}>{children}</StyledLink>
+const Link: FC<Props> = ({ href, onClick, children }): ReactElement => (
+  <StyledLink href={href} onClick={onClick} passHref>
+    {children}
+  </StyledLink>
 );
 
 export default Link;
