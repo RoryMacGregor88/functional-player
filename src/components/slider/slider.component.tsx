@@ -194,7 +194,7 @@ const Slider: FC<SliderProps> = ({
         >
           {courses.map((course) => (
             <Box
-              key={course._id}
+              key={course.title}
               onClick={() => handleClick(course)}
               sx={{
                 position: 'relative',
