@@ -67,7 +67,7 @@ export default async function register(
         id: subscriptionId,
         status: subscriptionStatus,
         latest_invoice,
-      } = await stripe.subscriptions.create({
+      }: any = await stripe.subscriptions.create({
         customer: customerId,
         items: [{ price: process.env.TEST_SUBSCRIPTION_PRICE_ID }],
         payment_behavior: 'default_incomplete',
