@@ -8,12 +8,7 @@ import { GetServerSideProps } from 'next';
 
 import { Grid, Typography } from '@mui/material';
 
-import {
-  PageWrapper,
-  SpacedTitle,
-  CourseDisplay,
-  LoadMask,
-} from '@/src/components';
+import { PageWrapper, SpacedTitle, LoadMask } from '@/src/components';
 
 import { Course, User, CustomError } from '@/src/utils/interfaces';
 
@@ -60,12 +55,7 @@ export default function List({ user, courses }: Props): ReactElement {
         </Typography>
       ) : (
         <Grid container spacing={4}>
-          {bookmarks.map((course) => (
-            <CourseDisplay
-              key={course._id}
-              course={{ ...course, src: '/stratocaster-small.jpg' }}
-            />
-          ))}
+          <h1>FIX THIS!!!</h1>
         </Grid>
       )}
     </PageWrapper>
