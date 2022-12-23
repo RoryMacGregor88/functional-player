@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { GetServerSideProps } from 'next';
 
 import { useRouter } from 'next/router';
@@ -56,10 +58,11 @@ export default function Categories({ user, courses }: Props) {
       ({ value }) => value === category
     );
 
-  if (!categoryMetadata) {
-    push('/dashboard');
-    return <LoadMask />;
-  }
+  useEffect(() => {
+    if (!categoryMetadata) push('/dashboard');
+  }, [categoryMetadata, push]);
+
+  if (!categoryMetadata) return <LoadMask />;
 
   const categorisedCourses = courses.filter(({ categories }) =>
       categories.includes(categoryMetadata.value)

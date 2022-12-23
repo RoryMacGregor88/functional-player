@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -27,10 +27,11 @@ export default function Login({ user, updateCtx }: Props) {
   const [wellData, setWellData] = useState<WellData>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  if (!!user) {
-    push('/dashboard');
-    return <LoadMask />;
-  }
+  useEffect(() => {
+    if (!!user) push('/dashboard');
+  }, [user, push]);
+
+  if (!!user) return <LoadMask />;
 
   interface ResProps {
     error: Error | undefined;

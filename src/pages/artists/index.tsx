@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { GetServerSideProps } from 'next';
 
 import { useRouter } from 'next/router';
@@ -51,10 +53,11 @@ export default function Categories({ user, courses }: Props) {
   const artist: Artist = `${artistParam}`,
     artistLabel = ARTIST_METADATA.find(({ value }) => value === artist)?.label;
 
-  if (!artistLabel) {
-    push('/dashboard');
-    return <LoadMask />;
-  }
+  useEffect(() => {
+    if (!artistLabel) push('/dashboard');
+  }, [artistLabel, push]);
+
+  if (!artistLabel) return <LoadMask />;
 
   const categorisedCourses = courses.filter(
       ({ artist }) => artist === artistLabel

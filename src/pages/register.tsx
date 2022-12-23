@@ -1,4 +1,4 @@
-import React, { useState, ReactElement } from 'react';
+import { useState, ReactElement, useEffect } from 'react';
 
 import { Elements } from '@stripe/react-stripe-js';
 
@@ -48,10 +48,11 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
   const [wellData, setWellData] = useState<WellData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  if (!!user) {
-    push('/dashboard');
-    return <LoadMask />;
-  }
+  useEffect(() => {
+    if (!!user) push('/dashboard');
+  }, [user, push]);
+
+  if (!!user) return <LoadMask />;
 
   const onNextClick = () => {
     if (!!wellData) setWellData(null);

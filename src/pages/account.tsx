@@ -1,4 +1,4 @@
-import { useState, ReactElement, FC, ReactNode } from 'react';
+import { useState, ReactElement, FC, ReactNode, useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -71,10 +71,11 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  if (!user) {
-    push('/login');
-    return <LoadMask />;
-  }
+  useEffect(() => {
+    if (!user) push('/login');
+  }, [user, push]);
+
+  if (!user) return <LoadMask />;
 
   const { subscriptionStatus } = user;
 

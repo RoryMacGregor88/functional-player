@@ -46,7 +46,9 @@ export default function ReactivationSuccess({
   type ResProps = boolean | undefined;
 
   useEffect(() => {
-    if (!!redirect) {
+    if (!redirect) {
+      push('/dashboard');
+    } else if (!!redirect) {
       (async () => {
         const res: ResProps = await syncSubscriptionStatus({
           user,
@@ -55,12 +57,9 @@ export default function ReactivationSuccess({
         if (!!res) setIsUpdated(true);
       })();
     }
-  }, [user, updateCtx, redirect]);
+  }, [user, updateCtx, redirect, push]);
 
-  if (!redirect) {
-    push('/dashboard');
-    return <LoadMask />;
-  }
+  if (!redirect) return <LoadMask />;
 
   return !isUpdated ? (
     <LoadMask />

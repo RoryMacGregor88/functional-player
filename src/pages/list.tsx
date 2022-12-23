@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -37,10 +37,11 @@ interface Props {
 export default function List({ user, courses }: Props): ReactElement {
   const { push } = useRouter();
 
-  if (!user) {
-    push('/login');
-    return <LoadMask />;
-  }
+  useEffect(() => {
+    if (!user) push('/login');
+  }, [user, push]);
+
+  if (!user) return <LoadMask />;
 
   const bookmarks = courses.filter((course) =>
     user.bookmarks.includes(course._id)

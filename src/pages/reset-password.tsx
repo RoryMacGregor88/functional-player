@@ -1,4 +1,4 @@
-import { useState, ReactElement } from 'react';
+import { useState, ReactElement, useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -33,10 +33,11 @@ export default function ResetPassword({
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
 
-  if (!!user) {
-    push('/dashboard');
-    return <LoadMask />;
-  }
+  useEffect(() => {
+    if (!!user) push('/dashboard');
+  }, [user, push]);
+
+  if (!!user) return <LoadMask />;
 
   const handleResponse = (wellData: WellData) => {
     setIsLoading(false);

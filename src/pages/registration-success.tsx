@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -36,10 +36,11 @@ interface Props {
 export default function RegistrationSuccess({ redirect }: Props): ReactElement {
   const { push } = useRouter();
 
-  if (!redirect) {
-    push('/dashboard');
-    return <LoadMask />;
-  }
+  useEffect(() => {
+    if (!redirect) push('/dashboard');
+  }, [redirect, push]);
+
+  if (!redirect) return <LoadMask />;
 
   return (
     <PageWrapper>
