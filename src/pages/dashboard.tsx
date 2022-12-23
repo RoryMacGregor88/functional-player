@@ -36,21 +36,12 @@ interface ServerSideProps {
   props: { error: CustomError } | { courses: Course[] };
 }
 
-// export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
-//   async ({ req }): Promise<ServerSideProps> => {
-//     const user = req.session.user;
-//     const { courses, error } = await getCourses(user);
-//     return {
-//       props: !!error ? { error, courses: null } : { error: null, courses },
-//     };
-//   },
-//   sessionOptions
-// );
-
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
-  async (): Promise<ServerSideProps> => {
+  async ({ req }): Promise<ServerSideProps> => {
+    const user = req.session.user;
+    const { courses, error } = await getCourses(user);
     return {
-      props: { error: { message: 'I AM WORKING NOW' } },
+      props: !!error ? { error, courses: null } : { error: null, courses },
     };
   },
   sessionOptions
@@ -70,7 +61,6 @@ export default function Dashboard({
 }: DashboardProps): ReactElement {
   // TODO: need useEffect for this? Or is error always present pre-load because of SSR?
   if (!!error) {
-    console.log('ERROR in DASHBOARD: ', error);
     updateCtx({
       toastData: {
         message: error.message,
@@ -90,7 +80,7 @@ export default function Dashboard({
     lastWatched = courses.find(({ _id }) => _id === user?.lastWatched) ?? null,
     bookmarks = courses.filter(({ _id }) => user?.bookmarks.includes(_id));
   return (
-    <Grid container direction='column' sx={{ width: '100%' }}>
+    <Grid container direction='column'>
       <HeaderImage
         src='/stratocaster'
         alt='stratocaster'

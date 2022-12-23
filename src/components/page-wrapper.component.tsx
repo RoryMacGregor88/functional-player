@@ -9,6 +9,7 @@ interface Props {
 const PageWrapper: FC<Props> = ({ children }): ReactElement => (
   <Box
     sx={{
+      width: '100%',
       margin: '0 auto',
       padding: '0 2rem',
     }}

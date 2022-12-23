@@ -26,23 +26,17 @@ export default async function http({
 }: Params): Promise<any> {
   try {
     const options = !!formData ? { body: JSON.stringify(formData) } : {};
-
-    const test1 = await fetch(`/api${endpoint}`, {
+    return await (
+      await fetch(`/api${endpoint}`, {
         method,
         headers: {
           'Content-Type': 'application/json',
         },
         ...options,
-      }),
-      test2 = await test1.json();
-
-    console.log('TEST 1: ', test1);
-    console.log('TEST 2: ', test2);
-
-    return test2;
+      })
+    ).json();
   } catch (e) {
-    console.log(`ERROR IN ${endpoint} ENDPOINT: `);
-    console.debug(e);
+    console.log(`ERROR IN ${endpoint} ENDPOINT: `, e);
     onError(defaultErrorProps);
     return {};
   }

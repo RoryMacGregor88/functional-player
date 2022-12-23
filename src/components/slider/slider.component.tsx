@@ -116,7 +116,7 @@ const Slider: FC<SliderProps> = ({
 
   if (!courses?.length) return null;
 
-  const minWidth = banner ? 'calc(100vw - 4rem)' : `${ITEM_WIDTH_REM}rem`,
+  const minWidth = banner ? '100%' : `${ITEM_WIDTH_REM}rem`,
     height = banner ? '30rem' : `${ITEM_HEIGHT_REM}rem`;
 
   const handleClick = (course: Course): void =>
@@ -143,7 +143,7 @@ const Slider: FC<SliderProps> = ({
         sx={{
           position: 'relative',
           overflow: 'hidden',
-          width: 'calc(100vw - 4rem)',
+          width: '100%',
           marginBottom: '2rem',
         }}
       >

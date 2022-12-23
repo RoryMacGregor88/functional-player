@@ -15,6 +15,7 @@ import {
   SpacedTitle,
   Well,
   LoadMask,
+  PageWrapper,
 } from '@/src/components';
 
 import { http } from '@/src/utils';
@@ -127,34 +128,36 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
   };
 
   return (
-    <Grid
-      container
-      direction='column'
-      alignItems='center'
-      sx={{ maxWidth: '50rem' }}
-    >
-      <SpacedTitle>Register</SpacedTitle>
-      {!!wellData ? <Well {...wellData} /> : null}
-      <Stepper activeStep={activeStep} />
-      {activeStep === 1 ? (
-        <RegisterForm
-          isLoading={isLoading}
-          handleRegister={handleRegister}
-          onNextClick={onNextClick}
-          disableSubmitButton={!!wellData?.severity}
-          disableNextButton={!clientSecret}
-        />
-      ) : null}
-      {activeStep === 2 && !!clientSecret ? (
-        <Elements stripe={getStripe()} options={{ clientSecret }}>
-          {/* // TODO: Replace P with details about cost/recurrence */}
-          <p style={{ textAlign: 'center' }}>Subscribe</p>
-          <SubscribeForm
-            subscribeSubmit={subscribeSubmit}
+    <PageWrapper>
+      <Grid
+        container
+        direction='column'
+        alignItems='center'
+        sx={{ maxWidth: '50rem', margin: '5rem auto' }}
+      >
+        <SpacedTitle>Register</SpacedTitle>
+        {!!wellData ? <Well {...wellData} /> : null}
+        <Stepper activeStep={activeStep} />
+        {activeStep === 1 ? (
+          <RegisterForm
             isLoading={isLoading}
+            handleRegister={handleRegister}
+            onNextClick={onNextClick}
+            disableSubmitButton={!!wellData?.severity}
+            disableNextButton={!clientSecret}
           />
-        </Elements>
-      ) : null}
-    </Grid>
+        ) : null}
+        {activeStep === 2 && !!clientSecret ? (
+          <Elements stripe={getStripe()} options={{ clientSecret }}>
+            {/* // TODO: Replace P with details about cost/recurrence */}
+            <p style={{ textAlign: 'center' }}>Subscribe</p>
+            <SubscribeForm
+              subscribeSubmit={subscribeSubmit}
+              isLoading={isLoading}
+            />
+          </Elements>
+        ) : null}
+      </Grid>
+    </PageWrapper>
   );
 }

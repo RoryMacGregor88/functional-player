@@ -39,12 +39,7 @@ interface Props {
   courses: Course[];
 }
 
-// TODO: does not reset slider when changing categories
-// does not reset select when changing categories
-// bottom margin is disappearing behind footer (pretty sure this is fixed?)
-
-// Why was updateCtx here? Is it needed
-
+// TODO: Why was updateCtx here? Is it needed
 // needs tests
 
 export default function Categories({ user, courses }: Props) {

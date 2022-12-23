@@ -4,7 +4,13 @@ import { useRouter } from 'next/router';
 
 import { Grid } from '@mui/material';
 
-import { LoginForm, SpacedTitle, Well, LoadMask } from '@/src/components';
+import {
+  LoginForm,
+  SpacedTitle,
+  Well,
+  LoadMask,
+  PageWrapper,
+} from '@/src/components';
 
 import { http } from '@/src/utils';
 
@@ -65,18 +71,18 @@ export default function Login({ user, updateCtx }: Props) {
     setIsLoading(false);
   };
 
-  // TODO: no PageWrapper. Make consistent, check others
-  // if needs to be narrower, styles should be in form wrapper
   return (
-    <Grid
-      container
-      direction='column'
-      alignItems='center'
-      sx={{ maxWidth: '50rem' }}
-    >
-      <SpacedTitle>Login</SpacedTitle>
-      {!!wellData ? <Well {...wellData} /> : null}
-      <LoginForm handleLogin={handleLogin} isLoading={isLoading} />
-    </Grid>
+    <PageWrapper>
+      <Grid
+        container
+        direction='column'
+        alignItems='center'
+        sx={{ maxWidth: '50rem', margin: '5rem auto' }}
+      >
+        <SpacedTitle>Login</SpacedTitle>
+        {!!wellData ? <Well {...wellData} /> : null}
+        <LoginForm handleLogin={handleLogin} isLoading={isLoading} />
+      </Grid>
+    </PageWrapper>
   );
 }

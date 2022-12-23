@@ -53,7 +53,7 @@ const Navbar: FC<Props> = ({
         sx={{
           width: '100%',
           padding: '0.5rem 2rem',
-          minHeight: '4rem !important',
+          minHeight: '0px !important',
         }}
       >
         <Grid item container sx={{ width: 'fit-content' }}>
