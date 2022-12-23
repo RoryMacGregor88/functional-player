@@ -26,17 +26,17 @@ export default async function http({
 }: Params): Promise<any> {
   try {
     const options = !!formData ? { body: JSON.stringify(formData) } : {};
-    const test1 = await fetch(`/api${endpoint}`, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      ...options,
-    });
-    console.log('RETURNED DATA: ', test1);
-    // SyntaxError: Unexpected token 'A', "An error o"... is not valid JSON
+    return await (
+      await fetch(`${process.env.BASE_URL}/api${endpoint}`, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        ...options,
+      })
+    ).json();
   } catch (e) {
-    console.log('ERROR 1: ', e);
+    console.log('ERROR HTTP: ', e);
     onError(defaultErrorProps);
     return {};
   }
