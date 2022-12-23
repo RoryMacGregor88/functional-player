@@ -36,13 +36,21 @@ interface ServerSideProps {
   props: { error: CustomError } | { courses: Course[] };
 }
 
+// export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
+//   async ({ req }): Promise<ServerSideProps> => {
+//     const user = req.session.user;
+//     const { courses, error } = await getCourses(user);
+//     return {
+//       props: !!error ? { error, courses: null } : { error: null, courses },
+//     };
+//   },
+//   sessionOptions
+// );
+
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
-  async ({ req }): Promise<ServerSideProps> => {
-    console.log('GET SERVER SIDE PROPS');
-    const user = req.session.user;
-    const { courses, error } = await getCourses(user);
+  async (): Promise<ServerSideProps> => {
     return {
-      props: !!error ? { error, courses: null } : { error: null, courses },
+      props: { error: { message: 'I AM WORKING NOW' } },
     };
   },
   sessionOptions
@@ -62,7 +70,7 @@ export default function Dashboard({
 }: DashboardProps): ReactElement {
   // TODO: need useEffect for this? Or is error always present pre-load because of SSR?
   if (!!error) {
-    console.log('ERROR in DASHBOARD!!!');
+    console.log('ERROR in DASHBOARD: ', error);
     updateCtx({
       toastData: {
         message: error.message,
