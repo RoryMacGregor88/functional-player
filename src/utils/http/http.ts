@@ -27,7 +27,7 @@ export default async function http({
   try {
     const options = !!formData ? { body: JSON.stringify(formData) } : {};
 
-    const test1 = await fetch(`${process.env.BASE_URL}/api${endpoint}`, {
+    const test1 = await fetch(`/api${endpoint}`, {
         method,
         headers: {
           'Content-Type': 'application/json',
