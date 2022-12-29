@@ -13,18 +13,20 @@ jest.mock('iron-session/next', () => ({
   withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
 }));
 
-jest.mock('stripe', () => () => ({
-  customers: { create: () => ({ id: '12345' }) },
-  subscriptions: {
-    create: () => ({
-      id: '678910',
-      status: 'incomplete',
-      latest_invoice: {
-        payment_intent: { client_secret: 'test-client-secret' },
-      },
-    }),
-  },
-}));
+jest.mock('stripe', () =>
+  jest.fn().mockImplementation(() => ({
+    customers: { create: () => ({ id: '12345' }) },
+    subscriptions: {
+      create: () => ({
+        id: '678910',
+        status: 'incomplete',
+        latest_invoice: {
+          payment_intent: { client_secret: 'test-client-secret' },
+        },
+      }),
+    },
+  }))
+);
 
 jest.mock('@/lib', () => ({
   connectToDatabase: jest.fn().mockImplementation(() => ({

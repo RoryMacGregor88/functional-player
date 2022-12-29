@@ -11,7 +11,9 @@ import deleteAccount from '@/src/pages/api/auth/delete';
 let json = null,
   status = null;
 
-jest.mock('stripe', () => () => ({ customers: { del: () => {} } }));
+jest.mock('stripe', () =>
+  jest.fn().mockImplementation(() => ({ customers: { del: () => {} } }))
+);
 
 jest.mock('iron-session/next', () => ({
   withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),

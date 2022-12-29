@@ -39,8 +39,11 @@ async function syncStripeAndDb({
 
     const { status: stripeStatus } = await stripe.subscriptions.retrieve(id);
 
+    console.log('STRIPE TYPE: ', typeof stripeStatus);
+
     // if stripe's status does not match db, update status in db
     if (currentSubscriptionStatus !== stripeStatus) {
+      console.log('STRIPE IS NOT EQUAL');
       await db
         .collection(USERS)
         .findOneAndUpdate(
@@ -49,7 +52,8 @@ async function syncStripeAndDb({
         );
 
       return { isError: null, subscriptionStatus: stripeStatus };
-    } else {
+    } else if (currentSubscriptionStatus === stripeStatus) {
+      console.log('STRIPE IS EQUAL');
       // if unchanged, return current status
       return { isError: null, subscriptionStatus: currentSubscriptionStatus };
     }

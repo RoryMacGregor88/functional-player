@@ -37,8 +37,6 @@ function App({ Component, pageProps }: AppProps): ReactElement {
   const updateCtx: UpdateCtx = (newData: Partial<Ctx>) =>
     setCtx((prev) => ({ ...prev, ...newData }));
 
-  console.log('USER: ', user);
-
   // token is checked upon initial app request (not internal page navigations)
   useEffect(() => {
     (async () => await authenticateToken({ updateCtx }))();
@@ -50,7 +48,6 @@ function App({ Component, pageProps }: AppProps): ReactElement {
   }
 
   // TODO: need one on every page once fleshed out, SEO is vital
-
   return (
     <>
       <Head>

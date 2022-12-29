@@ -15,6 +15,7 @@ interface Props {
 }
 
 // TODO: get rid of ...props? Being used anywhere?
+// also, need disabled color to make clear that it's disabled
 
 const Button = (
   {
@@ -40,6 +41,9 @@ const Button = (
       textAlign: 'center',
       backgroundColor: 'primary.main',
       color: 'background.paper',
+      '&:disabled': {
+        color: 'background.paper',
+      },
       ...sx,
     }}
     {...props}

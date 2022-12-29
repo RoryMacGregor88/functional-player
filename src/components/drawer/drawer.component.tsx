@@ -2,18 +2,22 @@ import { FC, useContext, ReactElement, Dispatch, SetStateAction } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { Drawer as MuiDrawer, Grid, Typography } from '@mui/material';
+import { Drawer as MuiDrawer, Grid } from '@mui/material';
 
 import {
   SidebarItem,
+  HomeIcon,
   ProfileIcon,
-  Link,
+  LoginIcon,
+  LogoutIcon,
+  BookmarksIcon,
   FacebookIcon,
   InstagramIcon,
   TwitterIcon,
   RedditIcon,
   YouTubeIcon,
-  IconButton,
+  HelpIcon,
+  RegisterIcon,
 } from '@/src/components';
 
 import { Context, logout } from '@/src/utils';
@@ -91,7 +95,7 @@ const Drawer: FC<Props> = ({
         gap={4}
       >
         <SidebarItem
-          Icon={ProfileIcon}
+          Icon={HomeIcon}
           label='Home'
           href={!user ? '/' : '/dashboard'}
           isSelected={pathname === '/dashboard'}
@@ -100,7 +104,7 @@ const Drawer: FC<Props> = ({
         {!!user ? (
           <>
             <SidebarItem
-              Icon={ProfileIcon}
+              Icon={BookmarksIcon}
               label='My List'
               href='/list'
               isSelected={pathname === '/list'}
@@ -114,7 +118,7 @@ const Drawer: FC<Props> = ({
               onClick={handleIconClick}
             />
             <SidebarItem
-              Icon={ProfileIcon}
+              Icon={LogoutIcon}
               label='Logout'
               onClick={handleLogout}
             />
@@ -122,14 +126,14 @@ const Drawer: FC<Props> = ({
         ) : (
           <>
             <SidebarItem
-              Icon={ProfileIcon}
+              Icon={LoginIcon}
               label='Login'
               href='/login'
               isSelected={pathname === '/login'}
               onClick={handleIconClick}
             />
             <SidebarItem
-              Icon={ProfileIcon}
+              Icon={RegisterIcon}
               label='Register'
               href='/register'
               isSelected={pathname === '/register'}
@@ -138,14 +142,22 @@ const Drawer: FC<Props> = ({
           </>
         )}
         <SidebarItem
-          Icon={ProfileIcon}
+          Icon={HelpIcon}
           label='FAQ'
           href='/faq'
           isSelected={pathname === '/faq'}
           onClick={handleIconClick}
         />
       </Grid>
-      <div style={{ margin: '2rem 0' }}>----------</div>
+
+      <div
+        style={{
+          margin: '2rem 0',
+          width: '100%',
+          border: '0.5px solid #fff',
+        }}
+      />
+
       <Grid
         container
         direction='column'

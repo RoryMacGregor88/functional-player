@@ -49,11 +49,12 @@ describe('updateBookmarks endpoint', () => {
   it('updates bookmarks', async () => {
     const save = jest.fn(),
       email = 'success@test.com',
+      user = { email },
       bookmarks = ['123', '456'],
       req = {
         method: 'POST',
         body: { email, bookmarks },
-        session: { user: { email }, save },
+        session: { user, save },
       },
       res = { status };
 
@@ -61,9 +62,7 @@ describe('updateBookmarks endpoint', () => {
 
     expect(save).toHaveBeenCalled();
     expect(status).toHaveBeenCalledWith(200);
-    expect(json).toHaveBeenCalledWith({
-      resBookmarks: bookmarks,
-    });
+    expect(json).toHaveBeenCalledWith({ resUser: { ...user, bookmarks } });
   });
 
   it('handles http method forbidden', async () => {

@@ -36,7 +36,6 @@ export default async function http({
       })
     ).json();
   } catch (e) {
-    console.log(`ERROR IN ${endpoint} ENDPOINT: `, e);
     onError(defaultErrorProps);
     return {};
   }

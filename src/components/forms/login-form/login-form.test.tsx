@@ -120,10 +120,22 @@ describe('Login Form', () => {
     });
   });
 
+  it('redirects if register link clicked', async () => {
+    const { push } = renderComponent();
+
+    userEvent.click(screen.getByText(/sign up/i));
+
+    await waitFor(() => {
+      expect(push).toHaveBeenCalledWith('/register', {
+        forceOptimisticNavigation: false,
+      });
+    });
+  });
+
   it('redirects if forgot password link clicked', async () => {
     const { push } = renderComponent();
 
-    userEvent.click(screen.getByText(/click here/i));
+    userEvent.click(screen.getByText(/reset/i));
 
     await waitFor(() => {
       expect(push).toHaveBeenCalledWith('/reset-password', {

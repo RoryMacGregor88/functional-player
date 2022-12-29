@@ -22,7 +22,7 @@ const EmailField: FC<EmailProps> = ({ error, register }): ReactElement => (
     id='email'
     type='email'
     error={error}
-    {...register('email')}
+    register={register}
     autoFocus
   />
 );
@@ -42,7 +42,7 @@ const ConfirmEmailField: FC<ConfirmEmailProps> = ({
     id='confirmEmail'
     type='email'
     error={error}
-    {...register('confirmEmail')}
+    register={register}
   />
 );
 
@@ -55,12 +55,7 @@ const UsernameField: FC<UsernameProps> = ({
   error,
   register,
 }): ReactElement => (
-  <TextField
-    label='username'
-    id='username'
-    error={error}
-    {...register('username')}
-  />
+  <TextField label='username' id='username' error={error} register={register} />
 );
 
 interface PasswordProps {
@@ -87,6 +82,7 @@ const PasswordField: FC<PasswordProps> = ({
       id={name}
       type={showPassword ? 'input' : 'password'}
       error={error}
+      register={register}
       InputProps={{
         role: 'textbox',
         'aria-label': label,
@@ -105,7 +101,6 @@ const PasswordField: FC<PasswordProps> = ({
           </InputAdornment>
         ),
       }}
-      {...register(name)}
     />
   );
 };

@@ -10,16 +10,18 @@ import register from '@/src/pages/api/auth/register';
 let json = null,
   status = null;
 
-jest.mock('stripe', () => () => ({
-  customers: { create: () => ({}) },
-  subscriptions: {
-    create: () => ({
-      latest_invoice: {
-        payment_intent: { client_secret: 'test-client-secret' },
-      },
-    }),
-  },
-}));
+jest.mock('stripe', () =>
+  jest.fn().mockImplementation(() => ({
+    customers: { create: () => ({}) },
+    subscriptions: {
+      create: () => ({
+        latest_invoice: {
+          payment_intent: { client_secret: 'test-client-secret' },
+        },
+      }),
+    },
+  }))
+);
 
 jest.mock('bcryptjs', () => ({
   hash: () => {},

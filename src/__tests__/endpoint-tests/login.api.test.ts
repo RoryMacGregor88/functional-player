@@ -85,7 +85,10 @@ describe('login endpoint', () => {
     expect(save).toHaveBeenCalled();
     expect(status).toHaveBeenCalledWith(200);
     expect(json).toHaveBeenCalledWith({
-      resUser: { subscriptionStatus: 'active' },
+      resUser: {
+        subscriptionId: 'success',
+        subscriptionStatus: 'active',
+      },
     });
   });
 

@@ -74,13 +74,14 @@ describe('VideoDialog', () => {
   });
 
   it('updates bookmark if user', async () => {
-    fetchMock.mockResponse(JSON.stringify({ resBookmarks: ['123'] }));
+    const resUser = { userame: 'John Smith' };
+    fetchMock.mockResponse(JSON.stringify({ resUser }));
     const { updateCtx } = renderComponent();
 
     userEvent.click(screen.getByTestId(/bookmark-icon/i));
 
     const expected = {
-      user: { ...testUser, bookmarks: ['123'] },
+      user: resUser,
       toastData: {
         message: BOOKMARK_SUCCESS_REMOVE_MESSAGE,
       },

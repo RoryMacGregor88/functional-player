@@ -31,13 +31,21 @@ const SidebarItem: FC<Props> = ({
         alignItems: 'center',
         color: isSelected ? 'primary.main' : 'common.white',
         fontSize: '1.25rem',
+        opacity: '1',
+        '&:hover': {
+          opacity: '0.75',
+        },
       }}
     >
       <Icon
         data-testid={`${label}-icon`}
-        sx={{ height: '1.5rem', width: '1.5rem', marginRight: '1rem' }}
+        sx={{
+          height: '1.25rem',
+          width: '1.25rem',
+          marginRight: '1rem',
+        }}
       />
-      {label}
+      <span>{label}</span>
     </IconButton>
   </Link>
 );

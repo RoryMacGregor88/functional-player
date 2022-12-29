@@ -8,20 +8,22 @@ import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
 enableFetchMocks();
 
+const resUser = { username: 'John Smith' };
+
 describe('updateBookmarks', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
 
   it('adds bookmark', async () => {
-    fetchMock.mockResponse(JSON.stringify({ resBookmarks: ['123'] }));
+    fetchMock.mockResponse(JSON.stringify({ resUser }));
 
     const _id = '123',
       user = { email: 'email@test.com', bookmarks: [] },
       updateCtx = jest.fn();
 
     const expected = {
-      user: { ...user, bookmarks: ['123'] },
+      user: resUser,
       toastData: {
         message: 'Added to your list',
       },
@@ -35,14 +37,14 @@ describe('updateBookmarks', () => {
   });
 
   it('removes bookmark', async () => {
-    fetchMock.mockResponse(JSON.stringify({ resBookmarks: ['456'] }));
+    fetchMock.mockResponse(JSON.stringify({ resUser }));
 
     const _id = '123',
       user = { email: 'email@test.com', bookmarks: [_id, '456'] },
       updateCtx = jest.fn();
 
     const expected = {
-      user: { ...user, bookmarks: ['456'] },
+      user: resUser,
       toastData: {
         message: 'Removed from your list',
       },

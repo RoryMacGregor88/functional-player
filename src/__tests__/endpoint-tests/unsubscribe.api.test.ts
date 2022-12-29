@@ -13,9 +13,11 @@ jest.mock('iron-session/next', () => ({
   withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
 }));
 
-jest.mock('stripe', () => () => ({
-  customers: { del: () => {} },
-}));
+jest.mock('stripe', () =>
+  jest.fn().mockImplementation(() => ({
+    customers: { del: () => {} },
+  }))
+);
 
 jest.mock('@/lib', () => ({
   connectToDatabase: jest.fn().mockImplementation(() => ({

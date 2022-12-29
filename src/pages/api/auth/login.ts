@@ -40,8 +40,6 @@ async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
         });
       }
 
-      // TODO: subscriptionStatus id not included on token, check this.
-
       const {
         password: dbPassword,
         subscriptionStatus: currentSubscriptionStatus,

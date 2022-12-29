@@ -32,7 +32,6 @@ describe('Register Page', () => {
   it('renders', () => {
     render(<Register />);
 
-    expect(screen.getByText(/register/i)).toBeInTheDocument();
     expect(screen.getByText(/create account/i)).toBeInTheDocument();
     expect(screen.getByText(/subscribe/i)).toBeInTheDocument();
     expect(screen.getByText(/finish/i)).toBeInTheDocument();
