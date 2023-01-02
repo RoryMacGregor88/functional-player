@@ -12,7 +12,13 @@ import { getCourses, sessionOptions } from '@/lib';
 
 import { PageWrapper, Slider, LoadMask } from '@/src/components';
 
-import { User, Course, CustomError, Artist } from '@/src/utils/interfaces';
+import {
+  User,
+  Course,
+  CustomError,
+  Artist,
+  UpdateCtx,
+} from '@/src/utils/interfaces';
 
 import { ARTIST_METADATA } from '@/src/utils/constants';
 
@@ -33,34 +39,41 @@ export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
 
 interface Props {
   user: User;
+  updateCtx: UpdateCtx;
   courses: Course[];
+  error: CustomError;
 }
 
-// TODO: Why was updateCtx here? Is it needed
-// needs tests
-
-export default function Artists({ user, courses }: Props) {
+export default function Artists({ user, updateCtx, courses, error }: Props) {
   const {
     push,
     query: { artist: artistParam },
   } = useRouter();
 
-  const artist: Artist = `${artistParam}`,
+  const artist: Artist = String(artistParam),
     artistLabel = ARTIST_METADATA.find(({ value }) => value === artist)?.label;
 
   useEffect(() => {
-    if (!artistLabel) push('/dashboard');
-  }, [artistLabel, push]);
+    if (!!error) {
+      updateCtx({
+        toastData: {
+          message: error.message,
+          severity: 'error',
+        },
+      });
+    }
+    if (!!error || !artistLabel) push('/dashboard');
+  }, [artistLabel, push, error, updateCtx]);
 
-  if (!artistLabel) return <LoadMask />;
+  if (!!error || !artistLabel) return <LoadMask />;
 
   const categorisedCourses = courses.filter(
       ({ artist }) => artist === artistLabel
     ),
-    continueWatching = categorisedCourses.find(
+    lastWatched = categorisedCourses.find(
       (course) => course._id === user?.lastWatched
-    );
-
+    ),
+    bookmarks = courses.filter(({ _id }) => user?.bookmarks.includes(_id));
   return (
     <PageWrapper>
       <Grid
@@ -69,12 +82,15 @@ export default function Artists({ user, courses }: Props) {
         justifyContent='center'
         sx={{ height: '100%', marginTop: '4.5rem' }}
       >
-        {continueWatching ? (
+        {!!lastWatched ? (
           <Slider
             title='Continue Watching'
-            courses={[continueWatching]}
+            courses={[lastWatched]}
             banner={true}
           />
+        ) : null}
+        {!!bookmarks.length ? (
+          <Slider title='From Your List' courses={bookmarks} />
         ) : null}
         <Slider title={artistLabel} courses={categorisedCourses} />
       </Grid>

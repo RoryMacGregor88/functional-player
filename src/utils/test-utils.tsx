@@ -12,24 +12,25 @@ interface Options {
   ctx?: Partial<Ctx>;
   updateCtx?: (newData: Partial<Ctx>) => void;
   push?: (href: string) => void;
-  options?: any;
+  query?: object;
 }
 
 const render = (
   ui: ReactElement,
-  { ctx = {}, updateCtx = () => {}, push = () => {}, ...options }: Options = {}
+  { ctx = {}, updateCtx = () => {}, push = () => {}, query = {} }: Options = {}
 ) => {
   // for testing only, don't care about type enforcement
   const router: any = {
     push,
     prefetch: () => ({ catch: () => {} }),
+    query,
   };
   const Wrapper = ({ children }) => (
     <RouterContext.Provider value={router}>
       <Context.Provider value={{ ctx, updateCtx }}>{children}</Context.Provider>
     </RouterContext.Provider>
   );
-  const utils = rtlRender(ui, { wrapper: Wrapper, ...options });
+  const utils = rtlRender(ui, { wrapper: Wrapper });
   return { ...utils, ctx, updateCtx, router };
 };
 

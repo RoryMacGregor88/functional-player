@@ -23,7 +23,7 @@ enableFetchMocks();
 
 let push = null;
 
-describe('Register Page', () => {
+describe('Register', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
     push = jest.fn();

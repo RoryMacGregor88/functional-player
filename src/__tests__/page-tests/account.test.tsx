@@ -36,7 +36,7 @@ const toastData = {
 
 let updateCtx = null;
 
-describe('Account Page', () => {
+describe('Account', () => {
   beforeEach(() => {
     updateCtx = jest.fn();
     fetchMock.resetMocks();

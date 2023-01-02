@@ -34,10 +34,9 @@ async function syncStripeAndDb({
       return { isError: null, subscriptionStatus: currentSubscriptionStatus };
     }
 
-    // TODO: fix this, get rid of ID interface
-    const id = `${subscriptionId}`;
-
-    const { status: stripeStatus } = await stripe.subscriptions.retrieve(id);
+    const { status: stripeStatus } = await stripe.subscriptions.retrieve(
+      String(subscriptionId)
+    );
 
     console.log('STRIPE TYPE: ', typeof stripeStatus);
 

@@ -1,6 +1,6 @@
 import { render, screen, waitFor, userEvent } from '@/src/utils/test-utils';
 
-import Dashboard from '@/src/pages/dashboard';
+import Artists from '@/src/pages/artists';
 
 jest.mock('@/lib', () => ({
   getCourses: () => {},
@@ -15,34 +15,33 @@ const mockUser = {
     {
       _id: '123',
       title: 'course-title-1',
-      artist: 'John Smith',
+      artist: 'Peter Green',
       level: 'advanced',
-      categories: [],
     },
     {
       _id: '456',
       title: 'course-title-2',
-      artist: 'John Smith',
+      artist: 'Peter Green',
       level: 'advanced',
-      categories: [],
     },
   ];
 
 let updateCtx = null;
 
-describe('Dashboard', () => {
+describe('Artists', () => {
   beforeEach(() => {
     updateCtx = jest.fn();
   });
 
   it('renders', () => {
     render(
-      <Dashboard
+      <Artists
         updateCtx={updateCtx}
         user={mockUser}
         courses={mockCourses}
         error={null}
-      />
+      />,
+      { query: { artist: 'peter-green' } }
     );
 
     mockCourses.forEach(({ title }) => {
@@ -50,24 +49,53 @@ describe('Dashboard', () => {
     });
   });
 
-  it('renders when no user found', () => {
-    render(
-      <Dashboard updateCtx={updateCtx} courses={mockCourses} error={null} />
+  it('redirects to dashboard if no query', async () => {
+    const {
+      router: { push },
+    } = render(
+      <Artists
+        updateCtx={updateCtx}
+        user={mockUser}
+        courses={mockCourses}
+        error={null}
+      />,
+      { push: jest.fn() }
     );
 
-    mockCourses.forEach(({ title }) => {
-      expect(screen.getByText(title)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(push).toHaveBeenCalledWith('/dashboard');
+      expect(updateCtx).not.toHaveBeenCalled();
+    });
+  });
+
+  it('rendirects to dashboard if no matching artist found', async () => {
+    const {
+      router: { push },
+    } = render(
+      <Artists
+        updateCtx={updateCtx}
+        user={mockUser}
+        courses={mockCourses}
+        error={null}
+      />,
+      { push: jest.fn(), query: { artist: 'john-smith' } }
+    );
+
+    await waitFor(() => {
+      expect(push).toHaveBeenCalledWith('/dashboard');
+      expect(updateCtx).not.toHaveBeenCalled();
     });
   });
 
   it('does not display bookmarks if user has no bookmarks', () => {
     render(
-      <Dashboard
+      <Artists
         updateCtx={updateCtx}
         user={mockUser}
         courses={mockCourses}
         error={null}
-      />
+      />,
+      { query: { artist: 'peter-green' } }
     );
 
     expect(screen.queryByText(/your list/i)).not.toBeInTheDocument();
@@ -76,12 +104,13 @@ describe('Dashboard', () => {
   it('displays bookmarks if user has bookmarks', () => {
     const user = { ...mockUser, bookmarks: ['123'] };
     render(
-      <Dashboard
+      <Artists
         updateCtx={updateCtx}
         user={user}
         courses={mockCourses}
         error={null}
-      />
+      />,
+      { query: { artist: 'peter-green' } }
     );
 
     expect(screen.getByText(/your list/i)).toBeInTheDocument();
@@ -89,12 +118,13 @@ describe('Dashboard', () => {
 
   it('does not display lastWatched if user has no lastWatched', () => {
     render(
-      <Dashboard
+      <Artists
         updateCtx={updateCtx}
         user={mockUser}
         courses={mockCourses}
         error={null}
-      />
+      />,
+      { query: { artist: 'peter-green' } }
     );
 
     expect(screen.queryByText(/continue watching/i)).not.toBeInTheDocument();
@@ -103,12 +133,13 @@ describe('Dashboard', () => {
   it('displays lastWatched if user has lastWatched', () => {
     const user = { ...mockUser, lastWatched: '123' };
     render(
-      <Dashboard
+      <Artists
         updateCtx={updateCtx}
         user={user}
         courses={mockCourses}
         error={null}
-      />
+      />,
+      { query: { artist: 'peter-green' } }
     );
 
     expect(screen.getByText(/continue watching/i)).toBeInTheDocument();
@@ -116,17 +147,16 @@ describe('Dashboard', () => {
 
   it('opens video dialog if video clicked', async () => {
     render(
-      <Dashboard
+      <Artists
         updateCtx={updateCtx}
         user={mockUser}
         courses={mockCourses}
         error={null}
       />,
-      { updateCtx }
+      { updateCtx, query: { artist: 'peter-green' } }
     );
 
-    // TODO: why more than 1 title?
-    userEvent.click(screen.getAllByTestId(/course-title-1/i)[0]);
+    userEvent.click(screen.getByTestId(/course-title-1/i));
 
     await waitFor(() => {
       const expected = { selectedVideo: mockCourses[0] };
@@ -137,13 +167,16 @@ describe('Dashboard', () => {
   it('handles server error', async () => {
     const message = 'test-error-message';
 
-    render(
-      <Dashboard
+    const {
+      router: { push },
+    } = render(
+      <Artists
         updateCtx={updateCtx}
         user={mockUser}
-        error={{ message }}
         courses={null}
-      />
+        error={{ message }}
+      />,
+      { push: jest.fn(), query: { artist: 'peter-green' } }
     );
 
     const expected = {
@@ -154,6 +187,7 @@ describe('Dashboard', () => {
     };
 
     await waitFor(() => {
+      expect(push).toHaveBeenCalledWith('/dashboard');
       expect(updateCtx).toHaveBeenCalledWith(expected);
     });
   });

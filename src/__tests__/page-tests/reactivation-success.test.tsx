@@ -11,7 +11,7 @@ enableFetchMocks();
 let user = null;
 let updateCtx = null;
 
-describe('Reactivation success page', () => {
+describe('Reactivation Success', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
 

@@ -107,6 +107,7 @@ const Slider: FC<SliderProps> = ({
     updateCtx,
     ctx: { selectedCategory },
   } = useContext(Context);
+
   const [position, setPosition] = useState(0);
 
   useEffect(() => {
@@ -116,8 +117,8 @@ const Slider: FC<SliderProps> = ({
 
   if (!courses?.length) return null;
 
-  const minWidth = banner ? '100%' : `${ITEM_WIDTH_REM}rem`,
-    height = banner ? '30rem' : `${ITEM_HEIGHT_REM}rem`;
+  const minWidth = banner ? '100%' : `${ITEM_WIDTH_REM}em`,
+    height = banner ? '30em' : `${ITEM_HEIGHT_REM}em`;
 
   const handleClick = (course: Course): void =>
     updateCtx({ selectedVideo: course });

@@ -10,7 +10,7 @@ enableFetchMocks();
 
 let updateCtx = null;
 
-describe('Login Page', () => {
+describe('Login', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
     updateCtx = jest.fn();

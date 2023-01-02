@@ -2,7 +2,7 @@ import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
 import RegistrationSuccess from '@/src/pages/registration-success';
 
-describe('registrationSuccess', () => {
+describe('Registration Success', () => {
   it('renders', () => {
     render(<RegistrationSuccess redirect={true} />);
 

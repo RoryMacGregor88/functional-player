@@ -1,8 +1,10 @@
-import { ReactElement } from 'react';
+import { ReactElement, useEffect } from 'react';
 
 import { withIronSessionSsr } from 'iron-session/next';
 
 import { GetServerSideProps } from 'next';
+
+import { useRouter } from 'next/router';
 
 import { Grid } from '@mui/material';
 
@@ -59,25 +61,29 @@ export default function Dashboard({
   courses,
   error,
 }: DashboardProps): ReactElement {
-  // TODO: need useEffect for this? Or is error always present pre-load because of SSR?
-  if (!!error) {
-    updateCtx({
-      toastData: {
-        message: error.message,
-        severity: 'error',
-      },
-    });
-    // TODO: What do here? Can't just show loadmask. Redirect to index to get redirected here?
-    return <LoadMask />;
-  }
+  const { push } = useRouter();
 
-  const getCategoryCourses = (value: Category): Course[] =>
-    courses.filter(({ categories }) => categories.includes(value));
+  useEffect(() => {
+    if (!!error) {
+      updateCtx({
+        toastData: {
+          message: error.message,
+          severity: 'error',
+        },
+      });
+      push('/dashboard');
+    }
+  }, [push, error, updateCtx]);
+
+  if (!!error) return <LoadMask />;
+
+  const getCategoryCourses = (category: Category): Course[] =>
+    courses.filter(({ categories }) => categories.includes(category));
 
   const latestCourses = courses
       ?.sort((a, b) => (a.creationDate > b.creationDate ? -1 : 1))
       .slice(0, 5),
-    lastWatched = courses.find(({ _id }) => _id === user?.lastWatched) ?? null,
+    lastWatched = courses.find(({ _id }) => _id === user?.lastWatched),
     bookmarks = courses.filter(({ _id }) => user?.bookmarks.includes(_id));
   return (
     <Grid container direction='column'>
@@ -103,13 +109,11 @@ export default function Dashboard({
           courses={[comingSoonCourse]}
           banner={true}
         />
-        {CATEGORY_METADATA.map(({ label, value }) => (
-          <Slider
-            key={value}
-            title={label}
-            courses={getCategoryCourses(value)}
-          />
-        ))}
+        {CATEGORY_METADATA.map(({ label, value }) => {
+          const test = getCategoryCourses(value);
+          console.log('test: ', test);
+          return <Slider key={value} title={label} courses={test} />;
+        })}
       </PageWrapper>
     </Grid>
   );

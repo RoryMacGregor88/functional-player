@@ -6,7 +6,7 @@ jest.mock('@/lib', () => ({
   getCourses: () => {},
 }));
 
-describe('list', () => {
+describe('List', () => {
   it('renders', () => {
     render(<List user={{ bookmarks: [] }} courses={[]} />);
 

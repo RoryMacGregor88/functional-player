@@ -10,7 +10,7 @@ enableFetchMocks();
 
 let updateCtx = null;
 
-describe('ResetPassword', () => {
+describe('Reset Password', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
     updateCtx = jest.fn();
