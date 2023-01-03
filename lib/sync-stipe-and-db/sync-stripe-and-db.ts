@@ -24,14 +24,14 @@ async function syncStripeAndDb({
   subscriptionId,
 }: Params): Promise<{
   subscriptionStatus: string | null;
-  isError: boolean | null;
+  isError: boolean;
 }> {
   try {
     // subscriptionStatus can only be null if subscription
     // has been deleted. If so, return null value
     // TODO: is this right? Can status be null and still out of sync?
     if (currentSubscriptionStatus === null) {
-      return { isError: null, subscriptionStatus: currentSubscriptionStatus };
+      return { isError: false, subscriptionStatus: currentSubscriptionStatus };
     }
 
     const { status: stripeStatus } = await stripe.subscriptions.retrieve(
@@ -50,11 +50,11 @@ async function syncStripeAndDb({
           { $set: { subscriptionStatus: stripeStatus } }
         );
 
-      return { isError: null, subscriptionStatus: stripeStatus };
+      return { isError: false, subscriptionStatus: stripeStatus };
     } else if (currentSubscriptionStatus === stripeStatus) {
       console.log('STRIPE IS EQUAL');
       // if unchanged, return current status
-      return { isError: null, subscriptionStatus: currentSubscriptionStatus };
+      return { isError: false, subscriptionStatus: currentSubscriptionStatus };
     }
   } catch (e) {
     // error is handled in parent handler

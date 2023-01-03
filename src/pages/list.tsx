@@ -10,21 +10,24 @@ import { Grid, Typography } from '@mui/material';
 
 import { PageWrapper, SpacedTitle, LoadMask } from '@/src/components';
 
-import { Course, User, CustomError } from '@/src/utils/interfaces';
+import {
+  Course,
+  User,
+  CustomError,
+  CourseServerProps,
+} from '@/src/utils/interfaces';
 
 import { getCourses, sessionOptions } from '@/lib';
 
 interface ServerSideProps {
-  props: { error: CustomError } | { courses: Course[] };
+  props: CourseServerProps;
 }
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }): Promise<ServerSideProps> {
     const user = req.session.user;
-    const { courses, error } = await getCourses(user);
-    return {
-      props: !!error ? { error, courses: null } : { error: null, courses },
-    };
+    const props = await getCourses(user);
+    return { props };
   },
   sessionOptions
 );
@@ -32,11 +35,14 @@ export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
 interface Props {
   user: User;
   courses: Course[] | null;
+  error: CustomError | null;
 }
 
-export default function List({ user, courses }: Props): ReactElement {
+export default function List({ user, courses, error }: Props): ReactElement {
   const { push } = useRouter();
 
+  // TODO: show 'You must be logged in' message instead of redirecting
+  // deal with error
   useEffect(() => {
     if (!user) push('/login');
   }, [user, push]);

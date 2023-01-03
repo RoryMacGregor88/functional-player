@@ -22,21 +22,17 @@ import {
 
 import { logout, useCtx } from '@/src/utils';
 
-import { User } from '@/src/utils/interfaces';
-
 interface Props {
-  user: User;
   isDrawerOpen: boolean;
   setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const Drawer: FC<Props> = ({
-  user,
-  isDrawerOpen,
-  setIsDrawerOpen,
-}): ReactElement => {
+const Drawer: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
   const { push, pathname } = useRouter();
-  const { updateCtx } = useCtx();
+  const {
+    updateCtx,
+    ctx: { user },
+  } = useCtx();
 
   const icons = [
     { Icon: FacebookIcon, url: 'https://www.facebook.com', label: 'Facebook' },
@@ -58,11 +54,11 @@ const Drawer: FC<Props> = ({
   };
 
   const handleLogout = async () => {
-    const res: boolean | undefined = await logout({
+    const { ok } = await logout({
       user,
       updateCtx,
     });
-    if (!!res) push('/login');
+    if (ok) push('/login');
     toggleDrawer();
   };
 

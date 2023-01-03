@@ -24,7 +24,7 @@ export default async function updateBookmarks({
   _id,
   user,
   updateCtx,
-}: Params) {
+}: Params): Promise<void> {
   const { email, bookmarks: currentBookmarks } = user;
   const isBookmarked = currentBookmarks.includes(_id);
 

@@ -12,7 +12,7 @@ import {
 
 import { MenuIcon, Link, Select, IconButton } from '@/src/components';
 
-import { User, Category } from '@/src/utils/interfaces';
+import { Category } from '@/src/utils/interfaces';
 
 import { useCtx } from '@/src/utils';
 
@@ -23,19 +23,14 @@ import {
 } from '@/src/utils/constants';
 
 interface Props {
-  user: User;
   isDrawerOpen: boolean;
   setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const Navbar: FC<Props> = ({
-  user,
-  isDrawerOpen,
-  setIsDrawerOpen,
-}): ReactElement => {
+const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
   const {
     updateCtx,
-    ctx: { selectedCategory },
+    ctx: { selectedCategory, user },
   } = useCtx();
 
   const { push } = useRouter();

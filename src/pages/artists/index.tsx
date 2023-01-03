@@ -16,6 +16,7 @@ import {
   User,
   Course,
   CustomError,
+  CourseServerProps,
   Artist,
   UpdateCtx,
 } from '@/src/utils/interfaces';
@@ -23,16 +24,14 @@ import {
 import { ARTIST_METADATA } from '@/src/utils/constants';
 
 interface ServerSideProps {
-  props: { error: CustomError } | { courses: Course[] };
+  props: CourseServerProps;
 }
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
   async ({ req }): Promise<ServerSideProps> => {
     const user = req.session.user;
-    const { error, courses } = await getCourses(user);
-    return {
-      props: !!error ? { error, courses: null } : { error: null, courses },
-    };
+    const props = await getCourses(user);
+    return { props };
   },
   sessionOptions
 );
@@ -40,8 +39,8 @@ export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
 interface Props {
   user: User;
   updateCtx: UpdateCtx;
-  courses: Course[];
-  error: CustomError;
+  courses: Course[] | null;
+  error: CustomError | null;
 }
 
 export default function Artists({ user, updateCtx, courses, error }: Props) {

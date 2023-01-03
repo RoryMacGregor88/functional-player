@@ -79,6 +79,11 @@ export type ContextProps = {
   ctx: Ctx;
 };
 
+export type CourseServerProps = {
+  courses: Course[] | null;
+  error: CustomError | null;
+};
+
 export type DialogAction = {
   label: string;
   onClick: () => void;

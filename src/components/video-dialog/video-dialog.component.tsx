@@ -17,7 +17,7 @@ import {
 
 import { updateBookmarks, updateLastWatched, useCtx } from '@/src/utils';
 
-import { Course, User, UpdateCtx, Id } from '@/src/utils/interfaces';
+import { Course, UpdateCtx, Id } from '@/src/utils/interfaces';
 
 import { ARTIST_METADATA } from '@/src/utils/constants';
 
@@ -117,17 +117,18 @@ export const Overlay: FC<OverlayProps> = ({
 
 interface VideoDialogProps {
   open: boolean;
-  user: User;
   selectedVideo: Course;
   updateCtx: UpdateCtx;
 }
 
 const VideoDialog: FC<VideoDialogProps> = ({
   open,
-  user,
   selectedVideo,
   updateCtx,
 }): ReactElement => {
+  const {
+    ctx: { user },
+  } = useCtx();
   const { push } = useRouter();
 
   const { _id, videoId } = selectedVideo ?? {};

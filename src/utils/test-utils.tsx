@@ -9,8 +9,8 @@ import { Context } from '@/src/utils';
 import { Ctx } from '@/src/utils/interfaces';
 
 interface Options {
-  ctx?: Partial<Ctx>;
-  updateCtx?: (newData: Partial<Ctx>) => void;
+  ctx?: any;
+  updateCtx?: () => void;
   push?: (href: string) => void;
   query?: object;
 }

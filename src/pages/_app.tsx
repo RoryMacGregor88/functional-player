@@ -73,11 +73,10 @@ function App({ Component, pageProps }: AppProps): ReactElement {
           />
           <VideoDialog
             open={!!selectedVideo}
-            user={user}
             selectedVideo={selectedVideo}
             updateCtx={updateCtx}
           />
-          <Layout user={user}>
+          <Layout>
             <Component user={user} updateCtx={updateCtx} {...pageProps} />
           </Layout>
         </Context.Provider>

@@ -2,12 +2,17 @@ import { connectToDatabase } from '@/lib';
 
 import { DEFAULT_ERROR_MESSAGE, COURSES } from '@/src/utils/constants';
 
-import { Course, CustomError, User, DbCourse } from '@/src/utils/interfaces';
+import {
+  Course,
+  CourseServerProps,
+  User,
+  DbCourse,
+} from '@/src/utils/interfaces';
 
 export default async function getCourses(
   user: User,
   find: object = {}
-): Promise<{ courses: Course[] | null; error: CustomError | null }> {
+): Promise<CourseServerProps> {
   try {
     const { db } = await connectToDatabase();
     // find property is only used in test to force error state

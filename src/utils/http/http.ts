@@ -37,6 +37,7 @@ export default async function http({
     ).json();
   } catch (e) {
     onError(defaultErrorProps);
+    // empty object so return value can be destructured
     return {};
   }
 }

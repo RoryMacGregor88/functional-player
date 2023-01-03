@@ -12,7 +12,10 @@ interface ResProps {
   resUser: User | undefined;
 }
 
-export default async function logout({ user, updateCtx }: Params) {
+export default async function logout({
+  user,
+  updateCtx,
+}: Params): Promise<{ ok: boolean }> {
   const { error, resUser }: ResProps = await http({
     endpoint: '/auth/logout',
     formData: { email: user.email },
@@ -28,6 +31,7 @@ export default async function logout({ user, updateCtx }: Params) {
   } else if (resUser === null) {
     updateCtx({ user: resUser });
     // must return truthy value to invoke router
-    return true;
+    return { ok: true };
   }
+  return { ok: false };
 }

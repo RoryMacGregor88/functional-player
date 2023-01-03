@@ -11,8 +11,8 @@ jest.mock('stripe', () =>
     subscriptions: {
       retrieve: jest.fn().mockImplementation((id) => {
         if (id === 'error') throw new Error();
-        if (id === 'active') return { isError: null, status: 'active' };
-        if (id === 'cancelled') return { isError: null, status: 'cancelled' };
+        if (id === 'active') return { status: 'active' };
+        if (id === 'cancelled') return { status: 'cancelled' };
       }),
     },
   }))
@@ -33,7 +33,7 @@ describe('syncStripeAndDb', () => {
       subscriptionId: 'active',
     });
 
-    expect(result).toEqual({ isError: null, subscriptionStatus: null });
+    expect(result).toEqual({ isError: false, subscriptionStatus: null });
   });
 
   it('updates db and returns new value if out of sync', async () => {
@@ -49,7 +49,7 @@ describe('syncStripeAndDb', () => {
       { email },
       { $set: { subscriptionStatus: 'cancelled' } }
     );
-    expect(result).toEqual({ isError: null, subscriptionStatus: 'cancelled' });
+    expect(result).toEqual({ isError: false, subscriptionStatus: 'cancelled' });
   });
 
   it('returns original value if in sync but unchanged', async () => {
@@ -60,7 +60,7 @@ describe('syncStripeAndDb', () => {
       subscriptionId: 'active',
     });
 
-    expect(result).toEqual({ isError: null, subscriptionStatus: 'active' });
+    expect(result).toEqual({ isError: false, subscriptionStatus: 'active' });
   });
 
   it('handles error', async () => {

@@ -9,18 +9,19 @@ import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 enableFetchMocks();
 
 const resUser = { username: 'John Smith' };
+let updateCtx = null;
 
 describe('updateBookmarks', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
+    updateCtx = jest.fn();
   });
 
   it('adds bookmark', async () => {
     fetchMock.mockResponse(JSON.stringify({ resUser }));
 
     const _id = '123',
-      user = { email: 'email@test.com', bookmarks: [] },
-      updateCtx = jest.fn();
+      user = { email: 'email@test.com', bookmarks: [] };
 
     const expected = {
       user: resUser,
@@ -40,8 +41,7 @@ describe('updateBookmarks', () => {
     fetchMock.mockResponse(JSON.stringify({ resUser }));
 
     const _id = '123',
-      user = { email: 'email@test.com', bookmarks: [_id, '456'] },
-      updateCtx = jest.fn();
+      user = { email: 'email@test.com', bookmarks: [_id, '456'] };
 
     const expected = {
       user: resUser,
@@ -63,8 +63,7 @@ describe('updateBookmarks', () => {
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
     const _id = '123',
-      user = { email: 'email@test.com', bookmarks: [_id] },
-      updateCtx = jest.fn();
+      user = { email: 'email@test.com', bookmarks: [_id] };
 
     const expected = {
       toastData: {
@@ -86,8 +85,7 @@ describe('updateBookmarks', () => {
     });
 
     const _id = '123',
-      user = { email: 'email@test.com', bookmarks: [] },
-      updateCtx = jest.fn();
+      user = { email: 'email@test.com', bookmarks: [] };
 
     const expected = {
       toastData: {

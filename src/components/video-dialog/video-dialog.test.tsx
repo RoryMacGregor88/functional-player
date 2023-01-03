@@ -20,15 +20,15 @@ const selectedVideo = {
 
 const renderComponent = ({ user = testUser } = {}) => {
   const updateCtx = jest.fn(),
-    push = jest.fn();
+    push = jest.fn(),
+    ctx = { user };
   render(
     <VideoDialog
       open={true}
-      user={user}
       selectedVideo={selectedVideo}
       updateCtx={updateCtx}
     />,
-    { updateCtx, push }
+    { updateCtx, push, ctx }
   );
 
   return { updateCtx, push };

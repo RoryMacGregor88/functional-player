@@ -15,7 +15,7 @@ interface ResProps {
 export default async function syncSubscriptionStatus({
   user,
   updateCtx,
-}: Params): Promise<boolean | undefined> {
+}: Params): Promise<{ ok: boolean }> {
   const handleError = (defaultToastData: DefaultToastData) =>
     updateCtx({ ...defaultToastData, user: null });
 
@@ -31,8 +31,6 @@ export default async function syncSubscriptionStatus({
     onError: handleError,
   });
   if (!!error) {
-    // TODO: don't like this, think of something better
-    await http({ endpoint: '/auth/logout', onError: handleError });
     updateCtx({
       user: null,
       toastData: {
@@ -40,9 +38,11 @@ export default async function syncSubscriptionStatus({
         message: error.message,
       },
     });
-  } else if (resUser) {
+  } else if (!!resUser) {
     updateCtx({ user: resUser });
     // must return truthy value so that state can update in component
-    return true;
+    return { ok: true };
   }
+  await http({ endpoint: '/auth/logout', onError: handleError });
+  return { ok: false };
 }

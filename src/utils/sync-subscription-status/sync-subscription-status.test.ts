@@ -11,7 +11,7 @@ enableFetchMocks();
 let user = null,
   updateCtx = null;
 
-describe('Reactivation success page', () => {
+describe('syncSubscriptionStatus', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
 
@@ -23,21 +23,20 @@ describe('Reactivation success page', () => {
     const user = { username: 'John Smith' };
     fetchMock.mockResponse(JSON.stringify({ resUser: user }));
 
-    const res = await syncSubscriptionStatus({ user, updateCtx });
+    const { ok } = await syncSubscriptionStatus({ user, updateCtx });
 
     await waitFor(() => {
       expect(updateCtx).toHaveBeenCalledWith({ user });
-      expect(res).toBeTruthy();
+      expect(ok).toBeTruthy();
     });
   });
 
-  //TODO: need to learn how to mock 2 concurrent requests, maybe not (see TODO in component)
   it('handles server error', async () => {
     const message = 'test-error-message';
 
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
-    const res = await syncSubscriptionStatus({ user, updateCtx });
+    const { ok } = await syncSubscriptionStatus({ user, updateCtx });
 
     await waitFor(() => {
       expect(updateCtx).toHaveBeenCalledWith({
@@ -47,7 +46,7 @@ describe('Reactivation success page', () => {
           message,
         },
       });
-      expect(res).toBeFalsy();
+      expect(ok).toBeFalsy();
     });
   });
 
@@ -56,7 +55,7 @@ describe('Reactivation success page', () => {
       throw new Error();
     });
 
-    const res = await syncSubscriptionStatus({ user, updateCtx });
+    const { ok } = await syncSubscriptionStatus({ user, updateCtx });
 
     const expected = {
       user: null,
@@ -68,7 +67,7 @@ describe('Reactivation success page', () => {
 
     await waitFor(() => {
       expect(updateCtx).toHaveBeenCalledWith(expected);
-      expect(res).toBeFalsy();
+      expect(ok).toBeFalsy();
     });
   });
 });

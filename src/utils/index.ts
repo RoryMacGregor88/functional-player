@@ -1,6 +1,6 @@
 import http from './http/http';
 import logout from './logout/logout';
-import useCtx from './use-ctx/use-ctx';
+import useCtx, { Context } from './use-ctx/use-ctx';
 import updateBookmarks from './update-bookmarks/update-bookmarks';
 import updateLastWatched from './update-last-watched/update-last-watched';
 import authenticateToken from './authenticate-token/authenticate-token';
@@ -11,6 +11,7 @@ import generateTempPassword from './generate-temp-password/generate-temp-passwor
 export {
   http,
   logout,
+  Context,
   useCtx,
   updateBookmarks,
   updateLastWatched,

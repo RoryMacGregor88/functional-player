@@ -30,7 +30,7 @@ export default async function updateLastWatched({
 
     if (!!error) {
       // this is a background action,
-      // doesn't really matter if it's error-handled
+      // doesn't really matter if it's not error-handled
       return;
     } else if (!!user) {
       updateCtx({ user: resUser });

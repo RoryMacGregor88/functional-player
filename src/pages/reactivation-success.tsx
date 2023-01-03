@@ -43,27 +43,23 @@ export default function ReactivationSuccess({
   const { push } = useRouter();
   const [isUpdated, setIsUpdated] = useState(false);
 
-  type ResProps = boolean | undefined;
-
   useEffect(() => {
     if (!redirect) {
       push('/dashboard');
     } else if (!!redirect) {
       (async () => {
-        const res: ResProps = await syncSubscriptionStatus({
+        const { ok } = await syncSubscriptionStatus({
           user,
           updateCtx,
         });
-        if (!!res) setIsUpdated(true);
+        if (ok) setIsUpdated(true);
       })();
     }
   }, [user, updateCtx, redirect, push]);
 
-  if (!redirect) return <LoadMask />;
+  if (!redirect || !isUpdated) return <LoadMask />;
 
-  return !isUpdated ? (
-    <LoadMask />
-  ) : (
+  return (
     <PageWrapper>
       <SpacedTitle>Success</SpacedTitle>
       <Grid

@@ -16,6 +16,7 @@ import {
   Course,
   User,
   CustomError,
+  CourseServerProps,
   Category,
   UpdateCtx,
 } from '@/src/utils/interfaces';
@@ -35,16 +36,14 @@ const comingSoonCourse: Course = {
 };
 
 interface ServerSideProps {
-  props: { error: CustomError } | { courses: Course[] };
+  props: CourseServerProps;
 }
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
   async ({ req }): Promise<ServerSideProps> => {
     const user = req.session.user;
-    const { courses, error } = await getCourses(user);
-    return {
-      props: !!error ? { error, courses: null } : { error: null, courses },
-    };
+    const props = await getCourses(user);
+    return { props };
   },
   sessionOptions
 );
