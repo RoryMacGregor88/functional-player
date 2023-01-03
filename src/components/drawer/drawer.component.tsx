@@ -1,4 +1,4 @@
-import { FC, useContext, ReactElement, Dispatch, SetStateAction } from 'react';
+import { FC, ReactElement, Dispatch, SetStateAction } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -20,7 +20,7 @@ import {
   RegisterIcon,
 } from '@/src/components';
 
-import { Context, logout } from '@/src/utils';
+import { logout, useCtx } from '@/src/utils';
 
 import { User } from '@/src/utils/interfaces';
 
@@ -36,7 +36,7 @@ const Drawer: FC<Props> = ({
   setIsDrawerOpen,
 }): ReactElement => {
   const { push, pathname } = useRouter();
-  const { updateCtx } = useContext(Context);
+  const { updateCtx } = useCtx();
 
   const icons = [
     { Icon: FacebookIcon, url: 'https://www.facebook.com', label: 'Facebook' },

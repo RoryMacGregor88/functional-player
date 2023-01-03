@@ -1,4 +1,4 @@
-import { FC, ReactElement, useContext } from 'react';
+import { FC, ReactElement } from 'react';
 
 import {
   Snackbar,
@@ -10,12 +10,12 @@ import {
 
 import { IconButton, CloseIcon } from '@/src/components';
 
-import { Context } from '@/src/utils';
+import { useCtx } from '@/src/utils';
 
 import { Severity, UpdateCtx } from '@/src/utils/interfaces';
 
 const Action: FC = (): ReactElement => {
-  const { updateCtx } = useContext(Context);
+  const { updateCtx } = useCtx();
   return (
     <IconButton onClick={() => updateCtx({ toastData: null })}>
       <CloseIcon

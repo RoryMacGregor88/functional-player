@@ -1,11 +1,4 @@
-import {
-  FC,
-  useState,
-  useContext,
-  ReactElement,
-  ReactNode,
-  useEffect,
-} from 'react';
+import { FC, useState, ReactElement, ReactNode, useEffect } from 'react';
 
 import NextImage from 'next/image';
 
@@ -17,7 +10,7 @@ import {
   LevelRatingBadge,
 } from '@/src/components';
 
-import { Context } from '@/src/utils';
+import { useCtx } from '@/src/utils';
 
 import { Course } from '@/src/utils/interfaces';
 
@@ -106,7 +99,7 @@ const Slider: FC<SliderProps> = ({
   const {
     updateCtx,
     ctx: { selectedCategory },
-  } = useContext(Context);
+  } = useCtx();
 
   const [position, setPosition] = useState(0);
 

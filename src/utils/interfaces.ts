@@ -51,6 +51,7 @@ export type User = {
   lastWatched: Id;
 } | null;
 
+// _id optional because created by MongoDb, so not required when registering
 export type DbUser = {
   _id?: Id;
   email: string;
@@ -72,6 +73,11 @@ export type Ctx = {
 };
 
 export type UpdateCtx = (newData: Partial<Ctx>) => void;
+
+export type ContextProps = {
+  updateCtx: UpdateCtx;
+  ctx: Ctx;
+};
 
 export type DialogAction = {
   label: string;

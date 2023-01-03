@@ -1,4 +1,4 @@
-import { useEffect, FC, ReactElement, useContext } from 'react';
+import { useEffect, FC, ReactElement } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -15,7 +15,7 @@ import {
   IconButton,
 } from '@/src/components';
 
-import { updateBookmarks, updateLastWatched, Context } from '@/src/utils';
+import { updateBookmarks, updateLastWatched, useCtx } from '@/src/utils';
 
 import { Course, User, UpdateCtx, Id } from '@/src/utils/interfaces';
 
@@ -36,7 +36,7 @@ export const Overlay: FC<OverlayProps> = ({
   onBookmarkClick,
   push,
 }): ReactElement => {
-  const { updateCtx } = useContext(Context);
+  const { updateCtx } = useCtx();
 
   const { title, description, level, artist } = selectedVideo,
     artistValue = ARTIST_METADATA.find(({ label }) => label === artist)?.value;

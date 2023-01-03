@@ -1,4 +1,4 @@
-import { Dispatch, FC, ReactElement, SetStateAction, useContext } from 'react';
+import { Dispatch, FC, ReactElement, SetStateAction } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -14,7 +14,7 @@ import { MenuIcon, Link, Select, IconButton } from '@/src/components';
 
 import { User, Category } from '@/src/utils/interfaces';
 
-import { Context } from '@/src/utils';
+import { useCtx } from '@/src/utils';
 
 import {
   CATEGORY_METADATA,
@@ -36,7 +36,8 @@ const Navbar: FC<Props> = ({
   const {
     updateCtx,
     ctx: { selectedCategory },
-  } = useContext(Context);
+  } = useCtx();
+
   const { push } = useRouter();
 
   const handleLogoClick = () => {
