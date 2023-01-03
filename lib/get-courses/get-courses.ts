@@ -17,12 +17,10 @@ export default async function getCourses(
       .toArray();
 
     const isAuthorized = user?.subscriptionStatus === 'active',
-      courses: Course[] = dbCourses.map(({ courseId, trailerId, ...rest }) => {
-        return {
-          videoId: isAuthorized ? courseId : trailerId,
-          ...rest,
-        };
-      });
+      courses: Course[] = dbCourses.map(({ courseId, trailerId, ...rest }) => ({
+        videoId: isAuthorized ? courseId : trailerId,
+        ...rest,
+      }));
 
     console.log(isAuthorized ? 'AUTHORIZED' : 'RESTRICTED');
     return { error: null, courses };

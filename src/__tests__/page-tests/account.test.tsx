@@ -15,8 +15,7 @@ jest.mock('@stripe/react-stripe-js', () => ({
   Elements: ({ children }) => <div>{children}</div>,
   PaymentElement: () => <div>MOCK PAYMENT ELEMENT</div>,
   useStripe: () => ({
-    test: 'mock stripe',
-    confirmPayment: () => ({ error: true }),
+    confirmPayment: () => ({ error: { message: 'stripe-error-message' } }),
   }),
   useElements: () => ({ test: 'mock elements' }),
 }));
@@ -42,7 +41,7 @@ describe('Account', () => {
     fetchMock.resetMocks();
   });
 
-  describe('tabs', () => {
+  describe('Tabs', () => {
     it('renders', () => {
       render(<Account user={{ username: 'test-username' }} />);
 
@@ -118,9 +117,9 @@ describe('Account', () => {
     });
   });
 
-  describe('update subscription', () => {
-    describe('unsubscribe', () => {
-      it('unsubscribe success', async () => {
+  describe('Update Subscription', () => {
+    describe('Unsubscribe', () => {
+      it('unsubscribes', async () => {
         const resUser = { subscriptionStatus: null, subscriptionId: null };
 
         fetchMock.mockResponse(JSON.stringify({ resUser }));
@@ -219,8 +218,8 @@ describe('Account', () => {
       });
     });
 
-    describe('resubscribe', () => {
-      it('resubscribe success', async () => {
+    describe('Create Stripe Customer', () => {
+      it('creates stripe customer', async () => {
         fetchMock.mockResponse(
           JSON.stringify({
             clientSecret: '12345',
@@ -319,9 +318,61 @@ describe('Account', () => {
         });
       });
     });
+
+    describe('Resubscribe', () => {
+      it('handles stripe error', async () => {
+        fetchMock.mockResponse(
+          JSON.stringify({
+            clientSecret: '12345',
+            resUser: {
+              suscriptionId: '12345',
+              subscriptionStatus: 'incomplete',
+            },
+          })
+        );
+
+        render(
+          <Account user={{ subscriptionStatus: null }} updateCtx={updateCtx} />
+        );
+
+        userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
+
+        await waitFor(() => {
+          expect(
+            screen.getByRole('button', {
+              name: /re-enable subscription/i,
+            })
+          ).toBeInTheDocument();
+        });
+
+        userEvent.click(
+          screen.getByRole('button', {
+            name: /re-enable subscription/i,
+          })
+        );
+
+        await waitFor(() => {
+          expect(
+            screen.getByRole('button', {
+              name: /submit/i,
+            })
+          ).toBeInTheDocument();
+        });
+
+        userEvent.click(
+          screen.getByRole('button', {
+            name: /submit/i,
+          })
+        );
+
+        await waitFor(() => {
+          expect(screen.getByText(/stripe-error-message/i)).toBeInTheDocument();
+        });
+      });
+    });
   });
 
-  describe('updatePassword', () => {
+  describe('Update Password', () => {
     it('renders success well', async () => {
       fetchMock.mockResponse(JSON.stringify({ ok: true }));
 
@@ -426,8 +477,8 @@ describe('Account', () => {
     });
   });
 
-  describe('deleteAccount', () => {
-    it('delete success', async () => {
+  describe('Delete Account', () => {
+    it('deletes account', async () => {
       fetchMock.mockResponse(JSON.stringify({ resUser: null }));
 
       const updateCtx = jest.fn();

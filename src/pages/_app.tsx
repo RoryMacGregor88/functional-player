@@ -19,14 +19,12 @@ import {
 
 import { Context, authenticateToken } from '@/src/utils';
 
-import { DEFAULT_SELECT_OPTION } from '@/src/utils/constants';
-
 import { Ctx, UpdateCtx } from '@/src/utils/interfaces';
 
 function App({ Component, pageProps }: AppProps): ReactElement {
   const [ctx, setCtx] = useState<Ctx>({
     selectedVideo: undefined,
-    selectedCategory: DEFAULT_SELECT_OPTION,
+    selectedCategory: undefined,
     dialogData: undefined,
     toastData: undefined,
     user: undefined,
@@ -42,10 +40,8 @@ function App({ Component, pageProps }: AppProps): ReactElement {
     (async () => await authenticateToken({ updateCtx }))();
   }, []);
 
-  // only a user object or null can be returned from server
-  if (user === undefined) {
-    return <LoadMask />;
-  }
+  // only a user object or null can ever be returned from server
+  if (user === undefined) return <LoadMask />;
 
   // TODO: need one on every page once fleshed out, SEO is vital
   return (

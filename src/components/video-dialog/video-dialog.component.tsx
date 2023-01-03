@@ -144,6 +144,8 @@ const VideoDialog: FC<VideoDialogProps> = ({
   const isMedium = useMediaQuery('(max-width:1200px)');
   const isSmall = useMediaQuery('(max-width:600px)');
 
+  // guard is here because selectedVideo gets set to null when dialog is
+  // closed, and will error if null is passed to children components
   if (!selectedVideo) return null;
 
   const deviceSize = isSmall ? 'small' : isMedium ? 'medium' : 'large';
@@ -188,9 +190,8 @@ const VideoDialog: FC<VideoDialogProps> = ({
         <NextImage
           src={`/telecaster-${deviceSize}.jpg`}
           alt='telecaster-image'
-          objectFit='cover'
-          layout='fill'
           quality={100}
+          fill
         />
         <Grid
           item

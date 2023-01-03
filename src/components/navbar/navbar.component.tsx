@@ -1,10 +1,18 @@
 import { Dispatch, FC, ReactElement, SetStateAction, useContext } from 'react';
 
-import { AppBar, Toolbar, Typography, Grid } from '@mui/material';
+import { useRouter } from 'next/router';
+
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Grid,
+  SelectChangeEvent,
+} from '@mui/material';
 
 import { MenuIcon, Link, Select, IconButton } from '@/src/components';
 
-import { User } from '@/src/utils/interfaces';
+import { User, Category } from '@/src/utils/interfaces';
 
 import { Context } from '@/src/utils';
 
@@ -25,11 +33,21 @@ const Navbar: FC<Props> = ({
   isDrawerOpen,
   setIsDrawerOpen,
 }): ReactElement => {
-  const { updateCtx } = useContext(Context);
+  const {
+    updateCtx,
+    ctx: { selectedCategory },
+  } = useContext(Context);
+  const { push } = useRouter();
 
   const handleLogoClick = () => {
     if (isDrawerOpen) setIsDrawerOpen(false);
-    updateCtx({ selectedCategory: DEFAULT_SELECT_OPTION });
+    updateCtx({ selectedCategory: null });
+  };
+
+  const handleCategoryChange = (e: SelectChangeEvent<string>) => {
+    const selectedCategory: Category = e.target.value;
+    updateCtx({ selectedCategory });
+    push(`/categories/?category=${selectedCategory}`);
   };
 
   return (
@@ -79,7 +97,12 @@ const Navbar: FC<Props> = ({
           gap={2}
           sx={{ width: 'fit-content' }}
         >
-          <Select options={[...CATEGORY_METADATA, ...COURSE_LEVEL_METADATA]} />
+          <Select
+            label={DEFAULT_SELECT_OPTION}
+            options={[...CATEGORY_METADATA, ...COURSE_LEVEL_METADATA]}
+            selectedCategory={selectedCategory ?? ''}
+            handleCategoryChange={handleCategoryChange}
+          />
           {!!user ? (
             <Typography
               variant='h5'

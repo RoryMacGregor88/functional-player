@@ -13,8 +13,7 @@ jest.mock('@stripe/react-stripe-js', () => ({
   Elements: ({ children }) => <div>{children}</div>,
   PaymentElement: () => <div>MOCK PAYMENT ELEMENT</div>,
   useStripe: () => ({
-    test: 'mock stripe',
-    confirmPayment: () => ({ error: true }),
+    confirmPayment: () => ({ error: { message: 'stripe-error-message' } }),
   }),
   useElements: () => ({ test: 'mock elements' }),
 }));
@@ -240,7 +239,7 @@ describe('Register', () => {
       });
 
       await waitFor(() => {
-        expect(screen.getByText(DEFAULT_ERROR_MESSAGE)).toBeInTheDocument();
+        expect(screen.getByText(/stripe-error-message/i)).toBeInTheDocument();
       });
     });
   });

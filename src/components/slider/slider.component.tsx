@@ -115,8 +115,6 @@ const Slider: FC<SliderProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory]);
 
-  if (!courses?.length) return null;
-
   const minWidth = banner ? '100%' : `${ITEM_WIDTH_REM}em`,
     height = banner ? '30em' : `${ITEM_HEIGHT_REM}em`;
 

@@ -24,8 +24,6 @@ import { Context, logout } from '@/src/utils';
 
 import { User } from '@/src/utils/interfaces';
 
-import { DEFAULT_SELECT_OPTION } from '@/src/utils/constants';
-
 interface Props {
   user: User;
   isDrawerOpen: boolean;
@@ -56,7 +54,7 @@ const Drawer: FC<Props> = ({
 
   const handleIconClick = () => {
     toggleDrawer();
-    updateCtx({ selectedCategory: DEFAULT_SELECT_OPTION });
+    updateCtx({ selectedCategory: null });
   };
 
   const handleLogout = async () => {

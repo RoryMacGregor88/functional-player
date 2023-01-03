@@ -241,8 +241,7 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
     }
   };
 
-  // TODO: what's the deal with && !clientSecret down there?
-
+  // TODO: why is !clientSecret there? It's breaking a test
   return (
     <PageWrapper>
       <SpacedTitle>Account Settings</SpacedTitle>

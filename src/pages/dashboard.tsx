@@ -81,10 +81,10 @@ export default function Dashboard({
     courses.filter(({ categories }) => categories.includes(category));
 
   const latestCourses = courses
-      ?.sort((a, b) => (a.creationDate > b.creationDate ? -1 : 1))
+      .sort((a, b) => (a.creationDate > b.creationDate ? -1 : 1))
       .slice(0, 5),
     lastWatched = courses.find(({ _id }) => _id === user?.lastWatched),
-    bookmarks = courses.filter(({ _id }) => user?.bookmarks.includes(_id));
+    bookmarks = courses.filter(({ _id }) => !!user?.bookmarks.includes(_id));
   return (
     <Grid container direction='column'>
       <HeaderImage
@@ -109,11 +109,13 @@ export default function Dashboard({
           courses={[comingSoonCourse]}
           banner={true}
         />
-        {CATEGORY_METADATA.map(({ label, value }) => {
-          const test = getCategoryCourses(value);
-          console.log('test: ', test);
-          return <Slider key={value} title={label} courses={test} />;
-        })}
+        {CATEGORY_METADATA.map(({ label, value }) => (
+          <Slider
+            key={value}
+            title={label}
+            courses={getCategoryCourses(value)}
+          />
+        ))}
       </PageWrapper>
     </Grid>
   );
