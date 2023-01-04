@@ -16,7 +16,7 @@ import { Course } from '@/src/utils/interfaces';
 
 const ITEM_WIDTH_REM = 40,
   ITEM_HEIGHT_REM = 25,
-  BORDER_WIDTH = 8;
+  BORDER_WIDTH = 6;
 
 type Orientation = 'left' | 'right';
 
@@ -193,7 +193,7 @@ const Slider: FC<SliderProps> = ({
                 minWidth,
                 height,
                 border: `${BORDER_WIDTH}px solid transparent`,
-                borderRadius: '0.75rem',
+                borderRadius: 4,
                 overflow: 'hidden',
                 cursor: 'pointer',
                 '&:hover': {

@@ -49,7 +49,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
       <Head>
         <title>Functional Player</title>
         <meta
-          name='description'
+          name='Functional Player'
           content='Functional Player'
           key='functional-player'
         />

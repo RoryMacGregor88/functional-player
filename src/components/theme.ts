@@ -13,7 +13,7 @@ const openSans = Open_Sans({ weight: '400', subsets: ['latin'] });
 
 const theme: ThemeOptions = {
   shape: {
-    borderRadius: 5,
+    borderRadius: 3,
   },
   typography: {
     fontFamily: openSans.style.fontFamily,

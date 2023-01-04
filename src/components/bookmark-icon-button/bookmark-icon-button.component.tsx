@@ -35,7 +35,7 @@ const BookmarkIconButton: FC<Props> = ({
       sx={{
         padding: '0 0.5rem',
         border: `2px solid ${color}`,
-        borderRadius: '5px',
+        borderRadius: 1,
         ...sx,
       }}
       data-testid='bookmark-icon'

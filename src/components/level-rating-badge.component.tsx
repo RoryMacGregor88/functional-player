@@ -19,7 +19,7 @@ const LevelRatingBadge: FC<Props> = ({ level }): ReactElement => {
       <Box
         sx={{
           padding: '0.25rem 0.5rem',
-          borderRadius: '3px',
+          borderRadius: 1,
           width: 'fit-content',
           backgroundColor: levelMetadata.color,
           color: 'common.black',

@@ -2,25 +2,24 @@ import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
 import Select from './select.component';
 
-import { DEFAULT_SELECT_OPTION } from '@/src/utils/constants';
-
-const options = [{ label: 'Test Option', value: 'test-option' }];
+const options = [{ label: 'Test Option', value: 'test-option' }],
+  label = 'test-label';
 
 describe('Select', () => {
   it('renders', () => {
-    render(<Select options={options} />, {
-      ctx: { selectedCategory: DEFAULT_SELECT_OPTION },
+    render(<Select options={options} label={label} />, {
+      ctx: { selectedCategory: null },
     });
 
-    expect(screen.getByText(/explore by category/i)).toBeInTheDocument();
+    expect(screen.getAllByText(label)).toHaveLength(2);
   });
 
   it('renders options', async () => {
-    render(<Select options={options} />, {
-      ctx: { selectedCategory: DEFAULT_SELECT_OPTION },
+    render(<Select options={options} label={label} />, {
+      ctx: { selectedCategory: null },
     });
 
-    userEvent.click(screen.getByText(/explore by category/i));
+    userEvent.click(screen.getAllByText(label)[1]);
 
     await waitFor(() => {
       expect(screen.getByText(/test option/i)).toBeInTheDocument();
@@ -30,24 +29,28 @@ describe('Select', () => {
   it('reads selected category from ctx', () => {
     const selectedCategory = 'test-option';
 
-    render(<Select options={options} />, {
+    render(<Select options={options} label={label} />, {
       ctx: { selectedCategory },
     });
 
-    expect(screen.getByText(/test option/i)).toBeInTheDocument();
+    expect(screen.getByText(selectedCategory)).toBeInTheDocument();
   });
 
   it('updates selected category and navigates to option link', async () => {
-    const {
-      updateCtx,
-      router: { push },
-    } = render(<Select options={options} />, {
-      ctx: { selectedCategory: DEFAULT_SELECT_OPTION },
-      push: jest.fn(),
-      updateCtx: jest.fn(),
-    });
+    const handleCategoryChange = jest.fn();
 
-    userEvent.click(screen.getByText(/explore by category/i));
+    render(
+      <Select
+        options={options}
+        label={label}
+        handleCategoryChange={handleCategoryChange}
+      />,
+      {
+        ctx: { selectedCategory: null },
+      }
+    );
+
+    userEvent.click(screen.getAllByText(label)[1]);
 
     await waitFor(() => {
       userEvent.click(screen.getByText(/test option/i));
@@ -58,8 +61,7 @@ describe('Select', () => {
     };
 
     await waitFor(() => {
-      expect(updateCtx).toHaveBeenCalledWith(expected);
-      expect(push).toHaveBeenCalledWith('/categories/?category=test-option');
+      expect(handleCategoryChange).toHaveBeenCalledWith(expected);
     });
   });
 });

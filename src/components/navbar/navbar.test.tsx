@@ -4,6 +4,8 @@ import { DEFAULT_SELECT_OPTION } from '@/src/utils/constants';
 
 import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
+// TODO: need to add changes in here, tests for select handler
+
 describe('Navbar', () => {
   it('renders', () => {
     render(<Navbar />);
