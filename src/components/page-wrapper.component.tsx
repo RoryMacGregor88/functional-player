@@ -1,12 +1,16 @@
 import { FC, ReactElement, ReactNode } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 
 interface Props {
+  restrictWidth?: boolean;
   children: ReactNode;
 }
 
-const PageWrapper: FC<Props> = ({ children }): ReactElement => (
+const PageWrapper: FC<Props> = ({
+  restrictWidth = false,
+  children,
+}): ReactElement => (
   <Box
     sx={{
       width: '100%',
@@ -14,7 +18,18 @@ const PageWrapper: FC<Props> = ({ children }): ReactElement => (
       padding: '0 2rem',
     }}
   >
-    {children}
+    {restrictWidth ? (
+      <Grid
+        container
+        direction='column'
+        alignItems='center'
+        sx={{ maxWidth: '50rem', margin: '5rem auto' }}
+      >
+        {children}
+      </Grid>
+    ) : (
+      children
+    )}
   </Box>
 );
 

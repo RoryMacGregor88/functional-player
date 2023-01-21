@@ -117,7 +117,7 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
       await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${process.env.BASE_URL}/registration-success/?redirect=true&`,
+          return_url: `${process.env.BASE_URL}/registration-success`,
         },
       });
 
@@ -128,36 +128,29 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
   };
 
   return (
-    <PageWrapper>
-      <Grid
-        container
-        direction='column'
-        alignItems='center'
-        sx={{ maxWidth: '50rem', margin: '5rem auto' }}
-      >
-        <SpacedTitle>Register</SpacedTitle>
-        {!!wellData ? <Well {...wellData} /> : null}
-        <Stepper activeStep={activeStep} />
-        {activeStep === 1 ? (
-          <RegisterForm
+    <PageWrapper restrictWidth>
+      <SpacedTitle>Register</SpacedTitle>
+      {!!wellData ? <Well {...wellData} /> : null}
+      <Stepper activeStep={activeStep} />
+      {activeStep === 1 ? (
+        <RegisterForm
+          isLoading={isLoading}
+          handleRegister={handleRegister}
+          onNextClick={onNextClick}
+          disableSubmitButton={!!wellData?.severity}
+          disableNextButton={!clientSecret}
+        />
+      ) : null}
+      {activeStep === 2 && !!clientSecret ? (
+        <Elements stripe={getStripe()} options={{ clientSecret }}>
+          {/* // TODO: Replace P with details about cost/recurrence */}
+          <p style={{ textAlign: 'center' }}>Subscribe</p>
+          <SubscribeForm
+            subscribeSubmit={subscribeSubmit}
             isLoading={isLoading}
-            handleRegister={handleRegister}
-            onNextClick={onNextClick}
-            disableSubmitButton={!!wellData?.severity}
-            disableNextButton={!clientSecret}
           />
-        ) : null}
-        {activeStep === 2 && !!clientSecret ? (
-          <Elements stripe={getStripe()} options={{ clientSecret }}>
-            {/* // TODO: Replace P with details about cost/recurrence */}
-            <p style={{ textAlign: 'center' }}>Subscribe</p>
-            <SubscribeForm
-              subscribeSubmit={subscribeSubmit}
-              isLoading={isLoading}
-            />
-          </Elements>
-        ) : null}
-      </Grid>
+        </Elements>
+      ) : null}
     </PageWrapper>
   );
 }

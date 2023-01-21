@@ -73,9 +73,11 @@ const Device: FC<DeviceProps> = ({
       <NextImage
         src={`${src}-${deviceSize}.jpg`}
         alt={alt}
-        objectFit='cover'
-        layout='fill'
+        fill
         quality={100}
+        style={{
+          objectFit: 'cover',
+        }}
       />
     </Grid>
   </Grid>
@@ -142,9 +144,11 @@ const Desktop: FC<DesktopProps> = ({ src, alt, title }): ReactElement => (
       <NextImage
         src={`${src}-large.jpg`}
         alt={alt}
-        objectFit='cover'
-        layout='fill'
+        fill
         quality={100}
+        style={{
+          objectFit: 'cover',
+        }}
       />
     </Grid>
   </Grid>

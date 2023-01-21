@@ -5,6 +5,9 @@ import Select from './select.component';
 const options = [{ label: 'Test Option', value: 'test-option' }],
   label = 'test-label';
 
+  // TODO: selectedCategory is a prop now, not state
+  // but state is in navbar now, make sure tests for both have been updated
+
 describe('Select', () => {
   it('renders', () => {
     render(<Select options={options} label={label} />, {

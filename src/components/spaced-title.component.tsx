@@ -11,7 +11,12 @@ const SpacedTitle: FC<Props> = ({ children }): ReactElement => (
     item
     component={Typography}
     variant='h1'
-    sx={{ width: '100%', margin: '2rem 0', textAlign: 'center' }}
+    sx={{
+      width: '100%',
+      margin: '2rem 0',
+      textAlign: 'center',
+      fontSize: '3.5rem',
+    }}
   >
     {children}
   </Grid>

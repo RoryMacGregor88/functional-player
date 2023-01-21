@@ -53,6 +53,7 @@ const TabPanel: FC<TabPanelProps> = ({
     hidden={value !== index}
     id={`${name}-tab`}
     aria-labelledby={`${name}-tab`}
+    sx={{ width: '100%' }}
   >
     {value === index ? children : null}
   </Box>
@@ -197,12 +198,11 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
 
     const { stripe, elements } = formValues;
 
-    // TODO: Make sure this still works with `registration=true`, see registration-success
     const { error: stripeError }: ResubscribeResProps =
       await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${process.env.BASE_URL}/reactivation-success/?redirect=true&`,
+          return_url: `${process.env.BASE_URL}/reactivation-success`,
         },
       });
 
@@ -243,7 +243,7 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
 
   // TODO: why is !clientSecret there? It's breaking a test
   return (
-    <PageWrapper>
+    <PageWrapper restrictWidth={true}>
       <SpacedTitle>Account Settings</SpacedTitle>
       {!!wellData && !clientSecret ? <Well {...wellData} /> : null}
       <Tabs
@@ -251,8 +251,13 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
         onChange={handleTabChange}
         aria-label='account and subscription tabs'
         indicatorColor='primary'
-        centered
-        sx={{ marginBottom: '2rem' }}
+        sx={{
+          marginBottom: '2rem',
+          width: '100%',
+          '& .MuiTabs-flexContainer	': {
+            justifyContent: 'space-between',
+          },
+        }}
       >
         <Tab label='Update Password' />
         <Tab label='My Subscription' />

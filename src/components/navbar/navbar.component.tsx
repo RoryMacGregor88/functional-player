@@ -90,23 +90,27 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
           item
           container
           alignItems='center'
+          wrap='nowrap'
           gap={2}
           sx={{ width: 'fit-content' }}
         >
+          {!!user ? (
+            <Typography
+              variant='h5'
+              sx={{
+                fontSize: '1.25rem',
+                paddingRight: '0.5rem',
+              }}
+            >
+              Logged in as: {user.username}
+            </Typography>
+          ) : null}
           <Select
             label={DEFAULT_SELECT_OPTION}
             options={[...CATEGORY_METADATA, ...COURSE_LEVEL_METADATA]}
             selectedCategory={selectedCategory ?? ''}
             handleCategoryChange={handleCategoryChange}
           />
-          {!!user ? (
-            <Typography
-              variant='h5'
-              sx={{ fontSize: '1.25rem', paddingRight: '0.5rem' }}
-            >
-              Logged in as: {user.username}
-            </Typography>
-          ) : null}
         </Grid>
       </Grid>
     </AppBar>

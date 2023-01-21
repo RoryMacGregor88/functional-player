@@ -45,7 +45,7 @@ describe('Navbar', () => {
     userEvent.click(screen.getByText(/functional player/i));
 
     const expected = {
-      selectedCategory: DEFAULT_SELECT_OPTION,
+      selectedCategory: null,
     };
 
     await waitFor(() => {

@@ -15,7 +15,7 @@ import {
 } from '@/src/components';
 
 interface ServerSideProps {
-  props: { redirect: boolean };
+  props: { paymentIntent: boolean };
 }
 
 export const getServerSideProps: GetServerSideProps = async (
@@ -23,24 +23,26 @@ export const getServerSideProps: GetServerSideProps = async (
 ): Promise<ServerSideProps> => {
   // Checks if the page was redirected to from the registration page,
   // preventing manual linking to this page.
-  const redirect = !!ctx.query.redirect;
+  const paymentIntent = !!ctx.query.payment_intent;
   return {
-    props: { redirect },
+    props: { paymentIntent },
   };
 };
 
 interface Props {
-  redirect: boolean;
+  paymentIntent: boolean;
 }
 
-export default function RegistrationSuccess({ redirect }: Props): ReactElement {
+export default function RegistrationSuccess({
+  paymentIntent,
+}: Props): ReactElement {
   const { push } = useRouter();
 
   useEffect(() => {
-    if (!redirect) push('/dashboard');
-  }, [redirect, push]);
+    if (!paymentIntent) push('/dashboard');
+  }, [paymentIntent, push]);
 
-  if (!redirect) return <LoadMask />;
+  if (!paymentIntent) return <LoadMask />;
 
   return (
     <PageWrapper>

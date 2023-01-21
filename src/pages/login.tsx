@@ -72,17 +72,10 @@ export default function Login({ user, updateCtx }: Props) {
   };
 
   return (
-    <PageWrapper>
-      <Grid
-        container
-        direction='column'
-        alignItems='center'
-        sx={{ maxWidth: '50rem', margin: '5rem auto' }}
-      >
-        <SpacedTitle>Login</SpacedTitle>
-        {!!wellData ? <Well {...wellData} /> : null}
-        <LoginForm handleLogin={handleLogin} isLoading={isLoading} />
-      </Grid>
+    <PageWrapper restrictWidth>
+      <SpacedTitle>Login</SpacedTitle>
+      {!!wellData ? <Well {...wellData} /> : null}
+      <LoginForm handleLogin={handleLogin} isLoading={isLoading} />
     </PageWrapper>
   );
 }

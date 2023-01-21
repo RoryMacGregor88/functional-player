@@ -38,7 +38,7 @@ export const Overlay: FC<OverlayProps> = ({
 }): ReactElement => {
   const { updateCtx } = useCtx();
 
-  const { title, description, level, artist } = selectedVideo,
+  const { title, description, level, artist, categories } = selectedVideo,
     artistValue = ARTIST_METADATA.find(({ label }) => label === artist)?.value;
 
   const close = () => updateCtx({ selectedVideo: null }),
@@ -100,6 +100,7 @@ export const Overlay: FC<OverlayProps> = ({
         >
           <Grid item container direction='column'>
             <Typography variant='h3'>{title}</Typography>
+            <Typography variant='h5'>{categories.join(' * ')}</Typography>
             <Typography variant='body1'>{description}</Typography>
           </Grid>
         </Grid>

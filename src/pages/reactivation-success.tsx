@@ -15,7 +15,7 @@ import { REACTIVATION_SUCCESS_MESSAGE } from '@/src/utils/constants';
 import { UpdateCtx, User } from '@/src/utils/interfaces';
 
 interface ServerSideProps {
-  props: { redirect: boolean };
+  props: { paymentIntent: boolean };
 }
 
 export const getServerSideProps: GetServerSideProps = async (
@@ -23,30 +23,30 @@ export const getServerSideProps: GetServerSideProps = async (
 ): Promise<ServerSideProps> => {
   // Checks if the page was redirected to from the accounts page,
   // preventing manual linking to this page.
-  const redirect = !!ctx.query.redirect;
+  const paymentIntent = !!ctx.query.payment_intent;
   return {
-    props: { redirect },
+    props: { paymentIntent },
   };
 };
 
 interface Props {
   user: User;
   updateCtx: UpdateCtx;
-  redirect: boolean;
+  paymentIntent: boolean;
 }
 
 export default function ReactivationSuccess({
   user,
   updateCtx,
-  redirect,
+  paymentIntent,
 }: Props): ReactElement {
   const { push } = useRouter();
   const [isUpdated, setIsUpdated] = useState(false);
 
   useEffect(() => {
-    if (!redirect) {
+    if (!paymentIntent) {
       push('/dashboard');
-    } else if (!!redirect) {
+    } else if (!!paymentIntent) {
       (async () => {
         const { ok } = await syncSubscriptionStatus({
           user,
@@ -55,9 +55,9 @@ export default function ReactivationSuccess({
         if (ok) setIsUpdated(true);
       })();
     }
-  }, [user, updateCtx, redirect, push]);
+  }, [user, updateCtx, paymentIntent, push]);
 
-  if (!redirect || !isUpdated) return <LoadMask />;
+  if (!paymentIntent || !isUpdated) return <LoadMask />;
 
   return (
     <PageWrapper>

@@ -149,6 +149,29 @@ export const CATEGORY_METADATA = [
   },
 ];
 
+export const FAQ_DATA = [
+  {
+    question: 'I am a question?',
+    answer: 'I am an answer',
+  },
+  {
+    question: 'I am a question?',
+    answer: 'I am an answer',
+  },
+  {
+    question: 'I am a question?',
+    answer: 'I am an answer',
+  },
+  {
+    question: 'I am a question?',
+    answer: 'I am an answer',
+  },
+  {
+    question: 'I am a question?',
+    answer: 'I am an answer',
+  },
+];
+
 export const CHARS = [
   '1',
   '2',

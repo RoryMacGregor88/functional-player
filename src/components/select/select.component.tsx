@@ -29,7 +29,7 @@ const Select: FC<Props> = ({
   selectedCategory,
   handleCategoryChange,
 }): ReactElement => (
-  <FormControl fullWidth>
+  <FormControl>
     <InputLabel id='category-select-label'>{label}</InputLabel>
     <MuiSelect
       id='category-select'
@@ -39,7 +39,7 @@ const Select: FC<Props> = ({
       labelId='category-select-label'
       sx={{
         width: '15rem',
-        '& 	.MuiSelect-select': {
+        '& .MuiSelect-select': {
           padding: '0.5rem',
         },
       }}
