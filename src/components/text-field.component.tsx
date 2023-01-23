@@ -19,15 +19,26 @@ interface Props {
   InputProps?: Partial<InputProps>;
   register?: any;
   autoFocus?: boolean;
+  textArea?: boolean;
 }
 
 // TODO: input props being used anywhere?
 
 const TextField = (
-  { id, label, error, type = 'input', InputProps, register, autoFocus = false },
+  {
+    id,
+    label,
+    error,
+    type = 'input',
+    InputProps,
+    register,
+    autoFocus = false,
+    textArea = false,
+  },
   ref
 ): ReactElement => {
-  const regProps = !!register ? { ...register(id) } : {};
+  const regProps = !!register ? { ...register(id) } : {},
+    textAreaProps = textArea ? { multiline: true, rows: 5 } : {};
   return (
     <StyledTextField
       id={id}
@@ -43,6 +54,7 @@ const TextField = (
       InputProps={InputProps}
       ref={ref}
       {...regProps}
+      {...textAreaProps}
     />
   );
 };

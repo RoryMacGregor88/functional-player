@@ -6,13 +6,14 @@ import { withIronSessionSsr } from 'iron-session/next';
 
 import { GetServerSideProps } from 'next';
 
-import { Grid, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
-import { PageWrapper, SpacedTitle, LoadMask } from '@/src/components';
+import { PageWrapper, SpacedTitle, LoadMask, Slider } from '@/src/components';
 
 import {
   Course,
   User,
+  UpdateCtx,
   CustomError,
   CourseServerProps,
 } from '@/src/utils/interfaces';
@@ -34,20 +35,32 @@ export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
 
 interface Props {
   user: User;
+  updateCtx: UpdateCtx;
   courses: Course[] | null;
   error: CustomError | null;
 }
 
-export default function List({ user, courses, error }: Props): ReactElement {
+export default function List({
+  user,
+  updateCtx,
+  courses,
+  error,
+}: Props): ReactElement {
   const { push } = useRouter();
 
-  // TODO: show 'You must be logged in' message instead of redirecting
-  // deal with error
   useEffect(() => {
     if (!user) push('/login');
-  }, [user, push]);
+    if (!!error) {
+      updateCtx({
+        toastData: {
+          message: error.message,
+          severity: 'error',
+        },
+      });
+    }
+  }, [user, push, error, updateCtx]);
 
-  if (!user) return <LoadMask />;
+  if (!user || !!error) return <LoadMask />;
 
   const bookmarks = courses.filter((course) =>
     user.bookmarks.includes(course._id)
@@ -61,9 +74,7 @@ export default function List({ user, courses, error }: Props): ReactElement {
           You currently have no saved courses.
         </Typography>
       ) : (
-        <Grid container spacing={4}>
-          <h1>FIX THIS!!!</h1>
-        </Grid>
+        <Slider title='Your List' courses={bookmarks} />
       )}
     </PageWrapper>
   );

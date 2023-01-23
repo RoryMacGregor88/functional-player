@@ -7,15 +7,23 @@ import {
   Typography,
 } from '@mui/material';
 
-import { PageWrapper, SpacedTitle, ExpandIcon } from '@/src/components';
+import {
+  PageWrapper,
+  SpacedTitle,
+  ExpandIcon,
+  Link,
+  LinkButton,
+} from '@/src/components';
 
 import { FAQ_DATA } from '@/src/utils/constants';
+
+// TODO: needs tests
 
 export default function FAQ(): ReactElement {
   return (
     <PageWrapper restrictWidth>
       <SpacedTitle>Frequently Asked Questions</SpacedTitle>
-      {FAQ_DATA.map(({ question, answer }) => (
+      {FAQ_DATA.map(({ question, answer, action }) => (
         <Accordion key={question} sx={{ width: '100%', margin: '0.5rem 0' }}>
           <AccordionSummary
             expandIcon={<ExpandIcon />}
@@ -29,6 +37,11 @@ export default function FAQ(): ReactElement {
           <AccordionDetails>
             <Typography variant='body1'>{answer}</Typography>
           </AccordionDetails>
+          {!!action ? (
+            <Link href={action.href}>
+              <LinkButton>{action.label}</LinkButton>
+            </Link>
+          ) : null}
         </Accordion>
       ))}
     </PageWrapper>

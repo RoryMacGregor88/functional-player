@@ -142,3 +142,8 @@ export type ResubscribeFormValues = StripeModules;
 export type DeleteFormValues = {
   password: string;
 };
+
+export type ContactFormValues = {
+  email: string;
+  body: string;
+};
