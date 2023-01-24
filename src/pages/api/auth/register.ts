@@ -74,6 +74,11 @@ export default async function register(
         expand: ['latest_invoice.payment_intent'],
       });
 
+      // type casting
+      const invoice = latest_invoice as stripeFn.Invoice,
+        paymentIntent = invoice.payment_intent as stripeFn.PaymentIntent,
+        clientSecret = paymentIntent.client_secret;
+
       await db.collection<DbUser>(USERS).insertOne({
         email,
         username,
@@ -85,9 +90,7 @@ export default async function register(
         bookmarks: [],
       });
 
-      return res
-        .status(201)
-        .json({ clientSecret: latest_invoice.payment_intent.client_secret });
+      return res.status(201).json({ clientSecret });
     } catch (error) {
       await logServerError('register', error);
       return handleServerError(res);

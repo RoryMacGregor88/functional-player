@@ -58,6 +58,11 @@ async function resubscribe(
         expand: ['latest_invoice.payment_intent'],
       });
 
+      // type casting
+      const invoice = latest_invoice as stripeFn.Invoice,
+        paymentIntent = invoice.payment_intent as stripeFn.PaymentIntent,
+        clientSecret = paymentIntent.client_secret;
+
       const updatedProperties = {
         customerId,
         subscriptionId,
@@ -81,10 +86,7 @@ async function resubscribe(
       req.session.user = resUser;
       await req.session.save();
 
-      return res.status(201).json({
-        resUser,
-        clientSecret: latest_invoice.payment_intent.client_secret,
-      });
+      return res.status(201).json({ resUser, clientSecret });
     } catch (error) {
       await logServerError('resubscribe', error);
       return handleServerError(res);
