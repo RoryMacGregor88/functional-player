@@ -36,7 +36,7 @@ const contactFormSchema = Yup.object().shape({
 
 export default function Contact({ updateCtx }): ReactElement {
   const [wellData, setWellData] = useState(null);
-  const [disableSubmit, setDisableSubmit] = useState(false);
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -79,12 +79,12 @@ export default function Contact({ updateCtx }): ReactElement {
         severity: 'success',
         message: 'Your message has been successfully sent.',
       });
-      setDisableSubmit(true);
+      setIsSubmitDisabled(true);
     }
     setIsLoading(false);
   };
 
-  const isDisabled = disableSubmit || !isDirty || !!Object.keys(errors).length;
+  const isDisabled = isSubmitDisabled || !isDirty || !!Object.keys(errors).length;
 
   return (
     <PageWrapper restrictWidth>

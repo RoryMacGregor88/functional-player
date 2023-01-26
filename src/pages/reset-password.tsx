@@ -79,7 +79,7 @@ export default function ResetPassword({
   };
 
   return (
-    <PageWrapper>
+    <PageWrapper restrictWidth>
       <SpacedTitle>Reset Password</SpacedTitle>
       {!!wellData ? <Well {...wellData} /> : null}
       <ResetPasswordForm
