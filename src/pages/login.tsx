@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { Grid } from '@mui/material';
-
 import {
   LoginForm,
   SpacedTitle,
@@ -45,6 +43,8 @@ export default function Login({ user, updateCtx }: Props) {
   }
 
   const handleLogin = async (formValues: LoginFormValues): Promise<void> => {
+    // TODO: do this for all handlers that need it
+    setWellData(null);
     setIsLoading(true);
 
     const { email, password } = formValues;

@@ -5,6 +5,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
+  Box,
 } from '@mui/material';
 
 import {
@@ -38,9 +39,11 @@ export default function FAQ(): ReactElement {
             <Typography variant='body1'>{answer}</Typography>
           </AccordionDetails>
           {!!action ? (
-            <Link href={action.href}>
-              <LinkButton>{action.label}</LinkButton>
-            </Link>
+            <Box sx={{ padding: '0 0 1rem 0.5rem' }}>
+              <Link href={action.href}>
+                <LinkButton>{action.label}</LinkButton>
+              </Link>
+            </Box>
           ) : null}
         </Accordion>
       ))}

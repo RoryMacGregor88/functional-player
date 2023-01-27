@@ -6,8 +6,6 @@ import { StripeError } from '@stripe/stripe-js';
 
 import { useRouter } from 'next/router';
 
-import { Grid } from '@mui/material';
-
 import {
   Stepper,
   RegisterForm,

@@ -18,6 +18,7 @@ import {
   YouTubeIcon,
   HelpIcon,
   RegisterIcon,
+  ContactIcon,
 } from '@/src/components';
 
 import { logout, useCtx } from '@/src/utils';
@@ -142,8 +143,16 @@ const Drawer: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
           isSelected={pathname === '/faq'}
           onClick={handleIconClick}
         />
+        <SidebarItem
+          Icon={ContactIcon}
+          label='Contact'
+          href='/contact'
+          isSelected={pathname === '/contact'}
+          onClick={handleIconClick}
+        />
       </Grid>
 
+      {/* simple divider, maybe upgrade later */}
       <div
         style={{
           margin: '2rem 0',

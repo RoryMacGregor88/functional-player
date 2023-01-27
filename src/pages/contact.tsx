@@ -2,6 +2,8 @@ import { ReactElement, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 
+import { Typography } from '@mui/material';
+
 import * as Yup from 'yup';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -84,12 +86,20 @@ export default function Contact({ updateCtx }): ReactElement {
     setIsLoading(false);
   };
 
-  const isDisabled = isSubmitDisabled || !isDirty || !!Object.keys(errors).length;
+  const isDisabled =
+    isSubmitDisabled || !isDirty || !!Object.keys(errors).length;
 
   return (
     <PageWrapper restrictWidth>
       <SpacedTitle>Contact</SpacedTitle>
       {!!wellData ? <Well {...wellData} /> : null}
+      <Typography
+        variant='body1'
+        sx={{ padding: '1rem', textAlign: 'center', fontSize: '1rem' }}
+      >
+        Please leave your email address and message below. We aim to respond
+        within 24 hours.
+      </Typography>
       <FormWrapper
         onSubmit={handleSubmit((formValues) => onSubmit(formValues))}
       >
