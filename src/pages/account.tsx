@@ -35,6 +35,9 @@ import {
 
 import { http } from '@/src/utils';
 
+//TODO: need `Account Details` page, read-only
+// also, need `Are you sure?` step for cancelling subscription
+
 interface TabPanelProps {
   name: string;
   value: number;

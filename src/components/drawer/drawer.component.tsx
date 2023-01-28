@@ -6,6 +6,7 @@ import { Drawer as MuiDrawer, Grid } from '@mui/material';
 
 import {
   SidebarItem,
+  IconButton,
   HomeIcon,
   ProfileIcon,
   LoginIcon,
@@ -19,6 +20,7 @@ import {
   HelpIcon,
   RegisterIcon,
   ContactIcon,
+  CloseIcon,
 } from '@/src/components';
 
 import { logout, useCtx } from '@/src/utils';
@@ -65,23 +67,33 @@ const Drawer: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
 
   return (
     <MuiDrawer
-      anchor='left'
+      anchor='right'
       open={isDrawerOpen}
       onClose={toggleDrawer}
       sx={{
         '.MuiDrawer-paper': {
-          padding: '1rem 1rem 1rem 2rem',
+          padding: '1rem',
           minWidth: '15.5rem',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'flex-start',
-          backgroundColor: 'background.paper',
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
           backgroundImage: 'none',
           boxShadow: 'none',
         },
       }}
       data-testid='drawer'
     >
+      <IconButton
+        sx={{
+          position: 'absolute',
+          top: '1rem',
+          right: '1rem',
+        }}
+        onClick={toggleDrawer}
+      >
+        <CloseIcon sx={{ height: '2rem', width: '2rem' }} />
+      </IconButton>
       <Grid
         container
         direction='column'

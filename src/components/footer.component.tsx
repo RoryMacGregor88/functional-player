@@ -1,19 +1,32 @@
 import { FC, ReactElement } from 'react';
 
-import { Typography } from '@mui/material';
+import { Typography, Grid } from '@mui/material';
 
-import { Link } from '@/src/components';
+import { Link, LinkButton } from '@/src/components';
 
 // TODO: real terms/conditions
 
 const Footer: FC = (): ReactElement => (
-  <footer>
-    <Typography variant='body1' sx={{ textAlign: 'center', margin: '1rem' }}>
-      Copyright &copy; {new Date().getFullYear()} Functional Player |{' '}
-      <Link href='/terms'>Terms &amp; Conditions</Link> |{' '}
-      <Link href='/privacy'>Privacy Policy</Link>
+  <Grid
+    component='footer'
+    container
+    alignItems='baseline'
+    justifyContent='center'
+    gap='0.5rem'
+    sx={{ padding: '1rem' }}
+  >
+    <Typography variant='body1' sx={{ textAlign: 'center' }}>
+      Copyright &copy; {new Date().getFullYear()} Functional Player
     </Typography>
-  </footer>
+    {'|'}
+    <Link href='/terms'>
+      <LinkButton noLeftMargin>Terms &amp; Conditions</LinkButton>
+    </Link>
+    {'|'}
+    <Link href='/privacy'>
+      <LinkButton noLeftMargin>Privacy Policy</LinkButton>
+    </Link>
+  </Grid>
 );
 
 export default Footer;

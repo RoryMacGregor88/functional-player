@@ -50,7 +50,9 @@ describe('Delete Form', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: /permanently delete my account/i })
+        screen.getByRole('button', {
+          name: /yes, permanently delete my account/i,
+        })
       ).toBeInTheDocument();
     });
   });
@@ -67,12 +69,16 @@ describe('Delete Form', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: /permanently delete my account/i })
+        screen.getByRole('button', {
+          name: /yes, permanently delete my account/i,
+        })
       ).toBeInTheDocument();
     });
 
     userEvent.click(
-      screen.getByRole('button', { name: /permanently delete my account/i })
+      screen.getByRole('button', {
+        name: /yes, permanently delete my account/i,
+      })
     );
 
     await waitFor(() => {

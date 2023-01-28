@@ -39,7 +39,7 @@ export const REACTIVATION_SUCCESS_MESSAGE =
 export const UPDATE_PASSWORD_SUCCESS_MESSAGE =
   'Your password has been successfully updated.';
 export const CANCEL_SUBSCRITION_SUCCESS_MESSAGE =
-  'Your subscription has been successfully cancelled. You can re-activate your subscription any time by clicking the "RE-ENABLE SUBSCRIPTION" button below.';
+  'Your subscription has been successfully cancelled. You can re-activate your subscription at any time by clicking the "RE-ENABLE SUBSCRIPTION" button below.';
 
 // form validation
 export const EMAIL_REQUIRED_MESSAGE = 'Email is required';
@@ -90,17 +90,17 @@ export const COURSE_LEVEL_METADATA = [
   {
     label: 'Beginner',
     value: 'beginner',
-    color: '#0ca464',
+    color: 'success.dark',
   },
   {
     label: 'Intermediate',
     value: 'intermediate',
-    color: '#dfe2cc',
+    color: 'info.dark',
   },
   {
     label: 'Advanced',
     value: 'advanced',
-    color: '#c31e1e',
+    color: 'error.dark',
   },
 ];
 

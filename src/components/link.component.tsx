@@ -5,8 +5,13 @@ import NextLink from 'next/link';
 import { styled } from '@mui/material';
 
 const StyledLink = styled(NextLink)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
   textDecoration: 'none',
   color: theme.palette.text.primary,
+  '&:hover': {
+    opacity: '0.75',
+  },
 }));
 
 interface Props {

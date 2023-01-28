@@ -47,10 +47,10 @@ function App({ Component, pageProps }: AppProps): ReactElement {
   return (
     <>
       <Head>
-        <title>Functional Player</title>
+        <title>FunctionalPlayer</title>
         <meta
-          name='Functional Player'
-          content='Functional Player'
+          name='FunctionalPlayer'
+          content='FunctionalPlayer'
           key='functional-player'
         />
         <link rel='icon' href='/favicon.ico' />

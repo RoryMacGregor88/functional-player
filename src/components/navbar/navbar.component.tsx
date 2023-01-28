@@ -8,9 +8,17 @@ import {
   Typography,
   Grid,
   SelectChangeEvent,
+  useMediaQuery,
 } from '@mui/material';
 
-import { MenuIcon, Link, Select, IconButton } from '@/src/components';
+import {
+  MenuIcon,
+  Link,
+  Select,
+  IconButton,
+  ProfileIcon,
+  LinkButton,
+} from '@/src/components';
 
 import { Category } from '@/src/utils/interfaces';
 
@@ -22,6 +30,9 @@ import {
   DEFAULT_SELECT_OPTION,
 } from '@/src/utils/constants';
 
+// to make sure left/right elements are same width, for centering logo
+const ICON_WIDTH = '2rem';
+
 interface Props {
   isDrawerOpen: boolean;
   setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
@@ -32,6 +43,8 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
     updateCtx,
     ctx: { selectedCategory, user },
   } = useCtx();
+
+  const isMobile = useMediaQuery('(max-width:700px)');
 
   const { push } = useRouter();
 
@@ -46,15 +59,17 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
     push(`/categories/?category=${selectedCategory}`);
   };
 
+  // TODO: magic color in AppBar, and in Drawer
+
   return (
     <AppBar
       position='fixed'
       sx={{
-        zIndex: 2000,
         border: 'none',
-        backgroundColor: 'background.paper',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
         boxShadow: 'none',
         backgroundImage: 'none',
+        height: '4.375rem',
       }}
     >
       <Grid
@@ -66,51 +81,65 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
         disableGutters
         sx={{
           width: '100%',
-          padding: '0.5rem 2rem',
+          height: '100%',
+          padding: '0.5rem 1rem',
           minHeight: '0px !important',
         }}
       >
-        <Grid item container sx={{ width: 'fit-content' }}>
-          <IconButton
-            aria-label='menu'
-            onClick={() => setIsDrawerOpen((prev) => !prev)}
+        {/* for centering logo at mobile sizes */}
+        {isMobile ? <div style={{ width: ICON_WIDTH }} /> : null}
+        <Link href={'/dashboard'} onClick={handleLogoClick}>
+          <Typography
+            variant='h5'
+            sx={{ cursor: 'pointer', fontSize: '1.8rem', fontWeight: 'bold' }}
           >
-            <MenuIcon
-              data-testid='menu-icon'
-              sx={{ height: '2rem', width: '2rem', marginRight: '1rem' }}
-            />
-          </IconButton>
-          <Link href={'/dashboard'} onClick={handleLogoClick}>
-            <Typography variant='h5' sx={{ cursor: 'pointer', height: '2rem' }}>
-              Functional Player
-            </Typography>
-          </Link>
-        </Grid>
+            FunctionalPlayer
+          </Typography>
+        </Link>
         <Grid
           item
           container
           alignItems='center'
           wrap='nowrap'
           gap={2}
-          sx={{ width: 'fit-content' }}
+          sx={{ width: 'fit-content', textAlign: 'center' }}
         >
-          {!!user ? (
-            <Typography
-              variant='h5'
-              sx={{
-                fontSize: '1.25rem',
-                paddingRight: '0.5rem',
-              }}
-            >
-              Logged in as: {user.username}
-            </Typography>
-          ) : null}
-          <Select
-            label={DEFAULT_SELECT_OPTION}
-            options={[...CATEGORY_METADATA, ...COURSE_LEVEL_METADATA]}
-            selectedCategory={selectedCategory ?? ''}
-            handleCategoryChange={handleCategoryChange}
-          />
+          {isMobile ? null : (
+            <>
+              <Select
+                label={DEFAULT_SELECT_OPTION}
+                options={[...CATEGORY_METADATA, ...COURSE_LEVEL_METADATA]}
+                selectedCategory={selectedCategory ?? ''}
+                handleCategoryChange={handleCategoryChange}
+              />
+              {!!user ? (
+                <Link href='/account'>
+                  <ProfileIcon />
+                </Link>
+              ) : (
+                <>
+                  <Link href='/login'>
+                    <LinkButton noLeftMargin>Log in</LinkButton>
+                  </Link>
+                  <Link href='/register'>
+                    <LinkButton noLeftMargin>Sign Up</LinkButton>
+                  </Link>
+                </>
+              )}
+            </>
+          )}
+          <IconButton
+            aria-label='menu'
+            onClick={() => setIsDrawerOpen((prev) => !prev)}
+            sx={{
+              visibility: isDrawerOpen ? 'hidden' : 'visible',
+            }}
+          >
+            <MenuIcon
+              data-testid='menu-icon'
+              sx={{ height: ICON_WIDTH, width: ICON_WIDTH }}
+            />
+          </IconButton>
         </Grid>
       </Grid>
     </AppBar>

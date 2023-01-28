@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Typography } from '@mui/material';
+import { Typography, Grid } from '@mui/material';
 
 import { FormWrapper, Button, PasswordField } from '@/src/components';
 
@@ -60,14 +60,32 @@ const DeleteAccountForm: FC<Props> = ({
         Proceed
       </Button>
       {showConfirmButton ? (
-        <>
-          <Typography variant='body1' sx={{ textAlign: 'center' }}>
+        <Grid
+          item
+          container
+          justifyContent='center'
+          sx={{
+            borderWidth: '2px',
+            borderStyle: 'solid',
+            borderColor: 'error.dark',
+            borderRadius: 1,
+            padding: '1rem',
+          }}
+        >
+          <Typography
+            variant='body1'
+            sx={{ color: 'error.dark', paddingBottom: '0.5rem' }}
+          >
             This action is irreversible, are you sure?
           </Typography>
-          <Button type='submit' isLoading={isLoading}>
-            Permanently delete my account
+          <Button
+            type='submit'
+            isLoading={isLoading}
+            sx={{ backgroundColor: 'error.dark', color: '#fff' }}
+          >
+            Yes, permanently delete my account
           </Button>
-        </>
+        </Grid>
       ) : null}
     </FormWrapper>
   );

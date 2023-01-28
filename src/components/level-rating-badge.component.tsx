@@ -22,7 +22,7 @@ const LevelRatingBadge: FC<Props> = ({ level }): ReactElement => {
           borderRadius: 1,
           width: 'fit-content',
           backgroundColor: levelMetadata.color,
-          color: 'common.black',
+          color: 'common.white',
         }}
       >
         <Typography variant='h5'>{levelMetadata.label}</Typography>

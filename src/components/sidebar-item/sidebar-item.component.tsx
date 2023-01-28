@@ -27,7 +27,6 @@ const SidebarItem: FC<Props> = ({
       onClick={onClick}
       sx={{
         display: 'flex',
-        justifyContent: 'flex-start',
         alignItems: 'center',
         color: isSelected ? 'primary.main' : 'common.white',
         fontSize: '1.25rem',
