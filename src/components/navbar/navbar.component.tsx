@@ -30,9 +30,6 @@ import {
   DEFAULT_SELECT_OPTION,
 } from '@/src/utils/constants';
 
-// to make sure left/right elements are same width, for centering logo
-const ICON_WIDTH = '2rem';
-
 interface Props {
   isDrawerOpen: boolean;
   setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
@@ -47,6 +44,9 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
   const isMobile = useMediaQuery('(max-width:700px)');
 
   const { push } = useRouter();
+
+  // to make sure left/right elements are same width, for centering logo
+  const ICON_SCALE = isMobile ? '1.75rem' : '2rem';
 
   const handleLogoClick = () => {
     if (isDrawerOpen) setIsDrawerOpen(false);
@@ -87,14 +87,23 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
         }}
       >
         {/* for centering logo at mobile sizes */}
-        {isMobile ? <div style={{ width: ICON_WIDTH }} /> : null}
+        {isMobile ? <div style={{ width: ICON_SCALE }} /> : null}
         <Link href={'/dashboard'} onClick={handleLogoClick}>
-          <Typography
-            variant='h5'
-            sx={{ cursor: 'pointer', fontSize: '1.8rem', fontWeight: 'bold' }}
-          >
-            FunctionalPlayer
-          </Typography>
+          {['Functional', 'Player'].map((str, i) => (
+            <Typography
+              key={str}
+              variant='h5'
+              sx={{
+                cursor: 'pointer',
+                fontSize: isMobile ? '1.5rem' : '1.8rem',
+                fontWeight: 'bold',
+                fontStyle: 'italic',
+                color: i === 1 ? 'primary.main' : 'common.white',
+              }}
+            >
+              {str}
+            </Typography>
+          ))}
         </Link>
         <Grid
           item
@@ -137,7 +146,7 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
           >
             <MenuIcon
               data-testid='menu-icon'
-              sx={{ height: ICON_WIDTH, width: ICON_WIDTH }}
+              sx={{ height: ICON_SCALE, width: ICON_SCALE }}
             />
           </IconButton>
         </Grid>
