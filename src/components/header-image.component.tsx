@@ -16,72 +16,80 @@ const Device: FC<DeviceProps> = ({
   alt,
   title,
   deviceSize,
-}): ReactElement => (
-  <Grid
-    container
-    alignItems='flex-start'
-    sx={{
-      position: 'relative',
-      height: '75vh',
-      width: '100%',
-      marginBottom: '2rem',
-    }}
-  >
+}): ReactElement => {
+  const typographyStyles = { sx: { textAlign: 'center' } };
+  return (
     <Grid
-      item
       container
-      alignItems='flex-end'
-      justifyContent='center'
+      alignItems='flex-start'
       sx={{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        height: '50vh',
-        width: '100vw',
-        zIndex: 1000,
-        backgroundImage:
-          'linear-gradient(to top, rgb(8, 8, 8) 50%, rgba(8, 8, 8, 0.75) 75%, rgba(8, 8, 8, 0) 100%)',
+        position: 'relative',
+        height: '75vh',
+        width: '100%',
+        marginBottom: '2rem',
       }}
     >
       <Grid
         item
         container
-        direction='column'
-        justifyContent='space-evenly'
-        wrap='nowrap'
+        alignItems='flex-end'
+        justifyContent='center'
         sx={{
-          height: '50%',
-          padding: '2rem',
-          marginBottom: '1rem',
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          height: '50vh',
+          width: '100vw',
+          zIndex: 1000,
+          backgroundImage:
+            'linear-gradient(to top, rgb(8, 8, 8) 50%, rgba(8, 8, 8, 0.75) 75%, rgba(8, 8, 8, 0) 100%)',
         }}
       >
-        <Typography variant='h3'>{title}</Typography>
-        <Typography variant='h5'>
-          This is some description information.
-        </Typography>
-        <Typography variant='body1'>Some extra information.</Typography>
+        <Grid
+          item
+          container
+          direction='column'
+          justifyContent='space-evenly'
+          wrap='nowrap'
+          gap='0.5rem'
+          sx={{
+            height: '50%',
+            padding: '2rem',
+            marginBottom: '1rem',
+          }}
+        >
+          <Typography variant='h3' {...typographyStyles}>
+            {title}
+          </Typography>
+          <Typography variant='h5' {...typographyStyles}>
+            This is some description information.
+          </Typography>
+          <Typography variant='body1' {...typographyStyles}>
+            Some extra information.
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid
+        item
+        sx={{
+          height: '75vh',
+          width: '100vw',
+          position: 'relative',
+        }}
+      >
+        <NextImage
+          src={`${src}-${deviceSize}.jpg`}
+          alt={alt}
+          fill
+          quality={100}
+          style={{
+            objectFit: 'cover',
+          }}
+        />
       </Grid>
     </Grid>
-    <Grid
-      item
-      sx={{
-        height: '75vh',
-        width: '100vw',
-        position: 'relative',
-      }}
-    >
-      <NextImage
-        src={`${src}-${deviceSize}.jpg`}
-        alt={alt}
-        fill
-        quality={100}
-        style={{
-          objectFit: 'cover',
-        }}
-      />
-    </Grid>
-  </Grid>
-);
+  );
+};
 
 interface DesktopProps {
   src: string;
