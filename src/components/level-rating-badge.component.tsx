@@ -8,9 +8,13 @@ import { COURSE_LEVEL_METADATA } from '@/src/utils/constants';
 
 interface Props {
   level: LevelRating;
+  small?: boolean;
 }
 
-const LevelRatingBadge: FC<Props> = ({ level }): ReactElement => {
+const LevelRatingBadge: FC<Props> = ({
+  level,
+  small = false,
+}): ReactElement => {
   const levelMetadata = COURSE_LEVEL_METADATA.find(
     ({ value }) => value === level
   );
@@ -25,7 +29,9 @@ const LevelRatingBadge: FC<Props> = ({ level }): ReactElement => {
           color: 'common.white',
         }}
       >
-        <Typography variant='h5'>{levelMetadata.label}</Typography>
+        <Typography variant='h5' sx={{ fontSize: small ? '1rem' : '1.5rem' }}>
+          {levelMetadata.label}
+        </Typography>
       </Box>
     </Grid>
   );

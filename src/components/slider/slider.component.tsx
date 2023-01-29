@@ -2,7 +2,13 @@ import { FC, useState, ReactElement, ReactNode, useEffect } from 'react';
 
 import NextImage from 'next/image';
 
-import { Grid, Box, Typography, ButtonBase } from '@mui/material';
+import {
+  Grid,
+  Box,
+  Typography,
+  ButtonBase,
+  useMediaQuery,
+} from '@mui/material';
 
 import {
   ChevronLeftIcon,
@@ -14,18 +20,20 @@ import { useCtx } from '@/src/utils';
 
 import { Course } from '@/src/utils/interfaces';
 
-const ITEM_WIDTH_REM = 40,
-  ITEM_HEIGHT_REM = 25,
-  BORDER_WIDTH = 6;
-
 type Orientation = 'left' | 'right';
 
 interface OverlayProps {
   course: Course;
+  isMobile: boolean;
 }
 
-const Overlay: FC<OverlayProps> = ({ course }): ReactElement => {
-  const { title, level } = course;
+const Overlay: FC<OverlayProps> = ({ course, isMobile }): ReactElement => {
+  const { title, level } = course,
+    positioning = {
+      position: 'absolute',
+      top: isMobile ? '0.5rem' : '1rem',
+      right: isMobile ? '0.5rem' : '1rem',
+    };
   return (
     <Grid
       container
@@ -39,10 +47,12 @@ const Overlay: FC<OverlayProps> = ({ course }): ReactElement => {
         width: '100%',
       }}
     >
-      <Grid item sx={{ position: 'absolute', top: '1rem', right: '1rem' }}>
-        <LevelRatingBadge level={level} />
+      <Grid item sx={positioning}>
+        <LevelRatingBadge level={level} small={isMobile} />
       </Grid>
-      <Typography variant='h3'>{title}</Typography>
+      <Typography variant='h3' sx={{ fontSize: isMobile ? '1.5rem' : '3rem' }}>
+        {title}
+      </Typography>
     </Grid>
   );
 };
@@ -103,13 +113,27 @@ const Slider: FC<SliderProps> = ({
 
   const [position, setPosition] = useState(0);
 
+  const isMobile = useMediaQuery('(max-width:700px)');
+
   useEffect(() => {
     if (position > 0) setPosition(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory]);
 
-  const minWidth = banner ? '100%' : `${ITEM_WIDTH_REM}em`,
-    height = banner ? '30em' : `${ITEM_HEIGHT_REM}em`;
+  const ITEM_WIDTH_REM = isMobile ? 20 : 40,
+    ITEM_HEIGHT_REM = isMobile ? 12.5 : 25,
+    BORDER_WIDTH = isMobile ? 3 : 5;
+
+  const BANNER_HEIGHT = '100%',
+    BANNER_WIDTH = isMobile ? '15rem' : '30rem';
+
+  const minWidth = banner ? BANNER_HEIGHT : `${ITEM_WIDTH_REM}rem`,
+    height = banner ? BANNER_WIDTH : `${ITEM_HEIGHT_REM}rem`;
+
+  const chevronScale = {
+    width: isMobile ? '4rem' : '5rem',
+    height: isMobile ? '4rem' : '5rem',
+  };
 
   const handleClick = (course: Course): void =>
     updateCtx({ selectedVideo: course });
@@ -126,7 +150,11 @@ const Slider: FC<SliderProps> = ({
     <>
       <Typography
         variant='h4'
-        sx={{ paddingLeft: '0.5rem', marginBottom: '0.5rem' }}
+        sx={{
+          paddingLeft: '0.5rem',
+          marginBottom: '0.5rem',
+          fontSize: isMobile ? '1.8rem' : '2.125',
+        }}
       >
         {title}
       </Typography>
@@ -147,10 +175,9 @@ const Slider: FC<SliderProps> = ({
             >
               <ChevronLeftIcon
                 sx={{
-                  width: '5rem',
-                  height: '5rem',
                   color: 'common.white',
                   visibility: position === 0 ? 'hidden' : 'normal',
+                  ...chevronScale,
                 }}
               />
             </ChevronWrapper>
@@ -160,17 +187,15 @@ const Slider: FC<SliderProps> = ({
             >
               <ChevronRightIcon
                 sx={{
-                  width: '5rem',
-                  height: '5rem',
                   color: 'common.white',
                   visibility:
                     position === courses.length - 1 ? 'hidden' : 'normal',
+                  ...chevronScale,
                 }}
               />
             </ChevronWrapper>
           </>
         ) : null}
-
         <Grid
           item
           container
@@ -193,7 +218,7 @@ const Slider: FC<SliderProps> = ({
                 minWidth,
                 height,
                 border: `${BORDER_WIDTH}px solid transparent`,
-                borderRadius: 4,
+                borderRadius: 3,
                 overflow: 'hidden',
                 cursor: 'pointer',
                 '&:hover': {
@@ -202,7 +227,7 @@ const Slider: FC<SliderProps> = ({
               }}
               data-testid={course.title}
             >
-              <Overlay course={course} />
+              <Overlay course={course} isMobile={isMobile} />
               <NextImage
                 src='/stratocaster-medium.jpg'
                 alt='stratocaster'
