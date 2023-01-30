@@ -1,6 +1,7 @@
 import { Dispatch, FC, ReactElement, SetStateAction } from 'react';
 
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 import {
   AppBar,
@@ -9,6 +10,7 @@ import {
   Grid,
   SelectChangeEvent,
   useMediaQuery,
+  Box,
 } from '@mui/material';
 
 import {
@@ -29,6 +31,8 @@ import {
   COURSE_LEVEL_METADATA,
   DEFAULT_SELECT_OPTION,
 } from '@/src/utils/constants';
+
+import Logo from '@/src/fp-logo.png';
 
 interface Props {
   isDrawerOpen: boolean;
@@ -69,7 +73,6 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         boxShadow: 'none',
         backgroundImage: 'none',
-        height: '4.375rem',
       }}
     >
       <Grid
@@ -89,7 +92,14 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
         {/* for centering logo at mobile sizes */}
         {isMobile ? <div style={{ width: ICON_SCALE }} /> : null}
         <Link href={'/dashboard'} onClick={handleLogoClick}>
-          {['Functional', 'Player'].map((str, i) => (
+          <Box sx={{ height: isMobile ? '2.75rem' : '3.75rem' }}>
+            <Image
+              alt='fp-logo'
+              src={Logo}
+              style={{ width: 'inherit', height: 'inherit' }}
+            />
+          </Box>
+          {/* {['Functional', 'Player'].map((str, i) => (
             <Typography
               key={str}
               variant='h5'
@@ -103,7 +113,7 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
             >
               {str}
             </Typography>
-          ))}
+          ))} */}
         </Link>
         <Grid
           item
