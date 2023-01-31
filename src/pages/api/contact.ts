@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import nodemailer from 'nodemailer';
+
 import {
   connectToDatabase,
   handleForbidden,
@@ -10,6 +12,8 @@ import {
 import { DbUser } from '@/src/utils/interfaces';
 
 import { USERS, HTTP_METHOD_ERROR_MESSAGE } from '@/src/utils/constants';
+
+// TODO: needs tests
 
 async function contact(
   req: NextApiRequest,
@@ -36,21 +40,51 @@ async function contact(
       const metadata = {
         email,
         ...userMetadata,
-        body,
       };
 
-      console.log(
-        `You have been contacted by ${email}, who is${
-          !!result ? '' : ' not'
-        } registered with the app: `
+      const formattedMetadata = Object.entries(metadata).reduce(
+        (acc, [key, value]) =>
+          acc + `<strong>${key.toUpperCase()}: </strong><p>${value}</p><br/>`,
+        ''
       );
-      console.log('Metadata: ', metadata);
 
-      // TODO: flesh out email functionality
+      const html = `
+        <div>
+          <p>You have been contacted by ${email}</p>
+          <br/>
+          <p>Registered: ${!!result ? 'YES' : ' NO'}</p>
+          <br/>
+          ${formattedMetadata}
+          <br/>
+          <p>The following message was attached: </p>
+          <br/>
+          <p>${body}</p>
+        </div>
+      `;
+
+      // TODO: fix env variables
+      const hostEmail = process.env.HOST_EMAIL;
+
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.outlook.com',
+        auth: {
+          user: hostEmail,
+          pass: process.env.HOST_EMAIL_PASSWORD,
+        },
+      });
+
+      const data = {
+        from: hostEmail,
+        to: hostEmail,
+        subject: `Contact message from ${email}.`,
+        html,
+      };
+
+      await transporter.sendMail(data);
 
       return res.status(200).json({ ok: true });
     } catch (error) {
-      await logServerError('lastWatched', error);
+      await logServerError('contact', error);
       return handleServerError(res);
     }
   }

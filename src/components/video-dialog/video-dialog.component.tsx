@@ -7,12 +7,13 @@ import NextImage from 'next/image';
 import { Dialog, Grid, Typography, useMediaQuery } from '@mui/material';
 
 import {
-  ArrowBackIcon,
+  CloseIcon,
   VideoPlayer,
-  Button,
   BookmarkIconButton,
   LevelRatingBadge,
   IconButton,
+  Link,
+  LinkButton,
 } from '@/src/components';
 
 import { updateBookmarks, updateLastWatched, useCtx } from '@/src/utils';
@@ -26,6 +27,7 @@ interface OverlayProps {
   selectedVideo: Course;
   isBookmarked: boolean;
   onBookmarkClick: () => void;
+  close: () => void;
   push: (url: string) => void;
 }
 
@@ -34,22 +36,15 @@ export const Overlay: FC<OverlayProps> = ({
   selectedVideo,
   isBookmarked,
   onBookmarkClick,
+  close,
   push,
 }): ReactElement => {
   const { updateCtx } = useCtx();
 
+  // TODO: spacing between video and elements is a bit big
+
   const { title, description, level, artist, categories } = selectedVideo,
     artistValue = ARTIST_METADATA.find(({ label }) => label === artist)?.value;
-
-  const close = () => updateCtx({ selectedVideo: null }),
-    onArtistClick = () => {
-      push(`/artists?artist=${artistValue}`);
-      updateCtx({ selectedVideo: null });
-    },
-    onMoreLikeThisClick = () => {
-      // TODO: must send all categories as params to route
-      console.log('See More Like This');
-    };
   return (
     <Grid
       item
@@ -57,60 +52,79 @@ export const Overlay: FC<OverlayProps> = ({
       wrap='nowrap'
       gap={4}
       direction='column'
-      justifyContent='space-evenly'
+      justifyContent='space-between'
       alignItems='flex-start'
-      sx={{ width: '45%', height: '100%' }}
+      sx={{
+        height: '50rem',
+        width: '60rem',
+        border: '2px solid #fff',
+        borderRadius: 3,
+        padding: '2.5rem',
+        position: 'relative',
+      }}
     >
-      <Grid
-        item
-        container
-        direction='column'
-        justifyContent='space-between'
-        alignItems='flex-start'
-        sx={{ width: '100%' }}
+      <IconButton
+        data-testid='close-icon'
+        onClick={close}
+        sx={{
+          width: 'fit-content',
+          padding: '0',
+          position: 'absolute',
+          top: '0.5rem',
+          right: '0.5rem',
+        }}
       >
-        <Grid item container justifyContent='space-between' alignItems='center'>
-          <IconButton
-            data-testid='close-icon'
-            onClick={close}
-            sx={{ width: 'fit-content', padding: '0' }}
-          >
-            <ArrowBackIcon sx={{ height: '3rem', width: '3rem' }} />
-          </IconButton>
-          <Grid
-            item
-            container
-            gap={2}
-            wrap='nowrap'
-            sx={{ width: 'fit-content' }}
-          >
-            <LevelRatingBadge level={level} />
-            <BookmarkIconButton
-              isBookmarked={isBookmarked}
-              onBookmarkClick={onBookmarkClick}
-            />
-          </Grid>
-        </Grid>
+        <CloseIcon sx={{ height: '2rem', width: '2rem' }} />
+      </IconButton>
+
+      <VideoPlayer selectedVideoId={selectedVideoId} title={title} />
+
+      <Grid item container direction='column' gap={1}>
         <Grid
           item
           container
-          wrap='nowrap'
           justifyContent='space-between'
           alignItems='center'
+          gap={2}
+          wrap='nowrap'
         >
-          <Grid item container direction='column'>
-            <Typography variant='h3'>{title}</Typography>
-            <Typography variant='h5'>{categories.join(' * ')}</Typography>
-            <Typography variant='body1'>{description}</Typography>
-          </Grid>
+          <Typography
+            variant='h3'
+            sx={{ fontSize: '2rem', marginRight: 'auto' }}
+          >
+            {title}
+          </Typography>
+          <LevelRatingBadge level={level} />
+          <BookmarkIconButton
+            isBookmarked={isBookmarked}
+            onBookmarkClick={onBookmarkClick}
+          />
         </Grid>
-      </Grid>
-      <Grid item container sx={{ width: '100%', height: '50%' }}>
-        <VideoPlayer selectedVideoId={selectedVideoId} title={title} />
-      </Grid>
-      <Grid item container alignItems='center' gap='1rem' wrap='nowrap'>
-        <Button onClick={onArtistClick}>More From This Artist</Button>
-        <Button onClick={onMoreLikeThisClick}>See More Like this</Button>
+
+        <Grid
+          item
+          container
+          justifyContent='space-between'
+          alignItems='center'
+          gap={2}
+          wrap='nowrap'
+        >
+          <Typography
+            variant='h3'
+            sx={{ fontSize: '1.5rem', marginRight: 'auto' }}
+          >
+            <Link href={`/artists?artist=${artistValue}`}>
+              <LinkButton noLeftMargin>{artist}</LinkButton>
+            </Link>
+          </Typography>
+          {categories.map((cat) => (
+            <Link key={cat} href={`/categories?category=${cat}`}>
+              <LinkButton>{cat}</LinkButton>
+            </Link>
+          ))}
+        </Grid>
+
+        <Typography variant='body1'>{description}</Typography>
       </Grid>
     </Grid>
   );
@@ -153,6 +167,8 @@ const VideoDialog: FC<VideoDialogProps> = ({
   const deviceSize = isSmall ? 'small' : isMedium ? 'medium' : 'large';
   const isBookmarked = !!user?.bookmarks.includes(_id);
 
+  const close = () => updateCtx({ selectedVideo: null });
+
   const onActionClick = (path) => {
     push(path);
     updateCtx({ selectedVideo: null });
@@ -184,40 +200,27 @@ const VideoDialog: FC<VideoDialogProps> = ({
   return (
     <Dialog
       open={open}
-      fullScreen
+      onBackdropClick={close}
       transitionDuration={500}
-      sx={{ zIndex: 2000 }}
+      sx={{
+        zIndex: 2000,
+        '.MuiDialog-paper': {
+          backgroundImage: 'none',
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          maxWidth: 'none',
+          maxheight: 'none',
+        },
+      }}
     >
-      <Grid container sx={{ height: '100%', width: '100%' }}>
-        <NextImage
-          src={`/telecaster-${deviceSize}.jpg`}
-          alt='telecaster-image'
-          quality={100}
-          fill
+      <Grid container justifyContent='center' alignItems='center'>
+        <Overlay
+          selectedVideoId={videoId}
+          selectedVideo={selectedVideo}
+          isBookmarked={isBookmarked}
+          onBookmarkClick={onBookmarkClick}
+          close={close}
+          push={push}
         />
-        <Grid
-          item
-          container
-          justifyContent='center'
-          alignItems='center'
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            padding: '0 2rem',
-          }}
-        >
-          <Overlay
-            selectedVideoId={videoId}
-            selectedVideo={selectedVideo}
-            isBookmarked={isBookmarked}
-            onBookmarkClick={onBookmarkClick}
-            push={push}
-          />
-        </Grid>
       </Grid>
     </Dialog>
   );

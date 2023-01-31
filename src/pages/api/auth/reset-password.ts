@@ -51,7 +51,19 @@ export default async function resetPassword(
           { $set: { password: await hash(tempPassword, 12) } }
         );
 
-      const html = `<div><p>Hello, ${result.username}.</p><br/><p>Your password has been reset to: <strong>${tempPassword}</strong><p><br/><p>Please use it to log in, then change your password from the <strong>Accounts</strong> tab.</p><br/><p>Kind regards,</p><br/><p>Functional Player</p></div>`;
+      const html = `
+        <div>
+          <p>Hello, ${result.username}.</p>
+          <br/>
+          <p>Your password has been reset to: <strong>${tempPassword}</strong><p>
+          <br/>
+          <p>Please use it to log in, then change your password from the <strong>Accounts</strong> tab.</p>
+          <br/>
+          <p>Kind regards,</p>
+          <br/>
+          <p>FunctionalPlayer</p>
+        </div>
+      `;
 
       // TODO: fix env variables
       const hostEmail = process.env.HOST_EMAIL;
