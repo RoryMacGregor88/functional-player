@@ -2,9 +2,14 @@ import { FC, ReactElement, ReactNode } from 'react';
 
 import NextLink from 'next/link';
 
-import { styled } from '@mui/material';
+import { styled, Theme } from '@mui/material';
 
-const StyledLink = styled(NextLink)(({ theme, disableHover }) => {
+interface StyledProps {
+  theme: Theme;
+  disableHover: boolean;
+}
+
+const StyledLink = styled(NextLink)(({ theme, disableHover }: StyledProps) => {
   const hoverStyles = disableHover ? {} : { '&:hover': { opacity: '0.75' } };
   return {
     display: 'flex',

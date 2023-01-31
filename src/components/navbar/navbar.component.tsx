@@ -6,7 +6,6 @@ import Image from 'next/image';
 import {
   AppBar,
   Toolbar,
-  Typography,
   Grid,
   SelectChangeEvent,
   useMediaQuery,
@@ -50,7 +49,7 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
   const { push } = useRouter();
 
   // to make sure left/right elements are same width, for centering logo
-  const ICON_SCALE = isMobile ? '1.75rem' : '2rem';
+  const ICON_SCALE = '2rem';
 
   const handleLogoClick = () => {
     if (isDrawerOpen) setIsDrawerOpen(false);
@@ -94,7 +93,7 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
         <Link href={'/dashboard'} onClick={handleLogoClick} disableHover>
           <Box
             sx={{
-              height: isMobile ? '3.25rem' : '3.75rem',
+              height: '3.75rem',
               marginRight: isMobile ? '0.25rem' : '0',
             }}
           >
