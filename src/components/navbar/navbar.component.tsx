@@ -94,7 +94,7 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
           <Box
             sx={{
               height: '4rem',
-              marginRight: isMobile ? '0.25rem' : '0',
+              marginRight: isMobile ? '0.5rem' : '0',
             }}
           >
             <Image

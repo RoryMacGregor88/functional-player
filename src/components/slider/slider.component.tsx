@@ -153,7 +153,7 @@ const Slider: FC<SliderProps> = ({
         sx={{
           paddingLeft: '0.5rem',
           marginBottom: '0.5rem',
-          fontSize: isMobile ? '1.8rem' : '2.125',
+          fontSize: isMobile ? '1.5rem' : '2rem',
         }}
       >
         {title}

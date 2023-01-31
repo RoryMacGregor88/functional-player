@@ -17,7 +17,7 @@ const SpacedTitle: FC<Props> = ({ children }): ReactElement => {
         width: '100%',
         margin: '2rem 0',
         textAlign: 'center',
-        fontSize: isMobile ? '2.5rem' : '3.5rem',
+        fontSize: isMobile ? '1.5rem' : '2rem',
       }}
     >
       {children}

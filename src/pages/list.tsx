@@ -8,7 +8,7 @@ import { GetServerSideProps } from 'next';
 
 import { Typography } from '@mui/material';
 
-import { PageWrapper, SpacedTitle, LoadMask, Slider } from '@/src/components';
+import { PageWrapper, LoadMask, Slider } from '@/src/components';
 
 import {
   Course,
@@ -68,7 +68,6 @@ export default function List({
 
   return (
     <PageWrapper>
-      <SpacedTitle>Your List</SpacedTitle>
       {!bookmarks.length ? (
         <Typography sx={{ textAlign: 'center' }}>
           You currently have no saved courses.
