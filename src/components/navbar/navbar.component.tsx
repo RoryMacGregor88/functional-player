@@ -93,7 +93,7 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
         <Link href={'/dashboard'} onClick={handleLogoClick} disableHover>
           <Box
             sx={{
-              height: '3.75rem',
+              height: '4rem',
               marginRight: isMobile ? '0.25rem' : '0',
             }}
           >

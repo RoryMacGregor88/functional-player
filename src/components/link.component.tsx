@@ -5,7 +5,7 @@ import NextLink from 'next/link';
 import { styled, Theme } from '@mui/material';
 
 interface StyledProps {
-  theme: Theme;
+  theme?: Theme;
   disableHover: boolean;
 }
 
