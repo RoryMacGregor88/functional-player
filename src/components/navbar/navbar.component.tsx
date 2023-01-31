@@ -91,8 +91,13 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
       >
         {/* for centering logo at mobile sizes */}
         {isMobile ? <div style={{ width: ICON_SCALE }} /> : null}
-        <Link href={'/dashboard'} onClick={handleLogoClick}>
-          <Box sx={{ height: isMobile ? '2.75rem' : '3.75rem' }}>
+        <Link href={'/dashboard'} onClick={handleLogoClick} disableHover>
+          <Box
+            sx={{
+              height: isMobile ? '3.25rem' : '3.75rem',
+              marginRight: isMobile ? '0.25rem' : '0',
+            }}
+          >
             <Image
               alt='fp-logo'
               src={Logo}

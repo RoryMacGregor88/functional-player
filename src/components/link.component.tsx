@@ -4,24 +4,36 @@ import NextLink from 'next/link';
 
 import { styled } from '@mui/material';
 
-const StyledLink = styled(NextLink)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  textDecoration: 'none',
-  color: theme.palette.text.primary,
-  '&:hover': {
-    opacity: '0.75',
-  },
-}));
+const StyledLink = styled(NextLink)(({ theme, disableHover }) => {
+  const hoverStyles = disableHover ? {} : { '&:hover': { opacity: '0.75' } };
+  return {
+    display: 'flex',
+    alignItems: 'center',
+    textDecoration: 'none',
+    color: theme.palette.text.primary,
+    ...hoverStyles,
+  };
+});
 
 interface Props {
   href: string;
   onClick?: () => void;
+  disableHover?: boolean;
   children: ReactNode;
 }
 
-const Link: FC<Props> = ({ href, onClick, children }): ReactElement => (
-  <StyledLink href={href} onClick={onClick} passHref>
+const Link: FC<Props> = ({
+  href,
+  onClick,
+  disableHover = false,
+  children,
+}): ReactElement => (
+  <StyledLink
+    href={href}
+    onClick={onClick}
+    disableHover={disableHover}
+    passHref
+  >
     {children}
   </StyledLink>
 );
