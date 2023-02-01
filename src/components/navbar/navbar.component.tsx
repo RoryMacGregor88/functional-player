@@ -48,9 +48,6 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
 
   const { push } = useRouter();
 
-  // to make sure left/right elements are same width, for centering logo
-  const ICON_SCALE = '2rem';
-
   const handleLogoClick = () => {
     if (isDrawerOpen) setIsDrawerOpen(false);
     updateCtx({ selectedCategory: null });
@@ -88,15 +85,8 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
           minHeight: '0px !important',
         }}
       >
-        {/* for centering logo at mobile sizes */}
-        {isMobile ? <div style={{ width: ICON_SCALE }} /> : null}
         <Link href={'/dashboard'} onClick={handleLogoClick} disableHover>
-          <Box
-            sx={{
-              height: '4rem',
-              marginRight: isMobile ? '0.5rem' : '0',
-            }}
-          >
+          <Box sx={{ height: '4rem' }}>
             <Image
               alt='fp-logo'
               src={Logo}
@@ -160,7 +150,7 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
           >
             <MenuIcon
               data-testid='menu-icon'
-              sx={{ height: ICON_SCALE, width: ICON_SCALE }}
+              sx={{ height: '2rem', width: '2rem' }}
             />
           </IconButton>
         </Grid>
