@@ -82,11 +82,7 @@ export default function Artists({ user, updateCtx, courses, error }: Props) {
         sx={{ height: '100%', marginTop: '4.5rem' }}
       >
         {!!lastWatched ? (
-          <Slider
-            title='Continue Watching'
-            courses={[lastWatched]}
-            banner={true}
-          />
+          <Slider title='Continue Watching' courses={[lastWatched]} banner />
         ) : null}
         {!!bookmarks.length ? (
           <Slider title='From Your List' courses={bookmarks} />

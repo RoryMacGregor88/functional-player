@@ -13,9 +13,7 @@ describe('BookmarkIconButton', () => {
   });
 
   it('renders different state `isBookmarked` is true', () => {
-    render(
-      <BookmarkIconButton isBookmarked={true} onBookmarkClick={() => {}} />
-    );
+    render(<BookmarkIconButton isBookmarked onBookmarkClick={() => {}} />);
 
     expect(screen.getByText(/in your list/i)).toBeInTheDocument();
   });
@@ -23,10 +21,7 @@ describe('BookmarkIconButton', () => {
   it('calls handler when button is clicked', async () => {
     const onBookmarkClick = jest.fn();
     render(
-      <BookmarkIconButton
-        isBookmarked={true}
-        onBookmarkClick={onBookmarkClick}
-      />
+      <BookmarkIconButton isBookmarked onBookmarkClick={onBookmarkClick} />
     );
 
     userEvent.click(screen.getByTestId('bookmark-icon'));

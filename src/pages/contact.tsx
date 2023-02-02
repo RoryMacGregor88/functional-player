@@ -95,7 +95,7 @@ export default function Contact({ updateCtx }): ReactElement {
       {!!wellData ? <Well {...wellData} /> : null}
       <Typography
         variant='body1'
-        sx={{ padding: '1rem', textAlign: 'center', fontSize: '1rem' }}
+        sx={{ paddingBottom: '1rem', textAlign: 'center', fontSize: '1rem' }}
       >
         Please leave your email address and message below. We aim to respond
         within 24 hours.
@@ -106,7 +106,7 @@ export default function Contact({ updateCtx }): ReactElement {
         <EmailField error={errors.email} register={register} />
         <TextField
           id='body'
-          textArea={true}
+          textArea
           label='Type here...'
           error={errors.body}
           register={register}

@@ -30,7 +30,7 @@ describe('drawer', () => {
   });
 
   it('renders when isDrawerOpen is true', () => {
-    render(<Drawer isDrawerOpen={true} user={mockUser} />);
+    render(<Drawer isDrawerOpen user={mockUser} />);
     expect(screen.getByTestId('drawer')).toBeInTheDocument();
   });
 
@@ -44,11 +44,7 @@ describe('drawer', () => {
       updateCtx,
       router: { push },
     } = render(
-      <Drawer
-        isDrawerOpen={true}
-        setIsDrawerOpen={setIsDrawerOpen}
-        user={null}
-      />,
+      <Drawer isDrawerOpen setIsDrawerOpen={setIsDrawerOpen} user={null} />,
       { push: jest.fn(), updateCtx: jest.fn() }
     );
 
@@ -69,11 +65,7 @@ describe('drawer', () => {
 
   it('shows logged in icons', () => {
     render(
-      <Drawer
-        isDrawerOpen={true}
-        setIsDrawerOpen={setIsDrawerOpen}
-        user={mockUser}
-      />
+      <Drawer isDrawerOpen setIsDrawerOpen={setIsDrawerOpen} user={mockUser} />
     );
 
     expect(screen.getByRole('link', { name: /logout/i })).toBeInTheDocument();
@@ -84,11 +76,7 @@ describe('drawer', () => {
 
   it('shows logged out icons', () => {
     render(
-      <Drawer
-        isDrawerOpen={true}
-        setIsDrawerOpen={setIsDrawerOpen}
-        user={null}
-      />
+      <Drawer isDrawerOpen setIsDrawerOpen={setIsDrawerOpen} user={null} />
     );
 
     expect(
@@ -101,11 +89,7 @@ describe('drawer', () => {
     fetchMock.mockResponse(JSON.stringify({ resUser: null }));
 
     const { updateCtx } = render(
-      <Drawer
-        isDrawerOpen={true}
-        setIsDrawerOpen={setIsDrawerOpen}
-        user={mockUser}
-      />,
+      <Drawer isDrawerOpen setIsDrawerOpen={setIsDrawerOpen} user={mockUser} />,
       { updateCtx: jest.fn() }
     );
 
@@ -123,11 +107,7 @@ describe('drawer', () => {
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
     const { updateCtx } = render(
-      <Drawer
-        isDrawerOpen={true}
-        setIsDrawerOpen={setIsDrawerOpen}
-        user={mockUser}
-      />,
+      <Drawer isDrawerOpen setIsDrawerOpen={setIsDrawerOpen} user={mockUser} />,
       { updateCtx: jest.fn() }
     );
 

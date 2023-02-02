@@ -25,7 +25,7 @@ describe('Reactivation Success', () => {
     const {
       router: { push },
     } = render(
-      <ReactivationSuccess user={user} updateCtx={updateCtx} redirect={true} />,
+      <ReactivationSuccess user={user} updateCtx={updateCtx} paymentIntent />,
       { push: jest.fn() }
     );
 
@@ -49,7 +49,7 @@ describe('Reactivation Success', () => {
   it('redirects to login if user is not found', () => {
     const {
       router: { push },
-    } = render(<ReactivationSuccess user={null} redirect={false} />, {
+    } = render(<ReactivationSuccess user={null} paymentIntent={false} />, {
       push: jest.fn(),
     });
 

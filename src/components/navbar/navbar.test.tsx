@@ -26,7 +26,7 @@ describe('Navbar', () => {
 
   it('closes drawer when icon clicked', async () => {
     const setIsDrawerOpen = jest.fn();
-    render(<Navbar setIsDrawerOpen={setIsDrawerOpen} isDrawerOpen={true} />);
+    render(<Navbar setIsDrawerOpen={setIsDrawerOpen} isDrawerOpen />);
 
     userEvent.click(screen.getByTestId(/menu-icon/i));
 
@@ -38,7 +38,7 @@ describe('Navbar', () => {
   it('resets category and closes drawer (if open) if logo clicked', async () => {
     const setIsDrawerOpen = jest.fn();
     const { updateCtx } = render(
-      <Navbar setIsDrawerOpen={setIsDrawerOpen} isDrawerOpen={true} />,
+      <Navbar setIsDrawerOpen={setIsDrawerOpen} isDrawerOpen />,
       { updateCtx: jest.fn() }
     );
 

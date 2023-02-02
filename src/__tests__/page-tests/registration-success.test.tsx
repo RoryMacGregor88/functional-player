@@ -4,7 +4,7 @@ import RegistrationSuccess from '@/src/pages/registration-success';
 
 describe('Registration Success', () => {
   it('renders', () => {
-    render(<RegistrationSuccess redirect={true} />);
+    render(<RegistrationSuccess redirect />);
 
     expect(
       screen.getByText(/thank you, your subscription was successful./i)
@@ -24,7 +24,7 @@ describe('Registration Success', () => {
   it('navigates to login', async () => {
     const {
       router: { push },
-    } = render(<RegistrationSuccess redirect={true} />, {
+    } = render(<RegistrationSuccess redirect />, {
       push: jest.fn(),
     });
 

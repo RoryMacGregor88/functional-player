@@ -41,7 +41,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
   }, []);
 
   // only a user object or null can ever be returned from server
-  if (user === undefined) return <LoadMask showLogo={true} />;
+  if (user === undefined) return <LoadMask showLogo />;
 
   // TODO: need one on every page once fleshed out, SEO is vital
   return (

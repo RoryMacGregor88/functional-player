@@ -24,7 +24,7 @@ describe('button', () => {
 
   it('disables button if disabled prop is true', async () => {
     render(
-      <Button onClick={() => {}} disabled={true}>
+      <Button onClick={() => {}} disabled>
         Test Button
       </Button>
     );
@@ -38,7 +38,7 @@ describe('button', () => {
 
   it('disables button if isLoading prop is true', async () => {
     render(
-      <Button onClick={() => {}} isLoading={true}>
+      <Button onClick={() => {}} isLoading>
         Test Button
       </Button>
     );
@@ -52,7 +52,7 @@ describe('button', () => {
 
   it('shows loading spinner if isLoading prop is true', () => {
     render(
-      <Button onClick={() => {}} isLoading={true}>
+      <Button onClick={() => {}} isLoading>
         Test Button
       </Button>
     );

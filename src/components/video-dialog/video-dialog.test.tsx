@@ -23,11 +23,7 @@ const renderComponent = ({ user = testUser } = {}) => {
     push = jest.fn(),
     ctx = { user };
   render(
-    <VideoDialog
-      open={true}
-      selectedVideo={selectedVideo}
-      updateCtx={updateCtx}
-    />,
+    <VideoDialog open selectedVideo={selectedVideo} updateCtx={updateCtx} />,
     { updateCtx, push, ctx }
   );
 

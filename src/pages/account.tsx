@@ -246,7 +246,7 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
 
   // TODO: why is !clientSecret there? It's breaking a test
   return (
-    <PageWrapper restrictWidth={true}>
+    <PageWrapper restrictWidth>
       <SpacedTitle>Account Settings</SpacedTitle>
       {!!wellData && !clientSecret ? <Well {...wellData} /> : null}
       <Tabs

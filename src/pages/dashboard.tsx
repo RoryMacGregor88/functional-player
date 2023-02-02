@@ -93,21 +93,13 @@ export default function Dashboard({
       />
       <PageWrapper>
         {!!lastWatched ? (
-          <Slider
-            title='Continue Watching'
-            courses={[lastWatched]}
-            banner={true}
-          />
+          <Slider title='Continue Watching' courses={[lastWatched]} banner />
         ) : null}
         {!!bookmarks.length ? (
           <Slider title='Your List' courses={bookmarks} />
         ) : null}
         <Slider title='Recently Added' courses={latestCourses} />
-        <Slider
-          title='Coming Soon'
-          courses={[comingSoonCourse]}
-          banner={true}
-        />
+        <Slider title='Coming Soon' courses={[comingSoonCourse]} banner />
         {CATEGORY_METADATA.map(({ label, value }) => (
           <Slider
             key={value}

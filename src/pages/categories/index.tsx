@@ -90,7 +90,7 @@ export default function Categories({ user, updateCtx, courses, error }: Props) {
           <Slider
             title='Continue Watching'
             courses={[continueWatching]}
-            banner={true}
+            banner
           />
         ) : null}
         {!!bookmarks.length ? (

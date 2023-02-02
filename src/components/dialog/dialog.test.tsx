@@ -19,9 +19,7 @@ const renderComponent = (props = {}) => {
         closeOnClick: true,
       },
     ];
-  render(
-    <Dialog open={true} updateCtx={updateCtx} actions={actions} {...props} />
-  );
+  render(<Dialog open updateCtx={updateCtx} actions={actions} {...props} />);
   return { updateCtx, onClick };
 };
 
