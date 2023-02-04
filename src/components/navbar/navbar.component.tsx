@@ -18,7 +18,7 @@ import {
   Select,
   IconButton,
   ProfileIcon,
-  LinkButton,
+  Button,
 } from '@/src/components';
 
 import { Category } from '@/src/utils/interfaces';
@@ -32,6 +32,11 @@ import {
 } from '@/src/utils/constants';
 
 import Logo from '@/src/fp-logo.png';
+
+// old buttons in case needed
+{
+  /* <LinkButton noLeftMargin>Log in</LinkButton> */
+}
 
 interface Props {
   isDrawerOpen: boolean;
@@ -112,7 +117,7 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
         <Grid
           item
           container
-          alignItems='center'
+          alignItems='stretch'
           wrap='nowrap'
           gap={2}
           sx={{ width: 'fit-content', textAlign: 'center' }}
@@ -132,10 +137,24 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
               ) : (
                 <>
                   <Link href='/login'>
-                    <LinkButton noLeftMargin>Log in</LinkButton>
+                    <Button
+                      sx={{
+                        padding: '0',
+                        height: 'calc(100% - 2px)',
+                      }}
+                    >
+                      Log in
+                    </Button>
                   </Link>
                   <Link href='/register'>
-                    <LinkButton noLeftMargin>Sign Up</LinkButton>
+                    <Button
+                      sx={{
+                        padding: '0',
+                        height: 'calc(100% - 2px)',
+                      }}
+                    >
+                      Sign Up
+                    </Button>
                   </Link>
                 </>
               )}

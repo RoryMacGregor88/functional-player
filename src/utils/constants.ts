@@ -8,8 +8,7 @@ export const USERS = 'users-2';
 export const PASSWORD_MIN = 5;
 export const PASSWORD_MAX = 15;
 
-// TODO: this one has full stop. Does get used by well at all?
-export const DEFAULT_ERROR_MESSAGE = 'An unexpected error has occurred.';
+export const DEFAULT_ERROR_MESSAGE = 'An unexpected error has occurred';
 
 export const HTTP_METHOD_ERROR_MESSAGE =
   'Invalid method. Only POST requests permitted.';

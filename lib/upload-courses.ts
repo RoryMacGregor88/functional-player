@@ -1,7 +1,5 @@
 import { connectToDatabase } from '@/lib';
 
-import { v4 as uuidv4 } from 'uuid';
-
 import {
   COURSE_LEVEL_METADATA,
   CATEGORY_METADATA,
@@ -37,9 +35,9 @@ const data = new Array(50).fill(undefined).map((_, i) => {
     artist = getArtist();
 
   //TODO: make artist a label/value object, and any others that require it. Needed for url params
+  // maybe do this for categories tooo
 
   return {
-    _id: uuidv4(),
     title: `${artist} ${i + 1}`,
     description,
     artist,

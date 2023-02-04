@@ -40,9 +40,14 @@ const Button = (
       width: '100%',
       textAlign: 'center',
       backgroundColor: 'primary.main',
-      color: 'background.paper',
+      color: 'common.black',
       '&:disabled': {
-        color: 'background.paper',
+        color: 'common.black',
+        opacity: '0.5',
+      },
+      '&:hover': {
+        backgroundColor: 'primary.main',
+        opacity: '0.75',
       },
       ...sx,
     }}
