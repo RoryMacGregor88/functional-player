@@ -34,7 +34,11 @@ export default function ResetPassword({
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
 
   useEffect(() => {
-    if (!!user) push('/dashboard');
+    if (!!user) {
+      // TODO: toast notification: 'You must be logged in'
+      // also, make that message generic, as it's used in Account also
+      push('/dashboard');
+    }
   }, [user, push]);
 
   if (!!user) return <LoadMask />;

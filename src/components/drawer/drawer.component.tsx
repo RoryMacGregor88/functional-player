@@ -57,11 +57,22 @@ const Drawer: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
   };
 
   const handleLogout = async () => {
+    // TODO: logout can do all of this, that's why it's a custom handler
+    // is Logout() used in more places than just here?
     const { ok } = await logout({
       user,
       updateCtx,
     });
-    if (ok) push('/login');
+    if (ok) {
+      push('/login');
+      // TODO: remeber this toast stuff is new and untested
+      updateCtx({
+        toastData: {
+          severity: 'error',
+          message: 'You have been successfully logged out.',
+        },
+      });
+    }
     toggleDrawer();
   };
 
@@ -165,6 +176,7 @@ const Drawer: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
       </Grid>
 
       {/* simple divider, maybe upgrade later */}
+
       <div
         style={{
           margin: '2rem 0',

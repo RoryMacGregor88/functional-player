@@ -12,9 +12,11 @@ const LinkButton: FC<Props> = ({
   children,
 }): ReactElement => (
   <ButtonBase
-    style={{
+    sx={{
       cursor: 'pointer',
-      borderBottom: '2px solid orange',
+      borderBottomWidth: '2px',
+      borderBottomStyle: 'solid',
+      borderBottomColor: 'primary.main',
       width: 'fit-content',
       marginLeft: noLeftMargin ? '0' : '0.5rem',
       fontSize: '1rem',

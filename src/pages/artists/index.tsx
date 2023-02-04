@@ -61,7 +61,10 @@ export default function Artists({ user, updateCtx, courses, error }: Props) {
         },
       });
     }
-    if (!!error || !artistLabel) push('/dashboard');
+    if (!!error || !artistLabel) {
+      // TODO: some kind of toast notification here
+      push('/dashboard');
+    }
   }, [artistLabel, push, error, updateCtx]);
 
   if (!!error || !artistLabel) return <LoadMask />;

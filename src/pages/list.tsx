@@ -49,8 +49,12 @@ export default function List({
   const { push } = useRouter();
 
   useEffect(() => {
-    if (!user) push('/login');
+    if (!user) {
+      push('/login');
+      // TODO: toast notification here
+    }
     if (!!error) {
+      // TODO: redirect here too, can't just leave on loading spinner forever
       updateCtx({
         toastData: {
           message: error.message,

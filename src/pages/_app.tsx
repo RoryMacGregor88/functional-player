@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useEffect } from 'react';
+import React, { ReactElement, useState, useEffect, useCallback } from 'react';
 
 import Head from 'next/head';
 
@@ -32,13 +32,15 @@ function App({ Component, pageProps }: AppProps): ReactElement {
 
   const { user, toastData, dialogData, selectedVideo } = ctx;
 
-  const updateCtx: UpdateCtx = (newData: Partial<Ctx>) =>
-    setCtx((prev) => ({ ...prev, ...newData }));
+  const updateCtx: UpdateCtx = useCallback(
+    (newData: Partial<Ctx>) => setCtx((prev) => ({ ...prev, ...newData })),
+    []
+  );
 
   // token is checked upon initial app request (not internal page navigations)
   useEffect(() => {
     (async () => await authenticateToken({ updateCtx }))();
-  }, []);
+  }, [updateCtx]);
 
   // only a user object or null can ever be returned from server
   if (user === undefined) return <LoadMask showLogo />;

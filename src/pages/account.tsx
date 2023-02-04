@@ -21,6 +21,7 @@ import {
   UPDATE_PASSWORD_SUCCESS_MESSAGE,
   ACCOUNT_DELETE_SUCCESS_MESSAGE,
   CANCEL_SUBSCRITION_SUCCESS_MESSAGE,
+  LOGIN_REQUIRED_MESSAGE,
 } from '@/src/utils/constants';
 
 import {
@@ -76,8 +77,14 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!user) push('/login');
-  }, [user, push]);
+    if (!user) {
+      push('/login');
+      // TODO: do this for other places that need it
+      updateCtx({
+        toastData: { message: LOGIN_REQUIRED_MESSAGE },
+      });
+    }
+  }, [user, push, updateCtx]);
 
   if (!user) return <LoadMask />;
 

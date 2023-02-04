@@ -44,7 +44,7 @@ const Toast: FC<ToastProps> = ({
   // TODO: Fade not working
   // also Action not working
 
-  const anchorOrigin: SnackbarOrigin = {
+  const AnchorOrigin: SnackbarOrigin = {
     vertical: isMedium ? 'bottom' : 'top',
     horizontal: isMedium ? 'center' : 'right',
   };
@@ -52,9 +52,9 @@ const Toast: FC<ToastProps> = ({
   return (
     <Snackbar
       open={open}
-      autoHideDuration={3000}
+      autoHideDuration={5000}
       onClose={() => updateCtx({ toastData: null })}
-      anchorOrigin={anchorOrigin}
+      anchorOrigin={AnchorOrigin}
       TransitionComponent={Fade}
       action={<Action />}
       sx={{ zIndex: 4000 }}

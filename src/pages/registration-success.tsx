@@ -39,7 +39,10 @@ export default function RegistrationSuccess({
   const { push } = useRouter();
 
   useEffect(() => {
-    if (!paymentIntent) push('/dashboard');
+    if (!paymentIntent) {
+      // TODO: toast notification: 'This page cannot be accessed right now.'
+      push('/dashboard');
+    }
   }, [paymentIntent, push]);
 
   if (!paymentIntent) return <LoadMask />;

@@ -40,6 +40,8 @@ export const UPDATE_PASSWORD_SUCCESS_MESSAGE =
   'Your password has been successfully updated.';
 export const CANCEL_SUBSCRITION_SUCCESS_MESSAGE =
   'Your subscription has been successfully cancelled. You can re-activate your subscription at any time by clicking the "RE-ENABLE SUBSCRIPTION" button below.';
+export const LOGIN_REQUIRED_MESSAGE =
+  'You must be logged in to perform that action.';
 
 // form validation
 export const EMAIL_REQUIRED_MESSAGE = 'Email is required';
@@ -74,7 +76,8 @@ export const THEME_COLORS = {
   darkBlack: '#080808',
   lightGrey: '#757575',
   darkGrey: '#242424',
-  amazonOrange: '#ff9900',
+  // amazonOrange: '#ff9900',
+  amazonOrange: '#EAAA00',
 };
 
 // export const THEME_COLORS = {

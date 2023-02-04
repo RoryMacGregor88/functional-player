@@ -7,6 +7,7 @@ import {
   UPDATE_PASSWORD_SUCCESS_MESSAGE,
   ACCOUNT_DELETE_SUCCESS_MESSAGE,
   CANCEL_SUBSCRITION_SUCCESS_MESSAGE,
+  LOGIN_REQUIRED_MESSAGE,
 } from '@/src/utils/constants';
 
 import Account from '@/src/pages/account';
@@ -51,11 +52,17 @@ describe('Account', () => {
     });
 
     it('redirects to login if no user found', () => {
+      const updateCtx = jest.fn();
       const {
         router: { push },
-      } = render(<Account user={null} />, { push: jest.fn() });
+      } = render(<Account user={null} updateCtx={updateCtx} />, {
+        push: jest.fn(),
+      });
 
       expect(push).toHaveBeenCalledWith('/login');
+      expect(updateCtx).toHaveBeenCalledWith({
+        toastData: { message: LOGIN_REQUIRED_MESSAGE },
+      });
     });
 
     it('switches tabs', async () => {

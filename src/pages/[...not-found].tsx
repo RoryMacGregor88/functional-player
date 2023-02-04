@@ -9,6 +9,7 @@ export default function NotFound(): ReactElement {
 
   useEffect(() => {
     push('/dashboard');
+    // TODO: toast notification here 'That page does not exist'
   }, [push]);
 
   return <LoadMask />;

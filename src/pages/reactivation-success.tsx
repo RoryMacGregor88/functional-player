@@ -45,6 +45,7 @@ export default function ReactivationSuccess({
 
   useEffect(() => {
     if (!paymentIntent) {
+      // TODO: toast notification: 'This page cannot be accessed right now.'
       push('/dashboard');
     } else if (!!paymentIntent) {
       (async () => {

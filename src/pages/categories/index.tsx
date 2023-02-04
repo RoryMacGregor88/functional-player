@@ -66,7 +66,10 @@ export default function Categories({ user, updateCtx, courses, error }: Props) {
         },
       });
     }
-    if (!!error || !categoryMetadata) push('/dashboard');
+    if (!!error || !categoryMetadata) {
+      // TODO: some kind of toast notification here
+      push('/dashboard');
+    }
   }, [categoryMetadata, push, error, updateCtx]);
 
   if (!!error || !categoryMetadata) return <LoadMask />;

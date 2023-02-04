@@ -48,7 +48,10 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!!user) push('/dashboard');
+    if (!!user) {
+      // TODO: toast notification: 'you are already registered'
+      push('/dashboard');
+    }
   }, [user, push]);
 
   if (!!user) return <LoadMask />;

@@ -32,7 +32,10 @@ export default function Login({ user, updateCtx }: Props) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!!user) push('/dashboard');
+    if (!!user) {
+      // TODO: toast notification 'you are already logged in'
+      push('/dashboard');
+    }
   }, [user, push]);
 
   if (!!user) return <LoadMask />;
@@ -64,6 +67,7 @@ export default function Login({ user, updateCtx }: Props) {
     if (!!error) {
       setWellData({ message: error.message });
     } else if (!!resUser) {
+      // TODO: toast notification: 'you have been successfully logged in'
       updateCtx({ user: resUser });
       push('/dashboard');
     }
