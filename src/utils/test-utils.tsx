@@ -9,7 +9,7 @@ import { Context } from '@/src/utils';
 import { Ctx } from '@/src/utils/interfaces';
 
 interface Options {
-  ctx?: any;
+  ctx?: Partial<Ctx>;
   updateCtx?: () => void;
   push?: (href: string) => void;
   query?: object;

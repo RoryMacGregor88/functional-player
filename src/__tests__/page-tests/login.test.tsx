@@ -2,7 +2,10 @@ import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
 
 import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
-import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
+import {
+  DEFAULT_ERROR_MESSAGE,
+  SUCCESSFUL_LOG_IN_MESSAGE,
+} from '@/src/utils/constants';
 
 import Login from '@/src/pages/login';
 
@@ -54,7 +57,12 @@ describe('Login', () => {
 
     await waitFor(() => {
       expect(push).toHaveBeenCalledWith('/dashboard');
-      expect(updateCtx).toHaveBeenCalledWith({ user: resUser });
+      expect(updateCtx).toHaveBeenCalledWith({
+        user: resUser,
+        toastData: {
+          message: SUCCESSFUL_LOG_IN_MESSAGE,
+        },
+      });
     });
   });
 

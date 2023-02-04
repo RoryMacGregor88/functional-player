@@ -24,6 +24,7 @@ import {
 import {
   CATEGORY_METADATA,
   COURSE_LEVEL_METADATA,
+  DEFAULT_ERROR_MESSAGE,
 } from '@/src/utils/constants';
 
 interface ServerSideProps {
@@ -58,17 +59,14 @@ export default function Categories({ user, updateCtx, courses, error }: Props) {
     );
 
   useEffect(() => {
-    if (!!error) {
+    if (!!error || !categoryMetadata) {
+      push('/dashboard');
       updateCtx({
         toastData: {
-          message: error.message,
+          message: error?.message ?? DEFAULT_ERROR_MESSAGE,
           severity: 'error',
         },
       });
-    }
-    if (!!error || !categoryMetadata) {
-      // TODO: some kind of toast notification here
-      push('/dashboard');
     }
   }, [categoryMetadata, push, error, updateCtx]);
 

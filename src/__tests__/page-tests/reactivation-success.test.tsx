@@ -2,7 +2,10 @@ import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
 
 import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
-import { REACTIVATION_SUCCESS_MESSAGE } from '@/src/utils/constants';
+import {
+  PAGE_CANNOT_BE_ACCESSED_MESSAGE,
+  REACTIVATION_SUCCESS_MESSAGE,
+} from '@/src/utils/constants';
 
 import ReactivationSuccess from '@/src/pages/reactivation-success';
 
@@ -25,7 +28,11 @@ describe('Reactivation Success', () => {
     const {
       router: { push },
     } = render(
-      <ReactivationSuccess user={user} updateCtx={updateCtx} paymentIntent />,
+      <ReactivationSuccess
+        user={user}
+        updateCtx={updateCtx}
+        hasPaymentIntent
+      />,
       { push: jest.fn() }
     );
 
@@ -49,10 +56,74 @@ describe('Reactivation Success', () => {
   it('redirects to login if user is not found', () => {
     const {
       router: { push },
-    } = render(<ReactivationSuccess user={null} paymentIntent={false} />, {
-      push: jest.fn(),
-    });
+    } = render(
+      <ReactivationSuccess
+        user={null}
+        hasPaymentIntent={false}
+        updateCtx={updateCtx}
+      />,
+      {
+        push: jest.fn(),
+      }
+    );
 
     expect(push).toHaveBeenCalledWith('/dashboard');
+    expect(updateCtx).toHaveBeenCalledWith({
+      toastData: {
+        severity: 'error',
+        message: PAGE_CANNOT_BE_ACCESSED_MESSAGE,
+      },
+    });
+  });
+
+  // TODO: multiple calls broken
+  xit('logs out if reactivation error', async () => {
+    const message = 'test-error-message';
+
+    // reactivation request
+    fetchMock.mockResponseOnce(JSON.stringify({ error: { message } }));
+
+    // logout request
+    fetchMock.mockResponseOnce(JSON.stringify({ resUser: null }));
+
+    const {
+      router: { push },
+    } = render(
+      <ReactivationSuccess
+        user={user}
+        updateCtx={updateCtx}
+        hasPaymentIntent
+      />,
+      { push: jest.fn() }
+    );
+
+    await waitFor(() => {
+      expect(updateCtx).toHaveBeenCalledWith({
+        user: null,
+        toastData: {
+          severity: 'error',
+          message,
+        },
+      });
+    });
+
+    await waitFor(() => {
+      expect(updateCtx).toHaveBeenCalledWith({
+        user: null,
+        toastData: {
+          severity: 'error',
+          message,
+        },
+      });
+
+      expect(push).toHaveBeenCalledWith('/login');
+
+      expect(updateCtx).toHaveBeenCalledWith({
+        user: null,
+        toastData: {
+          message: 'You have been successfully logged out.',
+        },
+      });
+    });
   });
 });

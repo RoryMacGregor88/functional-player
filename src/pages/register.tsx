@@ -49,7 +49,6 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
 
   useEffect(() => {
     if (!!user) {
-      // TODO: toast notification: 'you are already registered'
       push('/dashboard');
     }
   }, [user, push]);

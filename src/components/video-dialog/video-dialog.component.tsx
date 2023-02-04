@@ -43,6 +43,8 @@ export const Overlay: FC<OverlayProps> = ({
 
   // TODO: spacing between video and elements is a bit big
 
+  // also, need to close dialog when clicking links below
+
   const { title, description, level, artist, categories } = selectedVideo,
     artistValue = ARTIST_METADATA.find(({ label }) => label === artist)?.value;
   return (
@@ -164,6 +166,7 @@ const VideoDialog: FC<VideoDialogProps> = ({
   // closed, and will error if null is passed to children components
   if (!selectedVideo) return null;
 
+  // TODO: delete this?
   const deviceSize = isSmall ? 'small' : isMedium ? 'medium' : 'large';
   const isBookmarked = !!user?.bookmarks.includes(_id);
 

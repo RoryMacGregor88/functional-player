@@ -1,36 +1,45 @@
 import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
 
-import { waitFor } from '@/src/utils/test-utils';
-
-import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
+import {
+  DEFAULT_ERROR_MESSAGE,
+  LOG_OUT_SUCCESS_MESSAGE,
+} from '@/src/utils/constants';
 
 import logout from './logout';
 
 enableFetchMocks();
 
 const user = { username: 'John Smith', email: 'email@test.com' };
-let updateCtx = null;
+
+let updateCtx = null,
+  push = null;
 
 describe('logout', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
     updateCtx = jest.fn();
+    push = jest.fn();
   });
 
   it('logs out', async () => {
     fetchMock.mockResponse(JSON.stringify({ resUser: null }));
 
-    const { ok } = await logout({ user, updateCtx });
+    await logout({ user, updateCtx, push });
 
-    expect(ok).toBeTruthy();
-    expect(updateCtx).toHaveBeenCalledWith({ user: null });
+    expect(push).toHaveBeenCalledWith('/login');
+    expect(updateCtx).toHaveBeenCalledWith({
+      user: null,
+      toastData: {
+        message: LOG_OUT_SUCCESS_MESSAGE,
+      },
+    });
   });
 
   it('handles error', async () => {
     const message = 'test-error-message';
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
-    const { ok } = await logout({ user, updateCtx });
+    await logout({ user, updateCtx, push });
 
     const expected = {
       toastData: {
@@ -39,7 +48,6 @@ describe('logout', () => {
       },
     };
 
-    expect(ok).toBeFalsy();
     expect(updateCtx).toHaveBeenCalledWith(expected);
   });
 
@@ -48,7 +56,7 @@ describe('logout', () => {
       throw new Error();
     });
 
-    const { ok } = await logout({ user, updateCtx });
+    await logout({ user, updateCtx, push });
 
     const expected = {
       toastData: {
@@ -57,7 +65,6 @@ describe('logout', () => {
       },
     };
 
-    expect(ok).toBeFalsy();
     expect(updateCtx).toHaveBeenCalledWith(expected);
   });
 });

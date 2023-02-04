@@ -32,6 +32,7 @@ import {
   UpdatePasswordFormValues,
   DeleteFormValues,
   ResubscribeFormValues,
+  Ctx,
 } from '@/src/utils/interfaces';
 
 import { http } from '@/src/utils';
@@ -65,10 +66,11 @@ const TabPanel: FC<TabPanelProps> = ({
 
 interface Props {
   user: User;
+  ctx: Ctx;
   updateCtx: UpdateCtx;
 }
 
-export default function Account({ user, updateCtx }: Props): ReactElement {
+export default function Account({ user, ctx, updateCtx }: Props): ReactElement {
   const { push } = useRouter();
 
   const [value, setValue] = useState(0);
@@ -79,12 +81,20 @@ export default function Account({ user, updateCtx }: Props): ReactElement {
   useEffect(() => {
     if (!user) {
       push('/login');
-      // TODO: do this for other places that need it
-      updateCtx({
-        toastData: { message: LOGIN_REQUIRED_MESSAGE },
-      });
+
+      // this is here because we need to conditionally call updateCtx here,
+      // as the toast message here will override the toast message from
+      // logging out if the user logs out from this page
+      if (!ctx.toastData) {
+        updateCtx({
+          toastData: {
+            severity: 'error',
+            message: LOGIN_REQUIRED_MESSAGE,
+          },
+        });
+      }
     }
-  }, [user, push, updateCtx]);
+  }, [user, push, ctx, updateCtx]);
 
   if (!user) return <LoadMask />;
 

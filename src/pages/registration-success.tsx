@@ -14,8 +14,12 @@ import {
   Stepper,
 } from '@/src/components';
 
+import { UpdateCtx } from '@/src/utils/interfaces';
+
+import { PAGE_CANNOT_BE_ACCESSED_MESSAGE } from '@/src/utils/constants';
+
 interface ServerSideProps {
-  props: { paymentIntent: boolean };
+  props: { hasPaymentIntent: boolean };
 }
 
 export const getServerSideProps: GetServerSideProps = async (
@@ -23,29 +27,36 @@ export const getServerSideProps: GetServerSideProps = async (
 ): Promise<ServerSideProps> => {
   // Checks if the page was redirected to from the registration page,
   // preventing manual linking to this page.
-  const paymentIntent = !!ctx.query.payment_intent;
+  const hasPaymentIntent = !!ctx.query.payment_intent;
   return {
-    props: { paymentIntent },
+    props: { hasPaymentIntent },
   };
 };
 
 interface Props {
-  paymentIntent: boolean;
+  updateCtx: UpdateCtx;
+  hasPaymentIntent: boolean;
 }
 
 export default function RegistrationSuccess({
-  paymentIntent,
+  updateCtx,
+  hasPaymentIntent,
 }: Props): ReactElement {
   const { push } = useRouter();
 
   useEffect(() => {
-    if (!paymentIntent) {
-      // TODO: toast notification: 'This page cannot be accessed right now.'
+    if (!hasPaymentIntent) {
       push('/dashboard');
+      updateCtx({
+        toastData: {
+          severity: 'error',
+          message: PAGE_CANNOT_BE_ACCESSED_MESSAGE,
+        },
+      });
     }
-  }, [paymentIntent, push]);
+  }, [hasPaymentIntent, push, updateCtx]);
 
-  if (!paymentIntent) return <LoadMask />;
+  if (!hasPaymentIntent) return <LoadMask />;
 
   return (
     <PageWrapper>

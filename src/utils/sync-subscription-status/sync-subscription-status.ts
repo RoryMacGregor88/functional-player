@@ -16,6 +16,8 @@ export default async function syncSubscriptionStatus({
   user,
   updateCtx,
 }: Params): Promise<{ ok: boolean }> {
+  let ok = false;
+
   const handleError = (defaultToastData: DefaultToastData) =>
     updateCtx({ ...defaultToastData, user: null });
 
@@ -32,17 +34,14 @@ export default async function syncSubscriptionStatus({
   });
   if (!!error) {
     updateCtx({
-      user: null,
       toastData: {
         severity: 'error',
         message: error.message,
       },
     });
   } else if (!!resUser) {
+    ok = true;
     updateCtx({ user: resUser });
-    // must return truthy value so that state can update in component
-    return { ok: true };
   }
-  await http({ endpoint: '/auth/logout', onError: handleError });
-  return { ok: false };
+  return { ok };
 }

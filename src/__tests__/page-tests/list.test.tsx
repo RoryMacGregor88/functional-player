@@ -2,6 +2,8 @@ import { render, screen } from '@/src/utils/test-utils';
 
 import List from '@/src/pages/list';
 
+import { LOGIN_REQUIRED_MESSAGE } from '@/src/utils/constants';
+
 jest.mock('@/lib', () => ({
   getCourses: () => {},
 }));
@@ -25,7 +27,7 @@ const mockCourses = [
 
 describe('List', () => {
   it('renders', () => {
-    render(<List user={{ bookmarks: [] }} courses={[]} />);
+    render(<List user={{ bookmarks: ['123'] }} courses={mockCourses} />);
 
     expect(screen.getByText(/your list/i)).toBeInTheDocument();
   });
@@ -45,25 +47,51 @@ describe('List', () => {
   });
 
   it('redirects to login if no user found', () => {
+    const updateCtx = jest.fn();
+
     const {
       router: { push },
-    } = render(<List />, { push: jest.fn() });
+    } = render(<List updateCtx={updateCtx} ctx={{ toastData: null }} />, {
+      push: jest.fn(),
+    });
 
     expect(push).toHaveBeenCalledWith('/login');
+    expect(updateCtx).toHaveBeenCalledWith({
+      toastData: {
+        severity: 'error',
+        message: LOGIN_REQUIRED_MESSAGE,
+      },
+    });
+  });
+
+  it('does not call updateCtx if already toastData in state', () => {
+    const updateCtx = jest.fn(),
+      ctx = { toastData: { message: 'test-toast-data' } };
+
+    const {
+      router: { push },
+    } = render(<List updateCtx={updateCtx} ctx={ctx} />, { push: jest.fn() });
+
+    expect(push).toHaveBeenCalledWith('/login');
+    expect(updateCtx).not.toHaveBeenCalledWith();
   });
 
   it('handles error', () => {
     const updateCtx = jest.fn(),
       message = 'test-error-message';
 
-    render(
+    const {
+      router: { push },
+    } = render(
       <List
         user={{ bookmarks: [] }}
         updateCtx={updateCtx}
         error={{ message }}
-      />
+      />,
+      { push: jest.fn() }
     );
 
+    expect(push).toHaveBeenCalledWith('/dashboard');
     expect(updateCtx).toHaveBeenCalledWith({
       toastData: {
         severity: 'error',

@@ -79,7 +79,12 @@ function App({ Component, pageProps }: AppProps): ReactElement {
             updateCtx={updateCtx}
           />
           <Layout>
-            <Component user={user} updateCtx={updateCtx} {...pageProps} />
+            <Component
+              user={user}
+              ctx={ctx}
+              updateCtx={updateCtx}
+              {...pageProps}
+            />
           </Layout>
         </Context.Provider>
       </ThemeProvider>

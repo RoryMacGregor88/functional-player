@@ -2,9 +2,12 @@ import { http } from '@/src/utils';
 
 import { User, UpdateCtx } from '@/src/utils/interfaces';
 
+import { LOG_OUT_SUCCESS_MESSAGE } from '@/src/utils/constants';
+
 interface Params {
   user: User;
   updateCtx: UpdateCtx;
+  push: (href: string) => void;
 }
 
 interface ResProps {
@@ -15,7 +18,8 @@ interface ResProps {
 export default async function logout({
   user,
   updateCtx,
-}: Params): Promise<{ ok: boolean }> {
+  push,
+}: Params): Promise<void> {
   const { error, resUser }: ResProps = await http({
     endpoint: '/auth/logout',
     formData: { email: user.email },
@@ -29,9 +33,12 @@ export default async function logout({
       },
     });
   } else if (resUser === null) {
-    updateCtx({ user: resUser });
-    // must return truthy value to invoke router
-    return { ok: true };
+    push('/login');
+    updateCtx({
+      user: resUser,
+      toastData: {
+        message: LOG_OUT_SUCCESS_MESSAGE,
+      },
+    });
   }
-  return { ok: false };
 }

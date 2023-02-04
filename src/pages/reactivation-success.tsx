@@ -8,14 +8,17 @@ import { Grid, Button, Typography } from '@mui/material';
 
 import { LoadMask, PageWrapper, SpacedTitle } from '@/src/components';
 
-import { syncSubscriptionStatus } from '@/src/utils';
+import { syncSubscriptionStatus, logout } from '@/src/utils';
 
-import { REACTIVATION_SUCCESS_MESSAGE } from '@/src/utils/constants';
+import {
+  REACTIVATION_SUCCESS_MESSAGE,
+  PAGE_CANNOT_BE_ACCESSED_MESSAGE,
+} from '@/src/utils/constants';
 
 import { UpdateCtx, User } from '@/src/utils/interfaces';
 
 interface ServerSideProps {
-  props: { paymentIntent: boolean };
+  props: { hasPaymentIntent: boolean };
 }
 
 export const getServerSideProps: GetServerSideProps = async (
@@ -23,42 +26,52 @@ export const getServerSideProps: GetServerSideProps = async (
 ): Promise<ServerSideProps> => {
   // Checks if the page was redirected to from the accounts page,
   // preventing manual linking to this page.
-  const paymentIntent = !!ctx.query.payment_intent;
+  const hasPaymentIntent = !!ctx.query.payment_intent;
   return {
-    props: { paymentIntent },
+    props: { hasPaymentIntent },
   };
 };
 
 interface Props {
   user: User;
   updateCtx: UpdateCtx;
-  paymentIntent: boolean;
+  hasPaymentIntent: boolean;
 }
 
 export default function ReactivationSuccess({
   user,
   updateCtx,
-  paymentIntent,
+  hasPaymentIntent,
 }: Props): ReactElement {
   const { push } = useRouter();
   const [isUpdated, setIsUpdated] = useState(false);
 
   useEffect(() => {
-    if (!paymentIntent) {
-      // TODO: toast notification: 'This page cannot be accessed right now.'
+    if (!hasPaymentIntent) {
+      updateCtx({
+        toastData: {
+          severity: 'error',
+          message: PAGE_CANNOT_BE_ACCESSED_MESSAGE,
+        },
+      });
       push('/dashboard');
-    } else if (!!paymentIntent) {
+    } else if (!!hasPaymentIntent) {
       (async () => {
         const { ok } = await syncSubscriptionStatus({
           user,
           updateCtx,
         });
-        if (ok) setIsUpdated(true);
+
+        if (ok) {
+          setIsUpdated(true);
+        } else if (!ok) {
+          await logout({ user, updateCtx, push });
+        }
       })();
     }
-  }, [user, updateCtx, paymentIntent, push]);
+  }, [user, updateCtx, hasPaymentIntent, push]);
 
-  if (!paymentIntent || !isUpdated) return <LoadMask />;
+  if (!hasPaymentIntent || !isUpdated) return <LoadMask />;
 
   return (
     <PageWrapper>

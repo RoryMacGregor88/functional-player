@@ -8,6 +8,7 @@ export const USERS = 'users-2';
 export const PASSWORD_MIN = 5;
 export const PASSWORD_MAX = 15;
 
+// TODO: this one has full stop. Does get used by well at all?
 export const DEFAULT_ERROR_MESSAGE = 'An unexpected error has occurred.';
 
 export const HTTP_METHOD_ERROR_MESSAGE =
@@ -24,8 +25,7 @@ export const USERNAME_TAKEN_MESSAGE = 'Username is taken.';
 
 export const INCORRECT_PASSWORD_MESSAGE = 'Incorrect password.';
 
-export const REGISTRATION_SUCCESS_MESSAGE =
-  'Account successfully created. Click "NEXT" button to continue.';
+export const REGISTRATION_SUCCESS_MESSAGE = `Account successfully created. Click 'NEXT' button to continue.`;
 
 export const ACCOUNT_DELETE_SUCCESS_MESSAGE =
   'Your account and subscription have been permanently deleted.';
@@ -41,7 +41,12 @@ export const UPDATE_PASSWORD_SUCCESS_MESSAGE =
 export const CANCEL_SUBSCRITION_SUCCESS_MESSAGE =
   'Your subscription has been successfully cancelled. You can re-activate your subscription at any time by clicking the "RE-ENABLE SUBSCRIPTION" button below.';
 export const LOGIN_REQUIRED_MESSAGE =
-  'You must be logged in to perform that action.';
+  'You must be logged in to perform that action';
+export const PAGE_DOES_NOT_EXIST_MESSAGE = 'That page does not exist';
+export const SUCCESSFUL_LOG_IN_MESSAGE = 'Welcome back! You are now logged in';
+export const LOG_OUT_SUCCESS_MESSAGE = 'You have been successfully logged out';
+export const PAGE_CANNOT_BE_ACCESSED_MESSAGE =
+  'This page cannot be accessed right now';
 
 // form validation
 export const EMAIL_REQUIRED_MESSAGE = 'Email is required';
@@ -71,7 +76,8 @@ export const STATUS_LABELS = {
 export const DEFAULT_SELECT_OPTION = 'Explore by category';
 
 export const THEME_COLORS = {
-  boneWhite: '#faf9f7',
+  // boneWhite: '#faf9f7',
+  boneWhite: '#fff',
   lightBlack: '#121212',
   darkBlack: '#080808',
   lightGrey: '#757575',

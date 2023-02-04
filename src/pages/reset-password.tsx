@@ -12,6 +12,8 @@ import {
 
 import { http } from '@/src/utils';
 
+import { PAGE_CANNOT_BE_ACCESSED_MESSAGE } from '@/src/utils/constants';
+
 import {
   User,
   UpdateCtx,
@@ -35,11 +37,15 @@ export default function ResetPassword({
 
   useEffect(() => {
     if (!!user) {
-      // TODO: toast notification: 'You must be logged in'
-      // also, make that message generic, as it's used in Account also
       push('/dashboard');
+      updateCtx({
+        toastData: {
+          severity: 'error',
+          message: PAGE_CANNOT_BE_ACCESSED_MESSAGE,
+        },
+      });
     }
-  }, [user, push]);
+  }, [user, push, updateCtx]);
 
   if (!!user) return <LoadMask />;
 

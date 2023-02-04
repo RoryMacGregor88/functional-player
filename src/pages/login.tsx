@@ -20,6 +20,8 @@ import {
   LoginFormValues,
 } from '@/src/utils/interfaces';
 
+import { SUCCESSFUL_LOG_IN_MESSAGE } from '@/src/utils/constants';
+
 interface Props {
   user: User;
   updateCtx: UpdateCtx;
@@ -33,7 +35,6 @@ export default function Login({ user, updateCtx }: Props) {
 
   useEffect(() => {
     if (!!user) {
-      // TODO: toast notification 'you are already logged in'
       push('/dashboard');
     }
   }, [user, push]);
@@ -47,6 +48,8 @@ export default function Login({ user, updateCtx }: Props) {
 
   const handleLogin = async (formValues: LoginFormValues): Promise<void> => {
     // TODO: do this for all handlers that need it
+    // remove well between requests, like if password is wrong
+    // and they have to submit again
     setWellData(null);
     setIsLoading(true);
 
@@ -67,8 +70,12 @@ export default function Login({ user, updateCtx }: Props) {
     if (!!error) {
       setWellData({ message: error.message });
     } else if (!!resUser) {
-      // TODO: toast notification: 'you have been successfully logged in'
-      updateCtx({ user: resUser });
+      updateCtx({
+        user: resUser,
+        toastData: {
+          message: SUCCESSFUL_LOG_IN_MESSAGE,
+        },
+      });
       push('/dashboard');
     }
 

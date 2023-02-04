@@ -55,14 +55,34 @@ describe('Account', () => {
       const updateCtx = jest.fn();
       const {
         router: { push },
-      } = render(<Account user={null} updateCtx={updateCtx} />, {
+      } = render(
+        <Account user={null} ctx={{ toastData: null }} updateCtx={updateCtx} />,
+        {
+          push: jest.fn(),
+        }
+      );
+
+      expect(push).toHaveBeenCalledWith('/login');
+      expect(updateCtx).toHaveBeenCalledWith({
+        toastData: {
+          severity: 'error',
+          message: LOGIN_REQUIRED_MESSAGE,
+        },
+      });
+    });
+
+    it('does not call updateCtx if already toastData in state', () => {
+      const updateCtx = jest.fn(),
+        ctx = { toastData: { message: 'test-toast-message' } };
+
+      const {
+        router: { push },
+      } = render(<Account user={null} ctx={ctx} updateCtx={updateCtx} />, {
         push: jest.fn(),
       });
 
       expect(push).toHaveBeenCalledWith('/login');
-      expect(updateCtx).toHaveBeenCalledWith({
-        toastData: { message: LOGIN_REQUIRED_MESSAGE },
-      });
+      expect(updateCtx).not.toHaveBeenCalled();
     });
 
     it('switches tabs', async () => {

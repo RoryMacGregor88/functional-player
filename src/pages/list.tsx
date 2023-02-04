@@ -10,9 +10,12 @@ import { Typography } from '@mui/material';
 
 import { PageWrapper, LoadMask, Slider } from '@/src/components';
 
+import { LOGIN_REQUIRED_MESSAGE } from '@/src/utils/constants';
+
 import {
   Course,
   User,
+  Ctx,
   UpdateCtx,
   CustomError,
   CourseServerProps,
@@ -25,7 +28,7 @@ interface ServerSideProps {
 }
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
-  async function getServerSideProps({ req }): Promise<ServerSideProps> {
+  async ({ req }): Promise<ServerSideProps> => {
     const user = req.session.user;
     const props = await getCourses(user);
     return { props };
@@ -35,6 +38,7 @@ export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
 
 interface Props {
   user: User;
+  ctx: Ctx;
   updateCtx: UpdateCtx;
   courses: Course[] | null;
   error: CustomError | null;
@@ -42,6 +46,7 @@ interface Props {
 
 export default function List({
   user,
+  ctx,
   updateCtx,
   courses,
   error,
@@ -51,10 +56,20 @@ export default function List({
   useEffect(() => {
     if (!user) {
       push('/login');
-      // TODO: toast notification here
-    }
-    if (!!error) {
-      // TODO: redirect here too, can't just leave on loading spinner forever
+
+      // this is here because we need to conditionally call updateCtx here,
+      // as the toast message here will override the toast message from
+      // logging out if the user logs out from this page
+      if (!ctx.toastData) {
+        updateCtx({
+          toastData: {
+            severity: 'error',
+            message: LOGIN_REQUIRED_MESSAGE,
+          },
+        });
+      }
+    } else if (!!error) {
+      push('/dashboard');
       updateCtx({
         toastData: {
           message: error.message,
@@ -62,7 +77,7 @@ export default function List({
         },
       });
     }
-  }, [user, push, error, updateCtx]);
+  }, [user, push, error, updateCtx, ctx]);
 
   if (!user || !!error) return <LoadMask />;
 

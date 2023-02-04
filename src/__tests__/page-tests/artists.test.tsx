@@ -2,6 +2,8 @@ import { render, screen, waitFor, userEvent } from '@/src/utils/test-utils';
 
 import Artists from '@/src/pages/artists';
 
+import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
+
 jest.mock('@/lib', () => ({
   getCourses: () => {},
 }));
@@ -64,7 +66,12 @@ describe('Artists', () => {
 
     await waitFor(() => {
       expect(push).toHaveBeenCalledWith('/dashboard');
-      expect(updateCtx).not.toHaveBeenCalled();
+      expect(updateCtx).toHaveBeenCalledWith({
+        toastData: {
+          severity: 'error',
+          message: DEFAULT_ERROR_MESSAGE,
+        },
+      });
     });
   });
 
@@ -78,12 +85,17 @@ describe('Artists', () => {
         courses={mockCourses}
         error={null}
       />,
-      { push: jest.fn(), query: { artist: 'john-smith' } }
+      { push: jest.fn(), query: { artist: 'adfasdfasdf' } }
     );
 
     await waitFor(() => {
       expect(push).toHaveBeenCalledWith('/dashboard');
-      expect(updateCtx).not.toHaveBeenCalled();
+      expect(updateCtx).toHaveBeenCalledWith({
+        toastData: {
+          severity: 'error',
+          message: DEFAULT_ERROR_MESSAGE,
+        },
+      });
     });
   });
 

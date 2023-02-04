@@ -2,6 +2,8 @@ import { render, screen, waitFor, userEvent } from '@/src/utils/test-utils';
 
 import Categories from '@/src/pages/categories';
 
+import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
+
 jest.mock('@/lib', () => ({
   getCourses: () => {},
 }));
@@ -66,7 +68,12 @@ describe('Categories', () => {
 
     await waitFor(() => {
       expect(push).toHaveBeenCalledWith('/dashboard');
-      expect(updateCtx).not.toHaveBeenCalled();
+      expect(updateCtx).toHaveBeenCalledWith({
+        toastData: {
+          severity: 'error',
+          message: DEFAULT_ERROR_MESSAGE,
+        },
+      });
     });
   });
 
@@ -85,7 +92,12 @@ describe('Categories', () => {
 
     await waitFor(() => {
       expect(push).toHaveBeenCalledWith('/dashboard');
-      expect(updateCtx).not.toHaveBeenCalled();
+      expect(updateCtx).toHaveBeenCalledWith({
+        toastData: {
+          severity: 'error',
+          message: DEFAULT_ERROR_MESSAGE,
+        },
+      });
     });
   });
 

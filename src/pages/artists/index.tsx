@@ -21,7 +21,7 @@ import {
   UpdateCtx,
 } from '@/src/utils/interfaces';
 
-import { ARTIST_METADATA } from '@/src/utils/constants';
+import { ARTIST_METADATA, DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
 interface ServerSideProps {
   props: CourseServerProps;
@@ -53,17 +53,14 @@ export default function Artists({ user, updateCtx, courses, error }: Props) {
     artistLabel = ARTIST_METADATA.find(({ value }) => value === artist)?.label;
 
   useEffect(() => {
-    if (!!error) {
+    if (!!error || !artistLabel) {
+      push('/dashboard');
       updateCtx({
         toastData: {
-          message: error.message,
+          message: error?.message ?? DEFAULT_ERROR_MESSAGE,
           severity: 'error',
         },
       });
-    }
-    if (!!error || !artistLabel) {
-      // TODO: some kind of toast notification here
-      push('/dashboard');
     }
   }, [artistLabel, push, error, updateCtx]);
 

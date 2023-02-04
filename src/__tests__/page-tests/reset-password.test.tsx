@@ -2,7 +2,10 @@ import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
 
 import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
-import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
+import {
+  DEFAULT_ERROR_MESSAGE,
+  PAGE_CANNOT_BE_ACCESSED_MESSAGE,
+} from '@/src/utils/constants';
 
 import ResetPassword from '@/src/pages/reset-password';
 
@@ -25,11 +28,20 @@ describe('Reset Password', () => {
   it('redirects to dashboard if user is found', () => {
     const {
       router: { push },
-    } = render(<ResetPassword user={{ username: 'John Smith' }} />, {
-      push: jest.fn(),
-    });
+    } = render(
+      <ResetPassword user={{ username: 'John Smith' }} updateCtx={updateCtx} />,
+      {
+        push: jest.fn(),
+      }
+    );
 
     expect(push).toHaveBeenCalledWith('/dashboard');
+    expect(updateCtx).toHaveBeenCalledWith({
+      toastData: {
+        severity: 'error',
+        message: PAGE_CANNOT_BE_ACCESSED_MESSAGE,
+      },
+    });
   });
 
   it('shows success well and disables button if successful', async () => {
