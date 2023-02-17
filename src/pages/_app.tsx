@@ -55,7 +55,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
           content='FunctionalPlayer'
           key='functional-player'
         />
-        <link rel='icon' href='/favicon.ico' />
+        <link rel='icon' href='/fp-favicon.svg' />
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />

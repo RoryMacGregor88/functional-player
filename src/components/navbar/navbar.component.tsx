@@ -18,7 +18,7 @@ import {
   Select,
   IconButton,
   ProfileIcon,
-  Button,
+  LinkButton,
 } from '@/src/components';
 
 import { Category } from '@/src/utils/interfaces';
@@ -28,10 +28,9 @@ import { useCtx } from '@/src/utils';
 import {
   CATEGORY_METADATA,
   COURSE_LEVEL_METADATA,
-  DEFAULT_SELECT_OPTION,
 } from '@/src/utils/constants';
 
-import Logo from '@/src/fp-logo.png';
+import Logo from '@/src/functional-player-logo.svg';
 
 // old buttons in case needed
 {
@@ -91,28 +90,14 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
         }}
       >
         <Link href={'/dashboard'} onClick={handleLogoClick} disableHover>
-          <Box sx={{ height: '3rem' }}>
+          <Box sx={{ height: '1.5rem' }}>
             <Image
+              data-testid='fp-logo'
               alt='fp-logo'
               src={Logo}
               style={{ width: 'inherit', height: 'inherit' }}
             />
           </Box>
-          {/* {['Functional', 'Player'].map((str, i) => (
-            <Typography
-              key={str}
-              variant='h5'
-              sx={{
-                cursor: 'pointer',
-                fontSize: isMobile ? '1.5rem' : '1.8rem',
-                fontWeight: 'bold',
-                fontStyle: 'italic',
-                color: i === 1 ? 'primary.main' : 'common.white',
-              }}
-            >
-              {str}
-            </Typography>
-          ))} */}
         </Link>
         <Grid
           item
@@ -125,7 +110,7 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
           {isMobile ? null : (
             <>
               <Select
-                label={DEFAULT_SELECT_OPTION}
+                label='Explore by category...'
                 options={[...CATEGORY_METADATA, ...COURSE_LEVEL_METADATA]}
                 selectedCategory={selectedCategory ?? ''}
                 handleCategoryChange={handleCategoryChange}
@@ -137,24 +122,10 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
               ) : (
                 <>
                   <Link href='/login'>
-                    <Button
-                      sx={{
-                        padding: '0',
-                        height: 'calc(100% - 2px)',
-                      }}
-                    >
-                      Log in
-                    </Button>
+                    <LinkButton noLeftMargin>Log in</LinkButton>
                   </Link>
                   <Link href='/register'>
-                    <Button
-                      sx={{
-                        padding: '0',
-                        height: 'calc(100% - 2px)',
-                      }}
-                    >
-                      Sign Up
-                    </Button>
+                    <LinkButton noLeftMargin>Sign Up</LinkButton>
                   </Link>
                 </>
               )}

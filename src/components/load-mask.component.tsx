@@ -1,6 +1,6 @@
 import { FC, ReactElement } from 'react';
 
-import Logo from '@/src/fp-logo.png';
+import Logo from '@/src/functional-player-logo.svg';
 
 import Image from 'next/image';
 
@@ -38,13 +38,10 @@ const LoadMask: FC<Props> = ({ showLogo = false }): ReactElement => {
             flexDirection: 'column',
             alignItems: 'center',
             width: isMobile ? '10rem' : '15rem',
+            gap: '1rem',
           }}
         >
-          <Image
-            alt='fp-logo'
-            src={Logo}
-            style={{ height: 'inherit', width: 'inherit' }}
-          />
+          <Image alt='fp-logo' src={Logo} style={{ width: '15rem' }} />
           <LoadingSpinner {...spinnerStyles} />
         </Box>
       ) : (
