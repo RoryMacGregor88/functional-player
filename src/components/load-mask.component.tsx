@@ -41,7 +41,11 @@ const LoadMask: FC<Props> = ({ showLogo = false }): ReactElement => {
             gap: '1rem',
           }}
         >
-          <Image alt='fp-logo' src={Logo} style={{ width: '15rem' }} />
+          <Image
+            alt='fp-logo'
+            src={Logo}
+            style={{ width: '15rem', height: 'auto' }}
+          />
           <LoadingSpinner {...spinnerStyles} />
         </Box>
       ) : (

@@ -90,7 +90,7 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
         }}
       >
         <Link href={'/dashboard'} onClick={handleLogoClick} disableHover>
-          <Box sx={{ height: '1.5rem' }}>
+          <Box sx={{ height: '2rem' }}>
             <Image
               data-testid='fp-logo'
               alt='fp-logo'
