@@ -84,7 +84,7 @@ async function resubscribe(
       };
 
       req.session.user = resUser;
-      await req.session.save();
+      req.session.save();
 
       return res.status(201).json({ resUser, clientSecret });
     } catch (error) {

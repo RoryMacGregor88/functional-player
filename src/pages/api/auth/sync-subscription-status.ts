@@ -54,7 +54,7 @@ async function syncSubscriptionStatus(
 
       // TODO: why this erroring?
       req.session.user = resUser;
-      await req.session.save();
+      req.session.save();
 
       return res.status(200).json({ resUser });
     } catch (error) {

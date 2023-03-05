@@ -1,6 +1,6 @@
 import { http } from '@/src/utils';
 
-import { User, UpdateCtx, DefaultToastData } from '@/src/utils/interfaces';
+import { User, UpdateCtx } from '@/src/utils/interfaces';
 
 interface Params {
   user: User;
@@ -12,15 +12,13 @@ interface ResProps {
   resUser: User | undefined;
 }
 
+// TODO: setting user to null on error was removed from here. Why?
+
 export default async function syncSubscriptionStatus({
   user,
   updateCtx,
 }: Params): Promise<{ ok: boolean }> {
   let ok = false;
-
-  const handleError = (defaultToastData: DefaultToastData) =>
-    updateCtx({ ...defaultToastData, user: null });
-
   const { email, subscriptionStatus, subscriptionId } = user;
 
   const { error, resUser }: ResProps = await http({
@@ -30,7 +28,7 @@ export default async function syncSubscriptionStatus({
       subscriptionStatus,
       subscriptionId,
     },
-    onError: handleError,
+    onError: updateCtx,
   });
   if (!!error) {
     updateCtx({

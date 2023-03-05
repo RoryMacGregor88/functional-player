@@ -11,7 +11,11 @@ const videoDialogTitle = 'Video Dialog Title';
 const TestComponent = ({ updateCtx }) => {
   const toastData = { message: toastMessage },
     dialogData = { message: generalDialogMessage },
-    selectedVideo = { title: videoDialogTitle, level: 'advanced' };
+    selectedVideo = {
+      title: videoDialogTitle,
+      level: 'advanced',
+      categories: ['Rock', 'Blues'],
+    };
   return (
     <div>
       <p>Test Component</p>

@@ -73,7 +73,7 @@ describe('getCourses', () => {
   it('handles error', async () => {
     const expected = {
       courses: null,
-      error: { message: 'An unexpected error has occurred.' },
+      error: { message: DEFAULT_ERROR_MESSAGE },
     };
 
     const result = await getCourses(null, null);

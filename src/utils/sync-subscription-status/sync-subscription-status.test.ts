@@ -40,7 +40,6 @@ describe('syncSubscriptionStatus', () => {
 
     await waitFor(() => {
       expect(updateCtx).toHaveBeenCalledWith({
-        user: null,
         toastData: {
           severity: 'error',
           message,
@@ -58,7 +57,6 @@ describe('syncSubscriptionStatus', () => {
     const { ok } = await syncSubscriptionStatus({ user, updateCtx });
 
     const expected = {
-      user: null,
       toastData: {
         severity: 'error',
         message: DEFAULT_ERROR_MESSAGE,

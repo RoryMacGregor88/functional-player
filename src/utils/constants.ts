@@ -72,8 +72,6 @@ export const STATUS_LABELS = {
   canceled: 'Cancelled',
 };
 
-export const DEFAULT_SELECT_OPTION = 'Explore by category';
-
 export const THEME_COLORS = {
   // boneWhite: '#faf9f7',
   boneWhite: '#fff',
