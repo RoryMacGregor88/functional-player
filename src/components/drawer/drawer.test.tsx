@@ -6,7 +6,7 @@ import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
 import { User } from '@/src/utils/interfaces';
 
-import { DEFAULT_SELECT_OPTION } from '@/src/utils/constants';
+import { LOG_OUT_SUCCESS_MESSAGE } from '@/src/utils/constants';
 
 enableFetchMocks();
 
@@ -30,28 +30,29 @@ describe('drawer', () => {
   });
 
   it('renders when isDrawerOpen is true', () => {
-    render(<Drawer isDrawerOpen user={mockUser} />);
+    render(<Drawer isDrawerOpen />, { ctx: { user: mockUser } });
     expect(screen.getByTestId('drawer')).toBeInTheDocument();
   });
 
   it('does not render when isDrawerOpen is false', () => {
-    render(<Drawer isDrawerOpen={false} user={mockUser} />);
+    render(<Drawer isDrawerOpen={false} />, { ctx: { user: mockUser } });
     expect(screen.queryByTestId('drawer')).not.toBeInTheDocument();
   });
 
-  it('routes to links and closes drawer and resets selected category', async () => {
+  it('routes to links and closes drawer and removes selected category', async () => {
     const {
       updateCtx,
       router: { push },
-    } = render(
-      <Drawer isDrawerOpen setIsDrawerOpen={setIsDrawerOpen} user={null} />,
-      { push: jest.fn(), updateCtx: jest.fn() }
-    );
+    } = render(<Drawer isDrawerOpen setIsDrawerOpen={setIsDrawerOpen} />, {
+      push: jest.fn(),
+      updateCtx: jest.fn(),
+      ctx: { user: undefined },
+    });
 
     userEvent.click(screen.getByRole('button', { name: /login/i }));
 
     const expected = {
-      selectedCategory: DEFAULT_SELECT_OPTION,
+      selectedCategory: null,
     };
 
     await waitFor(() => {
@@ -64,9 +65,9 @@ describe('drawer', () => {
   });
 
   it('shows logged in icons', () => {
-    render(
-      <Drawer isDrawerOpen setIsDrawerOpen={setIsDrawerOpen} user={mockUser} />
-    );
+    render(<Drawer isDrawerOpen setIsDrawerOpen={setIsDrawerOpen} />, {
+      ctx: { user: mockUser },
+    });
 
     expect(screen.getByRole('link', { name: /logout/i })).toBeInTheDocument();
     expect(
@@ -75,9 +76,9 @@ describe('drawer', () => {
   });
 
   it('shows logged out icons', () => {
-    render(
-      <Drawer isDrawerOpen setIsDrawerOpen={setIsDrawerOpen} user={null} />
-    );
+    render(<Drawer isDrawerOpen setIsDrawerOpen={setIsDrawerOpen} />, {
+      ctx: { user: undefined },
+    });
 
     expect(
       screen.queryByRole('link', { name: /logout/i })
@@ -89,14 +90,19 @@ describe('drawer', () => {
     fetchMock.mockResponse(JSON.stringify({ resUser: null }));
 
     const { updateCtx } = render(
-      <Drawer isDrawerOpen setIsDrawerOpen={setIsDrawerOpen} user={mockUser} />,
-      { updateCtx: jest.fn() }
+      <Drawer isDrawerOpen setIsDrawerOpen={setIsDrawerOpen} />,
+      { updateCtx: jest.fn(), ctx: { user: mockUser } }
     );
 
     userEvent.click(screen.getByRole('button', { name: /logout/i }));
 
     await waitFor(() => {
-      expect(updateCtx).toHaveBeenCalledWith({ user: null });
+      expect(updateCtx).toHaveBeenCalledWith({
+        user: null,
+        toastData: {
+          message: LOG_OUT_SUCCESS_MESSAGE,
+        },
+      });
       expect(setIsDrawerOpen).toHaveBeenCalled();
     });
   });
@@ -107,8 +113,8 @@ describe('drawer', () => {
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
     const { updateCtx } = render(
-      <Drawer isDrawerOpen setIsDrawerOpen={setIsDrawerOpen} user={mockUser} />,
-      { updateCtx: jest.fn() }
+      <Drawer isDrawerOpen setIsDrawerOpen={setIsDrawerOpen} />,
+      { updateCtx: jest.fn(), ctx: { user: mockUser } }
     );
 
     userEvent.click(screen.getByRole('button', { name: /logout/i }));

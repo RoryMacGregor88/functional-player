@@ -42,9 +42,7 @@ export const Overlay: FC<OverlayProps> = ({
   const { updateCtx } = useCtx();
 
   // TODO: spacing between video and elements is a bit big
-
   // also, need to close dialog when clicking links below
-
   const { title, description, level, artist, categories } = selectedVideo,
     artistValue = ARTIST_METADATA.find(({ label }) => label === artist)?.value;
   return (

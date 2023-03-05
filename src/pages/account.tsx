@@ -261,11 +261,12 @@ export default function Account({ user, ctx, updateCtx }: Props): ReactElement {
     }
   };
 
-  // TODO: why is !clientSecret there? It's breaking a test
+  // TODO: why was !clientSecret after !!wellData there?
+  // Check that it's not important
   return (
     <PageWrapper restrictWidth>
       <SpacedTitle>Account Settings</SpacedTitle>
-      {!!wellData && !clientSecret ? <Well {...wellData} /> : null}
+      {!!wellData ? <Well {...wellData} /> : null}
       <Tabs
         value={value}
         onChange={handleTabChange}
