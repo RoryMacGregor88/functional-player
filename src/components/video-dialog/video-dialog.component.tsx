@@ -28,7 +28,6 @@ interface OverlayProps {
   isBookmarked: boolean;
   onBookmarkClick: () => void;
   close: () => void;
-  push: (url: string) => void;
 }
 
 export const Overlay: FC<OverlayProps> = ({
@@ -37,14 +36,15 @@ export const Overlay: FC<OverlayProps> = ({
   isBookmarked,
   onBookmarkClick,
   close,
-  push,
 }): ReactElement => {
   const { updateCtx } = useCtx();
 
   // TODO: spacing between video and elements is a bit big
-  // also, need to close dialog when clicking links below, just add onClick to link button
+
   const { title, description, level, artist, categories } = selectedVideo,
     artistValue = ARTIST_METADATA.find(({ label }) => label === artist)?.value;
+
+  const handleLinkClick = () => updateCtx({ selectedVideo: null });
   return (
     <Grid
       item
@@ -114,12 +114,14 @@ export const Overlay: FC<OverlayProps> = ({
             sx={{ fontSize: '1.5rem', marginRight: 'auto' }}
           >
             <Link href={`/artists?artist=${artistValue}`}>
-              <LinkButton noLeftMargin>{artist}</LinkButton>
+              <LinkButton noLeftMargin onClick={handleLinkClick}>
+                {artist}
+              </LinkButton>
             </Link>
           </Typography>
           {categories.map((cat) => (
             <Link key={cat} href={`/categories?category=${cat}`}>
-              <LinkButton>{cat}</LinkButton>
+              <LinkButton onClick={handleLinkClick}>{cat}</LinkButton>
             </Link>
           ))}
         </Grid>
@@ -220,7 +222,6 @@ const VideoDialog: FC<VideoDialogProps> = ({
           isBookmarked={isBookmarked}
           onBookmarkClick={onBookmarkClick}
           close={close}
-          push={push}
         />
       </Grid>
     </Dialog>

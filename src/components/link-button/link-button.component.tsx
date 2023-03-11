@@ -4,14 +4,17 @@ import { ButtonBase } from '@mui/material';
 
 interface Props {
   noLeftMargin?: boolean;
+  onClick?: () => void;
   children: ReactNode;
 }
 
 const LinkButton: FC<Props> = ({
   noLeftMargin = false,
+  onClick,
   children,
 }): ReactElement => (
   <ButtonBase
+    onClick={onClick ?? null}
     sx={{
       cursor: 'pointer',
       borderBottomWidth: '2px',

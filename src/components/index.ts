@@ -23,7 +23,7 @@ import Toast from './toast/toast.component';
 import TextField from './text-field.component';
 import Attention from './attention.component';
 import Button from './button/button.component';
-import LinkButton from './link-button.component';
+import LinkButton from './link-button/link-button.component';
 import Footer from './footer.component';
 
 export * from './forms';
