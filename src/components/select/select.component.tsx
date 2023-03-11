@@ -6,7 +6,6 @@ import {
   FormControl,
   MenuItem,
   styled,
-  SelectChangeEvent,
 } from '@mui/material';
 
 import { Category } from '@/src/utils/interfaces';
@@ -37,7 +36,6 @@ const Select: FC<Props> = ({
         id='category-select'
         labelId={labelId}
         aria-labelledby={labelId}
-        q
         value={selectedCategory ?? ''}
         onChange={({ target: { value } }) => handleCategoryChange(value)}
         label={label}
