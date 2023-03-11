@@ -42,7 +42,7 @@ export const Overlay: FC<OverlayProps> = ({
   const { updateCtx } = useCtx();
 
   // TODO: spacing between video and elements is a bit big
-  // also, need to close dialog when clicking links below
+  // also, need to close dialog when clicking links below, just add onClick to link button
   const { title, description, level, artist, categories } = selectedVideo,
     artistValue = ARTIST_METADATA.find(({ label }) => label === artist)?.value;
   return (
@@ -180,7 +180,7 @@ const VideoDialog: FC<VideoDialogProps> = ({
       ? updateBookmarks({ _id, user, updateCtx })
       : updateCtx({
           dialogData: {
-            title: 'Welcome to Functional Player',
+            title: 'Welcome to FunctionalPlayer',
             message:
               'You must be logged in to perform this action. Please either login or register with us using the buttons below.',
             actions: [

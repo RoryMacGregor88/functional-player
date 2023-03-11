@@ -20,7 +20,7 @@ interface Props {
   label: string;
   options: { label: string; value: string }[];
   selectedCategory: Category | null;
-  handleCategoryChange: (e: SelectChangeEvent<string>) => void;
+  handleCategoryChange: (selectedCategory: Category) => void;
 }
 
 const Select: FC<Props> = ({
@@ -28,24 +28,29 @@ const Select: FC<Props> = ({
   options,
   selectedCategory,
   handleCategoryChange,
-}): ReactElement => (
-  <FormControl size='small'>
-    <InputLabel id='category-select-label'>{label}</InputLabel>
-    <MuiSelect
-      id='category-select'
-      value={selectedCategory}
-      onChange={handleCategoryChange}
-      label={label}
-      labelId='category-select-label'
-      sx={{ width: '15rem' }}
-    >
-      {options.map(({ label, value }) => (
-        <Option key={value} value={value}>
-          {label}
-        </Option>
-      ))}
-    </MuiSelect>
-  </FormControl>
-);
+}): ReactElement => {
+  const labelId = 'selectId';
+  return (
+    <FormControl size='small'>
+      <InputLabel id={labelId}>{label}</InputLabel>
+      <MuiSelect
+        id='category-select'
+        labelId={labelId}
+        aria-labelledby={labelId}
+        q
+        value={selectedCategory ?? ''}
+        onChange={({ target: { value } }) => handleCategoryChange(value)}
+        label={label}
+        sx={{ width: '15rem' }}
+      >
+        {options.map(({ label, value }) => (
+          <Option key={value} value={value}>
+            {label}
+          </Option>
+        ))}
+      </MuiSelect>
+    </FormControl>
+  );
+};
 
 export default Select;

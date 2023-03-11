@@ -5,24 +5,26 @@ import Select from './select.component';
 const options = [{ label: 'Test Option', value: 'test-option' }],
   label = 'test-label';
 
-  // TODO: selectedCategory is a prop now, not state
-  // but state is in navbar now, make sure tests for both have been updated
-
 describe('Select', () => {
   it('renders', () => {
-    render(<Select options={options} label={label} />, {
-      ctx: { selectedCategory: null },
-    });
+    render(<Select options={options} label={label} selectedCategory={null} />);
 
     expect(screen.getAllByText(label)).toHaveLength(2);
   });
 
   it('renders options', async () => {
-    render(<Select options={options} label={label} />, {
-      ctx: { selectedCategory: null },
-    });
+    const handleCategoryChange = jest.fn();
 
-    userEvent.click(screen.getAllByText(label)[1]);
+    render(
+      <Select
+        options={options}
+        label={label}
+        handleCategoryChange={handleCategoryChange}
+        selectedCategory={null}
+      />
+    );
+
+    userEvent.click(screen.getAllByLabelText(label)[1]);
 
     await waitFor(() => {
       expect(screen.getByText(/test option/i)).toBeInTheDocument();
@@ -32,11 +34,15 @@ describe('Select', () => {
   it('reads selected category from ctx', () => {
     const selectedCategory = 'test-option';
 
-    render(<Select options={options} label={label} />, {
-      ctx: { selectedCategory },
-    });
+    render(
+      <Select
+        options={options}
+        label={label}
+        selectedCategory={selectedCategory}
+      />
+    );
 
-    expect(screen.getByText(selectedCategory)).toBeInTheDocument();
+    expect(screen.getByLabelText(/test option/i)).toBeInTheDocument();
   });
 
   it('updates selected category and navigates to option link', async () => {
@@ -47,24 +53,18 @@ describe('Select', () => {
         options={options}
         label={label}
         handleCategoryChange={handleCategoryChange}
-      />,
-      {
-        ctx: { selectedCategory: null },
-      }
+        selectedCategory={null}
+      />
     );
 
-    userEvent.click(screen.getAllByText(label)[1]);
+    userEvent.click(screen.getAllByLabelText(label)[1]);
 
     await waitFor(() => {
       userEvent.click(screen.getByText(/test option/i));
     });
 
-    const expected = {
-      selectedCategory: 'test-option',
-    };
-
     await waitFor(() => {
-      expect(handleCategoryChange).toHaveBeenCalledWith(expected);
+      expect(handleCategoryChange).toHaveBeenCalledWith('test-option');
     });
   });
 });

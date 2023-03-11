@@ -32,11 +32,6 @@ import {
 
 import Logo from '@/src/functional-player-logo.svg';
 
-// old buttons in case needed
-{
-  /* <LinkButton noLeftMargin>Log in</LinkButton> */
-}
-
 interface Props {
   isDrawerOpen: boolean;
   setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
@@ -57,8 +52,7 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
     updateCtx({ selectedCategory: null });
   };
 
-  const handleCategoryChange = (e: SelectChangeEvent<string>) => {
-    const selectedCategory: Category = e.target.value;
+  const handleCategoryChange = (selectedCategory: Category) => {
     updateCtx({ selectedCategory });
     push(`/categories/?category=${selectedCategory}`);
   };
@@ -90,7 +84,7 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
         }}
       >
         <Link href={'/dashboard'} onClick={handleLogoClick} disableHover>
-          <Box sx={{ height: '2rem' }}>
+          <Box sx={{ height: '2.5rem' }}>
             <Image
               data-testid='fp-logo'
               alt='fp-logo'

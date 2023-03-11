@@ -1,7 +1,5 @@
 import Navbar from './navbar.component';
 
-import { DEFAULT_SELECT_OPTION } from '@/src/utils/constants';
-
 import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
 // TODO: need to add changes in here, tests for select handler
@@ -35,36 +33,6 @@ describe('Navbar', () => {
     });
   });
 
-  it('resets category and closes drawer (if open) if logo clicked', async () => {
-    const setIsDrawerOpen = jest.fn();
-    const { updateCtx } = render(
-      <Navbar setIsDrawerOpen={setIsDrawerOpen} isDrawerOpen />,
-      { updateCtx: jest.fn() }
-    );
-
-    userEvent.click(screen.getByText(/functional player/i));
-
-    const expected = {
-      selectedCategory: null,
-    };
-
-    await waitFor(() => {
-      expect(updateCtx).toHaveBeenCalledWith(expected);
-      expect(setIsDrawerOpen).toHaveBeenCalled();
-    });
-  });
-
-  it('does not call drawer close fn if drawer is closed and logo clicked', async () => {
-    const setIsDrawerOpen = jest.fn();
-    render(<Navbar setIsDrawerOpen={setIsDrawerOpen} isDrawerOpen={false} />);
-
-    userEvent.click(screen.getByText(/functional player/i));
-
-    await waitFor(() => {
-      expect(setIsDrawerOpen).not.toHaveBeenCalled();
-    });
-  });
-
   it('navigates to dashboard if logo clicked', async () => {
     const {
       router: { push },
@@ -72,10 +40,63 @@ describe('Navbar', () => {
       push: jest.fn(),
     });
 
-    userEvent.click(screen.getByText(/functional player/i));
+    userEvent.click(screen.getByTestId(/fp-logo/i));
 
     await waitFor(() => {
       expect(push).toHaveBeenCalledWith('/dashboard', {
+        forceOptimisticNavigation: false,
+      });
+    });
+  });
+
+  it('updates state and navigates to route when select changed', async () => {
+    const {
+      updateCtx,
+      router: { push },
+    } = render(<Navbar isDrawerOpen={false} />, {
+      push: jest.fn(),
+      updateCtx: jest.fn(),
+    });
+
+    userEvent.click(screen.getAllByLabelText('Explore by category...')[1]);
+
+    await waitFor(() => {
+      userEvent.click(screen.getByText(/blues/i));
+    });
+
+    await waitFor(() => {
+      expect(updateCtx).toHaveBeenCalledWith({ selectedCategory: 'blues' });
+      expect(push).toHaveBeenCalledWith('/categories/?category=blues');
+    });
+  });
+
+  it('navigates to login when button clicked', async () => {
+    const {
+      router: { push },
+    } = render(<Navbar isDrawerOpen={false} />, {
+      push: jest.fn(),
+    });
+
+    userEvent.click(screen.getByRole('button', { name: 'Log in' }));
+
+    await waitFor(() => {
+      expect(push).toHaveBeenCalledWith('/login', {
+        forceOptimisticNavigation: false,
+      });
+    });
+  });
+
+  it('navigates to register when button clicked', async () => {
+    const {
+      router: { push },
+    } = render(<Navbar isDrawerOpen={false} />, {
+      push: jest.fn(),
+    });
+
+    userEvent.click(screen.getByRole('button', { name: 'Sign Up' }));
+
+    await waitFor(() => {
+      expect(push).toHaveBeenCalledWith('/register', {
         forceOptimisticNavigation: false,
       });
     });
