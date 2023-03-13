@@ -10,6 +10,7 @@ import {
   handleServerError,
   handleForbidden,
   logServerError,
+  sanitizeBody,
 } from '@/lib';
 
 import {
@@ -29,7 +30,7 @@ async function updatePassword(
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {
     try {
-      const { email, currentPassword, newPassword } = req.body;
+      const { email, currentPassword, newPassword } = sanitizeBody(req.body);
       const { db } = await connectToDatabase();
 
       const { password: dbPassword } = await db

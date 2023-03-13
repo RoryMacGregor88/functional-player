@@ -20,6 +20,7 @@ async function logout(
 ): Promise<void> {
   if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
+    // body not used in DB operations, no sanitization required
   } else if (req.session.user?.email !== req.body.email) {
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {

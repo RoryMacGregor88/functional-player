@@ -4,7 +4,7 @@ import { DefaultToastData, Severity } from '@/src/utils/interfaces';
 
 const severity: Severity = 'error';
 
-const defaultErrorProps = {
+const defaultErrorProps: DefaultToastData = {
   toastData: {
     severity,
     message: DEFAULT_ERROR_MESSAGE,
@@ -15,7 +15,7 @@ interface Params {
   endpoint: string;
   formData?: object;
   method?: string;
-  onError: (values: DefaultToastData) => void;
+  onError: (defaultToastData: DefaultToastData) => void;
 }
 
 export default async function http({

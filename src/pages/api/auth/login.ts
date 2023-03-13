@@ -11,6 +11,7 @@ import {
   handleForbidden,
   handleServerError,
   logServerError,
+  sanitizeBody,
 } from '@/lib';
 
 import {
@@ -27,7 +28,7 @@ async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else {
     try {
-      const { email, password: formPassword } = req.body;
+      const { email, password: formPassword } = sanitizeBody(req.body);
       const { db } = await connectToDatabase();
 
       const result = await db.collection<DbUser>(USERS).findOne({ email });

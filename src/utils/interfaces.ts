@@ -52,6 +52,7 @@ export type User = {
 } | null;
 
 // _id optional because created by MongoDb, so not required when registering
+// TODO: should this ever be here in that case? We should never create IDs?
 export type DbUser = {
   _id?: Id;
   email: string;

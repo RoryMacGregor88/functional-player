@@ -10,6 +10,7 @@ import {
   handleServerError,
   handleForbidden,
   logServerError,
+  sanitizeBody,
 } from '@/lib';
 
 import {
@@ -35,7 +36,7 @@ async function unsubscribe(
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {
     try {
-      const { email, customerId } = req.body;
+      const { email, customerId } = sanitizeBody(req.body);
 
       await stripe.customers.del(customerId);
 

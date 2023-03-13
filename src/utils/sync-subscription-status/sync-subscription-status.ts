@@ -13,10 +13,9 @@ interface ResProps {
 }
 
 // User is not set to null on error here because the logout handler
-// is called is `ok` id returned false. Setting user to null here is
+// is called if `ok` is returned false. Setting user to null here is
 // pointless, because it only sets it in state. There will still be a
 // token in the browser, so calling `logout` is the better approach.
-
 export default async function syncSubscriptionStatus({
   user,
   updateCtx,

@@ -8,6 +8,7 @@ import {
   handleForbidden,
   logServerError,
   handleServerError,
+  sanitizeBody,
 } from '@/lib';
 
 import {
@@ -28,7 +29,7 @@ async function updateBookmarks(
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {
     try {
-      const { email, bookmarks } = req.body;
+      const { email, bookmarks } = sanitizeBody(req.body);
       const { db } = await connectToDatabase();
 
       await db

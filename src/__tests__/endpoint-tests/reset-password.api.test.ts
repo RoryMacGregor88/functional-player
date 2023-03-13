@@ -20,6 +20,7 @@ jest.mock('nodemailer', () => ({
 }));
 
 jest.mock('@/lib', () => ({
+  sanitizeBody: (b) => b,
   connectToDatabase: jest.fn().mockImplementation(() => ({
     db: {
       collection: () => ({

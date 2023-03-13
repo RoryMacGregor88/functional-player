@@ -9,6 +9,7 @@ import {
   handleServerError,
   handleForbidden,
   logServerError,
+  sanitizeBody,
 } from '@/lib';
 
 import { generateTempPassword } from '@/src/utils';
@@ -29,7 +30,7 @@ export default async function resetPassword(
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else {
     try {
-      const { email } = req.body;
+      const { email } = sanitizeBody(req.body);
       const { db } = await connectToDatabase();
 
       const result = await db.collection<DbUser>(USERS).findOne({ email });

@@ -12,6 +12,7 @@ import {
   handleForbidden,
   handleServerError,
   logServerError,
+  sanitizeBody,
 } from '@/lib';
 
 import {
@@ -39,7 +40,11 @@ async function deleteAccount(
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {
     try {
-      const { email, customerId, password: formPassword } = req.body;
+      const {
+        email,
+        customerId,
+        password: formPassword,
+      } = sanitizeBody(req.body);
 
       const { db } = await connectToDatabase();
       const result = await db.collection<DbUser>(USERS).findOne({ email });

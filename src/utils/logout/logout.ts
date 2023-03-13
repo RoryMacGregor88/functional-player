@@ -33,12 +33,13 @@ export default async function logout({
       },
     });
   } else if (resUser === null) {
-    push('/login');
     updateCtx({
       user: resUser,
       toastData: {
         message: LOG_OUT_SUCCESS_MESSAGE,
       },
     });
+    // TODO: this used to be above updateCtx, does it still work?
+    push('/login');
   }
 }

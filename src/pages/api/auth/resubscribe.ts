@@ -10,6 +10,7 @@ import {
   handleServerError,
   handleForbidden,
   logServerError,
+  sanitizeBody,
 } from '@/lib';
 
 import {
@@ -35,7 +36,7 @@ async function resubscribe(
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {
     try {
-      const { email, username } = req.body;
+      const { email, username } = sanitizeBody(req.body);
       const { db } = await connectToDatabase();
 
       // TODO: must prevent making second subscription with same email

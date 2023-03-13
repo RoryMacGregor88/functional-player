@@ -9,6 +9,7 @@ import {
   logServerError,
   handleForbidden,
   handleServerError,
+  sanitizeBody,
 } from '@/lib';
 
 import {
@@ -32,7 +33,7 @@ async function syncSubscriptionStatus(
         email,
         subscriptionStatus: currentSubscriptionStatus,
         subscriptionId,
-      } = req.body;
+      } = sanitizeBody(req.body);
 
       const { db } = await connectToDatabase();
 

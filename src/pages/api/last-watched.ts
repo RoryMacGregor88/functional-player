@@ -8,6 +8,7 @@ import {
   handleForbidden,
   handleServerError,
   logServerError,
+  sanitizeBody,
 } from '@/lib';
 
 import {
@@ -28,7 +29,7 @@ async function lastWatched(
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {
     try {
-      const { email, _id } = req.body;
+      const { email, _id } = sanitizeBody(req.body);
       const { db } = await connectToDatabase();
 
       await db

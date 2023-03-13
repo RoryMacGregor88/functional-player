@@ -29,6 +29,7 @@ jest.mock('stripe', () =>
 );
 
 jest.mock('@/lib', () => ({
+  sanitizeBody: (b) => b,
   connectToDatabase: jest.fn().mockImplementation(() => ({
     db: {
       collection: () => ({

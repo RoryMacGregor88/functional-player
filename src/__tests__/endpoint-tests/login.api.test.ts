@@ -19,6 +19,7 @@ jest.mock('iron-session/next', () => ({
 }));
 
 jest.mock('@/lib', () => ({
+  sanitizeBody: (b) => b,
   syncStripeAndDb: ({ subscriptionId }) => {
     if (subscriptionId === 'error') {
       return { isError: true };

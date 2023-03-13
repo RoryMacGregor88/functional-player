@@ -9,6 +9,7 @@ import {
   logServerError,
   handleForbidden,
   handleServerError,
+  sanitizeBody,
 } from '@/lib';
 
 import {
@@ -33,7 +34,7 @@ export default async function register(
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else {
     try {
-      const { email, username, password } = req.body;
+      const { email, username, password } = sanitizeBody(req.body);
       const { db } = await connectToDatabase();
 
       const checkExistingEmail = await db
