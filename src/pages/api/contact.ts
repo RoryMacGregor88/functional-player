@@ -7,13 +7,12 @@ import {
   handleForbidden,
   handleServerError,
   logServerError,
+  sanitizeBody,
 } from '@/lib';
 
 import { DbUser } from '@/src/utils/interfaces';
 
 import { USERS, HTTP_METHOD_ERROR_MESSAGE } from '@/src/utils/constants';
-
-// TODO: needs tests
 
 async function contact(
   req: NextApiRequest,
@@ -23,7 +22,7 @@ async function contact(
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else {
     try {
-      const { email, body } = req.body;
+      const { email, body } = sanitizeBody(req.body);
       const { db } = await connectToDatabase();
 
       const result = await db.collection<DbUser>(USERS).findOne({ email });
