@@ -2,6 +2,7 @@ import {
   TOKEN_ERROR_MESSAGE,
   DEFAULT_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
+  EMAIL_NOT_FOUND_MESSAGE,
 } from '@/src/utils/constants';
 
 import lastWatched from '@/src/pages/api/last-watched';
@@ -21,8 +22,10 @@ jest.mock('@/lib', () => ({
         findOneAndUpdate: ({ email }) => {
           if (email === 'error@test.com') {
             throw new Error();
+          } else if (email === 'notfound@test.com') {
+            return { value: null };
           } else if (email === 'success@test.com') {
-            return true;
+            return { value: true };
           }
         },
       }),
@@ -63,6 +66,25 @@ describe('lastWatched endpoint', () => {
     expect(status).toHaveBeenCalledWith(200);
     expect(json).toHaveBeenCalledWith({
       resUser: { email, lastWatched: '12345' },
+    });
+  });
+
+  it('handles user not found', async () => {
+    const save = jest.fn(),
+      email = 'notfound@test.com',
+      req = {
+        method: 'POST',
+        body: { email, _id: '12345' },
+        session: { user: { email }, save },
+      },
+      res = { status };
+
+    await lastWatched(req, res);
+
+    expect(save).not.toHaveBeenCalled();
+    expect(status).toHaveBeenCalledWith(400);
+    expect(json).toHaveBeenCalledWith({
+      error: { message: EMAIL_NOT_FOUND_MESSAGE },
     });
   });
 

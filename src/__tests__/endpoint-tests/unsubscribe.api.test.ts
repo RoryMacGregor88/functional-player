@@ -2,6 +2,7 @@ import {
   TOKEN_ERROR_MESSAGE,
   DEFAULT_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
+  EMAIL_NOT_FOUND_MESSAGE,
 } from '@/src/utils/constants';
 
 import unsubscribe from '@/src/pages/api/auth/unsubscribe';
@@ -27,8 +28,10 @@ jest.mock('@/lib', () => ({
         findOneAndUpdate: ({ email }) => {
           if (email === 'error@test.com') {
             throw new Error();
+          } else if (email === 'notfound@test.com') {
+            return { value: null };
           } else if (email === 'success@test.com') {
-            return true;
+            return { value: true };
           }
         },
       }),
@@ -74,6 +77,25 @@ describe('unsubscribe endpoint', () => {
         subscriptionId: null,
         subscriptionStatus: null,
       },
+    });
+  });
+
+  it('handles user not found', async () => {
+    const save = jest.fn(),
+      email = 'notfound@test.com',
+      req = {
+        method: 'POST',
+        body: { email },
+        session: { user: { email }, save },
+      },
+      res = { status };
+
+    await unsubscribe(req, res);
+
+    expect(save).not.toHaveBeenCalled();
+    expect(status).toHaveBeenCalledWith(400);
+    expect(json).toHaveBeenCalledWith({
+      error: { message: EMAIL_NOT_FOUND_MESSAGE },
     });
   });
 

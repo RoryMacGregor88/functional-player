@@ -4,7 +4,7 @@ import { Db } from 'mongodb';
 
 import { USERS, STRIPE_API_VERSION } from '@/src/utils/constants';
 
-import { Id } from '@/src/utils/interfaces';
+import { Id, DbUser } from '@/src/utils/interfaces';
 
 const stripe = new stripeFn(process.env.STRIPE_TEST_SECRET_KEY, {
   apiVersion: STRIPE_API_VERSION,
@@ -43,8 +43,10 @@ async function syncStripeAndDb({
     // if stripe's status does not match db, update status in db
     if (currentSubscriptionStatus !== stripeStatus) {
       console.log('STRIPE IS NOT EQUAL');
+
+      // does this need a check? Can this be broken through use input?
       await db
-        .collection(USERS)
+        .collection<DbUser>(USERS)
         .findOneAndUpdate(
           { email },
           { $set: { subscriptionStatus: stripeStatus } }

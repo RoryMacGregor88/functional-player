@@ -45,13 +45,6 @@ export default async function resetPassword(
 
       const tempPassword = generateTempPassword();
 
-      await db
-        .collection(USERS)
-        .findOneAndUpdate(
-          { email },
-          { $set: { password: await hash(tempPassword, 12) } }
-        );
-
       const html = `
         <div>
           <p>Hello, ${result.username}.</p>

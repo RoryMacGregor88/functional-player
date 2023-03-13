@@ -76,7 +76,7 @@ export default function Contact({ updateCtx }): ReactElement {
     });
 
     if (!!error) {
-      setWellData({ message: DEFAULT_ERROR_MESSAGE });
+      setWellData({ message: error.message });
     } else if (ok) {
       setWellData({
         severity: 'success',

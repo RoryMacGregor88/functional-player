@@ -18,6 +18,7 @@ import {
   STRIPE_API_VERSION,
   HTTP_METHOD_ERROR_MESSAGE,
   TOKEN_ERROR_MESSAGE,
+  EMAIL_NOT_FOUND_MESSAGE,
 } from '@/src/utils/constants';
 
 import { User, DbUser } from '@/src/utils/interfaces';
@@ -40,6 +41,8 @@ async function resubscribe(
       const { db } = await connectToDatabase();
 
       // TODO: must prevent making second subscription with same email
+      // if you do the email check here, the check after `findOneAndUpdate`
+      // below will no longer be needed
 
       // create customer on stripe servers
       const { id: customerId } = await stripe.customers.create({
@@ -70,7 +73,7 @@ async function resubscribe(
         subscriptionStatus,
       };
 
-      await db.collection<DbUser>(USERS).findOneAndUpdate(
+      const { value } = await db.collection<DbUser>(USERS).findOneAndUpdate(
         { email },
         {
           $set: {
@@ -78,6 +81,12 @@ async function resubscribe(
           },
         }
       );
+
+      if (!value) {
+        return res
+          .status(400)
+          .json({ error: { message: EMAIL_NOT_FOUND_MESSAGE } });
+      }
 
       const resUser: User = {
         ...req.session.user,

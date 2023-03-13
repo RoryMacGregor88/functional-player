@@ -15,9 +15,10 @@ import {
   USERS,
   TOKEN_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
+  EMAIL_NOT_FOUND_MESSAGE,
 } from '@/src/utils/constants';
 
-import { User } from '@/src/utils/interfaces';
+import { User, DbUser } from '@/src/utils/interfaces';
 
 async function lastWatched(
   req: NextApiRequest,
@@ -32,9 +33,15 @@ async function lastWatched(
       const { email, _id } = sanitizeBody(req.body);
       const { db } = await connectToDatabase();
 
-      await db
-        .collection(USERS)
+      const { value } = await db
+        .collection<DbUser>(USERS)
         .findOneAndUpdate({ email }, { $set: { lastWatched: _id } });
+
+      if (!value) {
+        return res
+          .status(400)
+          .json({ error: { message: EMAIL_NOT_FOUND_MESSAGE } });
+      }
 
       const resUser: User = { ...req.session.user, lastWatched: _id };
 

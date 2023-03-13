@@ -3,6 +3,7 @@ import {
   DEFAULT_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
   INCORRECT_PASSWORD_MESSAGE,
+  EMAIL_NOT_FOUND_MESSAGE,
 } from '@/src/utils/constants';
 
 import updatePassword from '@/src/pages/api/auth/update-password';
@@ -27,12 +28,14 @@ jest.mock('@/lib', () => ({
         findOne: ({ email }) => {
           if (email === 'error@test.com') {
             throw new Error();
+          } else if (email === 'notfound@test.com') {
+            return null;
           } else if (email === 'success@test.com') {
             const testUser = { password: '12345' };
             return testUser;
           }
         },
-        findOneAndUpdate: () => {},
+        updateOne: () => {},
       }),
     },
   })),
@@ -69,6 +72,23 @@ describe('updatePassword endpoint', () => {
     expect(status).toHaveBeenCalledWith(200);
     expect(json).toHaveBeenCalledWith({
       ok: true,
+    });
+  });
+
+  it('handles user not found', async () => {
+    const email = 'notfound@test.com',
+      req = {
+        method: 'POST',
+        body: { email, currentPassword: '12345', newPassword: '678910' },
+        session: { user: { email } },
+      },
+      res = { status };
+
+    await updatePassword(req, res);
+
+    expect(status).toHaveBeenCalledWith(400);
+    expect(json).toHaveBeenCalledWith({
+      error: { message: EMAIL_NOT_FOUND_MESSAGE },
     });
   });
 

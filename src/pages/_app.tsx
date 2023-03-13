@@ -46,6 +46,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
   if (user === undefined) return <LoadMask showLogo />;
 
   // TODO: need one on every page once fleshed out, SEO is vital
+  // use Componwent.title trick
   return (
     <>
       <Head>

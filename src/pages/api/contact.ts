@@ -12,7 +12,11 @@ import {
 
 import { DbUser } from '@/src/utils/interfaces';
 
-import { USERS, HTTP_METHOD_ERROR_MESSAGE } from '@/src/utils/constants';
+import {
+  USERS,
+  HTTP_METHOD_ERROR_MESSAGE,
+  EMAIL_NOT_FOUND_MESSAGE,
+} from '@/src/utils/constants';
 
 async function contact(
   req: NextApiRequest,

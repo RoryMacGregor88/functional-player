@@ -2,6 +2,7 @@ import {
   TOKEN_ERROR_MESSAGE,
   DEFAULT_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
+  EMAIL_NOT_FOUND_MESSAGE,
 } from '@/src/utils/constants';
 
 import resubscribe from '@/src/pages/api/auth/resubscribe';
@@ -33,15 +34,16 @@ jest.mock('@/lib', () => ({
   connectToDatabase: jest.fn().mockImplementation(() => ({
     db: {
       collection: () => ({
-        findOne: ({ email }) => {
+        findOneAndUpdate: ({ email }) => {
           if (email === 'error@test.com') {
             throw new Error();
+          } else if (email === 'notfound@test.com') {
+            return { value: null };
           } else if (email === 'success@test.com') {
             const testUser = { password: '12345' };
-            return testUser;
+            return { value: true };
           }
         },
-        findOneAndUpdate: () => {},
       }),
     },
   })),
@@ -66,7 +68,7 @@ describe('resubscribe endpoint', () => {
 
   it('resubscribes', async () => {
     const save = jest.fn(),
-      email = 'error@test.com',
+      email = 'success@test.com',
       req = {
         method: 'POST',
         body: { email },
@@ -82,7 +84,7 @@ describe('resubscribe endpoint', () => {
       clientSecret: 'test-client-secret',
       resUser: {
         customerId: '12345',
-        email: 'error@test.com',
+        email: 'success@test.com',
         subscriptionId: '678910',
         subscriptionStatus: 'incomplete',
       },
@@ -114,6 +116,25 @@ describe('resubscribe endpoint', () => {
     expect(status).toHaveBeenCalledWith(403);
     expect(json).toHaveBeenCalledWith({
       error: { message: TOKEN_ERROR_MESSAGE },
+    });
+  });
+
+  it('handles user not found', async () => {
+    const save = jest.fn(),
+      email = 'notfound@test.com',
+      req = {
+        method: 'POST',
+        body: { email },
+        session: { user: { email }, save },
+      },
+      res = { status };
+
+    await resubscribe(req, res);
+
+    expect(save).not.toHaveBeenCalled();
+    expect(status).toHaveBeenCalledWith(400);
+    expect(json).toHaveBeenCalledWith({
+      error: { message: EMAIL_NOT_FOUND_MESSAGE },
     });
   });
 

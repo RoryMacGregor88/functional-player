@@ -48,7 +48,7 @@ export default async function register(
       }
 
       const checkExistingUsername = await db
-        .collection(USERS)
+        .collection<DbUser>(USERS)
         .findOne({ username });
 
       if (!!checkExistingUsername) {

@@ -14,10 +14,11 @@ import {
 import {
   HTTP_METHOD_ERROR_MESSAGE,
   TOKEN_ERROR_MESSAGE,
+  EMAIL_NOT_FOUND_MESSAGE,
   USERS,
 } from '@/src/utils/constants';
 
-import { User } from '@/src/utils/interfaces';
+import { User, DbUser } from '@/src/utils/interfaces';
 
 async function updateBookmarks(
   req: NextApiRequest,
@@ -32,9 +33,15 @@ async function updateBookmarks(
       const { email, bookmarks } = sanitizeBody(req.body);
       const { db } = await connectToDatabase();
 
-      await db
-        .collection(USERS)
+      const { value } = await db
+        .collection<DbUser>(USERS)
         .findOneAndUpdate({ email }, { $set: { bookmarks } });
+
+      if (!value) {
+        return res
+          .status(400)
+          .json({ error: { message: EMAIL_NOT_FOUND_MESSAGE } });
+      }
 
       const resUser: User = { ...req.session.user, bookmarks };
 

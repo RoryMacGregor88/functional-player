@@ -2,6 +2,7 @@ import {
   TOKEN_ERROR_MESSAGE,
   DEFAULT_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
+  EMAIL_NOT_FOUND_MESSAGE,
 } from '@/src/utils/constants';
 
 import updateBookmarks from '@/src/pages/api/update-bookmarks';
@@ -21,8 +22,10 @@ jest.mock('@/lib', () => ({
         findOneAndUpdate: ({ email }) => {
           if (email === 'error@test.com') {
             throw new Error();
+          } else if (email === 'notfound@test.com') {
+            return { value: null };
           } else if (email === 'success@test.com') {
-            return true;
+            return { value: true };
           }
         },
       }),
@@ -64,6 +67,27 @@ describe('updateBookmarks endpoint', () => {
     expect(save).toHaveBeenCalled();
     expect(status).toHaveBeenCalledWith(200);
     expect(json).toHaveBeenCalledWith({ resUser: { ...user, bookmarks } });
+  });
+
+  it('handles user not found', async () => {
+    const save = jest.fn(),
+      email = 'notfound@test.com',
+      user = { email },
+      bookmarks = ['123', '456'],
+      req = {
+        method: 'POST',
+        body: { email, bookmarks },
+        session: { user, save },
+      },
+      res = { status };
+
+    await updateBookmarks(req, res);
+
+    expect(save).not.toHaveBeenCalled();
+    expect(status).toHaveBeenCalledWith(400);
+    expect(json).toHaveBeenCalledWith({
+      error: { message: EMAIL_NOT_FOUND_MESSAGE },
+    });
   });
 
   it('handles http method forbidden', async () => {

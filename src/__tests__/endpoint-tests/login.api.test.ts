@@ -93,7 +93,7 @@ describe('login endpoint', () => {
     });
   });
 
-  it('handles email not found', async () => {
+  it('handles user not found', async () => {
     const req = {
         method: 'POST',
         body: { email: 'nouser@email.com' },

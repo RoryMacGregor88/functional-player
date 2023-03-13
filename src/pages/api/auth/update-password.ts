@@ -18,7 +18,10 @@ import {
   TOKEN_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
   INCORRECT_PASSWORD_MESSAGE,
+  EMAIL_NOT_FOUND_MESSAGE,
 } from '@/src/utils/constants';
+
+import { DbUser } from '@/src/utils/interfaces';
 
 async function updatePassword(
   req: NextApiRequest,
@@ -33,9 +36,15 @@ async function updatePassword(
       const { email, currentPassword, newPassword } = sanitizeBody(req.body);
       const { db } = await connectToDatabase();
 
-      const { password: dbPassword } = await db
-        .collection(USERS)
-        .findOne({ email });
+      const result = await db.collection<DbUser>(USERS).findOne({ email });
+
+      if (!result) {
+        return res
+          .status(400)
+          .json({ error: { message: EMAIL_NOT_FOUND_MESSAGE } });
+      }
+
+      const { password: dbPassword } = result;
 
       const checkPassword = await compare(currentPassword, dbPassword);
 
@@ -45,9 +54,10 @@ async function updatePassword(
           .json({ error: { message: INCORRECT_PASSWORD_MESSAGE } });
       }
 
+      // TODO: was previously `findOneAndUpdate`, check still works
       await db
-        .collection(USERS)
-        .findOneAndUpdate(
+        .collection<DbUser>(USERS)
+        .updateOne(
           { email },
           { $set: { password: await hash(newPassword, 12) } }
         );

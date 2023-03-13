@@ -18,9 +18,10 @@ import {
   STRIPE_API_VERSION,
   HTTP_METHOD_ERROR_MESSAGE,
   TOKEN_ERROR_MESSAGE,
+  EMAIL_NOT_FOUND_MESSAGE,
 } from '@/src/utils/constants';
 
-import { User } from '@/src/utils/interfaces';
+import { User, DbUser } from '@/src/utils/interfaces';
 
 const stripe = new stripeFn(process.env.STRIPE_TEST_SECRET_KEY, {
   apiVersion: STRIPE_API_VERSION,
@@ -48,9 +49,15 @@ async function unsubscribe(
         subscriptionStatus: null,
       };
 
-      await db
-        .collection(USERS)
+      const { value } = await db
+        .collection<DbUser>(USERS)
         .findOneAndUpdate({ email }, { $set: { ...updatedProperties } });
+
+      if (!value) {
+        return res
+          .status(400)
+          .json({ error: { message: EMAIL_NOT_FOUND_MESSAGE } });
+      }
 
       const resUser: User = {
         ...req.session.user,
