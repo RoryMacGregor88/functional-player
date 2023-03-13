@@ -46,6 +46,8 @@ export const SUCCESSFUL_LOG_IN_MESSAGE = 'Welcome back! You are now logged in';
 export const LOG_OUT_SUCCESS_MESSAGE = 'You have been successfully logged out';
 export const PAGE_CANNOT_BE_ACCESSED_MESSAGE =
   'This page cannot be accessed right now';
+export const CONTACT_SUCCESS_MESSAGE =
+  'Your message has been successfully sent.';
 
 // form validation
 export const EMAIL_REQUIRED_MESSAGE = 'Email is required';

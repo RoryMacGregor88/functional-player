@@ -25,6 +25,7 @@ import {
   EMAIL_INVALID_MESSAGE,
   BODY_REQUIRED_MESSAGE,
   DEFAULT_ERROR_MESSAGE,
+  CONTACT_SUCCESS_MESSAGE,
 } from '@/src/utils/constants';
 
 import { DefaultToastData, ContactFormValues } from '@/src/utils/interfaces';
@@ -79,7 +80,7 @@ export default function Contact({ updateCtx }): ReactElement {
     } else if (ok) {
       setWellData({
         severity: 'success',
-        message: 'Your message has been successfully sent.',
+        message: CONTACT_SUCCESS_MESSAGE,
       });
       setIsSubmitDisabled(true);
     }

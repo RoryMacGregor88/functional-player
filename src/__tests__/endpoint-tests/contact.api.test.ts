@@ -10,9 +10,7 @@ let json = null,
 
 jest.mock('nodemailer', () => ({
   createTransport: () => ({
-    sendMail: () => {
-      console.log('HIT MAIL');
-    },
+    sendMail: () => {},
   }),
 }));
 

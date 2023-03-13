@@ -35,7 +35,7 @@ describe('logout', () => {
     });
   });
 
-  it('handles error', async () => {
+  it('handles server error', async () => {
     const message = 'test-error-message';
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
@@ -51,7 +51,7 @@ describe('logout', () => {
     expect(updateCtx).toHaveBeenCalledWith(expected);
   });
 
-  it('handles http error', async () => {
+  it('handles client error', async () => {
     fetchMock.mockResponse(() => {
       throw new Error();
     });
