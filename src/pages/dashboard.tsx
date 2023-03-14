@@ -64,9 +64,10 @@ export default function Dashboard({
 
   useEffect(() => {
     if (!!error) {
+      const { message } = error;
       updateCtx({
         toastData: {
-          message: error.message,
+          message,
           severity: 'error',
         },
       });

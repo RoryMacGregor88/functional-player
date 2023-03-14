@@ -42,9 +42,10 @@ export default async function updateBookmarks({
   });
 
   if (!!error) {
+    const { message } = error;
     updateCtx({
       toastData: {
-        message: error.message,
+        message,
         severity: 'error',
       },
     });

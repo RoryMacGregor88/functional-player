@@ -21,11 +21,12 @@ export default async function authenticateToken({
       updateCtx({ ...defaultToastData, user: null }),
   });
   if (!!error) {
+    const { message } = error;
     updateCtx({
       user: null,
       toastData: {
         severity: 'error',
-        message: error.message,
+        message,
       },
     });
   } else if (!!resUser || resUser === null) {

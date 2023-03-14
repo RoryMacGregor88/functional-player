@@ -26,9 +26,10 @@ export default async function logout({
     onError: updateCtx,
   });
   if (!!error) {
+    const { message } = error;
     updateCtx({
       toastData: {
-        message: error.message,
+        message,
         severity: 'error',
       },
     });

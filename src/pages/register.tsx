@@ -122,7 +122,8 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
       });
 
     if (!!stripeError) {
-      const error = { message: stripeError.message };
+      const { message } = stripeError,
+        error = { message };
       handleServerError(error);
     }
   };

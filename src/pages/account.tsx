@@ -227,7 +227,8 @@ export default function Account({ user, ctx, updateCtx }: Props): ReactElement {
       });
 
     if (!!stripeError) {
-      const error = { message: stripeError.message };
+      const { message } = stripeError,
+        error = { message };
       handleServerError(error);
     }
   };

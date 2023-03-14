@@ -63,20 +63,21 @@ export default function Contact({ updateCtx }): ReactElement {
   const onSubmit = async ({ email, body }: ContactFormValues) => {
     setIsLoading(true);
 
-    const { ok, error }: ResProps = await http({
+    const { error, ok }: ResProps = await http({
       endpoint: '/contact',
       formData: {
         email,
         body,
       },
-      onError: (DefaultToastData: DefaultToastData) => {
+      onError: (defaultToastData: DefaultToastData) => {
         setIsLoading(false);
-        updateCtx(DefaultToastData);
+        updateCtx(defaultToastData);
       },
     });
 
     if (!!error) {
-      setWellData({ message: error.message });
+      const { message } = error;
+      setWellData({ message });
     } else if (ok) {
       setWellData({
         severity: 'success',

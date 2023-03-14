@@ -78,7 +78,8 @@ export default function ResetPassword({
     });
 
     if (!!error) {
-      handleResponse({ message: error.message });
+      const { message } = error;
+      handleResponse({ message });
     } else if (ok) {
       handleResponse({
         severity: 'success',

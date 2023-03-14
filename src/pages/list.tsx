@@ -69,13 +69,15 @@ export default function List({
         });
       }
     } else if (!!error) {
-      push('/dashboard');
+      const { message } = error;
       updateCtx({
         toastData: {
-          message: error.message,
+          message,
           severity: 'error',
         },
       });
+      // TODO: used to be above updateCtx, make sure still works
+      push('/dashboard');
     }
   }, [user, push, error, updateCtx, ctx]);
 

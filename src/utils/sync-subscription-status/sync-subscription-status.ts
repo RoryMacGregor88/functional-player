@@ -33,10 +33,11 @@ export default async function syncSubscriptionStatus({
     onError: updateCtx,
   });
   if (!!error) {
+    const { message } = error;
     updateCtx({
       toastData: {
         severity: 'error',
-        message: error.message,
+        message,
       },
     });
   } else if (!!resUser) {

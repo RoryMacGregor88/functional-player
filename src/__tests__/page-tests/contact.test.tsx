@@ -40,9 +40,9 @@ describe('Contact', () => {
   });
 
   it('handles server error', async () => {
-    fetchMock.mockResponse(
-      JSON.stringify({ error: { message: 'test-error-message' } })
-    );
+    const message = 'test-error-message';
+
+    fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
     const updateCtx = jest.fn(),
       email = 'test@email.com',
@@ -63,7 +63,7 @@ describe('Contact', () => {
     userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(DEFAULT_ERROR_MESSAGE)).toBeInTheDocument();
+      expect(screen.getByText(message)).toBeInTheDocument();
     });
   });
 

@@ -46,7 +46,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
   if (user === undefined) return <LoadMask showLogo />;
 
   // TODO: need one on every page once fleshed out, SEO is vital
-  // use Componwent.title trick
+  // use Component.title trick: https://www.youtube.com/watch?v=R59e1Vl5lO8&list=WL&index=8&t=305s&ab_channel=LeeRobinson
   return (
     <>
       <Head>

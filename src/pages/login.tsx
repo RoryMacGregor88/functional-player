@@ -68,7 +68,8 @@ export default function Login({ user, updateCtx }: Props) {
     });
 
     if (!!error) {
-      setWellData({ message: error.message });
+      const { message } = error;
+      setWellData({ message });
     } else if (!!resUser) {
       updateCtx({
         user: resUser,
