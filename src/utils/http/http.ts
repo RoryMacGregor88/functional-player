@@ -11,7 +11,7 @@ const defaultToastData: DefaultToastData = {
 
 interface Params {
   endpoint: string;
-  formData?: Record<string, unknown>;
+  formData?: Record<string, any>;
   method?: string;
   onError: (defaultToastData: DefaultToastData) => void;
 }

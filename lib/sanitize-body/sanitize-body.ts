@@ -1,6 +1,8 @@
+import { NextApiRequest } from 'next';
+
 import sanitize from 'mongo-sanitize';
 
-type Body = Record<string, unknown>;
+type Body = Record<string, any>;
 
 // This is here to sanitize any user-inputted data that may contain
 // malicious characters intended to execute mongoDb commands.
