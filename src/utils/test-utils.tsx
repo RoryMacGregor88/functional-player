@@ -12,7 +12,7 @@ interface Options {
   ctx?: Partial<Ctx>;
   updateCtx?: () => void;
   push?: (href: string) => void;
-  query?: object;
+  query?: Record<string, unknown>;
 }
 
 const render = (

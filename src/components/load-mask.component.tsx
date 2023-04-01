@@ -10,8 +10,6 @@ import { LoadingSpinner } from '@/src/components';
 
 import { THEME_COLORS } from '@/src/utils/constants';
 
-// TODO: replace loading spinner with real logo SVG
-
 interface Props {
   showLogo?: boolean;
 }

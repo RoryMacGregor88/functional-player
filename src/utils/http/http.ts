@@ -2,18 +2,16 @@ import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
 import { DefaultToastData, Severity } from '@/src/utils/interfaces';
 
-const severity: Severity = 'error';
-
-const defaultErrorProps: DefaultToastData = {
+const defaultToastData: DefaultToastData = {
   toastData: {
-    severity,
+    severity: 'error' as Severity,
     message: DEFAULT_ERROR_MESSAGE,
   },
 };
 
 interface Params {
   endpoint: string;
-  formData?: object;
+  formData?: Record<string, unknown>;
   method?: string;
   onError: (defaultToastData: DefaultToastData) => void;
 }
@@ -36,7 +34,7 @@ export default async function http({
       })
     ).json();
   } catch (e) {
-    onError(defaultErrorProps);
+    onError(defaultToastData);
     // empty object so return value can be destructured
     return {};
   }

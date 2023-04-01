@@ -77,7 +77,7 @@ async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
       };
 
       req.session.user = resUser;
-      req.session.save();
+      await req.session.save();
 
       return res.status(200).json({ resUser });
     } catch (error) {

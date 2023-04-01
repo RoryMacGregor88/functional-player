@@ -25,7 +25,7 @@ async function logout(
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {
     try {
-      req.session.destroy();
+      await req.session.destroy();
       return res.status(200).json({ resUser: null });
     } catch (error) {
       await logServerError('logout', error);

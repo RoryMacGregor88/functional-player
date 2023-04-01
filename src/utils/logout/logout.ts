@@ -20,9 +20,10 @@ export default async function logout({
   updateCtx,
   push,
 }: Params): Promise<void> {
+  const { email } = user;
   const { error, resUser }: ResProps = await http({
     endpoint: '/auth/logout',
-    formData: { email: user.email },
+    formData: { email },
     onError: updateCtx,
   });
   if (!!error) {

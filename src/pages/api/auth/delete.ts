@@ -69,7 +69,7 @@ async function deleteAccount(
       await stripe.customers.del(customerId);
 
       await db.collection<DbUser>(USERS).deleteOne({ email });
-      req.session.destroy();
+      await req.session.destroy();
 
       return res.status(200).json({ resUser: null });
     } catch (error) {

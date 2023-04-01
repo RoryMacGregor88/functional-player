@@ -45,7 +45,7 @@ const Toast: FC<ToastProps> = ({
   // also Action not working
 
   const AnchorOrigin: SnackbarOrigin = {
-    vertical: isMedium ? 'bottom' : 'top',
+    vertical: 'top',
     horizontal: isMedium ? 'center' : 'right',
   };
 

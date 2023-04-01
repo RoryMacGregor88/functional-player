@@ -46,7 +46,7 @@ async function lastWatched(
       const resUser: User = { ...req.session.user, lastWatched: _id };
 
       req.session.user = resUser;
-      req.session.save();
+      await req.session.save();
 
       return res.status(200).json({ resUser });
     } catch (error) {

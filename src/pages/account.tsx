@@ -82,9 +82,14 @@ export default function Account({ user, ctx, updateCtx }: Props): ReactElement {
     if (!user) {
       push('/login');
 
+      // TODO: does this happen anywhere else? Surely it happens in every restricted page?
       // this is here because we need to conditionally call updateCtx here,
-      // as the toast message here will override the toast message from
-      // logging out if the user logs out from this page
+      // as the toast message here "Must be logged in..." will override the
+      // toast message from logging out "Sucessfully logged out" if the user
+      // logs out from this page.
+      //
+      // so it's saying "If there isn't already toast data saying 'successfully
+      // logged out', show toast data for 'you must be logged in..'"
       if (!ctx.toastData) {
         updateCtx({
           toastData: {

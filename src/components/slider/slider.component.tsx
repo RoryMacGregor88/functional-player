@@ -111,9 +111,8 @@ const Slider: FC<SliderProps> = ({
     ctx: { selectedCategory },
   } = useCtx();
 
-  const [position, setPosition] = useState(0);
-
   const isMobile = useMediaQuery('(max-width:700px)');
+  const [position, setPosition] = useState(0);
 
   useEffect(() => {
     if (position > 0) setPosition(0);

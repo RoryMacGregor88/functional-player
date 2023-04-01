@@ -11,7 +11,7 @@ import {
 
 export default async function getCourses(
   user: User,
-  find: object = {}
+  find: Record<string, unknown> = {}
 ): Promise<CourseServerProps> {
   try {
     const { db } = await connectToDatabase();

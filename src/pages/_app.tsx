@@ -32,15 +32,13 @@ function App({ Component, pageProps }: AppProps): ReactElement {
 
   const { user, toastData, dialogData, selectedVideo } = ctx;
 
-  const updateCtx: UpdateCtx = useCallback(
-    (newData: Partial<Ctx>) => setCtx((prev) => ({ ...prev, ...newData })),
-    []
-  );
+  const updateCtx: UpdateCtx = (newData: Partial<Ctx>) =>
+    setCtx((prev) => ({ ...prev, ...newData }));
 
   // token is checked upon initial app request (not internal page navigations)
   useEffect(() => {
     (async () => await authenticateToken({ updateCtx }))();
-  }, [updateCtx]);
+  }, []);
 
   // only a user object or null can ever be returned from server
   if (user === undefined) return <LoadMask showLogo />;
@@ -80,6 +78,9 @@ function App({ Component, pageProps }: AppProps): ReactElement {
             updateCtx={updateCtx}
           />
           <Layout>
+            {/* props such as 'user', 'ctx' and 'updateCtx' can be accessed
+            directly through top-level 'page' components, only deeper components
+            need to use useCtx hook.*/}
             <Component
               user={user}
               ctx={ctx}
