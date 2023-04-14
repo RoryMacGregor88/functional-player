@@ -7,7 +7,7 @@ import { Open_Sans } from '@next/font/google';
 
 import { THEME_COLORS } from '@/src/utils/constants';
 
-const { boneWhite, lightBlack, amazonOrange } = THEME_COLORS;
+const { offBlack, mustardYellow } = THEME_COLORS;
 
 const openSans = Open_Sans({ weight: '400', subsets: ['latin'] });
 
@@ -22,15 +22,15 @@ const theme: ThemeOptions = {
     mode: 'dark',
     // This is maybe not necessary when using all Mui components
     text: {
-      primary: boneWhite,
+      primary: '#fff',
     },
     background: {
-      paper: lightBlack,
+      paper: offBlack,
       // change this to something better
-      default: lightBlack,
+      default: offBlack,
     },
     primary: {
-      main: amazonOrange,
+      main: mustardYellow,
     },
     common: {
       black: '#000',

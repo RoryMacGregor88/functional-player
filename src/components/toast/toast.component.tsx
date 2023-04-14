@@ -59,7 +59,9 @@ const Toast: FC<ToastProps> = ({
       action={<Action />}
       sx={{ zIndex: 4000 }}
     >
-      <Alert severity={severity}>{message}</Alert>
+      <Alert severity={severity} variant='filled'>
+        {message}
+      </Alert>
     </Snackbar>
   );
 };

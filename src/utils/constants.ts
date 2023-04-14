@@ -74,21 +74,49 @@ export const STATUS_LABELS = {
   canceled: 'Cancelled',
 };
 
-export const THEME_COLORS = {
-  // boneWhite: '#faf9f7',
-  boneWhite: '#fff',
-  lightBlack: '#121212',
-  darkBlack: '#080808',
-  lightGrey: '#757575',
-  darkGrey: '#242424',
-  // amazonOrange: '#ff9900',
-  amazonOrange: '#EAAA00',
+const sixtiessPallette2 = {
+  offBlack: '#151515',
+  mustardYellow: '#EAAA00',
 };
+
+const sixtiesPallette = {
+  offBlack: '#151515',
+  brown: '#3a2c20',
+  cream: '#f4eaac',
+  maroon: '#601300',
+  orange: '#b65c11',
+  mustardYellow: '#e7a504',
+  green: '#719842',
+  red: '#901b1b',
+};
+
+export const THEME_COLORS = sixtiessPallette2;
+
+// export const THEME_COLORS = {
+//   white: '#fff',
+//   offBlack: sixtiesPallette.black,
+//   darkBlack: sixtiesPallette.black,
+//   lightGrey: sixtiesPallette.maroon,
+//   darkGrey: '#242424',
+//   // mustardYellow: '#ff9900',
+//   mustardYellow: sixtiesPallette.mustardYellow,
+// };
+
+// export const THEME_COLORS = {
+//   // white: '#faf9f7',
+//   white: '#fff',
+//   offBlack: '#121212',
+//   darkBlack: '#080808',
+//   lightGrey: '#757575',
+//   darkGrey: '#242424',
+//   // mustardYellow: '#ff9900',
+//   mustardYellow: '#EAAA00',
+// };
 
 // export const THEME_COLORS = {
 //   white: '#dfe2cc',
-//   black: '#140c0b',
-//   yellow: '#f2960b',
+//   offBlack: '#140c0b',
+//   mustardYellow: '#f2960b',
 //   green: '#0ca464',
 //   red: '#c31e1e',
 // };

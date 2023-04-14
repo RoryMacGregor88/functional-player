@@ -228,7 +228,7 @@ const Slider: FC<SliderProps> = ({
             >
               <Overlay course={course} isMobile={isMobile} />
               <NextImage
-                src='/stratocaster-medium.jpg'
+                src='/strat-small.jpg'
                 alt='stratocaster'
                 fill
                 style={{ objectFit: 'cover' }}

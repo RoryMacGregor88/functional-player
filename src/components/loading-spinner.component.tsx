@@ -13,7 +13,7 @@ const LoadingSpinner: FC<Props> = ({ sx = {} }): ReactElement => (
     data-testid='loading-spinner'
     // Color is not from theme because spinner
     // in app is outside ThemeProvider
-    sx={{ color: THEME_COLORS.amazonOrange, ...sx }}
+    sx={{ color: THEME_COLORS.mustardYellow, ...sx }}
   />
 );
 

@@ -1,10 +1,12 @@
-import React, { ReactElement, useState, useEffect, useCallback } from 'react';
+import React, { ReactElement, useState, useEffect } from 'react';
 
 import Head from 'next/head';
 
 import { AppProps } from 'next/app';
 
 import { CssBaseline } from '@mui/material';
+
+import { http } from '@/src/utils';
 
 import { ThemeProvider } from '@mui/material/styles';
 

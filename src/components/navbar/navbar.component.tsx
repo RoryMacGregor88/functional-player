@@ -3,14 +3,7 @@ import { Dispatch, FC, ReactElement, SetStateAction } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 
-import {
-  AppBar,
-  Toolbar,
-  Grid,
-  SelectChangeEvent,
-  useMediaQuery,
-  Box,
-} from '@mui/material';
+import { AppBar, Toolbar, Grid, useMediaQuery, Box } from '@mui/material';
 
 import {
   MenuIcon,
@@ -64,7 +57,7 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
       position='fixed'
       sx={{
         border: 'none',
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        backgroundColor: 'rgba(21, 21, 21, 0.9)',
         boxShadow: 'none',
         backgroundImage: 'none',
       }}

@@ -27,7 +27,7 @@ const LoadMask: FC<Props> = ({ showLogo = false }): ReactElement => {
       open
       // Background color is not from theme because spinner
       // in _app.tsx is outside ThemeProvider
-      sx={{ backgroundColor: THEME_COLORS.darkBlack, zIndex: '1000' }}
+      sx={{ backgroundColor: THEME_COLORS.offBlack, zIndex: '1000' }}
     >
       {showLogo ? (
         <Box

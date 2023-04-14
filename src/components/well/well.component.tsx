@@ -12,6 +12,7 @@ const Well: FC<WellData> = ({
   const defaultTitle = severity === 'error' ? 'Error!' : 'Success!';
   return (
     <Alert
+      variant='filled'
       severity={severity}
       sx={{ width: '100%', padding: '1rem', marginBottom: '2rem' }}
     >
