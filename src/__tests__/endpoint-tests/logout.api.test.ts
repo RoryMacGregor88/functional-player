@@ -14,6 +14,18 @@ jest.mock('iron-session/next', () => ({
 }));
 
 jest.mock('@/lib', () => ({
+  sanitizeBody: (b) => b,
+  connectToDatabase: () => ({
+    db: {
+      collection: () => ({
+        updateOne: ({ email }) => {
+          if (email === 'error@test.com') {
+            throw new Error('test-error');
+          }
+        },
+      }),
+    },
+  }),
   logServerError: () => {},
   handleForbidden: jest
     .fn()
@@ -80,10 +92,8 @@ describe('logout endpoint', () => {
 
   it('handles error', async () => {
     // mock database error
-    const destroy = jest.fn().mockImplementation(() => {
-        throw new Error();
-      }),
-      email = 'test@email.com',
+    const destroy = jest.fn(),
+      email = 'error@test.com',
       req = {
         method: 'POST',
         session: { user: { email }, destroy },
