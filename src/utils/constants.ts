@@ -48,6 +48,7 @@ export const PAGE_CANNOT_BE_ACCESSED_MESSAGE =
   'This page cannot be accessed right now';
 export const CONTACT_SUCCESS_MESSAGE =
   'Your message has been successfully sent.';
+export const SESSION_EXPIRED_MESSAGE = 'Session expired. Please log in again';
 
 // form validation
 export const EMAIL_REQUIRED_MESSAGE = 'Email is required';
