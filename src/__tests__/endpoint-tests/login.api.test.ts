@@ -14,6 +14,10 @@ jest.mock('bcryptjs', () => ({
   compare: (p1, p2) => p1 === p2,
 }));
 
+jest.mock('uuid', () => ({
+  v4: () => '123',
+}));
+
 jest.mock('iron-session/next', () => ({
   withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
 }));
@@ -37,6 +41,7 @@ jest.mock('@/lib', () => ({
             const testUser = {
               password: '12345',
               subscriptionId: 'success',
+              sessionIds: [],
             };
             return testUser;
           } else if (email === 'stripeerror@test.com') {
@@ -49,6 +54,7 @@ jest.mock('@/lib', () => ({
             return null;
           }
         },
+        updateOne: () => {},
       }),
     },
   })),

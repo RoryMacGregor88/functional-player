@@ -4,6 +4,8 @@ import { withIronSessionApiRoute } from 'iron-session/next';
 
 import { compare } from 'bcryptjs';
 
+import { v4 as uuid } from 'uuid';
+
 import {
   connectToDatabase,
   sessionOptions,
@@ -21,7 +23,7 @@ import {
   INCORRECT_PASSWORD_MESSAGE,
 } from '@/src/utils/constants';
 
-import { DbUser, User } from '@/src/utils/interfaces';
+import { DbUser, User, Id } from '@/src/utils/interfaces';
 
 async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   if (req.method !== 'POST') {
@@ -45,6 +47,7 @@ async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
         password: dbPassword,
         subscriptionStatus: currentSubscriptionStatus,
         subscriptionId,
+        sessionIds: currentSessionIds,
         ...restOfUser
       } = result;
 
@@ -56,9 +59,11 @@ async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
           .json({ error: { message: INCORRECT_PASSWORD_MESSAGE } });
       }
 
-      // fresh sync of stripe subscription status upon every login. If
-      // subscription status is null (deleted), or is unchanged, original
-      // value will be returned
+      /**
+       * fresh sync of stripe subscription status upon every login. If
+       * subscription status is null (deleted), or is unchanged, original
+       * value will be returned
+       */
       const { isError, subscriptionStatus } = await syncStripeAndDb({
         db,
         email,
@@ -70,13 +75,33 @@ async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
         return handleServerError(res);
       }
 
+      /**
+       * create new session id for both array on dbUser
+       * and to be stored on http cookie
+       */
+      const newSessionId = uuid() as Id;
+      const sessionIds = [...currentSessionIds, newSessionId];
+
+      await db
+        .collection<DbUser>(USERS)
+        .updateOne({ email }, { $set: { sessionIds } });
+
       const resUser: User = {
         ...restOfUser,
         subscriptionId,
         subscriptionStatus,
       };
 
-      req.session.user = resUser;
+      /**
+       * spread is here because session object also has
+       * methods such as destroy(), save(), etc
+       */
+      req.session = {
+        ...req.session,
+        id: newSessionId,
+        user: resUser,
+      };
+
       await req.session.save();
 
       return res.status(200).json({ resUser });
