@@ -11,6 +11,7 @@ import {
   UpdatePasswordForm,
   DeleteAccountForm,
   UpdateSubscriptionForm,
+  AccountDetails,
   Well,
   LoadMask,
   PageWrapper,
@@ -35,7 +36,7 @@ import {
   Ctx,
 } from '@/src/utils/interfaces';
 
-import { http } from '@/src/utils';
+import { http, logout } from '@/src/utils';
 
 //TODO: need `Account Details` page, read-only
 // also, need `Are you sure?` step for cancelling subscription
@@ -126,6 +127,24 @@ export default function Account({ user, ctx, updateCtx }: Props): ReactElement {
   const handleTabChange = (_: any, newValue: number) => {
     if (!!wellData) setWellData(null);
     setValue(newValue);
+  };
+
+  const handleLogoutFromAllClick = async () => {
+    const onClick = async () => await logout({ user, updateCtx, push });
+    updateCtx({
+      dialogData: {
+        title: 'Log out from all devices',
+        message:
+          'This will destroy all session data across any device on which you are logged into the app.',
+        actions: [
+          {
+            onClick,
+            label: 'Click to proceed',
+            closeOnClick: true,
+          },
+        ],
+      },
+    });
   };
 
   interface UpdatePasswordResProps {
@@ -287,17 +306,21 @@ export default function Account({ user, ctx, updateCtx }: Props): ReactElement {
         }}
       >
         {/* // TODO: add 'Logout from all devices' here, looks more "secure" */}
+        <Tab label='Account Details' />
         <Tab label='Update Password' />
         <Tab label='My Subscription' />
         <Tab label='Delete Account' />
       </Tabs>
       <TabPanel name='update-user' value={value} index={0}>
+        <AccountDetails handleLogoutFromAllClick={handleLogoutFromAllClick} />
+      </TabPanel>
+      <TabPanel name='update-user' value={value} index={1}>
         <UpdatePasswordForm
           handleUpdatePassword={handleUpdatePassword}
           isLoading={isLoading}
         />
       </TabPanel>
-      <TabPanel name='update-subscription' value={value} index={1}>
+      <TabPanel name='update-subscription' value={value} index={2}>
         <UpdateSubscriptionForm
           subscriptionStatus={subscriptionStatus}
           handleUnsubscribe={handleUnsubscribe}
@@ -307,7 +330,7 @@ export default function Account({ user, ctx, updateCtx }: Props): ReactElement {
           isLoading={isLoading}
         />
       </TabPanel>
-      <TabPanel name='delete-account' value={value} index={2}>
+      <TabPanel name='delete-account' value={value} index={3}>
         <DeleteAccountForm handleDelete={handleDelete} isLoading={isLoading} />
       </TabPanel>
     </PageWrapper>

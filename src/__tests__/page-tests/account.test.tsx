@@ -47,7 +47,7 @@ describe('Account', () => {
       render(<Account user={{ username: 'test-username' }} />);
 
       expect(
-        screen.getByRole('textbox', { name: /current password/i })
+        screen.getByRole('button', { name: /log out from all devices/i })
       ).toBeInTheDocument();
     });
 
@@ -89,7 +89,7 @@ describe('Account', () => {
       render(<Account user={{ subscriptionStatus: 'active' }} />);
 
       expect(
-        screen.getByRole('textbox', { name: /current password/i })
+        screen.getByRole('button', { name: /log out from all devices/i })
       ).toBeInTheDocument();
 
       userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
@@ -106,6 +106,12 @@ describe('Account', () => {
       fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
       render(<Account user={{ subscriptionStatus: 'active' }} />);
+
+      expect(
+        screen.getByRole('button', { name: /log out from all devices/i })
+      ).toBeInTheDocument();
+
+      userEvent.click(screen.getByRole('tab', { name: /update password/i }));
 
       await waitFor(() => {
         expect(
@@ -140,6 +146,33 @@ describe('Account', () => {
         ).toBeInTheDocument();
 
         expect(screen.queryByText(message)).not.toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Account Details', () => {
+    it('calls `updateCtx` when button clicked', async () => {
+      render(
+        <Account
+          user={{ subscriptionStatus: 'active' }}
+          updateCtx={updateCtx}
+        />
+      );
+
+      const logoutButton = screen.getByRole('button', {
+        name: /log out from all devices/i,
+      });
+
+      expect(logoutButton).toBeInTheDocument();
+
+      userEvent.click(logoutButton);
+
+      await waitFor(() => {
+        expect(updateCtx).toHaveBeenCalledWith({
+          dialogData: expect.objectContaining({
+            title: 'Log out from all devices',
+          }),
+        });
       });
     });
   });

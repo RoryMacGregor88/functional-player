@@ -71,9 +71,11 @@ export default function Dashboard({
           severity: 'error',
         },
       });
-      push('/dashboard');
     }
-  }, [push, error, updateCtx]);
+    // TODO: this is only temporary while under construction. Normally, anyone can go to the dashboard
+    // also, why was this pushing to dashboard when already on dashboard?
+    if (!!error || !user) push('/');
+  }, [push, error, updateCtx, user]);
 
   if (!!error) return <LoadMask />;
 

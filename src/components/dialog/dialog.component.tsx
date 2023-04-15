@@ -36,8 +36,12 @@ const Dialog: FC<Props> = ({
       sx={{
         zIndex: 4000,
         '.MuiDialog-paper': {
-          justifyContent: 'space-evenly',
-          alignItems: 'center',
+          backgroundImage: 'none',
+          backgroundColor: 'rgba(21, 21, 21, 0.9)',
+          border: '2px solid #fff',
+          borderRadius: 3,
+          maxWidth: 'none',
+          maxheight: 'none',
         },
       }}
     >

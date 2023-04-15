@@ -2,10 +2,8 @@ import { useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { PageWrapper } from '@/src/components';
+import { PageWrapper, LoadMask } from '@/src/components';
 import Carousel from '@/src/components/carousel.component';
-
-// TODO: maybe make into an advertising landing at some point
 
 export default function Landing({ user }) {
   const { push } = useRouter();
@@ -15,6 +13,9 @@ export default function Landing({ user }) {
       push('/dashboard');
     }
   }, [push, user]);
+
+  /** prevent flash of content before useEffect runs */
+  if (user !== null) return <LoadMask showLogo />;
 
   return (
     <PageWrapper>

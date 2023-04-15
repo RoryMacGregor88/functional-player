@@ -41,7 +41,6 @@ export default async function logout({
         message: LOG_OUT_SUCCESS_MESSAGE,
       },
     });
-    // TODO: this used to be above updateCtx, does it still work?
     push('/login');
   }
 }

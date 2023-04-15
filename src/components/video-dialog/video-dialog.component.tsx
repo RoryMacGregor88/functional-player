@@ -57,8 +57,6 @@ export const Overlay: FC<OverlayProps> = ({
       sx={{
         height: '50rem',
         width: '60rem',
-        border: '2px solid #fff',
-        borderRadius: 3,
         padding: '2.5rem',
         position: 'relative',
       }}
@@ -210,6 +208,8 @@ const VideoDialog: FC<VideoDialogProps> = ({
         '.MuiDialog-paper': {
           backgroundImage: 'none',
           backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          border: '2px solid #fff',
+          borderRadius: 3,
           maxWidth: 'none',
           maxheight: 'none',
         },

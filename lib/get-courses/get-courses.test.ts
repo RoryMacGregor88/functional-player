@@ -26,7 +26,6 @@ describe('getCourses', () => {
   it('returns courseId if user is authorized', async () => {
     const user = { subscriptionStatus: 'active' },
       expected = {
-        error: null,
         courses: [
           {
             title: 'test-title',
@@ -42,7 +41,6 @@ describe('getCourses', () => {
   it('returns trailerId if user is not authorized', async () => {
     const user = { subscriptionStatus: null },
       expected = {
-        error: null,
         courses: [
           {
             title: 'test-title',
@@ -57,7 +55,6 @@ describe('getCourses', () => {
 
   it('returns trailerId if user not found', async () => {
     const expected = {
-      error: null,
       courses: [
         {
           title: 'test-title',
@@ -72,7 +69,6 @@ describe('getCourses', () => {
 
   it('handles error', async () => {
     const expected = {
-      courses: null,
       error: { message: DEFAULT_ERROR_MESSAGE },
     };
 

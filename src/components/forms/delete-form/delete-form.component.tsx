@@ -63,7 +63,8 @@ const DeleteAccountForm: FC<Props> = ({
         <Grid
           item
           container
-          justifyContent='center'
+          direction='column'
+          alignItems='center'
           sx={{
             borderWidth: '2px',
             borderStyle: 'solid',
@@ -73,8 +74,20 @@ const DeleteAccountForm: FC<Props> = ({
           }}
         >
           <Typography
+            variant='h5'
+            sx={{
+              color: 'error.dark',
+              paddingBottom: '0.5rem',
+            }}
+          >
+            WARNING
+          </Typography>
+          <Typography
             variant='body1'
-            sx={{ color: 'error.dark', paddingBottom: '0.5rem' }}
+            sx={{
+              color: 'common.white',
+              paddingBottom: '0.5rem',
+            }}
           >
             This action is irreversible, are you sure?
           </Typography>
