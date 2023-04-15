@@ -27,6 +27,10 @@ jest.mock('bcryptjs', () => ({
   hash: () => {},
 }));
 
+jest.mock('uuid', () => ({
+  v4: () => '123',
+}));
+
 jest.mock('@/lib', () => ({
   sanitizeBody: (b) => b,
   connectToDatabase: jest.fn().mockImplementation(() => ({

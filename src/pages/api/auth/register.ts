@@ -4,6 +4,8 @@ import stripeFn from 'stripe';
 
 import { hash } from 'bcryptjs';
 
+import { v4 as uuid } from 'uuid';
+
 import {
   connectToDatabase,
   logServerError,
@@ -57,13 +59,13 @@ export default async function register(
           .json({ error: { message: USERNAME_TAKEN_MESSAGE } });
       }
 
-      // if credentials are valid, create customer on stripe servers
+      /** if credentials are valid, create customer on stripe servers */
       const { id: customerId } = await stripe.customers.create({
         email,
         name: username,
       });
 
-      // create (inactive) subscription on stripe servers
+      /** create (inactive) subscription on stripe servers */
       const {
         id: subscriptionId,
         status: subscriptionStatus,
@@ -75,12 +77,13 @@ export default async function register(
         expand: ['latest_invoice.payment_intent'],
       });
 
-      // type casting
+      /** type casting */
       const invoice = latest_invoice as stripeFn.Invoice,
         paymentIntent = invoice.payment_intent as stripeFn.PaymentIntent,
         clientSecret = paymentIntent.client_secret;
 
       await db.collection<DbUser>(USERS).insertOne({
+        _id: uuid(),
         email,
         username,
         password: await hash(password, 12),
@@ -89,6 +92,7 @@ export default async function register(
         subscriptionStatus,
         lastWatched: '',
         bookmarks: [],
+        sessionIds: [],
       });
 
       return res.status(201).json({ clientSecret });
