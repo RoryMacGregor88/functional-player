@@ -54,7 +54,6 @@ async function updatePassword(
           .json({ error: { message: INCORRECT_PASSWORD_MESSAGE } });
       }
 
-      // TODO: was previously `findOneAndUpdate`, check still works
       await db
         .collection<DbUser>(USERS)
         .updateOne(

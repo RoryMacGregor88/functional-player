@@ -286,6 +286,7 @@ export default function Account({ user, ctx, updateCtx }: Props): ReactElement {
           },
         }}
       >
+        {/* // TODO: add 'Logout from all devices' here, looks more "secure" */}
         <Tab label='Update Password' />
         <Tab label='My Subscription' />
         <Tab label='Delete Account' />

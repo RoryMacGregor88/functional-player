@@ -47,7 +47,7 @@ jest.mock('@/lib', () => ({
 
           if (!!email) {
             if (email === 'error@test.com') {
-              throw new Error();
+              throw new Error('test-error');
             } else if (email === 'existingemail@test.com') {
               return true;
             } else if (email === 'success@test.com') {

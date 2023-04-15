@@ -66,6 +66,7 @@ async function deleteAccount(
           .json({ error: { message: INCORRECT_PASSWORD_MESSAGE } });
       }
 
+      // TODO: does stripe error get thrown or just returned? HIGH PRIORITY
       await stripe.customers.del(customerId);
 
       await db.collection<DbUser>(USERS).deleteOne({ email });

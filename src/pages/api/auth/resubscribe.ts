@@ -41,16 +41,23 @@ async function resubscribe(
       const { db } = await connectToDatabase();
 
       // TODO: must prevent making second subscription with same email
-      // if you do the email check here, the check after `findOneAndUpdate`
-      // below will no longer be needed
+      // how to do this?
 
-      // create customer on stripe servers
+      const result = await db.collection<DbUser>(USERS).findOne({ email });
+
+      if (!result) {
+        return res
+          .status(400)
+          .json({ error: { message: EMAIL_NOT_FOUND_MESSAGE } });
+      }
+
+      /** create customer on stripe servers */
       const { id: customerId } = await stripe.customers.create({
         email,
         name: username,
       });
 
-      // create (inactive) subscription on stripe servers
+      /** create (inactive) subscription on stripe servers */
       const {
         id: subscriptionId,
         status: subscriptionStatus,
@@ -62,7 +69,7 @@ async function resubscribe(
         expand: ['latest_invoice.payment_intent'],
       });
 
-      // type casting
+      /** type casting */
       const invoice = latest_invoice as stripeFn.Invoice,
         paymentIntent = invoice.payment_intent as stripeFn.PaymentIntent,
         clientSecret = paymentIntent.client_secret;
@@ -73,7 +80,7 @@ async function resubscribe(
         subscriptionStatus,
       };
 
-      const { value } = await db.collection<DbUser>(USERS).findOneAndUpdate(
+      await db.collection<DbUser>(USERS).updateOne(
         { email },
         {
           $set: {
@@ -81,12 +88,6 @@ async function resubscribe(
           },
         }
       );
-
-      if (!value) {
-        return res
-          .status(400)
-          .json({ error: { message: EMAIL_NOT_FOUND_MESSAGE } });
-      }
 
       const resUser: User = {
         ...req.session.user,

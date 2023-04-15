@@ -37,11 +37,18 @@ async function unsubscribe(
     return handleForbidden(res, TOKEN_ERROR_MESSAGE);
   } else {
     try {
+      const { db } = await connectToDatabase();
       const { email, customerId } = sanitizeBody(req.body);
 
-      await stripe.customers.del(customerId);
+      const result = await db.collection<DbUser>(USERS).findOne({ email });
 
-      const { db } = await connectToDatabase();
+      if (!result) {
+        return res
+          .status(400)
+          .json({ error: { message: EMAIL_NOT_FOUND_MESSAGE } });
+      }
+
+      await stripe.customers.del(customerId);
 
       const updatedProperties = {
         customerId: null,
@@ -49,15 +56,9 @@ async function unsubscribe(
         subscriptionStatus: null,
       };
 
-      const { value } = await db
+      await db
         .collection<DbUser>(USERS)
-        .findOneAndUpdate({ email }, { $set: { ...updatedProperties } });
-
-      if (!value) {
-        return res
-          .status(400)
-          .json({ error: { message: EMAIL_NOT_FOUND_MESSAGE } });
-      }
+        .updateOne({ email }, { $set: { ...updatedProperties } });
 
       const resUser: User = {
         ...req.session.user,

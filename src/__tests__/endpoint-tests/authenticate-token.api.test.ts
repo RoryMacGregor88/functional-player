@@ -19,7 +19,7 @@ jest.mock('@/lib', () => ({
         findOne: ({ email }) => {
           if (!!email) {
             if (email === 'error@test.com') {
-              throw new Error();
+              throw new Error('test-error');
             } else if (email === 'nosessionids@test.com') {
               return { sessionIds: [] };
             } else if (email === 'success@test.com') {

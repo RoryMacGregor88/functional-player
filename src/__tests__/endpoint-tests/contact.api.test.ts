@@ -21,7 +21,7 @@ jest.mock('@/lib', () => ({
       collection: () => ({
         findOne: ({ email }) => {
           if (email === 'error@test.com') {
-            throw new Error();
+            throw new Error('test-error');
           } else if (email === 'success@test.com') {
             const testUser = { password: '12345' };
             return testUser;

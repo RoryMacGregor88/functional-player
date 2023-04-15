@@ -25,15 +25,16 @@ jest.mock('@/lib', () => ({
   connectToDatabase: jest.fn().mockImplementation(() => ({
     db: {
       collection: () => ({
-        findOneAndUpdate: ({ email }) => {
+        findOne: ({ email }) => {
           if (email === 'error@test.com') {
-            throw new Error();
+            throw new Error('test-error');
           } else if (email === 'notfound@test.com') {
-            return { value: null };
+            return null;
           } else if (email === 'success@test.com') {
-            return { value: true };
+            return { password: '12345' };
           }
         },
+        updateOne: () => {},
       }),
     },
   })),

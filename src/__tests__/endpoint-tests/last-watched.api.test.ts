@@ -21,7 +21,7 @@ jest.mock('@/lib', () => ({
       collection: () => ({
         findOneAndUpdate: ({ email }) => {
           if (email === 'error@test.com') {
-            throw new Error();
+            throw new Error('test-error');
           } else if (email === 'notfound@test.com') {
             return { value: null };
           } else if (email === 'success@test.com') {
