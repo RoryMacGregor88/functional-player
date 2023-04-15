@@ -7,8 +7,13 @@ const sessionOptions: IronSessionOptions = {
   password: process.env.SECRET_COOKIE_PASSWORD,
   cookieName: 'functional-player-session',
   cookieOptions: {
-    // maxAge goes here
-    // http only?
+    // TODO: must deal with expiration auto-destroying cookie.
+    // We must be able to identify owner of cookie to clear
+    // array on user in db
+
+    // 30 days in seconds
+    maxAge: 2592000,
+    // httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
   },
 };

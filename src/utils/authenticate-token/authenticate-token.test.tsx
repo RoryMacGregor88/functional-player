@@ -25,6 +25,40 @@ describe('authenticateToken', () => {
     });
   });
 
+  it.only('returns redirect as `false` by default', async () => {
+    const message = 'test-error-message';
+    fetchMock.mockResponse(
+      JSON.stringify({ redirect: false, error: { message } })
+    );
+
+    const updateCtx = jest.fn();
+    const redirect = await authenticateToken({ updateCtx });
+
+    await waitFor(() => {
+      expect(updateCtx).toHaveBeenCalledWith({
+        user: null,
+        toastData: {
+          severity: 'error',
+          message,
+        },
+      });
+      expect(redirect).toBe(false);
+    });
+  });
+
+  it.only('returns redirect as `true` if returned from server', async () => {
+    const resUser = { name: 'John Smith' };
+    fetchMock.mockResponse(JSON.stringify({ redirect: true, resUser }));
+
+    const updateCtx = jest.fn();
+    const redirect = await authenticateToken({ updateCtx });
+
+    await waitFor(() => {
+      expect(updateCtx).toHaveBeenCalledWith({ user: resUser });
+      expect(redirect).toBe(true);
+    });
+  });
+
   it('handles user null value', async () => {
     const resUser = null;
     fetchMock.mockResponse(JSON.stringify({ resUser }));

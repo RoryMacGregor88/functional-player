@@ -15,7 +15,7 @@ export default async function getCourses(
 ): Promise<CourseServerProps> {
   try {
     const { db } = await connectToDatabase();
-    // find property is only used in test to force error state
+    /** find property is only used in test to force error state */
     const dbCourses = await db
       .collection<DbCourse>(COURSES)
       .find(find)
@@ -28,10 +28,10 @@ export default async function getCourses(
       }));
 
     console.log(isAuthorized ? 'AUTHORIZED' : 'RESTRICTED');
-    return { error: null, courses };
+    return { courses };
   } catch (e) {
     console.log('ERROR in getCourses: ', e);
     const error = { message: DEFAULT_ERROR_MESSAGE };
-    return { error, courses: null };
+    return { error };
   }
 }

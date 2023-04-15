@@ -1,7 +1,5 @@
 import { Stripe } from '@stripe/stripe-js';
 
-import { ObjectId } from 'mongodb';
-
 import { StripeElements } from '@stripe/stripe-js';
 
 import { AlertColor } from '@mui/material';
@@ -11,8 +9,7 @@ type StripeModules = {
   elements: StripeElements;
 };
 
-export type Id = string | number | ObjectId;
-export type Token = string;
+export type Id = string | number;
 export type Category = string;
 export type Artist = string;
 export type DateString = string;
@@ -51,26 +48,17 @@ export type User = {
   lastWatched: Id;
 } | null;
 
-// _id optional because created by MongoDb, so not required when registering
-// TODO: should this ever be here in that case? We should never create IDs?
-export type DbUser = {
-  _id?: Id;
-  email: string;
-  username: string;
+export type DbUser = User & {
   password: string;
-  customerId: Id;
-  subscriptionId: string;
-  subscriptionStatus: string;
-  bookmarks: Id[];
-  lastWatched: Id;
+  sessionIds: Id[];
 };
 
 export type Ctx = {
-  dialogData: DialogData | null | undefined;
-  toastData: ToastData | null | undefined;
-  selectedVideo: Course | null | undefined;
-  selectedCategory: Category | null | undefined;
-  user: User | null | undefined;
+  dialogData?: DialogData;
+  toastData?: ToastData;
+  selectedVideo?: Course;
+  selectedCategory?: Category;
+  user?: User;
 };
 
 export type UpdateCtx = (newData: Partial<Ctx>) => void;
@@ -81,8 +69,8 @@ export type ContextProps = {
 };
 
 export type CourseServerProps = {
-  courses: Course[] | null;
-  error: CustomError | null;
+  courses?: Course[];
+  error?: CustomError;
 };
 
 export type DialogAction = {

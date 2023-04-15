@@ -1,11 +1,11 @@
-import { NextApiRequest } from 'next';
-
 import sanitize from 'mongo-sanitize';
 
 type Body = Record<string, any>;
 
-// This is here to sanitize any user-inputted data that may contain
-// malicious characters intended to execute mongoDb commands.
+/**
+ * sanitize user-submitted data that may contain malicious
+ * characters intended to execute mongoDb commands
+ */
 export default function sanitizeBody(body: Body): Body {
   if (!body || typeof body !== 'object') {
     throw new Error('Invalid body argument passed to sanitizeBody');

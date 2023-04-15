@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 import { connectToDatabase } from '@/lib';
 
 import {
@@ -35,9 +37,10 @@ const data = new Array(50).fill(undefined).map((_, i) => {
     artist = getArtist();
 
   //TODO: make artist a label/value object, and any others that require it. Needed for url params
-  // maybe do this for categories tooo
+  // maybe do this for categories too
 
   return {
+    _id: uuid(),
     title: `${artist} ${i + 1}`,
     description,
     artist,

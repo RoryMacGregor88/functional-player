@@ -7,14 +7,15 @@ interface Params {
 }
 
 interface ResProps {
-  error: Error | undefined;
-  resUser: User | undefined;
+  error?: Error;
+  resUser?: User;
+  redirect?: boolean;
 }
 
 export default async function authenticateToken({
   updateCtx,
-}: Params): Promise<void> {
-  const { error, resUser }: ResProps = await http({
+}: Params): Promise<boolean> {
+  const { error, resUser, redirect }: ResProps = await http({
     endpoint: '/auth/authenticate-token',
     method: 'GET',
     onError: (defaultToastData: DefaultToastData) =>
@@ -32,4 +33,5 @@ export default async function authenticateToken({
   } else if (!!resUser || resUser === null) {
     updateCtx({ user: resUser });
   }
+  return !!redirect;
 }

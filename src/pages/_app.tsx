@@ -6,7 +6,7 @@ import { AppProps } from 'next/app';
 
 import { CssBaseline } from '@mui/material';
 
-import { http } from '@/src/utils';
+import { useRouter } from 'next/router';
 
 import { ThemeProvider } from '@mui/material/styles';
 
@@ -24,25 +24,27 @@ import { Context, authenticateToken } from '@/src/utils';
 import { Ctx, UpdateCtx } from '@/src/utils/interfaces';
 
 function App({ Component, pageProps }: AppProps): ReactElement {
-  const [ctx, setCtx] = useState<Ctx>({
-    selectedVideo: undefined,
-    selectedCategory: undefined,
-    dialogData: undefined,
-    toastData: undefined,
-    user: undefined,
-  });
+  const { push } = useRouter();
+  const [ctx, setCtx] = useState<Ctx>({});
 
   const { user, toastData, dialogData, selectedVideo } = ctx;
 
   const updateCtx: UpdateCtx = (newData: Partial<Ctx>) =>
     setCtx((prev) => ({ ...prev, ...newData }));
 
-  // token is checked upon initial app request (not internal page navigations)
+  /**
+   * token is checked upon initial document request
+   * not internal page navigations
+   */
   useEffect(() => {
-    (async () => await authenticateToken({ updateCtx }))();
+    (async () => {
+      const redirect = await authenticateToken({ updateCtx });
+      if (redirect) push('/login');
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // only a user object or null can ever be returned from server
+  /** only a valid user object or null can ever be returned from server */
   if (user === undefined) return <LoadMask showLogo />;
 
   // TODO: need one on every page once fleshed out, SEO is vital

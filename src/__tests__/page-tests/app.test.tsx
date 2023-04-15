@@ -60,6 +60,23 @@ describe('App', () => {
     });
   });
 
+  it('redirects to login if token has expired', async () => {
+    fetchMock.mockResponse(
+      JSON.stringify({
+        error: { message: 'test-error-message' },
+        redirect: true,
+      })
+    );
+
+    const {
+      router: { push },
+    } = render(<App Component={TestComponent} />, { push: jest.fn() });
+
+    await waitFor(() => {
+      expect(push).toHaveBeenCalledWith('/login');
+    });
+  });
+
   it('renders toast notification', async () => {
     fetchMock.mockResponse(
       JSON.stringify({ resUser: { username: 'John Smith' } })
