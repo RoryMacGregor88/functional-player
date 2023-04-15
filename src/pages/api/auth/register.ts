@@ -93,6 +93,7 @@ export default async function register(
         lastWatched: '',
         bookmarks: [],
         sessionIds: [],
+        creationDate: new Date().toISOString(),
       });
 
       return res.status(201).json({ clientSecret });

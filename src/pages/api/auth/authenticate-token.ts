@@ -12,7 +12,11 @@ import {
 
 import { User, DbUser, Id } from '@/src/utils/interfaces';
 
-import { USERS, SESSION_EXPIRED_MESSAGE } from '@/src/utils/constants';
+import {
+  USERS,
+  SESSION_EXPIRED_MESSAGE,
+  GET_METHOD_ERROR_MESSAGE,
+} from '@/src/utils/constants';
 
 // TODO: is this doing anything? If not, remove from login too
 declare module 'iron-session' {
@@ -27,7 +31,7 @@ async function authenticateToken(
   res: NextApiResponse
 ): Promise<void> {
   if (req.method !== 'GET') {
-    return handleForbidden(res, 'Invalid method, only GET requests permitted.');
+    return handleForbidden(res, GET_METHOD_ERROR_MESSAGE);
   } else {
     try {
       const { db } = await connectToDatabase();

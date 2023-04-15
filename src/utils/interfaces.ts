@@ -39,6 +39,7 @@ export type WellData = {
 
 export type User = {
   _id: Id;
+  creationDate: string;
   email: string;
   username: string;
   customerId: Id;
@@ -106,7 +107,7 @@ export type CustomError = {
   message: string;
 };
 
-// FORM VALUES
+/** FORM VALUES */
 export type LoginFormValues = {
   email: string;
   password: string;

@@ -13,6 +13,9 @@ export const DEFAULT_ERROR_MESSAGE = 'An unexpected error has occurred';
 export const HTTP_METHOD_ERROR_MESSAGE =
   'Invalid method. Only POST requests permitted.';
 
+export const GET_METHOD_ERROR_MESSAGE =
+  'Invalid method, only GET requests permitted.';
+
 export const TOKEN_ERROR_MESSAGE = 'Not allowed. Authorization token required.';
 
 export const EMAIL_NOT_FOUND_MESSAGE =

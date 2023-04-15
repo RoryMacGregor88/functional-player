@@ -7,6 +7,7 @@ import authenticateToken from './authenticate-token/authenticate-token';
 import syncSubscriptionStatus from './sync-subscription-status/sync-subscription-status';
 import syncStripeAndDb from '../../lib/sync-stipe-and-db/sync-stripe-and-db';
 import generateTempPassword from './generate-temp-password/generate-temp-password';
+import formatDate from './format-date/format-date';
 
 export {
   http,
@@ -19,4 +20,5 @@ export {
   syncSubscriptionStatus,
   syncStripeAndDb,
   generateTempPassword,
+  formatDate,
 };

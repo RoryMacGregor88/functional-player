@@ -2,6 +2,7 @@ import authenticateToken from '@/src/pages/api/auth/authenticate-token';
 
 import {
   DEFAULT_ERROR_MESSAGE,
+  GET_METHOD_ERROR_MESSAGE,
   SESSION_EXPIRED_MESSAGE,
 } from '@/src/utils/constants';
 
@@ -108,7 +109,7 @@ describe('authenticateToken endpoint', () => {
 
     expect(status).toHaveBeenCalledWith(403);
     expect(json).toHaveBeenCalledWith({
-      error: { message: 'Invalid method, only GET requests permitted.' },
+      error: { message: GET_METHOD_ERROR_MESSAGE },
     });
   });
 
