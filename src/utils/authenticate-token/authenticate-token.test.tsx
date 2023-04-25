@@ -25,7 +25,7 @@ describe('authenticateToken', () => {
     });
   });
 
-  it.only('returns redirect as `false` by default', async () => {
+  it('returns redirect as `false` by default', async () => {
     const message = 'test-error-message';
     fetchMock.mockResponse(
       JSON.stringify({ redirect: false, error: { message } })
@@ -42,11 +42,11 @@ describe('authenticateToken', () => {
           message,
         },
       });
-      expect(redirect).toBe(false);
+      expect(redirect).toEqual(false);
     });
   });
 
-  it.only('returns redirect as `true` if returned from server', async () => {
+  it('returns redirect as `true` if returned from server', async () => {
     const resUser = { name: 'John Smith' };
     fetchMock.mockResponse(JSON.stringify({ redirect: true, resUser }));
 
@@ -55,7 +55,7 @@ describe('authenticateToken', () => {
 
     await waitFor(() => {
       expect(updateCtx).toHaveBeenCalledWith({ user: resUser });
-      expect(redirect).toBe(true);
+      expect(redirect).toEqual(true);
     });
   });
 

@@ -35,9 +35,9 @@ async function logout(
       /** destroy session ids on all devices */
       await db
         .collection<DbUser>(USERS)
-        .updateOne({ email }, { $set: { sessionIds: [] } });
+        .updateOne({ email }, { $set: { sessions: [] } });
 
-      /** destroy session locally */
+      /** destroy local session */
       await req.session.destroy();
 
       return res.status(200).json({ resUser: null });

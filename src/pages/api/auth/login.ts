@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import { withIronSessionApiRoute } from 'iron-session/next';
 
+import { addDays } from 'date-fns';
+
 import { compare } from 'bcryptjs';
 
 import { v4 as uuid } from 'uuid';
@@ -21,9 +23,18 @@ import {
   HTTP_METHOD_ERROR_MESSAGE,
   EMAIL_NOT_FOUND_MESSAGE,
   INCORRECT_PASSWORD_MESSAGE,
+  SESSION_EXPIRY_LENGTH,
 } from '@/src/utils/constants';
 
 import { DbUser, User, Id } from '@/src/utils/interfaces';
+
+declare module 'iron-session' {
+  interface IronSessionData {
+    id?: Id;
+    expirationDate?: string;
+    user?: User;
+  }
+}
 
 async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   if (req.method !== 'POST') {
@@ -47,7 +58,7 @@ async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
         password: dbPassword,
         subscriptionStatus: currentSubscriptionStatus,
         subscriptionId,
-        sessionIds: currentSessionIds,
+        sessions: currentSessions,
         ...restOfUser
       } = result;
 
@@ -76,18 +87,27 @@ async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
       }
 
       /**
-       * create new session id for both array on dbUser
-       * and to be stored on http cookie
+       * create new session id and expiration date for both array
+       * on dbUser and to be stored on http cookie
        */
-      const newSessionId = uuid() as Id;
-      const sessionIds = [...currentSessionIds, newSessionId];
+      const newSessionId = uuid() as Id, // TODO: make this the same as the user id? Any downside to that?
+        expirationDate = addDays(
+          new Date(),
+          SESSION_EXPIRY_LENGTH
+        ).toISOString();
+
+      const sessions = [
+        ...currentSessions,
+        { id: newSessionId, expirationDate },
+      ];
 
       await db
         .collection<DbUser>(USERS)
-        .updateOne({ email }, { $set: { sessionIds } });
+        .updateOne({ email }, { $set: { sessions } });
 
       const resUser: User = {
         ...restOfUser,
+        // TODO: does frontend ever need subscriptionId?
         subscriptionId,
         subscriptionStatus,
       };

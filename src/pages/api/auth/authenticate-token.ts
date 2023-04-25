@@ -8,6 +8,7 @@ import {
   handleForbidden,
   handleServerError,
   logServerError,
+  verifySessions,
 } from '@/lib';
 
 import { User, DbUser, Id } from '@/src/utils/interfaces';
@@ -18,10 +19,10 @@ import {
   GET_METHOD_ERROR_MESSAGE,
 } from '@/src/utils/constants';
 
-// TODO: is this doing anything? If not, remove from login too
 declare module 'iron-session' {
   interface IronSessionData {
     id?: Id;
+    expirationDate?: string;
     user?: User;
   }
 }
@@ -35,37 +36,53 @@ async function authenticateToken(
   } else {
     try {
       const { db } = await connectToDatabase();
-      const { id, user: sessionuser } = req.session;
+      const { id, user } = req.session;
 
       /** user has no session (logged out or not registered) */
       if (!id) {
         return res.status(200).json({ resUser: null });
       }
 
-      // TODO: If token has expired, filter from array of tokens on user
-      // (to not have orphaned tokens lying around), return error
-      // message directing to re-route to login
-      // how to do this?
+      const email = user.email;
+      const { sessions } = await db
+        .collection<DbUser>(USERS)
+        .findOne({ email });
 
-      const email = sessionuser?.email;
-      const dbUser = await db.collection<DbUser>(USERS).findOne({ email });
+      /**
+       * if user has logged out of a different device, or clicked
+       * "Log out of all devices", session id array will be empty,
+       * even if session exists on another device
+       */
+      if (!sessions.length) {
+        await req.session.destroy();
+        return res.status(403).json({
+          error: { message: SESSION_EXPIRED_MESSAGE },
+          redirect: true,
+        });
+      }
 
-      if (!dbUser.sessionIds.includes(id)) {
-        /** destroy all session ids to log out of all devices */
+      /** separate valid and invalid sessions */
+      const { validSessions, invalidSessions } = verifySessions(sessions);
+
+      /** destroy invalid sessions in db */
+      if (!!invalidSessions.length) {
         await db
           .collection<DbUser>(USERS)
-          .updateOne({ email }, { $set: { sessionIds: [] } });
+          .updateOne({ email }, { $set: { sessions: validSessions } });
+      }
 
-        /** destroy token locally */
+      /** local session is not valid */
+      if (!validSessions.find((s) => s.id === id)) {
+        /** destroy local session (already destoyed in db) */
         await req.session.destroy();
 
         return res.status(403).json({
           error: { message: SESSION_EXPIRED_MESSAGE },
           redirect: true,
         });
-      } else {
-        return res.status(200).json({ resUser: req.session.user });
       }
+
+      return res.status(200).json({ resUser: req.session.user });
     } catch (error) {
       await logServerError('authenticateToken', error);
       return handleServerError(res);

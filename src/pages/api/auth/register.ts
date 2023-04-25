@@ -92,7 +92,7 @@ export default async function register(
         subscriptionStatus,
         lastWatched: '',
         bookmarks: [],
-        sessionIds: [],
+        sessions: [],
         creationDate: new Date().toISOString(),
       });
 

@@ -1,3 +1,5 @@
+import { subDays, addDays } from 'date-fns';
+
 import authenticateToken from '@/src/pages/api/auth/authenticate-token';
 
 import {
@@ -21,10 +23,12 @@ jest.mock('@/lib', () => ({
           if (!!email) {
             if (email === 'error@test.com') {
               throw new Error('test-error');
-            } else if (email === 'nosessionids@test.com') {
-              return { sessionIds: [] };
+            } else if (email === 'nosessions@test.com') {
+              return { sessions: [] };
+            } else if (email === 'invalidsession@test.com') {
+              return { sessions: [{ id: '123' }] };
             } else if (email === 'success@test.com') {
-              return { sessionIds: ['123'] };
+              return { sessions: [{ id: '456' }] };
             }
           }
         },
@@ -32,7 +36,9 @@ jest.mock('@/lib', () => ({
       }),
     },
   })),
-  logServerError: () => {},
+  logServerError: async (handler, error) => {
+    console.log(`ERROR in ${handler}: ${error}`);
+  },
   handleForbidden: jest
     .fn()
     .mockImplementation((res, message) =>
@@ -43,6 +49,10 @@ jest.mock('@/lib', () => ({
     .mockImplementation((res) =>
       res.status(500).json({ error: { message: DEFAULT_ERROR_MESSAGE } })
     ),
+  verifySessions: jest.fn().mockImplementation(() => ({
+    validSessions: [{ id: '123' }],
+    invalidSessions: [],
+  })),
 }));
 
 describe('authenticateToken endpoint', () => {
@@ -66,7 +76,7 @@ describe('authenticateToken endpoint', () => {
     expect(json).toHaveBeenCalledWith({ resUser: { email } });
   });
 
-  it('returns null user if token not found', async () => {
+  it('returns null user if session not found', async () => {
     const email = 'test@email.com',
       req = {
         method: 'GET',
@@ -81,13 +91,33 @@ describe('authenticateToken endpoint', () => {
     expect(json).toHaveBeenCalledWith({ resUser: null });
   });
 
-  it('rejects request if session id not in user`s stored id array', async () => {
-    const email = 'nosessionids@test.com',
+  it('rejects request if user`s stored id array is empty', async () => {
+    const email = 'nosessions@test.com',
       destroy = jest.fn(),
       req = {
         method: 'GET',
         body: { email },
         session: { id: '123', user: { email }, destroy },
+      },
+      res = { status };
+
+    await authenticateToken(req, res);
+
+    expect(destroy).toHaveBeenCalled();
+    expect(status).toHaveBeenCalledWith(403);
+    expect(json).toHaveBeenCalledWith({
+      error: { message: SESSION_EXPIRED_MESSAGE },
+      redirect: true,
+    });
+  });
+
+  it('rejects request if session is invalid', async () => {
+    const email = 'invalidsession@test.com',
+      destroy = jest.fn(),
+      req = {
+        method: 'GET',
+        body: { email },
+        session: { id: '456', user: { email }, destroy },
       },
       res = { status };
 
