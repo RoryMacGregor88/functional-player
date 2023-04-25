@@ -10,7 +10,10 @@ function handleServerError(res: NextApiResponse): void {
   return res.status(500).json({ error: { message: DEFAULT_ERROR_MESSAGE } });
 }
 
-function logServerError(handlerName: string, error: Error): void {
+async function logServerError(
+  handlerName: string,
+  error: Error
+): Promise<void> {
   console.log(`SERVER ERROR in ${handlerName}: `, error);
 }
 

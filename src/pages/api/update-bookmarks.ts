@@ -45,6 +45,7 @@ async function updateBookmarks(
 
       const resUser: User = { ...req.session.user, bookmarks };
 
+      // TODO: this was commented out, why?
       req.session.user = resUser;
       await req.session.save();
 

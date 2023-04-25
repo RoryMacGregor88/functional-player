@@ -30,7 +30,9 @@ jest.mock('@/lib', () => ({
       }),
     },
   })),
-  logServerError: () => {},
+  logServerError: async (handler, error) => {
+    console.log(`ERROR in ${handler}: ${error}`);
+  },
   handleForbidden: jest
     .fn()
     .mockImplementation((res, message) =>

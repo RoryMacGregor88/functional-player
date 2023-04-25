@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 import { GetServerSideProps } from 'next';
 
-import { Grid, Button, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 
 import {
   LoadMask,
@@ -12,6 +12,7 @@ import {
   PageWrapper,
   Attention,
   Stepper,
+  Button,
 } from '@/src/components';
 
 import { UpdateCtx } from '@/src/utils/interfaces';
@@ -25,8 +26,10 @@ interface ServerSideProps {
 export const getServerSideProps: GetServerSideProps = async (
   ctx
 ): Promise<ServerSideProps> => {
-  // Checks if the page was redirected to from the registration page,
-  // preventing manual linking to this page.
+  /**
+   * Checks if the page was redirected to from the registration page,
+   * preventing manual linking to this page
+   */
   const hasPaymentIntent = !!ctx.query.payment_intent;
   return {
     props: { hasPaymentIntent },
@@ -59,7 +62,7 @@ export default function RegistrationSuccess({
   if (!hasPaymentIntent) return <LoadMask />;
 
   return (
-    <PageWrapper>
+    <PageWrapper restrictWidth>
       <SpacedTitle>Success</SpacedTitle>
       <Stepper activeStep={3} />
       <Grid

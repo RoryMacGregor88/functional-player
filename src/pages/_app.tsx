@@ -37,10 +37,14 @@ function App({ Component, pageProps }: AppProps): ReactElement {
    * not internal page navigations
    */
   useEffect(() => {
-    (async () => {
-      const redirect = await authenticateToken({ updateCtx });
-      if (redirect) push('/login');
-    })();
+    // TODO: test this. Are there any times when you would want to call this with a user?
+    // No, you would only call this when first loading page, when state is clear.
+    if (!user) {
+      (async () => {
+        const redirect = await authenticateToken({ updateCtx });
+        if (redirect) push('/login');
+      })();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

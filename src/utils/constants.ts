@@ -8,6 +8,8 @@ export const USERS = 'users-2';
 export const PASSWORD_MIN = 5;
 export const PASSWORD_MAX = 15;
 
+export const SESSION_EXPIRY_LENGTH = 90;
+
 export const DEFAULT_ERROR_MESSAGE = 'An unexpected error has occurred';
 
 export const HTTP_METHOD_ERROR_MESSAGE =

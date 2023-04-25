@@ -197,9 +197,7 @@ const Desktop: FC<DesktopProps> = ({ src, alt, updateCtx }): ReactElement => (
         alt={alt}
         fill
         quality={100}
-        style={{
-          objectFit: 'cover',
-        }}
+        style={{ objectFit: 'cover' }}
       />
     </Grid>
   </Grid>

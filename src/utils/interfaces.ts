@@ -16,6 +16,11 @@ export type DateString = string;
 export type Severity = AlertColor;
 export type LevelRating = string;
 
+export type Session = {
+  id: Id;
+  expirationDate: string;
+};
+
 export type DialogData = {
   title: string;
   message: string;
@@ -51,7 +56,7 @@ export type User = {
 
 export type DbUser = User & {
   password: string;
-  sessionIds: Id[];
+  sessions: Session[];
 };
 
 export type Ctx = {

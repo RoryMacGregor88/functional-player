@@ -73,7 +73,7 @@ const Drawer: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'flex-start',
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          backgroundColor: 'rgba(21, 21, 21, 0.8)',
           backgroundImage: 'none',
           boxShadow: 'none',
         },

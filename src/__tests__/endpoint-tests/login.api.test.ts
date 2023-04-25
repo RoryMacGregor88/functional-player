@@ -41,7 +41,7 @@ jest.mock('@/lib', () => ({
             const testUser = {
               password: '12345',
               subscriptionId: 'success',
-              sessionIds: [],
+              sessions: [],
             };
             return testUser;
           } else if (email === 'stripeerror@test.com') {
@@ -58,7 +58,9 @@ jest.mock('@/lib', () => ({
       }),
     },
   })),
-  logServerError: () => {},
+  logServerError: async (handler, error) => {
+    console.log(`ERROR in ${handler}: ${error}`);
+  },
   handleForbidden: jest
     .fn()
     .mockImplementation((res, message) =>

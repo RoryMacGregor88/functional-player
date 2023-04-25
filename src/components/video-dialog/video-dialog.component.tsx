@@ -207,7 +207,7 @@ const VideoDialog: FC<VideoDialogProps> = ({
         zIndex: 2000,
         '.MuiDialog-paper': {
           backgroundImage: 'none',
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          backgroundColor: 'rgba(21, 21, 21, 0.8)',
           border: '2px solid #fff',
           borderRadius: 3,
           maxWidth: 'none',

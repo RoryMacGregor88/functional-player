@@ -156,7 +156,10 @@ describe('Account', () => {
         <Account
           user={{ subscriptionStatus: 'active' }}
           updateCtx={updateCtx}
-        />
+        />,
+        // TODO: This is how you fix broken tests. Maybe make a renderComponent
+        // and keep user variable outside tests
+        { ctx: { user: { creationDate: new Date().toISOString() } } }
       );
 
       const logoutButton = screen.getByRole('button', {
