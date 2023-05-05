@@ -27,6 +27,8 @@ jest.mock('@/src/utils/get-stripe', () =>
 
 enableFetchMocks();
 
+const defaultCtx = { user: { creationDate: new Date().toISOString() } };
+
 const toastData = {
   toastData: {
     severity: 'error',
@@ -44,7 +46,9 @@ describe('Account', () => {
 
   describe('Tabs', () => {
     it('renders', () => {
-      render(<Account user={{ username: 'test-username' }} />);
+      render(<Account user={{ username: 'test-username' }} />, {
+        ctx: defaultCtx,
+      });
 
       expect(
         screen.getByRole('button', { name: /log out from all devices/i })
@@ -59,6 +63,7 @@ describe('Account', () => {
         <Account user={null} ctx={{ toastData: null }} updateCtx={updateCtx} />,
         {
           push: jest.fn(),
+          ctx: { user: null },
         }
       );
 
@@ -79,6 +84,7 @@ describe('Account', () => {
         router: { push },
       } = render(<Account user={null} ctx={ctx} updateCtx={updateCtx} />, {
         push: jest.fn(),
+        ctx: defaultCtx,
       });
 
       expect(push).toHaveBeenCalledWith('/login');
@@ -86,7 +92,9 @@ describe('Account', () => {
     });
 
     it('switches tabs', async () => {
-      render(<Account user={{ subscriptionStatus: 'active' }} />);
+      render(<Account user={{ subscriptionStatus: 'active' }} />, {
+        ctx: defaultCtx,
+      });
 
       expect(
         screen.getByRole('button', { name: /log out from all devices/i })
@@ -105,7 +113,9 @@ describe('Account', () => {
       const message = 'test-error-message';
       fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
-      render(<Account user={{ subscriptionStatus: 'active' }} />);
+      render(<Account user={{ subscriptionStatus: 'active' }} />, {
+        ctx: defaultCtx,
+      });
 
       expect(
         screen.getByRole('button', { name: /log out from all devices/i })
@@ -157,9 +167,7 @@ describe('Account', () => {
           user={{ subscriptionStatus: 'active' }}
           updateCtx={updateCtx}
         />,
-        // TODO: This is how you fix broken tests. Maybe make a renderComponent
-        // and keep user variable outside tests
-        { ctx: { user: { creationDate: new Date().toISOString() } } }
+        { ctx: defaultCtx }
       );
 
       const logoutButton = screen.getByRole('button', {
@@ -191,7 +199,8 @@ describe('Account', () => {
           <Account
             user={{ subscriptionStatus: 'active' }}
             updateCtx={updateCtx}
-          />
+          />,
+          { ctx: defaultCtx }
         );
 
         userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
@@ -224,7 +233,9 @@ describe('Account', () => {
 
         fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
-        render(<Account user={{ subscriptionStatus: 'active' }} />);
+        render(<Account user={{ subscriptionStatus: 'active' }} />, {
+          ctx: defaultCtx,
+        });
 
         userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
 
@@ -256,7 +267,8 @@ describe('Account', () => {
           <Account
             user={{ subscriptionStatus: 'active' }}
             updateCtx={updateCtx}
-          />
+          />,
+          { ctx: defaultCtx }
         );
 
         userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
@@ -294,7 +306,8 @@ describe('Account', () => {
         );
 
         render(
-          <Account user={{ subscriptionStatus: null }} updateCtx={updateCtx} />
+          <Account user={{ subscriptionStatus: null }} updateCtx={updateCtx} />,
+          { ctx: defaultCtx }
         );
 
         userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
@@ -327,7 +340,8 @@ describe('Account', () => {
         fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
         render(
-          <Account user={{ subscriptionStatus: null }} updateCtx={updateCtx} />
+          <Account user={{ subscriptionStatus: null }} updateCtx={updateCtx} />,
+          { ctx: defaultCtx }
         );
 
         userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
@@ -357,7 +371,8 @@ describe('Account', () => {
         });
 
         render(
-          <Account user={{ subscriptionStatus: null }} updateCtx={updateCtx} />
+          <Account user={{ subscriptionStatus: null }} updateCtx={updateCtx} />,
+          { ctx: defaultCtx }
         );
 
         userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
@@ -395,7 +410,8 @@ describe('Account', () => {
         );
 
         render(
-          <Account user={{ subscriptionStatus: null }} updateCtx={updateCtx} />
+          <Account user={{ subscriptionStatus: null }} updateCtx={updateCtx} />,
+          { ctx: defaultCtx }
         );
 
         userEvent.click(screen.getByRole('tab', { name: /my subscription/i }));
@@ -439,7 +455,9 @@ describe('Account', () => {
     it('renders success well', async () => {
       fetchMock.mockResponse(JSON.stringify({ ok: true }));
 
-      render(<Account user={{ username: 'John Smith' }} />);
+      render(<Account user={{ username: 'John Smith' }} />, {
+        ctx: defaultCtx,
+      });
 
       userEvent.click(screen.getByRole('tab', { name: /update password/i }));
 
@@ -474,7 +492,9 @@ describe('Account', () => {
       const message = 'test-error-message';
       fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
-      render(<Account user={{ username: 'John Smith' }} />);
+      render(<Account user={{ username: 'John Smith' }} />, {
+        ctx: defaultCtx,
+      });
 
       userEvent.click(screen.getByRole('tab', { name: /update password/i }));
 
@@ -509,7 +529,8 @@ describe('Account', () => {
       });
 
       render(
-        <Account user={{ username: 'John Smith' }} updateCtx={updateCtx} />
+        <Account user={{ username: 'John Smith' }} updateCtx={updateCtx} />,
+        { ctx: defaultCtx }
       );
 
       userEvent.click(screen.getByRole('tab', { name: /update password/i }));
@@ -547,7 +568,8 @@ describe('Account', () => {
       const updateCtx = jest.fn();
 
       render(
-        <Account user={{ username: 'John Smith' }} updateCtx={updateCtx} />
+        <Account user={{ username: 'John Smith' }} updateCtx={updateCtx} />,
+        { ctx: defaultCtx }
       );
 
       userEvent.click(screen.getByRole('tab', { name: /delete account/i }));
@@ -585,7 +607,9 @@ describe('Account', () => {
       const message = 'test-error-message';
       fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
-      render(<Account user={{ username: 'John Smith' }} />);
+      render(<Account user={{ username: 'John Smith' }} />, {
+        ctx: defaultCtx,
+      });
 
       userEvent.click(screen.getByRole('tab', { name: /delete account/i }));
 
@@ -621,7 +645,8 @@ describe('Account', () => {
       });
 
       render(
-        <Account user={{ username: 'John Smith' }} updateCtx={updateCtx} />
+        <Account user={{ username: 'John Smith' }} updateCtx={updateCtx} />,
+        { ctx: defaultCtx }
       );
 
       userEvent.click(screen.getByRole('tab', { name: /delete account/i }));

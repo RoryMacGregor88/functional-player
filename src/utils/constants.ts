@@ -18,7 +18,8 @@ export const HTTP_METHOD_ERROR_MESSAGE =
 export const GET_METHOD_ERROR_MESSAGE =
   'Invalid method, only GET requests permitted.';
 
-export const TOKEN_ERROR_MESSAGE = 'Not allowed. Authorization token required.';
+export const SESSION_ERROR_MESSAGE =
+  'Not allowed. Authorization session required.';
 
 export const EMAIL_NOT_FOUND_MESSAGE =
   'No user account associated with that email address.';

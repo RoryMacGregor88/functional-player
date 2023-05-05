@@ -27,8 +27,10 @@ async function syncStripeAndDb({
   isError: boolean;
 }> {
   try {
-    // subscriptionStatus can only be null if subscription
-    // has been deleted. If so, return null value
+    /**
+     * subscriptionStatus can only be null if subscription
+     * has been deleted. If so, return null value
+     */
     // TODO: is this right? Can status be null and still out of sync?
     if (currentSubscriptionStatus === null) {
       return { isError: false, subscriptionStatus: currentSubscriptionStatus };
@@ -40,11 +42,15 @@ async function syncStripeAndDb({
 
     console.log('STRIPE TYPE: ', typeof stripeStatus);
 
-    // if stripe's status does not match db, update status in db
+    /**
+     * if Stripe status does not match db, for example if
+     * the subscription has attempted to renew but failed for
+     * some reason, update status in db to reflect
+     */
     if (currentSubscriptionStatus !== stripeStatus) {
       console.log('STRIPE IS NOT EQUAL');
 
-      // does this need a check? Can this be broken through use input?
+      /** does this need a check? Can this be broken through use input? */
       await db
         .collection<DbUser>(USERS)
         .findOneAndUpdate(
@@ -55,11 +61,11 @@ async function syncStripeAndDb({
       return { isError: false, subscriptionStatus: stripeStatus };
     } else if (currentSubscriptionStatus === stripeStatus) {
       console.log('STRIPE IS EQUAL');
-      // if unchanged, return current status
+      /** if unchanged, return current status */
       return { isError: false, subscriptionStatus: currentSubscriptionStatus };
     }
   } catch (e) {
-    // error is handled in parent handler
+    /** error is handled in parent handler */
     return { isError: true, subscriptionStatus: null };
   }
 }

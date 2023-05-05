@@ -18,7 +18,7 @@ import {
 import {
   USERS,
   STRIPE_API_VERSION,
-  TOKEN_ERROR_MESSAGE,
+  SESSION_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
   EMAIL_NOT_FOUND_MESSAGE,
   INCORRECT_PASSWORD_MESSAGE,
@@ -37,7 +37,7 @@ async function deleteAccount(
   if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
-    return handleForbidden(res, TOKEN_ERROR_MESSAGE);
+    return handleForbidden(res, SESSION_ERROR_MESSAGE);
   } else {
     try {
       const {

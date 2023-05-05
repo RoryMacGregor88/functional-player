@@ -45,10 +45,14 @@ const DeleteAccountForm: FC<Props> = ({
 
   return (
     <FormWrapper
-      onSubmit={handleSubmit((formValues) => handleDelete(formValues))}
+      onSubmit={handleSubmit((formValues) => {
+        // TODO: does this kind of resetting need to be done on other forms?
+        setShowConfirmButton(false);
+        handleDelete(formValues);
+      })}
     >
       <Typography sx={{ textAlign: 'center' }}>
-        Enter password to proceed
+        Re-enter password to proceed
       </Typography>
       <PasswordField
         error={errors.password}
@@ -94,7 +98,15 @@ const DeleteAccountForm: FC<Props> = ({
           <Button
             type='submit'
             isLoading={isLoading}
-            sx={{ backgroundColor: 'error.dark', color: '#fff' }}
+            // TODO: make `error` button instead of this? There's only one so maybe not
+            sx={{
+              backgroundColor: 'error.dark',
+              color: '#fff',
+              '&:hover': {
+                backgroundColor: 'error.dark',
+                opacity: '0.75',
+              },
+            }}
           >
             Yes, permanently delete my account
           </Button>

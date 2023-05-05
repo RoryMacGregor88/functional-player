@@ -13,7 +13,7 @@ import {
 
 import {
   HTTP_METHOD_ERROR_MESSAGE,
-  TOKEN_ERROR_MESSAGE,
+  SESSION_ERROR_MESSAGE,
   EMAIL_NOT_FOUND_MESSAGE,
   USERS,
 } from '@/src/utils/constants';
@@ -27,7 +27,7 @@ async function updateBookmarks(
   if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
-    return handleForbidden(res, TOKEN_ERROR_MESSAGE);
+    return handleForbidden(res, SESSION_ERROR_MESSAGE);
   } else {
     try {
       const { email, bookmarks } = sanitizeBody(req.body);

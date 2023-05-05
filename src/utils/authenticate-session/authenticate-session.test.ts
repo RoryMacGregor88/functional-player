@@ -2,23 +2,23 @@ import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
 
 import { waitFor } from '@/src/utils/test-utils';
 
-import { authenticateToken } from '@/src/utils';
+import { authenticateSession } from '@/src/utils';
 
 import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
 enableFetchMocks();
 
-describe('authenticateToken', () => {
+describe('authenticateSession', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
 
-  it('authenticates token', async () => {
+  it('authenticates session', async () => {
     const resUser = { username: 'John Smith' };
     fetchMock.mockResponse(JSON.stringify({ resUser }));
 
     const updateCtx = jest.fn();
-    authenticateToken({ updateCtx });
+    authenticateSession({ updateCtx });
 
     await waitFor(() => {
       expect(updateCtx).toHaveBeenCalledWith({ user: resUser });
@@ -32,7 +32,7 @@ describe('authenticateToken', () => {
     );
 
     const updateCtx = jest.fn();
-    const redirect = await authenticateToken({ updateCtx });
+    const redirect = await authenticateSession({ updateCtx });
 
     await waitFor(() => {
       expect(updateCtx).toHaveBeenCalledWith({
@@ -51,7 +51,7 @@ describe('authenticateToken', () => {
     fetchMock.mockResponse(JSON.stringify({ redirect: true, resUser }));
 
     const updateCtx = jest.fn();
-    const redirect = await authenticateToken({ updateCtx });
+    const redirect = await authenticateSession({ updateCtx });
 
     await waitFor(() => {
       expect(updateCtx).toHaveBeenCalledWith({ user: resUser });
@@ -64,7 +64,7 @@ describe('authenticateToken', () => {
     fetchMock.mockResponse(JSON.stringify({ resUser }));
 
     const updateCtx = jest.fn();
-    authenticateToken({ updateCtx });
+    authenticateSession({ updateCtx });
 
     await waitFor(() => {
       expect(updateCtx).toHaveBeenCalledWith({ user: resUser });
@@ -76,7 +76,7 @@ describe('authenticateToken', () => {
     fetchMock.mockResponse(JSON.stringify({ error: { message } }));
 
     const updateCtx = jest.fn();
-    authenticateToken({ updateCtx });
+    authenticateSession({ updateCtx });
 
     const expected = {
       user: null,
@@ -97,7 +97,7 @@ describe('authenticateToken', () => {
     });
 
     const updateCtx = jest.fn();
-    authenticateToken({ updateCtx });
+    authenticateSession({ updateCtx });
 
     const expected = {
       user: null,

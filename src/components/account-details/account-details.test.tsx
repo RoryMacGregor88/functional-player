@@ -2,6 +2,8 @@ import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
 import AccountDetails from './account-details.component';
 
+const defaultCtx = { user: { creationDate: new Date().toISOString() } };
+
 let handleLogoutFromAllClick = null;
 
 describe('Account Details', () => {
@@ -10,16 +12,17 @@ describe('Account Details', () => {
   });
 
   it('renders', () => {
-    render(<AccountDetails />);
+    render(<AccountDetails />, { ctx: defaultCtx });
 
     expect(
-      screen.getByText(/below is a sumary of your account:/i)
+      screen.getByText(/below is a summary of your account:/i)
     ).toBeInTheDocument();
   });
 
   it('calls handleLogoutFromAllClick when button clicked', async () => {
     render(
-      <AccountDetails handleLogoutFromAllClick={handleLogoutFromAllClick} />
+      <AccountDetails handleLogoutFromAllClick={handleLogoutFromAllClick} />,
+      { ctx: defaultCtx }
     );
 
     userEvent.click(

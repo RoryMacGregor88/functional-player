@@ -50,7 +50,7 @@ describe('App', () => {
     });
   });
 
-  it('shows loadmask if token request has not resolved', async () => {
+  it('shows loadmask if session request has not resolved', async () => {
     fetchMock.mockResponse(JSON.stringify({}));
     render(<App Component={TestComponent} />);
 
@@ -60,7 +60,7 @@ describe('App', () => {
     });
   });
 
-  it('redirects to login if token has expired', async () => {
+  it('redirects to login if session has expired', async () => {
     fetchMock.mockResponse(
       JSON.stringify({
         error: { message: 'test-error-message' },

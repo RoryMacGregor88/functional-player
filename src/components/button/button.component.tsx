@@ -44,6 +44,8 @@ const Button = (
       '&:disabled': {
         color: 'common.black',
         opacity: '0.5',
+        // TODO: why this not working?
+        cursor: 'not-allowed',
       },
       '&:hover': {
         backgroundColor: 'primary.main',

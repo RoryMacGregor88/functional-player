@@ -12,11 +12,11 @@ interface ResProps {
   redirect?: boolean;
 }
 
-export default async function authenticateToken({
+export default async function authenticateSession({
   updateCtx,
 }: Params): Promise<boolean> {
   const { error, resUser, redirect }: ResProps = await http({
-    endpoint: '/auth/authenticate-token',
+    endpoint: '/auth/authenticate-session',
     method: 'GET',
     onError: (defaultToastData: DefaultToastData) =>
       updateCtx({ ...defaultToastData, user: null }),

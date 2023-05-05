@@ -1,7 +1,7 @@
 import {
   DEFAULT_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
-  TOKEN_ERROR_MESSAGE,
+  SESSION_ERROR_MESSAGE,
 } from '@/src/utils/constants';
 
 let json = null,
@@ -76,7 +76,7 @@ describe('logout endpoint', () => {
     });
   });
 
-  it('handles token forbidden', async () => {
+  it('handles session forbidden', async () => {
     const req = {
         method: 'POST',
         body: { email: 'test@email.com' },
@@ -88,7 +88,7 @@ describe('logout endpoint', () => {
 
     expect(status).toHaveBeenCalledWith(403);
     expect(json).toHaveBeenCalledWith({
-      error: { message: TOKEN_ERROR_MESSAGE },
+      error: { message: SESSION_ERROR_MESSAGE },
     });
   });
 

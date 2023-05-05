@@ -1,7 +1,7 @@
 import syncSubscriptionStatus from '@/src/pages/api/auth/sync-subscription-status';
 
 import {
-  TOKEN_ERROR_MESSAGE,
+  SESSION_ERROR_MESSAGE,
   DEFAULT_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
 } from '@/src/utils/constants';
@@ -104,7 +104,7 @@ describe('syncSubscriptionStatus endpoint', () => {
     });
   });
 
-  it('handles token forbidden', async () => {
+  it('handles session forbidden', async () => {
     const req = {
         method: 'POST',
         body: { email: 'success@test.com' },
@@ -116,7 +116,7 @@ describe('syncSubscriptionStatus endpoint', () => {
 
     expect(status).toHaveBeenCalledWith(403);
     expect(json).toHaveBeenCalledWith({
-      error: { message: TOKEN_ERROR_MESSAGE },
+      error: { message: SESSION_ERROR_MESSAGE },
     });
   });
 

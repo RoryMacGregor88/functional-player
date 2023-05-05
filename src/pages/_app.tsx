@@ -19,7 +19,7 @@ import {
   theme,
 } from '@/src/components';
 
-import { Context, authenticateToken } from '@/src/utils';
+import { Context, authenticateSession } from '@/src/utils';
 
 import { Ctx, UpdateCtx } from '@/src/utils/interfaces';
 
@@ -33,7 +33,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
     setCtx((prev) => ({ ...prev, ...newData }));
 
   /**
-   * token is checked upon initial document request
+   * session is verified upon initial document request
    * not internal page navigations
    */
   useEffect(() => {
@@ -41,7 +41,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
     // No, you would only call this when first loading page, when state is clear.
     if (!user) {
       (async () => {
-        const redirect = await authenticateToken({ updateCtx });
+        const redirect = await authenticateSession({ updateCtx });
         if (redirect) push('/login');
       })();
     }

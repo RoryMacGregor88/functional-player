@@ -14,14 +14,10 @@ interface VerifiedSessions {
 export default function verifySessions(sessions: Session[]): VerifiedSessions {
   const today = new Date();
   return sessions.reduce(
-    (acc, cur) => {
-      const result =
-        parseISO(cur.expirationDate) > today
-          ? { ...acc, validSessions: [...acc.validSessions, cur] }
-          : { ...acc, invalidSessions: [...acc.invalidSessions, cur] };
-
-      return result;
-    },
+    (acc, cur) =>
+      parseISO(cur.expirationDate) > today
+        ? { ...acc, validSessions: [...acc.validSessions, cur] }
+        : { ...acc, invalidSessions: [...acc.invalidSessions, cur] },
     { validSessions: [], invalidSessions: [] }
   );
 }

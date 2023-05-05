@@ -13,7 +13,7 @@ import {
 
 import {
   HTTP_METHOD_ERROR_MESSAGE,
-  TOKEN_ERROR_MESSAGE,
+  SESSION_ERROR_MESSAGE,
   USERS,
 } from '@/src/utils/constants';
 
@@ -26,7 +26,7 @@ async function logout(
   if (req.method !== 'POST') {
     return handleForbidden(res, HTTP_METHOD_ERROR_MESSAGE);
   } else if (req.session.user?.email !== req.body.email) {
-    return handleForbidden(res, TOKEN_ERROR_MESSAGE);
+    return handleForbidden(res, SESSION_ERROR_MESSAGE);
   } else {
     try {
       const { db } = await connectToDatabase();

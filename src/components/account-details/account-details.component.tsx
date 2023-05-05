@@ -30,7 +30,12 @@ const AccountDetails: FC<Props> = ({
           Email Address: <strong>{email}</strong>
         </Grid>
         <Grid item component='li'>
-          Date Registered: <strong>{formatDate(creationDate)}</strong>
+          Date Registered:{' '}
+          <strong>
+            {!!creationDate
+              ? formatDate(creationDate)
+              : 'Creation date not available.'}
+          </strong>
         </Grid>
         <Grid item component='li'>
           Subscription Status: <strong>{subscriptionStatus}</strong>

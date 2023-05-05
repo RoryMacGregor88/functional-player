@@ -8,8 +8,8 @@ export default function Landing({ user }) {
   const { push } = useRouter();
 
   useEffect(() => {
-    push('/dashboard');
+    if (!!user) push('/dashboard');
   }, [push, user]);
 
-  return <LoadMask showLogo />;
+  return !user ? <h1>LANDING PAGE</h1> : <LoadMask />;
 }

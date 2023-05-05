@@ -8,6 +8,13 @@ enableFetchMocks();
 
 let onError = null;
 
+const defaultToastData = {
+  toastData: {
+    severity: 'error',
+    message: DEFAULT_ERROR_MESSAGE,
+  },
+};
+
 describe('http', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
@@ -23,6 +30,20 @@ describe('http', () => {
     expect(res).toEqual({ testRes: { message } });
   });
 
+  it.each([401, 404, 400, 500, 501, 502])(
+    `handles non-2** responses (%d)`,
+    async (status) => {
+      const error = { error: { message: 'test-response-message' } };
+      fetchMock.mockResponse(JSON.stringify(error), { status });
+
+      const res = await http({ endpoint: '/test', onError });
+
+      expect(res).toEqual({});
+
+      expect(onError).toHaveBeenCalledWith(defaultToastData);
+    }
+  );
+
   it('handles client error', async () => {
     fetchMock.mockResponse(() => {
       throw new Error();
@@ -32,13 +53,6 @@ describe('http', () => {
 
     expect(res).toEqual({});
 
-    const expected = {
-      toastData: {
-        severity: 'error',
-        message: DEFAULT_ERROR_MESSAGE,
-      },
-    };
-
-    expect(onError).toHaveBeenCalledWith(expected);
+    expect(onError).toHaveBeenCalledWith(defaultToastData);
   });
 });

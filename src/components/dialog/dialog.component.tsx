@@ -51,7 +51,9 @@ const Dialog: FC<Props> = ({
         data-testid='close-icon'
       />
       {!!title ? (
-        <DialogTitle id='alert-dialog-title'>{title}</DialogTitle>
+        <DialogTitle id='alert-dialog-title' sx={{ textAlign: 'center' }}>
+          {title}
+        </DialogTitle>
       ) : null}
       <DialogContent sx={{ textAlign: 'center' }}>{message}</DialogContent>
       {!!actions ? (

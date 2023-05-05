@@ -1,5 +1,5 @@
 import {
-  TOKEN_ERROR_MESSAGE,
+  SESSION_ERROR_MESSAGE,
   DEFAULT_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
   EMAIL_NOT_FOUND_MESSAGE,
@@ -104,7 +104,7 @@ describe('updateBookmarks endpoint', () => {
     });
   });
 
-  it('handles token forbidden', async () => {
+  it('handles session forbidden', async () => {
     const req = {
         method: 'POST',
         body: { email: 'success@test.com' },
@@ -116,7 +116,7 @@ describe('updateBookmarks endpoint', () => {
 
     expect(status).toHaveBeenCalledWith(403);
     expect(json).toHaveBeenCalledWith({
-      error: { message: TOKEN_ERROR_MESSAGE },
+      error: { message: SESSION_ERROR_MESSAGE },
     });
   });
 

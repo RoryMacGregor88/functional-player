@@ -1,5 +1,5 @@
 import {
-  TOKEN_ERROR_MESSAGE,
+  SESSION_ERROR_MESSAGE,
   DEFAULT_ERROR_MESSAGE,
   HTTP_METHOD_ERROR_MESSAGE,
   INCORRECT_PASSWORD_MESSAGE,
@@ -123,7 +123,7 @@ describe('updatePassword endpoint', () => {
     });
   });
 
-  it('handles token forbidden', async () => {
+  it('handles session forbidden', async () => {
     const req = {
         method: 'POST',
         body: { email: 'success@test.com' },
@@ -135,7 +135,7 @@ describe('updatePassword endpoint', () => {
 
     expect(status).toHaveBeenCalledWith(403);
     expect(json).toHaveBeenCalledWith({
-      error: { message: TOKEN_ERROR_MESSAGE },
+      error: { message: SESSION_ERROR_MESSAGE },
     });
   });
 

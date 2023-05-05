@@ -24,18 +24,23 @@ export default async function http({
 }: Params): Promise<any> {
   try {
     const options = !!formData ? { body: JSON.stringify(formData) } : {};
-    return await (
-      await fetch(`/api${endpoint}`, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        ...options,
-      })
-    ).json();
+
+    const response = await fetch(`/api${endpoint}`, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      ...options,
+    });
+
+    if (!response.ok) {
+      throw new Error();
+    }
+
+    return await response.json();
   } catch (e) {
     onError(defaultToastData);
-    // empty object so return value can be destructured
+    /** empty object so return value can be destructured */
     return {};
   }
 }

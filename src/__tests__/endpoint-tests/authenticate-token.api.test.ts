@@ -1,6 +1,4 @@
-import { subDays, addDays } from 'date-fns';
-
-import authenticateToken from '@/src/pages/api/auth/authenticate-token';
+import authenticateSession from '@/src/pages/api/auth/authenticate-session';
 
 import {
   DEFAULT_ERROR_MESSAGE,
@@ -55,13 +53,13 @@ jest.mock('@/lib', () => ({
   })),
 }));
 
-describe('authenticateToken endpoint', () => {
+describe('authenticateSession endpoint', () => {
   beforeEach(() => {
     json = jest.fn();
     status = jest.fn().mockReturnValue({ json });
   });
 
-  it('returns user if found in token', async () => {
+  it('returns user if found in session', async () => {
     const email = 'success@test.com',
       req = {
         method: 'GET',
@@ -70,7 +68,7 @@ describe('authenticateToken endpoint', () => {
       },
       res = { status };
 
-    await authenticateToken(req, res);
+    await authenticateSession(req, res);
 
     expect(status).toHaveBeenCalledWith(200);
     expect(json).toHaveBeenCalledWith({ resUser: { email } });
@@ -85,7 +83,7 @@ describe('authenticateToken endpoint', () => {
       },
       res = { status };
 
-    await authenticateToken(req, res);
+    await authenticateSession(req, res);
 
     expect(status).toHaveBeenCalledWith(200);
     expect(json).toHaveBeenCalledWith({ resUser: null });
@@ -101,7 +99,7 @@ describe('authenticateToken endpoint', () => {
       },
       res = { status };
 
-    await authenticateToken(req, res);
+    await authenticateSession(req, res);
 
     expect(destroy).toHaveBeenCalled();
     expect(status).toHaveBeenCalledWith(403);
@@ -121,7 +119,7 @@ describe('authenticateToken endpoint', () => {
       },
       res = { status };
 
-    await authenticateToken(req, res);
+    await authenticateSession(req, res);
 
     expect(destroy).toHaveBeenCalled();
     expect(status).toHaveBeenCalledWith(403);
@@ -135,7 +133,7 @@ describe('authenticateToken endpoint', () => {
     const req = { method: 'DELETE' },
       res = { status };
 
-    await authenticateToken(req, res);
+    await authenticateSession(req, res);
 
     expect(status).toHaveBeenCalledWith(403);
     expect(json).toHaveBeenCalledWith({
@@ -152,7 +150,7 @@ describe('authenticateToken endpoint', () => {
       },
       res = { status };
 
-    await authenticateToken(req, res);
+    await authenticateSession(req, res);
 
     expect(status).toHaveBeenCalledWith(500);
     expect(json).toHaveBeenCalledWith({
