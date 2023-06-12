@@ -33,9 +33,10 @@ export default async function http({
       ...options,
     });
 
-    if (!response.ok) {
-      throw new Error();
-    }
+    // TODO: This needs fixing
+    // if (!response.ok) {
+    //   throw new Error();
+    // }
 
     return await response.json();
   } catch (e) {

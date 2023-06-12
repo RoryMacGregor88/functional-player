@@ -10,69 +10,6 @@ import login from '@/src/pages/api/auth/login';
 let json = null,
   status = null;
 
-jest.mock('bcryptjs', () => ({
-  compare: (p1, p2) => p1 === p2,
-}));
-
-jest.mock('uuid', () => ({
-  v4: () => '123',
-}));
-
-jest.mock('iron-session/next', () => ({
-  withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
-}));
-
-jest.mock('@/lib', () => ({
-  sanitizeBody: (b) => b,
-  syncStripeAndDb: ({ subscriptionId }) => {
-    if (subscriptionId === 'error') {
-      return { isError: true };
-    } else if (subscriptionId === 'success') {
-      return { subscriptionStatus: 'active' };
-    }
-  },
-  connectToDatabase: jest.fn().mockImplementation(() => ({
-    db: {
-      collection: () => ({
-        findOne: ({ email }) => {
-          if (email === 'error@test.com') {
-            throw new Error('test-error');
-          } else if (email === 'success@test.com') {
-            const testUser = {
-              password: '12345',
-              subscriptionId: 'success',
-              sessions: [],
-            };
-            return testUser;
-          } else if (email === 'stripeerror@test.com') {
-            const testUser = {
-              password: '12345',
-              subscriptionId: 'error',
-            };
-            return testUser;
-          } else if (email === 'nouser@test.com') {
-            return null;
-          }
-        },
-        updateOne: () => {},
-      }),
-    },
-  })),
-  logServerError: async (handler, error) => {
-    console.log(`ERROR in ${handler}: ${error}`);
-  },
-  handleForbidden: jest
-    .fn()
-    .mockImplementation((res, message) =>
-      res.status(403).json({ error: { message } })
-    ),
-  handleServerError: jest
-    .fn()
-    .mockImplementation((res) =>
-      res.status(500).json({ error: { message: DEFAULT_ERROR_MESSAGE } })
-    ),
-}));
-
 describe('login endpoint', () => {
   beforeEach(() => {
     json = jest.fn();
@@ -95,7 +32,7 @@ describe('login endpoint', () => {
     expect(status).toHaveBeenCalledWith(200);
     expect(json).toHaveBeenCalledWith({
       resUser: {
-        subscriptionId: 'success',
+        subscriptionId: 'success-id',
         subscriptionStatus: 'active',
       },
     });

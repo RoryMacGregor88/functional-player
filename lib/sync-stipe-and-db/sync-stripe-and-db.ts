@@ -40,16 +40,12 @@ async function syncStripeAndDb({
       String(subscriptionId)
     );
 
-    console.log('STRIPE TYPE: ', typeof stripeStatus);
-
     /**
      * if Stripe status does not match db, for example if
      * the subscription has attempted to renew but failed for
      * some reason, update status in db to reflect
      */
     if (currentSubscriptionStatus !== stripeStatus) {
-      console.log('STRIPE IS NOT EQUAL');
-
       /** does this need a check? Can this be broken through use input? */
       await db
         .collection<DbUser>(USERS)
@@ -60,7 +56,6 @@ async function syncStripeAndDb({
 
       return { isError: false, subscriptionStatus: stripeStatus };
     } else if (currentSubscriptionStatus === stripeStatus) {
-      console.log('STRIPE IS EQUAL');
       /** if unchanged, return current status */
       return { isError: false, subscriptionStatus: currentSubscriptionStatus };
     }

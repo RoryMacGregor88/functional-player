@@ -35,8 +35,8 @@ const LoadMask: FC<Props> = ({ showLogo = false }): ReactElement => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            width: isMobile ? '10rem' : '15rem',
-            gap: '1rem',
+            width: isMobile ? '16rem' : '24rem',
+            gap: '1.5rem',
           }}
         >
           <Image

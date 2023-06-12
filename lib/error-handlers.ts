@@ -14,6 +14,7 @@ async function logServerError(
   handlerName: string,
   error: Error
 ): Promise<void> {
+  /** This will eventually be replaced by real logging */
   console.log(`SERVER ERROR in ${handlerName}: `, error);
 }
 

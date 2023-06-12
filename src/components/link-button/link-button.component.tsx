@@ -1,16 +1,18 @@
 import { FC, ReactNode, ReactElement } from 'react';
 
-import { ButtonBase } from '@mui/material';
+import { ButtonBase, SxProps, Theme } from '@mui/material';
 
 interface Props {
   noLeftMargin?: boolean;
   onClick?: () => void;
+  sx?: SxProps<Theme>;
   children: ReactNode;
 }
 
 const LinkButton: FC<Props> = ({
   noLeftMargin = false,
   onClick,
+  sx,
   children,
 }): ReactElement => (
   <ButtonBase
@@ -23,6 +25,7 @@ const LinkButton: FC<Props> = ({
       width: 'fit-content',
       marginLeft: noLeftMargin ? '0' : '0.5rem',
       fontSize: '1rem',
+      ...sx,
     }}
   >
     {children}

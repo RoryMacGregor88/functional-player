@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest --env=jsdom --watch",
-    "test:ci": "jest --ci"
+    "test:ci": "jest --ci",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
@@ -16,7 +17,8 @@
     "@hookform/resolvers": "^2.9.7",
     "@mui/icons-material": "^5.6.0",
     "@mui/material": "^5.6.0",
-    "@next/font": "^13.0.5",
+    "@mui/styles": "^5.13.2",
+    "@next/font": "^13.4.2",
     "@stripe/react-stripe-js": "^1.7.2",
     "@stripe/stripe-js": "^1.29.0",
     "bcryptjs": "^2.4.3",

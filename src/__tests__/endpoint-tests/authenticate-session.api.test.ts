@@ -6,52 +6,21 @@ import {
   SESSION_EXPIRED_MESSAGE,
 } from '@/src/utils/constants';
 
+import {
+  STRIPE_TEST_ERROR_ID,
+  STRIPE_TEST_SUCCESS_ID,
+  TEST_INVALID_SESSION_ID,
+  TEST_VALID_SESSION_ID,
+  TEST_ERROR_EMAIL,
+  TEST_SUCCESS_EMAIL,
+  TEST_STRIPE_ERROR_EMAIL,
+  TEST_NO_SESSIONS_EMAIL,
+  TEST_INVALID_SESSION_EMAIL,
+  TEST_VALID_SESSION_EMAIL,
+} from '@/src/__tests__/test-constants';
+
 let json = null,
   status = null;
-
-jest.mock('iron-session/next', () => ({
-  withIronSessionApiRoute: (cb) => async (req, res) => cb(req, res),
-}));
-
-jest.mock('@/lib', () => ({
-  connectToDatabase: jest.fn().mockImplementation(() => ({
-    db: {
-      collection: () => ({
-        findOne: ({ email }) => {
-          if (!!email) {
-            if (email === 'error@test.com') {
-              throw new Error('test-error');
-            } else if (email === 'nosessions@test.com') {
-              return { sessions: [] };
-            } else if (email === 'invalidsession@test.com') {
-              return { sessions: [{ id: '123' }] };
-            } else if (email === 'success@test.com') {
-              return { sessions: [{ id: '456' }] };
-            }
-          }
-        },
-        updateOne: () => {},
-      }),
-    },
-  })),
-  logServerError: async (handler, error) => {
-    console.log(`ERROR in ${handler}: ${error}`);
-  },
-  handleForbidden: jest
-    .fn()
-    .mockImplementation((res, message) =>
-      res.status(403).json({ error: { message } })
-    ),
-  handleServerError: jest
-    .fn()
-    .mockImplementation((res) =>
-      res.status(500).json({ error: { message: DEFAULT_ERROR_MESSAGE } })
-    ),
-  verifySessions: jest.fn().mockImplementation(() => ({
-    validSessions: [{ id: '123' }],
-    invalidSessions: [],
-  })),
-}));
 
 describe('authenticateSession endpoint', () => {
   beforeEach(() => {
@@ -60,22 +29,34 @@ describe('authenticateSession endpoint', () => {
   });
 
   it('returns user if found in session', async () => {
-    const email = 'success@test.com',
+    const save = jest.fn(),
+      email = TEST_VALID_SESSION_EMAIL,
+      user = {
+        email,
+        subscriptionId: STRIPE_TEST_SUCCESS_ID,
+      },
       req = {
         method: 'GET',
         body: { email },
-        session: { id: '123', user: { email } },
+        session: {
+          id: TEST_VALID_SESSION_ID,
+          user,
+          save,
+        },
       },
       res = { status };
 
     await authenticateSession(req, res);
 
+    expect(save).toHaveBeenCalled();
     expect(status).toHaveBeenCalledWith(200);
-    expect(json).toHaveBeenCalledWith({ resUser: { email } });
+    expect(json).toHaveBeenCalledWith({
+      resUser: { ...user, subscriptionStatus: 'active' },
+    });
   });
 
   it('returns null user if session not found', async () => {
-    const email = 'test@email.com',
+    const email = TEST_SUCCESS_EMAIL,
       req = {
         method: 'GET',
         body: { email },
@@ -90,12 +71,16 @@ describe('authenticateSession endpoint', () => {
   });
 
   it('rejects request if user`s stored id array is empty', async () => {
-    const email = 'nosessions@test.com',
+    const email = TEST_NO_SESSIONS_EMAIL,
       destroy = jest.fn(),
       req = {
         method: 'GET',
         body: { email },
-        session: { id: '123', user: { email }, destroy },
+        session: {
+          id: TEST_VALID_SESSION_ID,
+          user: { email, subscriptionId: STRIPE_TEST_SUCCESS_ID },
+          destroy,
+        },
       },
       res = { status };
 
@@ -110,12 +95,16 @@ describe('authenticateSession endpoint', () => {
   });
 
   it('rejects request if session is invalid', async () => {
-    const email = 'invalidsession@test.com',
+    const email = TEST_INVALID_SESSION_EMAIL,
       destroy = jest.fn(),
       req = {
         method: 'GET',
         body: { email },
-        session: { id: '456', user: { email }, destroy },
+        session: {
+          id: TEST_INVALID_SESSION_ID,
+          user: { email, subscriptionId: STRIPE_TEST_SUCCESS_ID },
+          destroy,
+        },
       },
       res = { status };
 
@@ -141,12 +130,35 @@ describe('authenticateSession endpoint', () => {
     });
   });
 
+  it('handles stripe sync error', async () => {
+    const email = TEST_STRIPE_ERROR_EMAIL,
+      req = {
+        method: 'GET',
+        body: { email, password: '12345' },
+        session: {
+          id: TEST_VALID_SESSION_ID,
+          user: { email, subscriptionId: STRIPE_TEST_ERROR_ID },
+        },
+      },
+      res = { status };
+
+    await authenticateSession(req, res);
+
+    expect(status).toHaveBeenCalledWith(500);
+    expect(json).toHaveBeenCalledWith({
+      error: { message: DEFAULT_ERROR_MESSAGE },
+    });
+  });
+
   it('handles error', async () => {
-    const email = 'error@test.com',
+    const email = TEST_ERROR_EMAIL,
       req = {
         method: 'GET',
         body: { email },
-        session: { id: '123', user: { email } },
+        session: {
+          id: TEST_VALID_SESSION_ID,
+          user: { email, subscriptionId: STRIPE_TEST_SUCCESS_ID },
+        },
       },
       res = { status };
 

@@ -45,8 +45,8 @@ const data = new Array(50).fill(undefined).map((_, i) => {
     description,
     artist,
     creationDate: new Date().toISOString(),
-    courseId: '579544403',
-    trailerId: '579544403',
+    courseId: '828060656',
+    trailerId: '828060656',
     level,
     categories: getCategories(level),
   };
@@ -54,6 +54,7 @@ const data = new Array(50).fill(undefined).map((_, i) => {
 
 export const uploadCourses = async () => {
   const { db } = await connectToDatabase();
+  // await db[COLLECTION].deleteMany({});
   const courses = await db.collection(COLLECTION).insertMany(data);
   console.log('UPLOADED COURSES: ', courses);
 };

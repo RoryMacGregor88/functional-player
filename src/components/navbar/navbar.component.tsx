@@ -36,7 +36,7 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
     ctx: { selectedCategory, user },
   } = useCtx();
 
-  const isMobile = useMediaQuery('(max-width:700px)');
+  const isMobile = useMediaQuery('(max-width:950px)');
 
   const { push } = useRouter();
 
@@ -77,7 +77,7 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
         }}
       >
         <Link href={'/dashboard'} onClick={handleLogoClick} disableHover>
-          <Box sx={{ height: '2.5rem' }}>
+          <Box sx={{ height: isMobile ? '1rem' : '1.5rem' }}>
             <Image
               data-testid='fp-logo'
               alt='fp-logo'

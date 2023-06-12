@@ -28,6 +28,8 @@ declare module 'iron-session' {
   }
 }
 
+// TODO: SERVER ERROR in authenticateSession:  TypeError: Cannot destructure property 'email' of 'user' as it is undefined.
+
 async function authenticateSession(
   req: NextApiRequest,
   res: NextApiResponse
@@ -39,13 +41,17 @@ async function authenticateSession(
       const { db } = await connectToDatabase();
       const { id, user } = req.session;
 
+      /** user has no session (logged out or not registered) */
+      if (!id) {
+        return res.status(200).json({ resUser: null });
+      }
+
       const {
         email,
         subscriptionStatus: currentSubscriptionStatus,
         subscriptionId,
       } = user;
 
-      // TODO: make sure Stripe stuff is tip-top
       /**
        * fresh sync of stripe subscription status upon every login. If
        * subscription status is null (deleted), or is unchanged, original
@@ -62,11 +68,6 @@ async function authenticateSession(
         return handleServerError(res);
       }
 
-      /** user has no session (logged out or not registered) */
-      if (!id) {
-        return res.status(200).json({ resUser: null });
-      }
-
       const { sessions } = await db
         .collection<DbUser>(USERS)
         .findOne({ email });
@@ -74,7 +75,7 @@ async function authenticateSession(
       /**
        * if user has logged out of a different device, or clicked
        * "Log out of all devices", session id array will be empty,
-       * even if session exists on another device's browser
+       * even if session exists on current device's browser
        */
       if (!sessions.length) {
         await req.session.destroy();
@@ -105,7 +106,6 @@ async function authenticateSession(
         });
       }
 
-      // TODO: test this
       const resUser = {
         ...req.session.user,
         subscriptionStatus,
@@ -115,13 +115,11 @@ async function authenticateSession(
        * spread is here because session object also has
        * methods such as destroy(), save(), etc
        */
-      // TODO: test this
       req.session = {
         ...req.session,
         user: resUser,
       };
 
-      // TODO: test this
       await req.session.save();
 
       return res.status(200).json({ resUser });

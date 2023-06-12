@@ -1,6 +1,22 @@
 import { FC, ReactElement, useState, ReactNode } from 'react';
 
+import localFont from '@next/font/local';
+
 import { Navbar, Footer, Drawer } from '@/src/components';
+
+const folio = localFont({
+  src: [
+    {
+      path: '../../public/fonts/folio-bold.ttf',
+      weight: '400',
+    },
+    {
+      path: '../../public/fonts/folio-bold.ttf',
+      weight: '700',
+    },
+  ],
+  variable: '--folio-bold',
+});
 
 interface LayoutProps {
   children: ReactNode;
@@ -8,11 +24,13 @@ interface LayoutProps {
 
 const LayoutContainer: FC<LayoutProps> = ({ children }): ReactElement => (
   <div
+    // className={`${folio.variable}`}
     style={{
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
       minHeight: '100vh',
+      // fontFamily: `${folio.variable} !important`,
     }}
   >
     {children}

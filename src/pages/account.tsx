@@ -283,6 +283,9 @@ export default function Account({ user, ctx, updateCtx }: Props): ReactElement {
     if (!!error) {
       handleServerError(error);
     } else if (resUser === null) {
+      // TODO: This is triggering the `Not allowed to access this page` toast when
+      // the account is deleted. Because the user no longer exists and the useEffect
+      // at the top runs. Need to override with a `successfully deleted account` toast
       updateCtx({ user: resUser });
       handleSuccess(ACCOUNT_DELETE_SUCCESS_MESSAGE);
     }

@@ -11,5 +11,9 @@ export default function Landing({ user }) {
     if (!!user) push('/dashboard');
   }, [push, user]);
 
-  return !user ? <h1>LANDING PAGE</h1> : <LoadMask />;
+  return !user ? (
+    <h1>ABCDEFGHIJKLMNOPQRSTUVWXYZ FUNCTIONALPLAYER</h1>
+  ) : (
+    <LoadMask />
+  );
 }
