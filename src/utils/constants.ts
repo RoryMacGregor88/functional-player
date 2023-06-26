@@ -193,41 +193,6 @@ export const CATEGORY_METADATA = [
   },
 ];
 
-export const FAQ_DATA = [
-  {
-    question: `Who are you?`,
-    answer: `I am a former session musician, teacher and audio engineer from Edinburgh, Scotland. I started this site to reach a wider audience.`,
-  },
-  {
-    question: `What is "Expressive Detailing", and why is it so important?`,
-    answer: `"Expressive Detailing" is a term I coined as a less vague description of what a lot of musicians call "feel" or "soul" or "character". It is the combination of subtle inflactions imparted onto played notes that create a very human sound.`,
-  },
-  {
-    question: `Why do I have to pay for access?`,
-    answer: `I would love to do this for free, but unfortunately, running a website like this costs money.`,
-  },
-  {
-    question: `Why don't you show your face in the videos?`,
-    answer: `Two reasons: The main reason is that I just have no interest in being famous, but also because I am a bit shy about having a camera pointed at my face, and I doubt anybody really cares what I look like anyway!`,
-  },
-  {
-    question: `How do I cancel my subscription?`,
-    answer: `You can cancel and re-activate your subscription from the "Account page. You don't need to delete your account to cancel your subscription."`,
-    action: {
-      label: 'Click here',
-      href: '/account',
-    },
-  },
-  {
-    question: `How do I contact you?`,
-    answer: `You can contact me through the form on the "Contact page"`,
-    action: {
-      label: 'Click here',
-      href: '/contact',
-    },
-  },
-];
-
 export const CHARS = [
   '1',
   '2',

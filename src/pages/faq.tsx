@@ -16,15 +16,20 @@ import {
   LinkButton,
 } from '@/src/components';
 
-import { FAQ_DATA } from '@/src/utils/constants';
-
 // TODO: needs tests
+
+const MOCK_FAQ_DATA = new Array(20).fill(undefined).map((_, i) => ({
+  question: `Question ${i + 1}`,
+  answer:
+    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea eius quia totam corporis ipsa blanditiis nulla ex deleniti, explicabo recusandae molestias, optio minima sapiente dignissimos! Fugit voluptatem officiis veritatis neque.',
+  action: null,
+}));
 
 export default function FAQ(): ReactElement {
   return (
     <PageWrapper restrictWidth>
       <SpacedTitle>Frequently Asked Questions</SpacedTitle>
-      {FAQ_DATA.map(({ question, answer, action }) => (
+      {MOCK_FAQ_DATA.map(({ question, answer, action }) => (
         <Accordion key={question} sx={{ width: '100%', margin: '0.5rem 0' }}>
           <AccordionSummary
             expandIcon={<ExpandIcon />}
