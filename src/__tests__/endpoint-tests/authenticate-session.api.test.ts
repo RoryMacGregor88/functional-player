@@ -2,13 +2,14 @@ import authenticateSession from '@/src/pages/api/auth/authenticate-session';
 
 import {
   DEFAULT_ERROR_MESSAGE,
+  EMAIL_NOT_FOUND_MESSAGE,
   GET_METHOD_ERROR_MESSAGE,
   SESSION_EXPIRED_MESSAGE,
 } from '@/src/utils/constants';
 
 import {
-  STRIPE_TEST_ERROR_ID,
-  STRIPE_TEST_SUCCESS_ID,
+  TEST_STRIPE_ERROR_ID,
+  TEST_STRIPE_SUCCESS_ID,
   TEST_INVALID_SESSION_ID,
   TEST_VALID_SESSION_ID,
   TEST_ERROR_EMAIL,
@@ -17,6 +18,7 @@ import {
   TEST_NO_SESSIONS_EMAIL,
   TEST_INVALID_SESSION_EMAIL,
   TEST_VALID_SESSION_EMAIL,
+  TEST_NO_USER_EMAIL,
 } from '@/src/__tests__/test-constants';
 
 let json = null,
@@ -33,7 +35,6 @@ describe('authenticateSession endpoint', () => {
       email = TEST_VALID_SESSION_EMAIL,
       user = {
         email,
-        subscriptionId: STRIPE_TEST_SUCCESS_ID,
       },
       req = {
         method: 'GET',
@@ -52,6 +53,29 @@ describe('authenticateSession endpoint', () => {
     expect(status).toHaveBeenCalledWith(200);
     expect(json).toHaveBeenCalledWith({
       resUser: { ...user, subscriptionStatus: 'active' },
+    });
+  });
+
+  it('handles user not found', async () => {
+    const email = TEST_NO_USER_EMAIL,
+      user = {
+        email,
+      },
+      req = {
+        method: 'GET',
+        body: { email },
+        session: {
+          id: TEST_VALID_SESSION_ID,
+          user,
+        },
+      },
+      res = { status };
+
+    await authenticateSession(req, res);
+
+    expect(status).toHaveBeenCalledWith(400);
+    expect(json).toHaveBeenCalledWith({
+      error: { message: EMAIL_NOT_FOUND_MESSAGE },
     });
   });
 
@@ -78,7 +102,7 @@ describe('authenticateSession endpoint', () => {
         body: { email },
         session: {
           id: TEST_VALID_SESSION_ID,
-          user: { email, subscriptionId: STRIPE_TEST_SUCCESS_ID },
+          user: { email, subscriptionId: TEST_STRIPE_SUCCESS_ID },
           destroy,
         },
       },
@@ -102,7 +126,7 @@ describe('authenticateSession endpoint', () => {
         body: { email },
         session: {
           id: TEST_INVALID_SESSION_ID,
-          user: { email, subscriptionId: STRIPE_TEST_SUCCESS_ID },
+          user: { email, subscriptionId: '3456' },
           destroy,
         },
       },
@@ -137,7 +161,7 @@ describe('authenticateSession endpoint', () => {
         body: { email, password: '12345' },
         session: {
           id: TEST_VALID_SESSION_ID,
-          user: { email, subscriptionId: STRIPE_TEST_ERROR_ID },
+          user: { email, subscriptionId: TEST_STRIPE_ERROR_ID },
         },
       },
       res = { status };
@@ -157,7 +181,7 @@ describe('authenticateSession endpoint', () => {
         body: { email },
         session: {
           id: TEST_VALID_SESSION_ID,
-          user: { email, subscriptionId: STRIPE_TEST_SUCCESS_ID },
+          user: { email },
         },
       },
       res = { status };

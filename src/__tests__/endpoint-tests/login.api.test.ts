@@ -5,6 +5,15 @@ import {
   INCORRECT_PASSWORD_MESSAGE,
 } from '@/src/utils/constants';
 
+import {
+  TEST_STRIPE_ERROR_ID,
+  TEST_STRIPE_SUCCESS_ID,
+  TEST_ERROR_EMAIL,
+  TEST_SUCCESS_EMAIL,
+  TEST_NO_USER_EMAIL,
+  TEST_STRIPE_ERROR_EMAIL,
+} from '@/src/__tests__/test-constants';
+
 import login from '@/src/pages/api/auth/login';
 
 let json = null,
@@ -21,7 +30,7 @@ describe('login endpoint', () => {
 
     const req = {
         method: 'POST',
-        body: { email: 'success@test.com', password: '12345' },
+        body: { email: TEST_SUCCESS_EMAIL, password: '12345' },
         session: { save },
       },
       res = { status };
@@ -32,7 +41,7 @@ describe('login endpoint', () => {
     expect(status).toHaveBeenCalledWith(200);
     expect(json).toHaveBeenCalledWith({
       resUser: {
-        subscriptionId: 'success-id',
+        subscriptionId: TEST_STRIPE_SUCCESS_ID,
         subscriptionStatus: 'active',
       },
     });
@@ -41,7 +50,7 @@ describe('login endpoint', () => {
   it('handles user not found', async () => {
     const req = {
         method: 'POST',
-        body: { email: 'nouser@email.com' },
+        body: { email: TEST_NO_USER_EMAIL },
       },
       res = { status };
 
@@ -56,7 +65,7 @@ describe('login endpoint', () => {
   it('handles incorrect password', async () => {
     const req = {
         method: 'POST',
-        body: { email: 'success@test.com', password: '678910' },
+        body: { email: TEST_SUCCESS_EMAIL, password: '678910' },
       },
       res = { status };
 
@@ -71,7 +80,7 @@ describe('login endpoint', () => {
   it('handles stripe sync error', async () => {
     const req = {
         method: 'POST',
-        body: { email: 'stripeerror@test.com', password: '12345' },
+        body: { email: TEST_STRIPE_ERROR_EMAIL, password: '12345' },
       },
       res = { status };
 
@@ -98,7 +107,7 @@ describe('login endpoint', () => {
   it('handles error', async () => {
     const req = {
         method: 'POST',
-        body: { email: 'error@test.com', password: '123' },
+        body: { email: TEST_ERROR_EMAIL, password: '123' },
       },
       res = { status };
 

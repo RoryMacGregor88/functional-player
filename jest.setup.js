@@ -3,8 +3,8 @@ import '@testing-library/jest-dom';
 import { DEFAULT_ERROR_MESSAGE } from '@/src/utils/constants';
 
 import {
-  STRIPE_TEST_ERROR_ID,
-  STRIPE_TEST_SUCCESS_ID,
+  TEST_STRIPE_ERROR_ID,
+  TEST_STRIPE_SUCCESS_ID,
   TEST_INVALID_SESSION_ID,
   TEST_VALID_SESSION_ID,
   TEST_ERROR_EMAIL,
@@ -40,9 +40,9 @@ jest.mock('iron-session/next', () => ({
 jest.mock('@/lib', () => ({
   sanitizeBody: jest.fn().mockImplementation((b) => b),
   syncStripeAndDb: jest.fn().mockImplementation(({ subscriptionId }) => {
-    if (subscriptionId === STRIPE_TEST_ERROR_ID) {
+    if (subscriptionId === TEST_STRIPE_ERROR_ID) {
       return { isError: true };
-    } else if (subscriptionId === STRIPE_TEST_SUCCESS_ID) {
+    } else if (subscriptionId === TEST_STRIPE_SUCCESS_ID) {
       return { subscriptionStatus: 'active' };
     }
   }),
@@ -70,29 +70,37 @@ jest.mock('@/lib', () => ({
       collection: jest.fn().mockImplementation(() => ({
         updateOne: jest.fn().mockImplementation(() => {}),
         findOne: jest.fn().mockImplementation(({ email }) => {
+          const successUser = {
+            email,
+            password: '12345',
+            subscriptionId: TEST_STRIPE_SUCCESS_ID,
+            sessions: [],
+          };
           switch (email) {
             case TEST_ERROR_EMAIL:
               throw new Error('test-error');
             case TEST_SUCCESS_EMAIL:
-              return {
-                password: '12345',
-                subscriptionId: STRIPE_TEST_SUCCESS_ID,
-                sessions: [],
-              };
+              return successUser;
             case TEST_STRIPE_ERROR_EMAIL:
               return {
                 password: '12345',
                 /** for use in syncStripeAndDb above */
-                subscriptionId: STRIPE_TEST_ERROR_ID,
+                subscriptionId: TEST_STRIPE_ERROR_ID,
               };
             case TEST_NO_USER_EMAIL:
               return null;
             case TEST_NO_SESSIONS_EMAIL:
-              return { sessions: [] };
+              return successUser;
             case TEST_INVALID_SESSION_EMAIL:
-              return { sessions: [{ id: TEST_INVALID_SESSION_ID }] };
+              return {
+                ...successUser,
+                sessions: [{ id: TEST_INVALID_SESSION_ID }],
+              };
             case TEST_VALID_SESSION_EMAIL:
-              return { sessions: [{ id: TEST_VALID_SESSION_ID }] };
+              return {
+                ...successUser,
+                sessions: [{ id: TEST_VALID_SESSION_ID }],
+              };
           }
         }),
       })),

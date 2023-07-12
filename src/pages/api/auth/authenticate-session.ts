@@ -18,6 +18,7 @@ import {
   USERS,
   SESSION_EXPIRED_MESSAGE,
   GET_METHOD_ERROR_MESSAGE,
+  EMAIL_NOT_FOUND_MESSAGE,
 } from '@/src/utils/constants';
 
 declare module 'iron-session' {
@@ -46,11 +47,25 @@ async function authenticateSession(
         return res.status(200).json({ resUser: null });
       }
 
+      // TODO: change this to look for user by session id?
+      const result = await db
+        .collection<DbUser>(USERS)
+        .findOne({ email: user.email });
+
+      if (!result) {
+        return res.status(400).json({
+          error: {
+            message: EMAIL_NOT_FOUND_MESSAGE,
+          },
+        });
+      }
+
       const {
         email,
         subscriptionStatus: currentSubscriptionStatus,
         subscriptionId,
-      } = user;
+        sessions,
+      } = result;
 
       /**
        * fresh sync of stripe subscription status upon every login. If
@@ -67,10 +82,6 @@ async function authenticateSession(
       if (isError) {
         return handleServerError(res);
       }
-
-      const { sessions } = await db
-        .collection<DbUser>(USERS)
-        .findOne({ email });
 
       /**
        * if user has logged out of a different device, or clicked

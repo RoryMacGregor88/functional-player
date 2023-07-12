@@ -1,5 +1,7 @@
-export const STRIPE_TEST_ERROR_ID = 'stripe-error-id';
-export const STRIPE_TEST_SUCCESS_ID = 'stripe-success-id';
+export const TEST_SUCCESS_PASSWORD = '12345';
+
+export const TEST_STRIPE_ERROR_ID = 'stripe-error-id';
+export const TEST_STRIPE_SUCCESS_ID = 'stripe-success-id';
 
 export const TEST_INVALID_SESSION_ID = '123';
 export const TEST_VALID_SESSION_ID = '456';

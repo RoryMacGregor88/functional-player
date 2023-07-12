@@ -4,6 +4,8 @@ import { StripeElements } from '@stripe/stripe-js';
 
 import { AlertColor } from '@mui/material';
 
+//TODO: rename? Has types not interfaces
+
 type StripeModules = {
   stripe: Stripe;
   elements: StripeElements;
@@ -96,16 +98,9 @@ export type Course = {
   categories: Category[];
 };
 
-export type DbCourse = {
-  _id: Id;
+export type DbCourse = Omit<Course, 'videoId'> & {
   trailerId: string;
   courseId: string;
-  title: string;
-  description: string;
-  artist: string;
-  level: LevelRating;
-  creationDate: DateString;
-  categories: Category[];
 };
 
 export type CustomError = {
