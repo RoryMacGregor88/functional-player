@@ -26,7 +26,7 @@ const theme: ThemeOptions = {
     },
     background: {
       paper: offBlack,
-      // change this to something better
+      // TODO: change this to something better
       default: offBlack,
     },
     primary: {

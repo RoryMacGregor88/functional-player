@@ -21,7 +21,7 @@ const AccountDetails: FC<Props> = ({
 
   return (
     <Grid container alignItems='center' gap='1rem'>
-      <Typography variant='h5'>Below is a summary of your account:</Typography>
+      <Typography variant='h5'>Account summary:</Typography>
       <Grid item container direction='column' component='ul' gap='1rem'>
         <Grid item component='li'>
           Username: <strong>{username}</strong>

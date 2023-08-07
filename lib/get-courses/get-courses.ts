@@ -27,7 +27,9 @@ export default async function getCourses(
         ...rest,
       }));
 
-    console.log(isAuthorized ? 'AUTHORIZED' : 'RESTRICTED');
+    console.log(
+      `AUTHORIZATION STATUS: ${isAuthorized ? 'AUTHORIZED' : 'RESTRICTED'}`
+    );
     return { courses };
   } catch (e) {
     console.log('ERROR in getCourses: ', e);

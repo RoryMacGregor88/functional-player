@@ -12,11 +12,7 @@ import {
 
 import { DbUser } from '@/src/utils/interfaces';
 
-import {
-  USERS,
-  HTTP_METHOD_ERROR_MESSAGE,
-  EMAIL_NOT_FOUND_MESSAGE,
-} from '@/src/utils/constants';
+import { USERS, HTTP_METHOD_ERROR_MESSAGE } from '@/src/utils/constants';
 
 async function contact(
   req: NextApiRequest,
@@ -31,18 +27,24 @@ async function contact(
 
       const result = await db.collection<DbUser>(USERS).findOne({ email });
 
-      const userMetadata = !!result
-        ? {
-            username: result.username,
-            customerId: result.customerId,
-            subscriptionId: result.subscriptionId,
-            subscriptionStatus: result.subscriptionStatus,
-          }
-        : {};
+      // TODO: make sure this still works
+      let resultMetadata = {};
+
+      if (!!result) {
+        const { username, customerId, subscriptionId, subscriptionStatus } =
+          result;
+
+        resultMetadata = {
+          username,
+          customerId,
+          subscriptionId,
+          subscriptionStatus,
+        };
+      }
 
       const metadata = {
         email,
-        ...userMetadata,
+        ...resultMetadata,
       };
 
       const formattedMetadata = Object.entries(metadata).reduce(
@@ -66,13 +68,14 @@ async function contact(
       `;
 
       // TODO: fix env variables
-      const hostEmail = process.env.HOST_EMAIL;
+      const hostEmail = process.env.HOST_EMAIL,
+      password = process.env.HOST_EMAIL_PASSWORD
 
       const transporter = nodemailer.createTransport({
         host: 'smtp.outlook.com',
         auth: {
           user: hostEmail,
-          pass: process.env.HOST_EMAIL_PASSWORD,
+          pass: password
         },
       });
 

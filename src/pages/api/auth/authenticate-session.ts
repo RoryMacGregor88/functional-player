@@ -111,6 +111,8 @@ async function authenticateSession(
         /** destroy local session (already destoyed in db) */
         await req.session.destroy();
 
+        // TODO: bug when registering new user (on success message page)
+        // TODO: change redirect to shouldRedirect, more explicit
         return res.status(403).json({
           error: { message: SESSION_EXPIRED_MESSAGE },
           redirect: true,

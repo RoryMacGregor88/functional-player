@@ -20,6 +20,17 @@ import { useCtx } from '@/src/utils';
 
 import { Course } from '@/src/utils/interfaces';
 
+const stockImages = [
+  '/1-small.jpg',
+  '/2-small.jpg',
+  '/3-small.jpg',
+  '/4-small.jpg',
+  '/5-small.jpg',
+];
+
+/** this is only here to give a variety of images while using stock images */
+const getSrc = (index: number) => stockImages[index];
+
 type Orientation = 'left' | 'right';
 
 interface OverlayProps {
@@ -153,6 +164,7 @@ const Slider: FC<SliderProps> = ({
         sx={{
           paddingLeft: '0.5rem',
           marginBottom: '0.5rem',
+          fontWeight: '600',
           fontSize: isMobile ? '1.5rem' : '2rem',
         }}
       >
@@ -209,33 +221,40 @@ const Slider: FC<SliderProps> = ({
             transitionDuration: '0.25s',
           }}
         >
-          {courses.map((course) => (
-            <Box
-              key={course.title}
-              onClick={() => handleClick(course)}
-              sx={{
-                position: 'relative',
-                minWidth,
-                height,
-                border: `${BORDER_WIDTH}px solid transparent`,
-                borderRadius: 3,
-                overflow: 'hidden',
-                cursor: 'pointer',
-                '&:hover': {
-                  border: `${BORDER_WIDTH}px solid #fff`,
-                },
-              }}
-              data-testid={course.title}
-            >
-              <Overlay course={course} isMobile={isMobile} />
-              <NextImage
-                src='/strat-small.jpg'
-                alt='stratocaster'
-                fill
-                style={{ objectFit: 'cover' }}
-              />
-            </Box>
-          ))}
+          {courses.map((course) => {
+            /**
+             * This is here to be able to pick small and large versions of the same
+             * image when using stock images
+             */
+            const imageIndex = Math.floor(Math.random() * stockImages.length);
+            return (
+              <Box
+                key={course.title}
+                onClick={() => handleClick(course)}
+                sx={{
+                  position: 'relative',
+                  minWidth,
+                  height,
+                  border: `${BORDER_WIDTH}px solid transparent`,
+                  borderRadius: 3,
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  '&:hover': {
+                    border: `${BORDER_WIDTH}px solid #fff`,
+                  },
+                }}
+                data-testid={course.title}
+              >
+                <Overlay course={course} isMobile={isMobile} />
+                <NextImage
+                  src={getSrc(imageIndex)}
+                  alt={`image-${imageIndex}`}
+                  style={{ objectFit: 'cover', opacity: 0.5 }}
+                  fill
+                />
+              </Box>
+            );
+          })}
         </Grid>
       </Grid>
     </>

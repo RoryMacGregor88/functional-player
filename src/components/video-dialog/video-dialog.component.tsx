@@ -150,6 +150,7 @@ const VideoDialog: FC<VideoDialogProps> = ({
 
   // TODO: useEffect not running
   // also, this needs to fire when Vimeo play button is clicked, not on mount
+  // check to see if there is an onPlay method or something, that would be perfect
 
   // useEffect(() => {
   //   if (!!selectedVideo) {
@@ -164,7 +165,7 @@ const VideoDialog: FC<VideoDialogProps> = ({
   // closed, and will error if null is passed to children components
   if (!selectedVideo) return null;
 
-  // TODO: delete this?
+  // TODO: delete this if not using large images anymore?
   const deviceSize = isSmall ? 'small' : isMedium ? 'medium' : 'large';
   const isBookmarked = !!user?.bookmarks.includes(_id);
 

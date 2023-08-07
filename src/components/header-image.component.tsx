@@ -106,7 +106,7 @@ const Device: FC<DeviceProps> = ({
       }}
     >
       <NextImage
-        src={`${src}-${deviceSize}.jpg`}
+        src={`/${src}-${deviceSize}.jpg`}
         alt={alt}
         fill
         quality={100}
@@ -193,7 +193,7 @@ const Desktop: FC<DesktopProps> = ({ src, alt, updateCtx }): ReactElement => (
       }}
     >
       <NextImage
-        src={`${src}-large.jpg`}
+        src={`/${src}-large.jpg`}
         alt={alt}
         fill
         quality={100}

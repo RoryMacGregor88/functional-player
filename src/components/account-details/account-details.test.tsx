@@ -14,9 +14,7 @@ describe('Account Details', () => {
   it('renders', () => {
     render(<AccountDetails />, { ctx: defaultCtx });
 
-    expect(
-      screen.getByText(/below is a summary of your account:/i)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/account summary:/i)).toBeInTheDocument();
   });
 
   it('calls handleLogoutFromAllClick when button clicked', async () => {

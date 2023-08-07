@@ -89,7 +89,7 @@ export default function Dashboard({
     bookmarks = courses.filter(({ _id }) => !!user?.bookmarks.includes(_id));
   return (
     <Grid container direction='column'>
-      <HeaderImage src='/strat' alt='stratocaster' />
+      <HeaderImage src='landing' alt='landing-page' />
       <PageWrapper>
         {!!lastWatched ? (
           <Slider title='Continue Watching' courses={[lastWatched]} banner />

@@ -41,7 +41,7 @@ const Dialog: FC<Props> = ({
           border: '2px solid #fff',
           borderRadius: 3,
           maxWidth: 'none',
-          maxheight: 'none',
+          maxHeight: 'none',
         },
       }}
     >

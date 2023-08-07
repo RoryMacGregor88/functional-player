@@ -36,6 +36,7 @@ async function syncStripeAndDb({
       return { isError: false, subscriptionStatus: currentSubscriptionStatus };
     }
 
+    // TODO: bug! This broke, said customer did not exist. Haven't been able to replicate
     const { status: stripeStatus } = await stripe.subscriptions.retrieve(
       String(subscriptionId)
     );
@@ -59,7 +60,8 @@ async function syncStripeAndDb({
       /** if unchanged, return current status */
       return { isError: false, subscriptionStatus: currentSubscriptionStatus };
     }
-  } catch (e) {
+  } catch (error) {
+    console.log('ERROR in syncStripeAndDb: ', error);
     /** error is handled in parent handler */
     return { isError: true, subscriptionStatus: null };
   }
