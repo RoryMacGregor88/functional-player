@@ -97,7 +97,7 @@ async function authenticateSession(
       const { validSessions, invalidSessions } = verifySessions(sessions);
 
       /** destroy invalid sessions in db */
-      if (!!invalidSessions.length) {
+      if (invalidSessions.length) {
         await db
           .collection<DbUser>(USERS)
           .updateOne({ email }, { $set: { sessions: validSessions } });

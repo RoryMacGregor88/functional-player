@@ -121,7 +121,7 @@ export default function Account({ user, ctx, updateCtx }: Props): ReactElement {
   };
 
   const handleTabChange = (_: any, newValue: number) => {
-    if (!!wellData) setWellData(null);
+    if (wellData) setWellData(null);
     setValue(newValue);
   };
 
@@ -164,7 +164,7 @@ export default function Account({ user, ctx, updateCtx }: Props): ReactElement {
       onError: handleClientError,
     });
 
-    if (!!error) {
+    if (error) {
       handleServerError(error);
     } else if (ok) {
       handleSuccess(UPDATE_PASSWORD_SUCCESS_MESSAGE);
@@ -190,9 +190,9 @@ export default function Account({ user, ctx, updateCtx }: Props): ReactElement {
       onError: handleClientError,
     });
 
-    if (!!error) {
+    if (error) {
       handleServerError(error);
-    } else if (!!resUser) {
+    } else if (resUser) {
       updateCtx({ user: resUser });
       handleSuccess(CANCEL_SUBSCRITION_SUCCESS_MESSAGE);
     }
@@ -219,9 +219,9 @@ export default function Account({ user, ctx, updateCtx }: Props): ReactElement {
       }
     );
 
-    if (!!error) {
+    if (error) {
       handleServerError(error);
-    } else if (!!clientSecret && !!resUser) {
+    } else if (clientSecret && !!resUser) {
       setClientSecret(clientSecret);
       updateCtx({ user: resUser });
       setIsLoading(false);
@@ -245,7 +245,7 @@ export default function Account({ user, ctx, updateCtx }: Props): ReactElement {
         },
       });
 
-    if (!!stripeError) {
+    if (stripeError) {
       const { message } = stripeError,
         error = { message };
       handleServerError(error);
@@ -273,7 +273,7 @@ export default function Account({ user, ctx, updateCtx }: Props): ReactElement {
       onError: handleClientError,
     });
 
-    if (!!error) {
+    if (error) {
       handleServerError(error);
     } else if (resUser === null) {
       updateCtx({ user: resUser });

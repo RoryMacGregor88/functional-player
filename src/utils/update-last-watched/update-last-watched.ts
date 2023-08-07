@@ -18,7 +18,7 @@ export default async function updateLastWatched({
   _id,
   updateCtx,
 }: Params): Promise<void> {
-  if (!!user) {
+  if (user) {
     const { error, resUser }: ResProps = await http({
       endpoint: '/last-watched',
       formData: {
@@ -28,11 +28,11 @@ export default async function updateLastWatched({
       onError: updateCtx,
     });
 
-    if (!!error) {
+    if (error) {
       // this is a background action,
       // doesn't really matter if it's not error-handled
       return;
-    } else if (!!user) {
+    } else if (user) {
       updateCtx({ user: resUser });
     }
   }

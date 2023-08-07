@@ -10,11 +10,11 @@ type StripeModules = {
 };
 
 export type Id = string | number;
-export type Category = string;
+export type Category = { label: string; value: string };
 export type Artist = string;
 export type DateString = string;
 export type Severity = AlertColor;
-export type LevelRating = string;
+export type LevelRating = { label: string; value: string; color: string };
 
 export type Session = {
   id: Id;

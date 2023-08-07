@@ -13,20 +13,19 @@ const COLLECTION = 'courses';
 const description =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
-const levelRatings = COURSE_LEVEL_METADATA.map(({ value }) => value);
 const getLevel = () =>
-  levelRatings[Math.floor(Math.random() * levelRatings.length)];
+  COURSE_LEVEL_METADATA[
+    Math.floor(Math.random() * COURSE_LEVEL_METADATA.length)
+  ];
 
-const categories = CATEGORY_METADATA.map(({ value }) => value);
-const getCategories = (level) => {
-  let result = [];
-  for (let i = 0; i <= 3; i++) {
-    result = [
-      ...result,
-      categories[Math.floor(Math.random() * categories.length)],
-    ];
-  }
-  return [...Array.from(new Set([...result, level]))];
+const getCategories = (levelObj) => {
+  const categories = [1, 2, 3].reduce((acc) => {
+    const randomCategoryObj =
+      CATEGORY_METADATA[Math.floor(Math.random() * CATEGORY_METADATA.length)];
+    return [...acc, randomCategoryObj];
+  }, []);
+
+  return [...Array.from(new Set([...categories, levelObj]))];
 };
 
 const artists = ARTIST_METADATA.map(({ label }) => label);
@@ -49,9 +48,14 @@ const data = new Array(50).fill(undefined).map((_, i) => {
   };
 });
 
-export const uploadCourses = async () => {
+export default async function uploadCourses() {
   const { db } = await connectToDatabase();
-  // await db[COLLECTION].deleteMany({});
-  const courses = await db.collection(COLLECTION).insertMany(data);
-  console.log('UPLOADED COURSES: ', courses);
-};
+
+  /** delete everything */
+  // await db.collection(COLLECTION).deleteMany({});
+  // console.log('DELETED COURSES');
+
+  /** populate db */
+  // const courses = await db.collection(COLLECTION).insertMany(data);
+  // console.log('UPLOADED COURSES: ', courses);
+}

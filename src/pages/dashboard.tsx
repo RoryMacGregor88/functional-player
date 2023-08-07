@@ -29,7 +29,7 @@ const comingSoonCourse: Course = {
   title: 'Peter Green Coming Soon',
   description: 'This is a description of Peter Green Coming Soon',
   artist: 'Peter Green',
-  level: 'intermediate',
+  level: { label: 'Intermediate', value: 'intermediate', color: 'info.dark' },
   creationDate: new Date().toISOString(),
   categories: [],
 };
@@ -62,7 +62,7 @@ export default function Dashboard({
   const { push } = useRouter();
 
   useEffect(() => {
-    if (!!error) {
+    if (error) {
       const { message } = error;
       updateCtx({
         toastData: {
@@ -73,10 +73,12 @@ export default function Dashboard({
     }
   }, [push, error, updateCtx, user]);
 
-  if (!!error) return <LoadMask />;
+  if (error) return <LoadMask />;
 
   const getCategoryCourses = (category: Category): Course[] =>
-    courses.filter(({ categories }) => categories.includes(category));
+    courses.filter(({ categories }) =>
+      categories.map(({ value }) => value).includes(category.value)
+    );
 
   const latestCourses = courses
       .sort((a, b) => (a.creationDate > b.creationDate ? -1 : 1))
@@ -95,13 +97,16 @@ export default function Dashboard({
         ) : null}
         <Slider title='Recently Added' courses={latestCourses} />
         <Slider title='Coming Soon' courses={[comingSoonCourse]} banner />
-        {CATEGORY_METADATA.map(({ label, value }) => (
-          <Slider
-            key={value}
-            title={label}
-            courses={getCategoryCourses(value)}
-          />
-        ))}
+        {CATEGORY_METADATA.map((category) => {
+          const { label, value } = category;
+          return (
+            <Slider
+              key={value}
+              title={label}
+              courses={getCategoryCourses(category)}
+            />
+          );
+        })}
       </PageWrapper>
     </Grid>
   );

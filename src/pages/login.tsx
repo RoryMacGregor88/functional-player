@@ -34,12 +34,12 @@ export default function Login({ user, updateCtx }: Props) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!!user) {
+    if (user) {
       push('/dashboard');
     }
   }, [user, push]);
 
-  if (!!user) return <LoadMask />;
+  if (user) return <LoadMask />;
 
   interface ResProps {
     error: Error | undefined;
@@ -64,10 +64,10 @@ export default function Login({ user, updateCtx }: Props) {
       },
     });
 
-    if (!!error) {
+    if (error) {
       const { message } = error;
       setWellData({ message });
-    } else if (!!resUser) {
+    } else if (resUser) {
       updateCtx({
         user: resUser,
         toastData: {

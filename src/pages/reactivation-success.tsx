@@ -55,7 +55,7 @@ export default function ReactivationSuccess({
         },
       });
       push('/dashboard');
-    } else if (!!hasPaymentIntent) {
+    } else if (hasPaymentIntent) {
       (async () => {
         const { ok } = await syncSubscriptionStatus({
           user,

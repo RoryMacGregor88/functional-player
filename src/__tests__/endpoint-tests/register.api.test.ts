@@ -37,7 +37,7 @@ jest.mock('@/lib', () => ({
     db: {
       collection: () => ({
         findOne: ({ email, username }) => {
-          if (!!username) {
+          if (username) {
             if (username === 'success-username') {
               return false;
             } else if (username === 'existing-username') {
@@ -45,7 +45,7 @@ jest.mock('@/lib', () => ({
             }
           }
 
-          if (!!email) {
+          if (email) {
             if (email === 'error@test.com') {
               throw new Error('test-error');
             } else if (email === 'existingemail@test.com') {

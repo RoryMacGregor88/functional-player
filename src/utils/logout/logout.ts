@@ -26,7 +26,7 @@ export default async function logout({
     formData: { email },
     onError: updateCtx,
   });
-  if (!!error) {
+  if (error) {
     const { message } = error;
     updateCtx({
       toastData: {

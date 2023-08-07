@@ -21,7 +21,7 @@ export default async function authenticateSession({
     onError: (defaultToastData: DefaultToastData) =>
       updateCtx({ ...defaultToastData, user: null }),
   });
-  if (!!error) {
+  if (error) {
     const { message } = error;
     updateCtx({
       user: null,
@@ -30,7 +30,7 @@ export default async function authenticateSession({
         message,
       },
     });
-  } else if (!!resUser || resUser === null) {
+  } else if (resUser || resUser === null) {
     updateCtx({ user: resUser });
   }
   return !!redirect;

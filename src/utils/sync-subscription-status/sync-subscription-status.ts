@@ -34,7 +34,7 @@ export default async function syncSubscriptionStatus({
     },
     onError: updateCtx,
   });
-  if (!!error) {
+  if (error) {
     const { message } = error;
     updateCtx({
       toastData: {
@@ -42,7 +42,7 @@ export default async function syncSubscriptionStatus({
         message,
       },
     });
-  } else if (!!resUser) {
+  } else if (resUser) {
     ok = true;
     updateCtx({ user: resUser });
   }

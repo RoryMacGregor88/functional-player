@@ -53,7 +53,7 @@ export default function Artists({ user, updateCtx, courses, error }: Props) {
     artistLabel = ARTIST_METADATA.find(({ value }) => value === artist)?.label;
 
   useEffect(() => {
-    if (!!error || !artistLabel) {
+    if (error || !artistLabel) {
       push('/dashboard');
       updateCtx({
         toastData: {
@@ -64,7 +64,7 @@ export default function Artists({ user, updateCtx, courses, error }: Props) {
     }
   }, [artistLabel, push, error, updateCtx]);
 
-  if (!!error || !artistLabel) return <LoadMask />;
+  if (error || !artistLabel) return <LoadMask />;
 
   const categorisedCourses = courses.filter(
       ({ artist }) => artist === artistLabel

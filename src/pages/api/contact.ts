@@ -29,7 +29,7 @@ async function contact(
 
       let resultMetadata = {};
 
-      if (!!result) {
+      if (result) {
         const { username, customerId, subscriptionId, subscriptionStatus } =
           result;
 

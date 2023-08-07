@@ -39,7 +39,7 @@ if (!cached) {
 
 export default async function connectToDatabase(): Promise<MongoClientAndDb> {
   if (process.env.NODE_ENV === 'development') {
-    if (!!cached.conn) {
+    if (cached.conn) {
       return cached.conn;
     }
 

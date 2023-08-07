@@ -4,16 +4,12 @@ import { useRouter } from 'next/router';
 
 import { LoadMask } from '@/src/components';
 
-export default function Landing({ user }) {
+export default function Landing() {
   const { push } = useRouter();
 
   useEffect(() => {
-    if (!!user) push('/dashboard');
-  }, [push, user]);
+    push('/dashboard');
+  }, [push]);
 
-  return !user ? (
-    <h1>ABCDEFGHIJKLMNOPQRSTUVWXYZ FUNCTIONALPLAYER</h1>
-  ) : (
-    <LoadMask />
-  );
+  return <LoadMask />;
 }

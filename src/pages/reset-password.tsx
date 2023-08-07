@@ -36,7 +36,7 @@ export default function ResetPassword({
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
 
   useEffect(() => {
-    if (!!user) {
+    if (user) {
       push('/dashboard');
       updateCtx({
         toastData: {
@@ -47,7 +47,7 @@ export default function ResetPassword({
     }
   }, [user, push, updateCtx]);
 
-  if (!!user) return <LoadMask />;
+  if (user) return <LoadMask />;
 
   const handleResponse = (wellData: WellData) => {
     setIsLoading(false);
@@ -77,7 +77,7 @@ export default function ResetPassword({
       },
     });
 
-    if (!!error) {
+    if (error) {
       const { message } = error;
       handleResponse({ message });
     } else if (ok) {

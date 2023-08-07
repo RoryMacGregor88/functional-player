@@ -39,7 +39,7 @@ export default async function updateBookmarks({
     onError: updateCtx,
   });
 
-  if (!!error) {
+  if (error) {
     const { message } = error;
     updateCtx({
       toastData: {
@@ -47,7 +47,7 @@ export default async function updateBookmarks({
         severity: 'error',
       },
     });
-  } else if (!!resUser) {
+  } else if (resUser) {
     updateCtx({
       user: resUser,
       toastData: {

@@ -48,15 +48,15 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!!user) {
+    if (user) {
       push('/dashboard');
     }
   }, [user, push]);
 
-  if (!!user) return <LoadMask />;
+  if (user) return <LoadMask />;
 
   const onNextClick = () => {
-    if (!!wellData) setWellData(null);
+    if (wellData) setWellData(null);
     setActiveStep(2);
   };
 
@@ -98,9 +98,9 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
       onError: handleClientError,
     });
 
-    if (!!error) {
+    if (error) {
       handleServerError(error);
-    } else if (!!clientSecret) {
+    } else if (clientSecret) {
       setClientSecret(clientSecret);
       handleSuccess(REGISTRATION_SUCCESS_MESSAGE);
     }
@@ -121,7 +121,7 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
         },
       });
 
-    if (!!stripeError) {
+    if (stripeError) {
       const { message } = stripeError,
         error = { message };
       handleServerError(error);

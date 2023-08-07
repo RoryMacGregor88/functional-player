@@ -68,7 +68,7 @@ export default function List({
           },
         });
       }
-    } else if (!!error) {
+    } else if (error) {
       const { message } = error;
       updateCtx({
         toastData: {

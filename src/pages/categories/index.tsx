@@ -59,7 +59,7 @@ export default function Categories({ user, updateCtx, courses, error }: Props) {
     );
 
   useEffect(() => {
-    if (!!error || !categoryMetadata) {
+    if (error || !categoryMetadata) {
       push('/dashboard');
       updateCtx({
         toastData: {
@@ -70,7 +70,7 @@ export default function Categories({ user, updateCtx, courses, error }: Props) {
     }
   }, [categoryMetadata, push, error, updateCtx]);
 
-  if (!!error || !categoryMetadata) return <LoadMask />;
+  if (error || !categoryMetadata) return <LoadMask />;
 
   const categorisedCourses = courses.filter(({ categories }) =>
       categories.includes(categoryMetadata.value)

@@ -115,9 +115,9 @@ export const Overlay: FC<OverlayProps> = ({
               </LinkButton>
             </Link>
           </Typography>
-          {categories.map((cat) => (
-            <Link key={cat} href={`/categories?category=${cat}`}>
-              <LinkButton onClick={handleLinkClick}>{cat}</LinkButton>
+          {categories.map(({ label, value }) => (
+            <Link key={value} href={`/categories?category=${value}`}>
+              <LinkButton onClick={handleLinkClick}>{label}</LinkButton>
             </Link>
           ))}
         </Grid>
@@ -147,7 +147,7 @@ const VideoDialog: FC<VideoDialogProps> = ({
   const { _id, videoId } = selectedVideo ?? {};
 
   useEffect(() => {
-    if (!!selectedVideo) {
+    if (selectedVideo) {
       updateLastWatched({ user, _id, updateCtx });
     }
   }, [_id, selectedVideo, updateCtx, user]);

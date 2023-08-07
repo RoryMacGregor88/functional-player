@@ -43,7 +43,7 @@ export default async function register(
         .collection<DbUser>(USERS)
         .findOne({ email });
 
-      if (!!checkExistingEmail) {
+      if (checkExistingEmail) {
         return res
           .status(400)
           .json({ error: { message: EMAIL_ALREADY_EXISTS_MESSAGE } });
@@ -53,7 +53,7 @@ export default async function register(
         .collection<DbUser>(USERS)
         .findOne({ username });
 
-      if (!!checkExistingUsername) {
+      if (checkExistingUsername) {
         return res
           .status(400)
           .json({ error: { message: USERNAME_TAKEN_MESSAGE } });

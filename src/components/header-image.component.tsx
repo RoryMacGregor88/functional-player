@@ -8,9 +8,9 @@ import { LinkButton } from '@/src/components';
 
 import { useCtx } from '@/src/utils';
 
-import { UpdateCtx } from '@/src/utils/interfaces';
+import { UpdateCtx, Course } from '@/src/utils/interfaces';
 
-const HARDCODED_INTRODUCTION_VIDEO = {
+const HARDCODED_INTRODUCTION_VIDEO: Course = {
   videoId: '579544403',
   _id: 'f31a1831-b82b-4057-8cb4-8bf869e0f1ff',
   title: 'Joe Bonamassa 17',
@@ -18,8 +18,14 @@ const HARDCODED_INTRODUCTION_VIDEO = {
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
   artist: 'Joe Bonamassa',
   creationDate: '2022-12-04T19:41:25.686Z',
-  level: 'advanced',
-  categories: ['hiddenGems', 'rock', 'funk', 'artist', 'advanced'],
+  level: { label: 'Advanced', value: 'advanced', color: 'error.dark' },
+  categories: [
+    { label: 'Hidden Gems', value: 'hiddenGems' },
+    { label: 'Rock', value: 'rock' },
+    { label: 'Funk', value: 'funk' },
+    { label: 'Artist', value: 'artist' },
+    { label: 'Advanced', value: 'advanced' },
+  ],
 };
 
 interface DeviceProps {

@@ -1,4 +1,11 @@
-import { FC, useState, ReactElement, ReactNode, useEffect } from 'react';
+import {
+  FC,
+  useState,
+  ReactElement,
+  ReactNode,
+  useEffect,
+  useMemo,
+} from 'react';
 
 import NextImage from 'next/image';
 
@@ -26,6 +33,7 @@ const stockImages = [
   '/3-small.jpg',
   '/4-small.jpg',
   '/5-small.jpg',
+  '/6-small.jpg',
 ];
 
 /** this is only here to give a variety of images while using stock images */
@@ -130,6 +138,15 @@ const Slider: FC<SliderProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory]);
 
+  /**
+   * This is here to be able to pick small and large versions of the same
+   * image when using stock images
+   */
+  const imageIndex = useMemo(
+    () => Math.ceil(Math.random() * stockImages.length) - 1,
+    []
+  );
+
   const ITEM_WIDTH_REM = isMobile ? 20 : 40,
     ITEM_HEIGHT_REM = isMobile ? 12.5 : 25,
     BORDER_WIDTH = isMobile ? 3 : 5;
@@ -220,40 +237,33 @@ const Slider: FC<SliderProps> = ({
             transitionDuration: '0.25s',
           }}
         >
-          {courses.map((course) => {
-            /**
-             * This is here to be able to pick small and large versions of the same
-             * image when using stock images
-             */
-            const imageIndex = Math.floor(Math.random() * stockImages.length);
-            return (
-              <Box
-                key={course.title}
-                onClick={() => handleClick(course)}
-                sx={{
-                  position: 'relative',
-                  minWidth,
-                  height,
-                  border: `${BORDER_WIDTH}px solid transparent`,
-                  borderRadius: 3,
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  '&:hover': {
-                    border: `${BORDER_WIDTH}px solid #fff`,
-                  },
-                }}
-                data-testid={course.title}
-              >
-                <Overlay course={course} isMobile={isMobile} />
-                <NextImage
-                  src={getSrc(imageIndex)}
-                  alt={`image-${imageIndex}`}
-                  style={{ objectFit: 'cover', opacity: 0.5 }}
-                  fill
-                />
-              </Box>
-            );
-          })}
+          {courses.map((course) => (
+            <Box
+              key={course.title}
+              onClick={() => handleClick(course)}
+              sx={{
+                position: 'relative',
+                minWidth,
+                height,
+                border: `${BORDER_WIDTH}px solid transparent`,
+                borderRadius: 3,
+                overflow: 'hidden',
+                cursor: 'pointer',
+                '&:hover': {
+                  border: `${BORDER_WIDTH}px solid #fff`,
+                },
+              }}
+              data-testid={course.title}
+            >
+              <Overlay course={course} isMobile={isMobile} />
+              <NextImage
+                src={getSrc(imageIndex)}
+                alt={`image-${imageIndex}`}
+                style={{ objectFit: 'cover', opacity: 0.5 }}
+                fill
+              />
+            </Box>
+          ))}
         </Grid>
       </Grid>
     </>

@@ -16,7 +16,7 @@ const LevelRatingBadge: FC<Props> = ({
   small = false,
 }): ReactElement => {
   const levelMetadata = COURSE_LEVEL_METADATA.find(
-    ({ value }) => value === level
+    ({ value }) => value === level.value
   );
   return (
     <Grid container direction='column' sx={{ width: 'fit-content' }}>
