@@ -75,7 +75,6 @@ const Device: FC<DeviceProps> = ({
           marginBottom: '1rem',
         }}
       >
-        {/* TODO: this shit hasn't been tested at mobile size, might look broke */}
         <Typography variant='h5' sx={{ fontStyle: 'italic' }}>
           &quot;If you play everything straight, it&apos;ll sound so cold, so
           boring. How is it going to sound like it&apos;s saying something?
@@ -211,13 +210,10 @@ interface HeaderImageProps {
 const HeaderImage: FC<HeaderImageProps> = ({ src, alt }) => {
   const { updateCtx } = useCtx();
 
-  const isMedium = useMediaQuery('(max-width:1000px)');
-  const isSmall = useMediaQuery('(max-width:600px)');
+  const isMedium = useMediaQuery('(max-width:1000px)'),
+    isSmall = useMediaQuery('(max-width:600px)');
 
   const deviceSize = isSmall ? 'small' : isMedium ? 'medium' : 'large';
-
-  // TODO: make this re-usable across all pages but with different images and text
-  // also, replace this with Next suggested method
   if (isSmall) {
     return (
       <Device

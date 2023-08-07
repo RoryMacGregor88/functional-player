@@ -23,7 +23,6 @@ import {
 
 import { CATEGORY_METADATA } from '@/src/utils/constants';
 
-// TODO: make real, not fake data, also all videos need alts and aria labels
 const comingSoonCourse: Course = {
   _id: '12345678910',
   videoId: '12345678910',
@@ -72,9 +71,6 @@ export default function Dashboard({
         },
       });
     }
-    // TODO: this is only temporary while under construction. Normally, anyone can go to the dashboard
-    // also, why was this pushing to dashboard when already on dashboard?
-    if (!!error || !user) push('/');
   }, [push, error, updateCtx, user]);
 
   if (!!error) return <LoadMask />;

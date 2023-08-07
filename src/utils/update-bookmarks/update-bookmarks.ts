@@ -7,8 +7,6 @@ import {
 
 import { User, Id, UpdateCtx } from '@/src/utils/interfaces';
 
-// TODO: something wrong with bookmarking. Staying in bookmarks when not bookmarked, in bookmarks when white etc. Needs tightened!
-
 interface Params {
   _id: Id;
   user: User;

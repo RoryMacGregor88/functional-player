@@ -31,12 +31,10 @@ async function syncStripeAndDb({
      * subscriptionStatus can only be null if subscription
      * has been deleted. If so, return null value
      */
-    // TODO: is this right? Can status be null and still out of sync?
     if (currentSubscriptionStatus === null) {
       return { isError: false, subscriptionStatus: currentSubscriptionStatus };
     }
 
-    // TODO: bug! This broke, said customer did not exist. Haven't been able to replicate
     const { status: stripeStatus } = await stripe.subscriptions.retrieve(
       String(subscriptionId)
     );

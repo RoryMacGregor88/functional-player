@@ -32,7 +32,6 @@ interface ConfirmEmailProps {
   register: UseFormRegister<any>;
 }
 
-// TODO: not being used anywhere, delete or use?
 const ConfirmEmailField: FC<ConfirmEmailProps> = ({
   error,
   register,
@@ -72,9 +71,6 @@ const PasswordField: FC<PasswordProps> = ({
   name,
 }): ReactElement => {
   const [showPassword, setShowPassword] = useState(false);
-
-  // TODO: this is broke, negative margin -12px being implemented somewhere
-  // is this fixed now that that prop was removed?
   const iconStyles = { marginRight: '1rem', color: 'palette.primary.main' };
   return (
     <TextField

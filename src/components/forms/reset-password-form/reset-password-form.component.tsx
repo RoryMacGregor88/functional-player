@@ -19,8 +19,6 @@ const resetPasswordFormSchema = Yup.object().shape({
     .required(EMAIL_REQUIRED_MESSAGE),
 });
 
-// TODO: do the other http handlers return promises or just void? Fix.
-
 interface Props {
   handleResetPassword: (values: { email: string }) => Promise<void>;
   isSubmitDisabled: boolean;

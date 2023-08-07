@@ -16,8 +16,6 @@ import {
   LinkButton,
 } from '@/src/components';
 
-// TODO: needs tests
-
 const MOCK_FAQ_DATA = new Array(20).fill(undefined).map((_, i) => ({
   question: `Question ${i + 1}`,
   answer:

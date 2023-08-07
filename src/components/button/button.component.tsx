@@ -14,9 +14,6 @@ interface Props {
   props?: any;
 }
 
-// TODO: get rid of ...props? Being used anywhere?
-// also, need disabled color to make clear that it's disabled
-
 const Button = (
   {
     onClick,
@@ -44,7 +41,6 @@ const Button = (
       '&:disabled': {
         color: 'common.black',
         opacity: '0.5',
-        // TODO: why this not working?
         cursor: 'not-allowed',
       },
       '&:hover': {

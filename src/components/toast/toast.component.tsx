@@ -41,9 +41,6 @@ const Toast: FC<ToastProps> = ({
 }): ReactElement => {
   const isMedium = useMediaQuery('(max-width:1000px)');
 
-  // TODO: Fade not working
-  // also Action not working
-
   const AnchorOrigin: SnackbarOrigin = {
     vertical: 'top',
     horizontal: isMedium ? 'center' : 'right',

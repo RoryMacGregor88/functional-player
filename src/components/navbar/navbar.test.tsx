@@ -2,8 +2,6 @@ import Navbar from './navbar.component';
 
 import { render, screen, userEvent, waitFor } from '@/src/utils/test-utils';
 
-// TODO: need to add changes in here, tests for select handler
-
 describe('Navbar', () => {
   it('renders', () => {
     render(<Navbar />);

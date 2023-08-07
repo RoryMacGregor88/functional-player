@@ -40,9 +40,6 @@ async function resubscribe(
       const { email, username } = sanitizeBody(req.body);
       const { db } = await connectToDatabase();
 
-      // TODO: must prevent making second subscription with same email
-      // how to do this?
-
       const result = await db.collection<DbUser>(USERS).findOne({ email });
 
       if (!result) {

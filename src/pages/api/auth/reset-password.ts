@@ -59,7 +59,6 @@ export default async function resetPassword(
         </div>
       `;
 
-      // TODO: fix env variables
       const hostEmail = process.env.HOST_EMAIL;
 
       const transporter = nodemailer.createTransport({

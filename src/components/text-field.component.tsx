@@ -22,8 +22,6 @@ interface Props {
   textArea?: boolean;
 }
 
-// TODO: input props being used anywhere?
-
 const TextField = (
   {
     id,

@@ -90,7 +90,7 @@ async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
        * create new session id and expiration date for both array
        * on dbUser and to be stored in http cookie
        */
-      const newSessionId = uuid() as Id, // TODO: make this the same as the user id? Any downside to that?
+      const newSessionId = uuid() as Id,
         expirationDate = addDays(
           new Date(),
           SESSION_EXPIRY_LENGTH
@@ -107,7 +107,6 @@ async function login(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 
       const resUser: User = {
         ...restOfUser,
-        // TODO: does frontend ever need subscriptionId?
         subscriptionId,
         subscriptionStatus,
       };

@@ -125,7 +125,6 @@ describe('Dashboard', () => {
       { updateCtx }
     );
 
-    // TODO: why more than 1 title?
     userEvent.click(screen.getAllByTestId(/course-title-1/i)[0]);
 
     await waitFor(() => {

@@ -27,7 +27,6 @@ async function contact(
 
       const result = await db.collection<DbUser>(USERS).findOne({ email });
 
-      // TODO: make sure this still works
       let resultMetadata = {};
 
       if (!!result) {
@@ -67,15 +66,14 @@ async function contact(
         </div>
       `;
 
-      // TODO: fix env variables
       const hostEmail = process.env.HOST_EMAIL,
-      password = process.env.HOST_EMAIL_PASSWORD
+        password = process.env.HOST_EMAIL_PASSWORD;
 
       const transporter = nodemailer.createTransport({
         host: 'smtp.outlook.com',
         auth: {
           user: hostEmail,
-          pass: password
+          pass: password,
         },
       });
 

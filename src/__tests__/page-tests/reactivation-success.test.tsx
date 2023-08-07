@@ -76,7 +76,6 @@ describe('Reactivation Success', () => {
     });
   });
 
-  // TODO: multiple calls broken
   xit('logs out if reactivation error', async () => {
     const message = 'test-error-message';
 

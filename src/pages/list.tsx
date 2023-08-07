@@ -76,7 +76,6 @@ export default function List({
           severity: 'error',
         },
       });
-      // TODO: used to be above updateCtx, make sure still works
       push('/dashboard');
     }
   }, [user, push, error, updateCtx, ctx]);

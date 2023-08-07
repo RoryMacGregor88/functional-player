@@ -50,8 +50,6 @@ const Navbar: FC<Props> = ({ isDrawerOpen, setIsDrawerOpen }): ReactElement => {
     push(`/categories/?category=${selectedCategory}`);
   };
 
-  // TODO: magic color in AppBar, and in Drawer
-
   return (
     <AppBar
       position='fixed'

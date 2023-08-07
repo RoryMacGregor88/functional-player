@@ -12,7 +12,6 @@ describe('Toast', () => {
     expect(screen.getByText(message)).toBeInTheDocument();
   });
 
-  // TODO: broken because action is broken
   xit('calls updateCtx when clicked', async () => {
     const message = 'test-message',
       updateCtx = jest.fn();

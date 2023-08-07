@@ -33,11 +33,6 @@ export default async function http({
       ...options,
     });
 
-    // TODO: This needs fixing
-    // if (!response.ok) {
-    //   throw new Error();
-    // }
-
     return await response.json();
   } catch (e) {
     onError(defaultToastData);

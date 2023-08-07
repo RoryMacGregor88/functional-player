@@ -98,7 +98,6 @@ export const ChevronWrapper: FC<ChevronWrapperProps> = ({
       height: '100%',
       cursor: 'pointer',
       '&:hover': {
-        // TODO: where did this color come from?
         backgroundColor: 'rgba(8, 8, 8, 0.5)',
       },
     }}

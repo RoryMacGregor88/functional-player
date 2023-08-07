@@ -42,12 +42,6 @@ interface Props {
   isLoading: boolean;
 }
 
-// TODO: change hardcoded 'active' into constant
-
-// TODO: 'Are you sure?' before cancelling subscription
-
-// TODO: 'Subscribe' instead of 'Re-enable sub...' when status is incomplete
-
 const UpdateSubscriptionForm: FC<Props> = ({
   subscriptionStatus,
   handleUnsubscribe,

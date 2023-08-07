@@ -144,7 +144,6 @@ export default function Register({ user, updateCtx }: Props): ReactElement {
       ) : null}
       {activeStep === 2 && !!clientSecret ? (
         <Elements stripe={getStripe()} options={{ clientSecret }}>
-          {/* // TODO: Replace P with details about cost/recurrence */}
           <p style={{ textAlign: 'center' }}>Subscribe</p>
           <SubscribeForm
             subscribeSubmit={subscribeSubmit}

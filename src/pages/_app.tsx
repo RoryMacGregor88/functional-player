@@ -37,8 +37,6 @@ function App({ Component, pageProps }: AppProps): ReactElement {
    * not internal page navigations
    */
   useEffect(() => {
-    // TODO: test this. Are there any times when you would want to call this with a user?
-    // No, you would only call this when first loading page, when state is clear.
     if (!user) {
       (async () => {
         const redirect = await authenticateSession({ updateCtx });
@@ -51,8 +49,6 @@ function App({ Component, pageProps }: AppProps): ReactElement {
   /** only a valid user object or null can ever be returned from server */
   if (user === undefined) return <LoadMask showLogo />;
 
-  // TODO: need one on every page once fleshed out, SEO is vital
-  // use Component.title trick: https://www.youtube.com/watch?v=R59e1Vl5lO8&list=WL&index=8&t=305s&ab_channel=LeeRobinson
   return (
     <>
       <Head>

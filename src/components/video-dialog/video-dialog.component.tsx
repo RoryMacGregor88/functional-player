@@ -39,8 +39,6 @@ export const Overlay: FC<OverlayProps> = ({
 }): ReactElement => {
   const { updateCtx } = useCtx();
 
-  // TODO: spacing between video and elements is a bit big
-
   const { title, description, level, artist, categories } = selectedVideo,
     artistValue = ARTIST_METADATA.find(({ label }) => label === artist)?.value;
 
@@ -148,15 +146,11 @@ const VideoDialog: FC<VideoDialogProps> = ({
 
   const { _id, videoId } = selectedVideo ?? {};
 
-  // TODO: useEffect not running
-  // also, this needs to fire when Vimeo play button is clicked, not on mount
-  // check to see if there is an onPlay method or something, that would be perfect
-
-  // useEffect(() => {
-  //   if (!!selectedVideo) {
-  //     updateLastWatched({ user, _id, updateCtx });
-  //   }
-  // }, [_id, selectedVideo, updateCtx, user]);
+  useEffect(() => {
+    if (!!selectedVideo) {
+      updateLastWatched({ user, _id, updateCtx });
+    }
+  }, [_id, selectedVideo, updateCtx, user]);
 
   const isMedium = useMediaQuery('(max-width:1200px)');
   const isSmall = useMediaQuery('(max-width:600px)');
@@ -165,7 +159,6 @@ const VideoDialog: FC<VideoDialogProps> = ({
   // closed, and will error if null is passed to children components
   if (!selectedVideo) return null;
 
-  // TODO: delete this if not using large images anymore?
   const deviceSize = isSmall ? 'small' : isMedium ? 'medium' : 'large';
   const isBookmarked = !!user?.bookmarks.includes(_id);
 

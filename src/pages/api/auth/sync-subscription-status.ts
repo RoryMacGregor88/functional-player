@@ -53,7 +53,6 @@ async function syncSubscriptionStatus(
         subscriptionStatus,
       };
 
-      // TODO: why this erroring? await added, does this fix it? It fixed login
       req.session.user = resUser;
       await req.session.save();
 

@@ -52,7 +52,6 @@ describe('VideoDialog', () => {
     });
   });
 
-  // TODO: broken
   xit('opens dialog if no user and bookmark icon clicked', async () => {
     const { updateCtx } = renderComponent({ user: null });
 

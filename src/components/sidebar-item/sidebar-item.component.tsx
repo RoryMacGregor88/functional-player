@@ -6,7 +6,6 @@ import { OverridableComponent } from '@mui/material/OverridableComponent';
 
 import { IconButton, Link } from '@/src/components';
 
-// TODO: check this works with Link, no ref errors in console
 interface Props {
   href?: string;
   label: string;

@@ -47,7 +47,6 @@ export default function ReactivationSuccess({
   const [isUpdated, setIsUpdated] = useState(false);
 
   useEffect(() => {
-    // TODO: is this stuff tested?
     if (!hasPaymentIntent) {
       updateCtx({
         toastData: {

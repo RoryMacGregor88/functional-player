@@ -29,8 +29,6 @@ declare module 'iron-session' {
   }
 }
 
-// TODO: SERVER ERROR in authenticateSession:  TypeError: Cannot destructure property 'email' of 'user' as it is undefined.
-
 async function authenticateSession(
   req: NextApiRequest,
   res: NextApiResponse
@@ -47,7 +45,6 @@ async function authenticateSession(
         return res.status(200).json({ resUser: null });
       }
 
-      // TODO: change this to look for user by session id?
       const result = await db
         .collection<DbUser>(USERS)
         .findOne({ email: user.email });
@@ -111,8 +108,6 @@ async function authenticateSession(
         /** destroy local session (already destoyed in db) */
         await req.session.destroy();
 
-        // TODO: bug when registering new user (on success message page)
-        // TODO: change redirect to shouldRedirect, more explicit
         return res.status(403).json({
           error: { message: SESSION_EXPIRED_MESSAGE },
           redirect: true,

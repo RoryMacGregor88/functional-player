@@ -47,9 +47,6 @@ export default function Login({ user, updateCtx }: Props) {
   }
 
   const handleLogin = async (formValues: LoginFormValues): Promise<void> => {
-    // TODO: do this for all handlers that need it
-    // remove well between requests, like if password is wrong
-    // and they have to submit again
     setWellData(null);
     setIsLoading(true);
 

@@ -4,8 +4,6 @@ import { StripeElements } from '@stripe/stripe-js';
 
 import { AlertColor } from '@mui/material';
 
-//TODO: rename? Has types not interfaces
-
 type StripeModules = {
   stripe: Stripe;
   elements: StripeElements;

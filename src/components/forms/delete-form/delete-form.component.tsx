@@ -46,7 +46,6 @@ const DeleteAccountForm: FC<Props> = ({
   return (
     <FormWrapper
       onSubmit={handleSubmit((formValues) => {
-        // TODO: does this kind of resetting need to be done on other forms?
         setShowConfirmButton(false);
         handleDelete(formValues);
       })}
@@ -98,7 +97,6 @@ const DeleteAccountForm: FC<Props> = ({
           <Button
             type='submit'
             isLoading={isLoading}
-            // TODO: make `error` button instead of this? There's only one so maybe not
             sx={{
               backgroundColor: 'error.dark',
               color: '#fff',

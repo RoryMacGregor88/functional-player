@@ -8,9 +8,6 @@ import { THEME_COLORS } from '@/src/utils/constants';
 
 const { mustardYellow } = THEME_COLORS;
 
-// TODO: real terms/conditions
-// also, Link text and underlines are both yellow, looks weird
-
 const Footer: FC = (): ReactElement => {
   const isMobile = useMediaQuery('(max-width:600px)'),
     footerStyles = { color: mustardYellow };

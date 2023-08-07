@@ -1,7 +1,5 @@
-// must keep on top of this
 export const STRIPE_API_VERSION = '2022-11-15';
 
-// TODO: Move all notification messages to constants
 export const COURSES = 'courses';
 export const USERS = 'users-2';
 
@@ -128,7 +126,6 @@ export const THEME_COLORS = sixtiessPallette2;
 //   red: '#c31e1e',
 // };
 
-// TODO: this metadata stuff is getting out of hand, do this better!!!
 export const COURSE_LEVEL_METADATA = [
   {
     label: 'Beginner',
